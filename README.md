@@ -1,28 +1,32 @@
-# Go Project Template
+# FHIR Core (Go)
 
-![Continuous Integration](https://img.shields.io/github/actions/workflow/status/friendly-fhir/go-template/.github%2Fworkflows%2Fpostsubmit.yaml?logo=github)
-[![GitHub Release](https://img.shields.io/github/v/release/friendly-fhir/go-template?include_prereleases)][github-releases]
+![Continuous Integration](https://img.shields.io/github/actions/workflow/status/friendly-fhir/go-fhir/.github%2Fworkflows%2Fpostsubmit.yaml?logo=github)
+[![GitHub Release](https://img.shields.io/github/v/release/friendly-fhir/go-fhir?include_prereleases)][github-releases]
 [![Gitter Channel](https://img.shields.io/badge/matrix-%23friendly--fhir-darkcyan?logo=gitter)][gitter-channel]
 [![readthedocs](https://img.shields.io/badge/docs-readthedocs-blue?logo=readthedocs&logoColor=white)][docs]
 [![Godocs](https://img.shields.io/badge/docs-godocs-blue?logo=go&logoColor=white)][go-docs]
 
-This is a GitHub Repository Template for Go projects in the Friendly FHIR org!
+> [!NOTE]
+> The API for these generated bindings are current **unstable**.
+> These have been published primarily so that the [`fhenix`] utility may
+> leverage them to bootstrap its own parsing of `StructureDefinition`s.
 
-Make sure to follow this handy guide when using this as a template for new
-projects. Most of this has been done for you, but there are a few things you
-should update when starting a new project.
+This repository contains (mostly) generated [Go] bindings for the FHIR core
+specification. This can be leveraged by other projects to parse and model
+FHIR resources in a Go-idiomatic way.
 
-[gitter-channel]: https://matrix.to/#/#go-template:gitter.im
-[docs]: https://friendly-fhir.github.io/go-template/
-[go-docs]: https://pkg.go.dev/github.com/friendly-fhir/go-template
-[github-releases]: https://github.com/friendly-fhir/go-template/releases
+Code bindings have been generated using the [`fhenix`] utility.
 
-## Steps
+[Go]: https://golang.org/
 
-* [ ] Update the `go.mod` file with the correct module name
-* [ ] Replace `main.go` with your project's main file or library entry point
-* [ ] Replace `go-template` with your repository's name in links
-* [ ] Replace references to `go-template` with your project name in `docs/` and
-      `mkdocs.yaml`
-* [ ] Update the `README.md` file with the correct project name and description,
-      and remove these docs.
+[gitter-channel]: https://matrix.to/#/#friendly-fhir:gitter.im
+[docs]: https://friendly-fhir.github.io/go-fhir/
+[go-docs]: https://pkg.go.dev/github.com/friendly-fhir/go-fhir
+[github-releases]: https://github.com/friendly-fhir/go-fhir/releases
+[`fhenix`]: https://github.com/friendly-fhir/fhenix
+
+## Installation
+
+```bash
+go get github.com/friendly-fhir/go-fhir@latest
+```

@@ -1,4 +1,4 @@
-module github.com/friendly-fhir/go-template
+module github.com/friendly-fhir/go-fhir
 
 go 1.22.3
 
