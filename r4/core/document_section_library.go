@@ -8,7 +8,11 @@ import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
 )
 
-// Source: http://hl7.org/fhir/StructureDefinition/example-section-library
+// Meta Details:
+//
+//   - Package IG: hl7.fhir.r4.core@4.0.1
+//   - StructureDefinition: http://hl7.org/fhir/StructureDefinition/example-section-library
+//   - Source File: StructureDefinition-example-section-library.json
 type DocumentSectionLibrary interface {
 	// Implement base DocumentSectionLibraryProfile
 	profileimpl.DocumentSectionLibraryProfile

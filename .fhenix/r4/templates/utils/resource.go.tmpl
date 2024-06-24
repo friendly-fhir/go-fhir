@@ -1,0 +1,11 @@
+{{- /* Defines a 'resource' kind in Go */ -}}
+{{- /* Input: Type */ -}}
+
+{{ template "struct-header" . }}
+type {{ template "struct-name" . }} struct {
+{{ template "resource-fields" . }}
+{{ template "struct-base-embedding" . }}
+}
+
+{{ template "resource-getters" . }}
+

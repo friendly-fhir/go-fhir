@@ -1,0 +1,11 @@
+{{- /* Defines a 'struct' type in Go */ -}}
+{{- /* Input: Type */ -}}
+
+{{ template "struct-header" . }}
+type {{ template "struct-name" . }} struct {
+{{ template "struct-fields" . }}
+{{ template "struct-base-embedding" . }}
+}
+
+{{ template "struct-getters" . }}
+

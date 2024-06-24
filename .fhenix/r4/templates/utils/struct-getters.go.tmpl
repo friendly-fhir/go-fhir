@@ -1,0 +1,32 @@
+{{- $type := . -}}
+{{- range .Fields -}}
+// Get{{ template "field-name" . }} returns the value of the field {{ template "field-name" . }}.
+// This function is safe to call on nil pointers, and will return the zero value
+// instead.
+func ({{ template "struct-receiver" $type }} *{{ template "struct-name" $type }}) Get{{ template "field-name" . }}() {{ template "field-type" .}} {
+{{- if .IsDisabled }}
+  return {{ template "field-zero" . }}
+{{- else if and .IsScalar .BaseCardinality.IsList }}
+  return {{ template "field-type" . }}{ {{- template "struct-receiver" $type }}.{{ template "field-name" . -}} }
+{{- else }}
+  if {{ template "struct-receiver" $type }} == nil {
+    return {{ template "field-zero" . }}
+  }
+  return {{ template "struct-receiver" $type }}.{{ template "field-name" . }}
+{{- end }}
+}
+{{ $field := . }}
+{{ range .Alternatives }}
+// Get{{ template "field-name" $field }}{{ template "struct-name" . }} returns the value of the field {{ template "field-name" $field }}.
+func ({{ template "struct-receiver" $type }} *{{ template "struct-name" $type }}) Get{{ template "field-name" $field }}{{ template "struct-name" . }}() *{{ template "struct-name" . }} {
+  if {{ template "struct-receiver" $type }} == nil {
+    return nil
+  }
+  val, ok := {{ template "struct-receiver" $type }}.{{ template "field-name" $field }}.(*{{ template "struct-name" . }})
+  if !ok {
+    return nil
+  }
+  return val
+}
+{{- end }}
+{{ end }}

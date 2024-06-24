@@ -12,7 +12,11 @@ fi
 artifact_dir="${REPO_ROOT}/dist"
 readonly artifact_dir
 
-fhenix run --output "${artifact_dir}" .fhenix/r4/config.yaml
+fhenix run                                                                     \
+  .fhenix/r4/config.yaml                                                       \
+  --output "${artifact_dir}"                                                   \
+  --fhirig-cache "${REPO_ROOT}/.fhenix/cache"
+
 rm -r "${REPO_ROOT}/r4"
 mv "${artifact_dir}/r4" "${REPO_ROOT}/r4"
 go fmt ./r4/...

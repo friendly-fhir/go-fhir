@@ -1,10 +1,28 @@
+# yaml-language-server: $schema=https://friendly-fhir.github.io/fhenix/jsonschema/fhenix-v0.schema.json
 # The version of this configuration format
-version: 1
+version: 0
 
 # The name and version of the FHIR Package, as found on simplifier.net
 package:
   name: hl7.fhir.r4.core
   version: "4.0.1"
+
+default:
+  template:
+    field-func: 'templates/utils/field-func.go.tmpl'
+    field-header: 'templates/utils/field-header.go.tmpl'
+    field-name: 'templates/utils/field-name.go.tmpl'
+    field-tag: 'templates/utils/field-tag.go.tmpl'
+    field-type: 'templates/utils/field-type.go.tmpl'
+    field-zero: 'templates/utils/field-zero.go.tmpl'
+
+    struct-base-embedding: 'templates/utils/struct-base-embedding.go.tmpl'
+    struct-fields: 'templates/utils/struct-fields.go.tmpl'
+    struct-getters: 'templates/utils/struct-getters.go.tmpl'
+    struct-header: 'templates/utils/struct-header.go.tmpl'
+    struct-name: 'templates/utils/struct-name.go.tmpl'
+    struct-receiver: 'templates/utils/struct-receiver.go.tmpl'
+    struct: 'templates/utils/struct.go.tmpl'
 
 # The output transformations of the parsed FHIR content
 transformations:
@@ -12,17 +30,23 @@ transformations:
       type: StructureDefinition
       if: '{{ eq .Kind "primitive-type" }}'
     output: '{{ .Package | replace "." "/" | cutprefix "hl7/fhir/" }}/{{ .Name | snakecase }}.go'
-    template: '.fhenix/r4/templates/primitive.go.tmpl'
+    template: 'templates/primitive.go.tmpl'
   - input:
       type: StructureDefinition
       if: '{{ and (eq .Kind "complex-type") .IsSpecialization }}'
     output: '{{ .Package | replace "." "/" | cutprefix "hl7/fhir/" }}/{{ .Name | snakecase }}.go'
-    template: '.fhenix/r4/templates/complex.go.tmpl'
+    template: 'templates/complex.go.tmpl'
   - input:
       type: StructureDefinition
       if: '{{ or (eq .Name "StructureDefinition") (eq .Name "ElementDefinition") }}'
     output: '{{ .Package | replace "." "/" | cutprefix "hl7/fhir/" }}/resources/{{ .Name | lowercase }}/{{ .Name | snakecase }}.go'
-    template: '.fhenix/r4/templates/resource.go.tmpl'
+    template:
+      default: 'templates/resource.go.tmpl'
+      resource-field-type: 'templates/utils/resource-field-type.go.tmpl'
+      resource-fields: 'templates/utils/resource-fields.go.tmpl'
+      resource-getters: 'templates/utils/resource-getters.go.tmpl'
+      resource-type: 'templates/utils/resource-type.go.tmpl'
+      resource: 'templates/utils/resource.go.tmpl'
 
   # Define root interfaces in the 'core' package, so that they can be used by
   # element definitions.
@@ -30,10 +54,16 @@ transformations:
       type: StructureDefinition
       if: '{{ .IsAbstract }}'
     output: '{{ .Package | replace "." "/" | cutprefix "hl7/fhir/" }}/{{ .Name | snakecase }}.go'
-    template: '.fhenix/r4/templates/base-profile.go.tmpl'
+    template: 'templates/base-profile.go.tmpl'
 
   - input:
       type: StructureDefinition
       if: '{{ or .IsAbstract .HasDerived }}'
     output: '{{ .Package | replace "." "/" | cutprefix "hl7/fhir/" }}/internal/profileimpl/{{ .Name | snakecase }}.go'
-    template: '.fhenix/r4/templates/profileimpl.go.tmpl'
+    template: 'templates/profileimpl.go.tmpl'
+
+  # - input:
+  #     type: StructureDefinition
+  #     if: '{{ or .IsAbstract .HasDerived }}'
+  #   output: '{{ .Package | replace "." "/" | cutprefix "hl7/fhir/" }}/profiles/{{ .Name | snakecase }}.go'
+  #   template: 'templates/profile.go.tmpl'

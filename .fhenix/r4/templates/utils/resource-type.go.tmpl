@@ -1,0 +1,10 @@
+{{- $type := .Name | pascalinitialcase | replace "." "" -}}
+{{- if or (eq .Kind "primitive-type") (eq .Kind "complex-type") -}}
+  {{- $type = $type | prepend "fhir." -}}
+{{- else if .IsAbstract -}}
+  {{- $type = $type | prepend "fhir." -}}
+{{- end -}}
+{{- if not (.IsAbstract) -}}
+  {{- $type = "*" | append $type -}}
+{{- end -}}
+{{- $type -}}

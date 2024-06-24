@@ -1,0 +1,15 @@
+{{- with .Short -}}
+{{ . | resize 76 | prefix "// " }}
+{{- end -}}
+{{- with .Description -}}
+{{ . | resize 76 | prefix "// " }}
+{{- end -}}
+{{- with .Comment -}}
+{{ . | resize 76 | prefix "// " }}
+{{- end }}
+//
+// Meta Details:
+//
+//  - Package IG: {{ .Package }}@{{ .Version }}
+//  - StructureDefinition: {{ .URL }}
+//  - Source File: {{ .Source.File -}}

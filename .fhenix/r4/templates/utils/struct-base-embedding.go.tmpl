@@ -1,0 +1,6 @@
+{{ if .HasDerived -}}
+  profileimpl.Base{{ template "struct-name" . }}
+{{- end }}
+{{- with .Base }}
+{{ template "struct-base-embedding" . }}
+{{ end -}}

@@ -1,0 +1,30 @@
+{{- $type := "any" -}}
+{{- with .Alternatives -}}
+  {{- $type = (commonbase .).Name | pascalinitialcase -}}
+{{- else -}}
+  {{- with .Builtin -}}
+    {{- if eq .Name "integer" -}}
+      {{- $type = "int32" -}}
+    {{- else if eq .Name "positiveInt" -}}
+      {{- $type = "uint32" -}}
+    {{- else if eq .Name "unsignedInt" -}}
+      {{- $type = "uint32" -}}
+    {{- else if eq .Name "decimal" -}}
+      {{- $type = "float64" -}}
+    {{- else if eq .Name "boolean" -}}
+      {{- $type = "bool" -}}
+    {{- else -}}
+      {{- $type = "string" -}}
+    {{- end -}}
+  {{- end -}}
+  {{- with .Type -}}
+    {{- $type = .Name | pascalinitialcase | replace "." "" -}}
+    {{- if not (.IsAbstract) -}}
+      {{- $type = "*" | append $type -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if .IsList -}}
+    {{- $type = "[]" | append $type -}}
+  {{- end -}}
+{{- end -}}
+{{- $type -}}

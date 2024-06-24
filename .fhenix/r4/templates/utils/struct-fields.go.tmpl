@@ -1,0 +1,7 @@
+{{- /* Instantiates all non-disabled struct fields */ -}}
+{{- range .Fields -}}
+{{- if not .IsDisabled }}
+{{ template "field-header" . }}
+  {{ template "field-name" . }} {{ template "field-type" . }} {{ template "field-tag" . }}
+{{ end -}}
+{{ end -}}

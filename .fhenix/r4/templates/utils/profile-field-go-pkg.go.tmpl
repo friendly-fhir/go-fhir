@@ -1,0 +1,17 @@
+{{- $prefix := "" -}}
+{{- $type := nil -}}
+{{- with .Alternatives -}}
+  {{- $type = commonbase . -}}
+{{- else -}}
+  {{- with .Type -}}
+    {{- $type = .Type -}}
+  {{- end -}}
+{{- end -}}
+{{- with $type -}}
+{{- if .IsAbstract -}}
+{{- $prefix = "" -}}
+{{- else if or (eq .Kind "primitive-type") (eq .Kind "complex-type") }}
+  {{- $prefix = "fhir" }}
+{{- else -}}
+{{- end -}}
+{{- $prefix -}}

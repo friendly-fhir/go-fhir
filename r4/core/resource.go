@@ -9,23 +9,29 @@ import (
 )
 
 // This is the base resource type for everything.
-// Source: http://hl7.org/fhir/StructureDefinition/Resource
+//
+// Meta Details:
+//
+//   - Package IG: hl7.fhir.r4.core@4.0.1
+//   - StructureDefinition: http://hl7.org/fhir/StructureDefinition/Resource
+//   - Source File: StructureDefinition-Resource.json
 type Resource interface {
+	// The logical id of the resource, as used in the URL for the resource. Once
+	// assigned, this value never changes.
+	GetID() string
 
-	// GetId returns the value of id. If the value is nil, it
-	// returns the default value for the type.
-	GetId() string
+	// A reference to a set of rules that were followed when the resource was
+	// constructed, and which must be understood when processing the content.
+	// Often, this is a reference to an implementation guide that defines the
+	// special rules along with other profiles etc.
+	GetImplicitRules() *URI
 
-	// GetImplicitRules returns the value of implicitRules. If the value is nil, it
-	// returns the default value for the type.
-	GetImplicitRules() *Uri
-
-	// GetLanguage returns the value of language. If the value is nil, it
-	// returns the default value for the type.
+	// The base language in which the resource is written.
 	GetLanguage() *Code
 
-	// GetMeta returns the value of meta. If the value is nil, it
-	// returns the default value for the type.
+	// The metadata about the resource. This is content that is maintained by the
+	// infrastructure. Changes to the content might not always be associated with
+	// version changes to the resource.
 	GetMeta() *Meta
 
 	// Implement base ResourceProfile
