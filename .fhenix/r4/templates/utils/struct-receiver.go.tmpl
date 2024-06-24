@@ -1,1 +1,6 @@
-{{- .Name | acronym | lowercase -}}
+{{- $receiver := .Name | acronym | lowercase -}}
+{{- if eq $receiver "map" -}}
+  {{- $receiver | char 1 -}}
+{{- else -}}
+  {{- $receiver -}}
+{{- end -}}
