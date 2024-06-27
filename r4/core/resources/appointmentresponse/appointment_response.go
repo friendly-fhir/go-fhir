@@ -8,6 +8,8 @@ package appointmentresponse
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A reply to an appointment request for a patient and/or practitioner(s), such
@@ -271,3 +273,55 @@ func (ar *AppointmentResponse) GetText() *fhir.Narrative {
 	}
 	return ar.Text
 }
+
+func (ar *AppointmentResponse) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ar *AppointmentResponse) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Actor       *fhir.Reference   `json:"actor"`
+		Appointment *fhir.Reference   `json:"appointment"`
+		Comment     *fhir.String      `json:"comment"`
+		Contained   []fhir.Resource   `json:"contained"`
+		End         *fhir.Instant     `json:"end"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string                  `json:"id"`
+		Identifier        []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Language          *fhir.Code              `json:"language"`
+		Meta              *fhir.Meta              `json:"meta"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		ParticipantStatus *fhir.Code              `json:"participantStatus"`
+		ParticipantType   []*fhir.CodeableConcept `json:"participantType"`
+		Start             *fhir.Instant           `json:"start"`
+		Text              *fhir.Narrative         `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ar.Actor = raw.Actor
+	ar.Appointment = raw.Appointment
+	ar.Comment = raw.Comment
+	ar.Contained = raw.Contained
+	ar.End = raw.End
+	ar.Extension = raw.Extension
+	ar.ID = raw.ID
+	ar.Identifier = raw.Identifier
+	ar.ImplicitRules = raw.ImplicitRules
+	ar.Language = raw.Language
+	ar.Meta = raw.Meta
+	ar.ModifierExtension = raw.ModifierExtension
+	ar.ParticipantStatus = raw.ParticipantStatus
+	ar.ParticipantType = raw.ParticipantType
+	ar.Start = raw.Start
+	ar.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*AppointmentResponse)(nil)
+var _ json.Unmarshaler = (*AppointmentResponse)(nil)

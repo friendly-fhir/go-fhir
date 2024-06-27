@@ -6,8 +6,11 @@
 package library
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The Library resource is a general-purpose container for knowledge asset
@@ -636,3 +639,107 @@ func (l *Library) GetVersion() *fhir.String {
 	}
 	return l.Version
 }
+
+func (l *Library) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (l *Library) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ApprovalDate    *fhir.Date              `json:"approvalDate"`
+		Author          []*fhir.ContactDetail   `json:"author"`
+		Contact         []*fhir.ContactDetail   `json:"contact"`
+		Contained       []fhir.Resource         `json:"contained"`
+		Content         []*fhir.Attachment      `json:"content"`
+		Copyright       *fhir.Markdown          `json:"copyright"`
+		DataRequirement []*fhir.DataRequirement `json:"dataRequirement"`
+		Date            *fhir.DateTime          `json:"date"`
+		Description     *fhir.Markdown          `json:"description"`
+		Editor          []*fhir.ContactDetail   `json:"editor"`
+		EffectivePeriod *fhir.Period            `json:"effectivePeriod"`
+		Endorser        []*fhir.ContactDetail   `json:"endorser"`
+		Experimental    *fhir.Boolean           `json:"experimental"`
+		Extension       []*fhir.Extension       `json:"extension"`
+
+		ID                     string                      `json:"id"`
+		Identifier             []*fhir.Identifier          `json:"identifier"`
+		ImplicitRules          *fhir.URI                   `json:"implicitRules"`
+		Jurisdiction           []*fhir.CodeableConcept     `json:"jurisdiction"`
+		Language               *fhir.Code                  `json:"language"`
+		LastReviewDate         *fhir.Date                  `json:"lastReviewDate"`
+		Meta                   *fhir.Meta                  `json:"meta"`
+		ModifierExtension      []*fhir.Extension           `json:"modifierExtension"`
+		Name                   *fhir.String                `json:"name"`
+		Parameter              []*fhir.ParameterDefinition `json:"parameter"`
+		Publisher              *fhir.String                `json:"publisher"`
+		Purpose                *fhir.Markdown              `json:"purpose"`
+		RelatedArtifact        []*fhir.RelatedArtifact     `json:"relatedArtifact"`
+		Reviewer               []*fhir.ContactDetail       `json:"reviewer"`
+		Status                 *fhir.Code                  `json:"status"`
+		SubjectCodeableConcept *fhir.CodeableConcept       `json:"subjectCodeableConcept"`
+		SubjectReference       *fhir.Reference             `json:"subjectReference"`
+		Subtitle               *fhir.String                `json:"subtitle"`
+		Text                   *fhir.Narrative             `json:"text"`
+		Title                  *fhir.String                `json:"title"`
+		Topic                  []*fhir.CodeableConcept     `json:"topic"`
+		Type                   *fhir.CodeableConcept       `json:"type"`
+		URL                    *fhir.URI                   `json:"url"`
+		Usage                  *fhir.String                `json:"usage"`
+		UseContext             []*fhir.UsageContext        `json:"useContext"`
+		Version                *fhir.String                `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	l.ApprovalDate = raw.ApprovalDate
+	l.Author = raw.Author
+	l.Contact = raw.Contact
+	l.Contained = raw.Contained
+	l.Content = raw.Content
+	l.Copyright = raw.Copyright
+	l.DataRequirement = raw.DataRequirement
+	l.Date = raw.Date
+	l.Description = raw.Description
+	l.Editor = raw.Editor
+	l.EffectivePeriod = raw.EffectivePeriod
+	l.Endorser = raw.Endorser
+	l.Experimental = raw.Experimental
+	l.Extension = raw.Extension
+	l.ID = raw.ID
+	l.Identifier = raw.Identifier
+	l.ImplicitRules = raw.ImplicitRules
+	l.Jurisdiction = raw.Jurisdiction
+	l.Language = raw.Language
+	l.LastReviewDate = raw.LastReviewDate
+	l.Meta = raw.Meta
+	l.ModifierExtension = raw.ModifierExtension
+	l.Name = raw.Name
+	l.Parameter = raw.Parameter
+	l.Publisher = raw.Publisher
+	l.Purpose = raw.Purpose
+	l.RelatedArtifact = raw.RelatedArtifact
+	l.Reviewer = raw.Reviewer
+	l.Status = raw.Status
+	l.Subject, err = validate.SelectOneOf[fhir.Element]("Library.subject",
+		raw.SubjectCodeableConcept,
+		raw.SubjectReference)
+	if err != nil {
+		return err
+	}
+	l.Subtitle = raw.Subtitle
+	l.Text = raw.Text
+	l.Title = raw.Title
+	l.Topic = raw.Topic
+	l.Type = raw.Type
+	l.URL = raw.URL
+	l.Usage = raw.Usage
+	l.UseContext = raw.UseContext
+	l.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*Library)(nil)
+var _ json.Unmarshaler = (*Library)(nil)

@@ -8,6 +8,8 @@ package graphdefinition
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A formal computable definition of a graph of resources - that is, a coherent
@@ -788,3 +790,177 @@ func (gdltc *GraphDefinitionLinkTargetCompartment) GetUse() *fhir.Code {
 	}
 	return gdltc.Use
 }
+
+func (gd *GraphDefinition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (gd *GraphDefinition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contact      []*fhir.ContactDetail `json:"contact"`
+		Contained    []fhir.Resource       `json:"contained"`
+		Date         *fhir.DateTime        `json:"date"`
+		Description  *fhir.Markdown        `json:"description"`
+		Experimental *fhir.Boolean         `json:"experimental"`
+		Extension    []*fhir.Extension     `json:"extension"`
+
+		ID                string                  `json:"id"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Jurisdiction      []*fhir.CodeableConcept `json:"jurisdiction"`
+		Language          *fhir.Code              `json:"language"`
+		Link              []*GraphDefinitionLink  `json:"link"`
+		Meta              *fhir.Meta              `json:"meta"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Name              *fhir.String            `json:"name"`
+		Profile           *fhir.Canonical         `json:"profile"`
+		Publisher         *fhir.String            `json:"publisher"`
+		Purpose           *fhir.Markdown          `json:"purpose"`
+		Start             *fhir.Code              `json:"start"`
+		Status            *fhir.Code              `json:"status"`
+		Text              *fhir.Narrative         `json:"text"`
+		URL               *fhir.URI               `json:"url"`
+		UseContext        []*fhir.UsageContext    `json:"useContext"`
+		Version           *fhir.String            `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	gd.Contact = raw.Contact
+	gd.Contained = raw.Contained
+	gd.Date = raw.Date
+	gd.Description = raw.Description
+	gd.Experimental = raw.Experimental
+	gd.Extension = raw.Extension
+	gd.ID = raw.ID
+	gd.ImplicitRules = raw.ImplicitRules
+	gd.Jurisdiction = raw.Jurisdiction
+	gd.Language = raw.Language
+	gd.Link = raw.Link
+	gd.Meta = raw.Meta
+	gd.ModifierExtension = raw.ModifierExtension
+	gd.Name = raw.Name
+	gd.Profile = raw.Profile
+	gd.Publisher = raw.Publisher
+	gd.Purpose = raw.Purpose
+	gd.Start = raw.Start
+	gd.Status = raw.Status
+	gd.Text = raw.Text
+	gd.URL = raw.URL
+	gd.UseContext = raw.UseContext
+	gd.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*GraphDefinition)(nil)
+var _ json.Unmarshaler = (*GraphDefinition)(nil)
+
+func (gdl *GraphDefinitionLink) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (gdl *GraphDefinitionLink) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description *fhir.String      `json:"description"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string                       `json:"id"`
+		Max               *fhir.String                 `json:"max"`
+		Min               *fhir.Integer                `json:"min"`
+		ModifierExtension []*fhir.Extension            `json:"modifierExtension"`
+		Path              *fhir.String                 `json:"path"`
+		SliceName         *fhir.String                 `json:"sliceName"`
+		Target            []*GraphDefinitionLinkTarget `json:"target"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	gdl.Description = raw.Description
+	gdl.Extension = raw.Extension
+	gdl.ID = raw.ID
+	gdl.Max = raw.Max
+	gdl.Min = raw.Min
+	gdl.ModifierExtension = raw.ModifierExtension
+	gdl.Path = raw.Path
+	gdl.SliceName = raw.SliceName
+	gdl.Target = raw.Target
+	return nil
+}
+
+var _ json.Marshaler = (*GraphDefinitionLink)(nil)
+var _ json.Unmarshaler = (*GraphDefinitionLink)(nil)
+
+func (gdlt *GraphDefinitionLinkTarget) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (gdlt *GraphDefinitionLinkTarget) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Compartment []*GraphDefinitionLinkTargetCompartment `json:"compartment"`
+		Extension   []*fhir.Extension                       `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Params            *fhir.String      `json:"params"`
+		Profile           *fhir.Canonical   `json:"profile"`
+		Type              *fhir.Code        `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	gdlt.Compartment = raw.Compartment
+	gdlt.Extension = raw.Extension
+	gdlt.ID = raw.ID
+	gdlt.ModifierExtension = raw.ModifierExtension
+	gdlt.Params = raw.Params
+	gdlt.Profile = raw.Profile
+	gdlt.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*GraphDefinitionLinkTarget)(nil)
+var _ json.Unmarshaler = (*GraphDefinitionLinkTarget)(nil)
+
+func (gdltc *GraphDefinitionLinkTargetCompartment) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (gdltc *GraphDefinitionLinkTargetCompartment) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code        *fhir.Code        `json:"code"`
+		Description *fhir.String      `json:"description"`
+		Expression  *fhir.String      `json:"expression"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Rule              *fhir.Code        `json:"rule"`
+		Use               *fhir.Code        `json:"use"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	gdltc.Code = raw.Code
+	gdltc.Description = raw.Description
+	gdltc.Expression = raw.Expression
+	gdltc.Extension = raw.Extension
+	gdltc.ID = raw.ID
+	gdltc.ModifierExtension = raw.ModifierExtension
+	gdltc.Rule = raw.Rule
+	gdltc.Use = raw.Use
+	return nil
+}
+
+var _ json.Marshaler = (*GraphDefinitionLinkTargetCompartment)(nil)
+var _ json.Unmarshaler = (*GraphDefinitionLinkTargetCompartment)(nil)

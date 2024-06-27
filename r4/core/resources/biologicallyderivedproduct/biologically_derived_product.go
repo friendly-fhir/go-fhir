@@ -6,8 +6,11 @@
 package biologicallyderivedproduct
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A material substance originating from a biological entity intended to be
@@ -832,3 +835,209 @@ func (bdps *BiologicallyDerivedProductStorage) GetTemperature() *fhir.Decimal {
 	}
 	return bdps.Temperature
 }
+
+func (bdp *BiologicallyDerivedProduct) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (bdp *BiologicallyDerivedProduct) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Collection *BiologicallyDerivedProductCollection `json:"collection"`
+		Contained  []fhir.Resource                       `json:"contained"`
+		Extension  []*fhir.Extension                     `json:"extension"`
+
+		ID                string                                  `json:"id"`
+		Identifier        []*fhir.Identifier                      `json:"identifier"`
+		ImplicitRules     *fhir.URI                               `json:"implicitRules"`
+		Language          *fhir.Code                              `json:"language"`
+		Manipulation      *BiologicallyDerivedProductManipulation `json:"manipulation"`
+		Meta              *fhir.Meta                              `json:"meta"`
+		ModifierExtension []*fhir.Extension                       `json:"modifierExtension"`
+		Parent            []*fhir.Reference                       `json:"parent"`
+		Processing        []*BiologicallyDerivedProductProcessing `json:"processing"`
+		ProductCategory   *fhir.Code                              `json:"productCategory"`
+		ProductCode       *fhir.CodeableConcept                   `json:"productCode"`
+		Quantity          *fhir.Integer                           `json:"quantity"`
+		Request           []*fhir.Reference                       `json:"request"`
+		Status            *fhir.Code                              `json:"status"`
+		Storage           []*BiologicallyDerivedProductStorage    `json:"storage"`
+		Text              *fhir.Narrative                         `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	bdp.Collection = raw.Collection
+	bdp.Contained = raw.Contained
+	bdp.Extension = raw.Extension
+	bdp.ID = raw.ID
+	bdp.Identifier = raw.Identifier
+	bdp.ImplicitRules = raw.ImplicitRules
+	bdp.Language = raw.Language
+	bdp.Manipulation = raw.Manipulation
+	bdp.Meta = raw.Meta
+	bdp.ModifierExtension = raw.ModifierExtension
+	bdp.Parent = raw.Parent
+	bdp.Processing = raw.Processing
+	bdp.ProductCategory = raw.ProductCategory
+	bdp.ProductCode = raw.ProductCode
+	bdp.Quantity = raw.Quantity
+	bdp.Request = raw.Request
+	bdp.Status = raw.Status
+	bdp.Storage = raw.Storage
+	bdp.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*BiologicallyDerivedProduct)(nil)
+var _ json.Unmarshaler = (*BiologicallyDerivedProduct)(nil)
+
+func (bdpc *BiologicallyDerivedProductCollection) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (bdpc *BiologicallyDerivedProductCollection) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		CollectedDateTime *fhir.DateTime    `json:"collectedDateTime"`
+		CollectedPeriod   *fhir.Period      `json:"collectedPeriod"`
+		Collector         *fhir.Reference   `json:"collector"`
+		Extension         []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Source            *fhir.Reference   `json:"source"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	bdpc.Collected, err = validate.SelectOneOf[fhir.Element]("BiologicallyDerivedProduct.collection.collected",
+		raw.CollectedDateTime,
+		raw.CollectedPeriod)
+	if err != nil {
+		return err
+	}
+	bdpc.Collector = raw.Collector
+	bdpc.Extension = raw.Extension
+	bdpc.ID = raw.ID
+	bdpc.ModifierExtension = raw.ModifierExtension
+	bdpc.Source = raw.Source
+	return nil
+}
+
+var _ json.Marshaler = (*BiologicallyDerivedProductCollection)(nil)
+var _ json.Unmarshaler = (*BiologicallyDerivedProductCollection)(nil)
+
+func (bdpm *BiologicallyDerivedProductManipulation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (bdpm *BiologicallyDerivedProductManipulation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description *fhir.String      `json:"description"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		TimeDateTime      *fhir.DateTime    `json:"timeDateTime"`
+		TimePeriod        *fhir.Period      `json:"timePeriod"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	bdpm.Description = raw.Description
+	bdpm.Extension = raw.Extension
+	bdpm.ID = raw.ID
+	bdpm.ModifierExtension = raw.ModifierExtension
+	bdpm.Time, err = validate.SelectOneOf[fhir.Element]("BiologicallyDerivedProduct.manipulation.time",
+		raw.TimeDateTime,
+		raw.TimePeriod)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*BiologicallyDerivedProductManipulation)(nil)
+var _ json.Unmarshaler = (*BiologicallyDerivedProductManipulation)(nil)
+
+func (bdpp *BiologicallyDerivedProductProcessing) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (bdpp *BiologicallyDerivedProductProcessing) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Additive    *fhir.Reference   `json:"additive"`
+		Description *fhir.String      `json:"description"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Procedure         *fhir.CodeableConcept `json:"procedure"`
+		TimeDateTime      *fhir.DateTime        `json:"timeDateTime"`
+		TimePeriod        *fhir.Period          `json:"timePeriod"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	bdpp.Additive = raw.Additive
+	bdpp.Description = raw.Description
+	bdpp.Extension = raw.Extension
+	bdpp.ID = raw.ID
+	bdpp.ModifierExtension = raw.ModifierExtension
+	bdpp.Procedure = raw.Procedure
+	bdpp.Time, err = validate.SelectOneOf[fhir.Element]("BiologicallyDerivedProduct.processing.time",
+		raw.TimeDateTime,
+		raw.TimePeriod)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*BiologicallyDerivedProductProcessing)(nil)
+var _ json.Unmarshaler = (*BiologicallyDerivedProductProcessing)(nil)
+
+func (bdps *BiologicallyDerivedProductStorage) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (bdps *BiologicallyDerivedProductStorage) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description *fhir.String      `json:"description"`
+		Duration    *fhir.Period      `json:"duration"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Scale             *fhir.Code        `json:"scale"`
+		Temperature       *fhir.Decimal     `json:"temperature"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	bdps.Description = raw.Description
+	bdps.Duration = raw.Duration
+	bdps.Extension = raw.Extension
+	bdps.ID = raw.ID
+	bdps.ModifierExtension = raw.ModifierExtension
+	bdps.Scale = raw.Scale
+	bdps.Temperature = raw.Temperature
+	return nil
+}
+
+var _ json.Marshaler = (*BiologicallyDerivedProductStorage)(nil)
+var _ json.Unmarshaler = (*BiologicallyDerivedProductStorage)(nil)

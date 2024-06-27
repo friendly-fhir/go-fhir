@@ -6,8 +6,11 @@
 package structuremap
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A Map of relationships between 2 structures that can be used to transform
@@ -2188,3 +2191,479 @@ func (sms *StructureMapStructure) GetURL() *fhir.Canonical {
 	}
 	return sms.URL
 }
+
+func (sm *StructureMap) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sm *StructureMap) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contact      []*fhir.ContactDetail `json:"contact"`
+		Contained    []fhir.Resource       `json:"contained"`
+		Copyright    *fhir.Markdown        `json:"copyright"`
+		Date         *fhir.DateTime        `json:"date"`
+		Description  *fhir.Markdown        `json:"description"`
+		Experimental *fhir.Boolean         `json:"experimental"`
+		Extension    []*fhir.Extension     `json:"extension"`
+		Group        []*StructureMapGroup  `json:"group"`
+
+		ID                string                   `json:"id"`
+		Identifier        []*fhir.Identifier       `json:"identifier"`
+		ImplicitRules     *fhir.URI                `json:"implicitRules"`
+		Import            []*fhir.Canonical        `json:"import"`
+		Jurisdiction      []*fhir.CodeableConcept  `json:"jurisdiction"`
+		Language          *fhir.Code               `json:"language"`
+		Meta              *fhir.Meta               `json:"meta"`
+		ModifierExtension []*fhir.Extension        `json:"modifierExtension"`
+		Name              *fhir.String             `json:"name"`
+		Publisher         *fhir.String             `json:"publisher"`
+		Purpose           *fhir.Markdown           `json:"purpose"`
+		Status            *fhir.Code               `json:"status"`
+		Structure         []*StructureMapStructure `json:"structure"`
+		Text              *fhir.Narrative          `json:"text"`
+		Title             *fhir.String             `json:"title"`
+		URL               *fhir.URI                `json:"url"`
+		UseContext        []*fhir.UsageContext     `json:"useContext"`
+		Version           *fhir.String             `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sm.Contact = raw.Contact
+	sm.Contained = raw.Contained
+	sm.Copyright = raw.Copyright
+	sm.Date = raw.Date
+	sm.Description = raw.Description
+	sm.Experimental = raw.Experimental
+	sm.Extension = raw.Extension
+	sm.Group = raw.Group
+	sm.ID = raw.ID
+	sm.Identifier = raw.Identifier
+	sm.ImplicitRules = raw.ImplicitRules
+	sm.Import = raw.Import
+	sm.Jurisdiction = raw.Jurisdiction
+	sm.Language = raw.Language
+	sm.Meta = raw.Meta
+	sm.ModifierExtension = raw.ModifierExtension
+	sm.Name = raw.Name
+	sm.Publisher = raw.Publisher
+	sm.Purpose = raw.Purpose
+	sm.Status = raw.Status
+	sm.Structure = raw.Structure
+	sm.Text = raw.Text
+	sm.Title = raw.Title
+	sm.URL = raw.URL
+	sm.UseContext = raw.UseContext
+	sm.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*StructureMap)(nil)
+var _ json.Unmarshaler = (*StructureMap)(nil)
+
+func (smg *StructureMapGroup) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (smg *StructureMapGroup) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Documentation *fhir.String      `json:"documentation"`
+		Extends       *fhir.ID          `json:"extends"`
+		Extension     []*fhir.Extension `json:"extension"`
+
+		ID                string                    `json:"id"`
+		Input             []*StructureMapGroupInput `json:"input"`
+		ModifierExtension []*fhir.Extension         `json:"modifierExtension"`
+		Name              *fhir.ID                  `json:"name"`
+		Rule              []*StructureMapGroupRule  `json:"rule"`
+		TypeMode          *fhir.Code                `json:"typeMode"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	smg.Documentation = raw.Documentation
+	smg.Extends = raw.Extends
+	smg.Extension = raw.Extension
+	smg.ID = raw.ID
+	smg.Input = raw.Input
+	smg.ModifierExtension = raw.ModifierExtension
+	smg.Name = raw.Name
+	smg.Rule = raw.Rule
+	smg.TypeMode = raw.TypeMode
+	return nil
+}
+
+var _ json.Marshaler = (*StructureMapGroup)(nil)
+var _ json.Unmarshaler = (*StructureMapGroup)(nil)
+
+func (smgi *StructureMapGroupInput) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (smgi *StructureMapGroupInput) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Documentation *fhir.String      `json:"documentation"`
+		Extension     []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Mode              *fhir.Code        `json:"mode"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.ID          `json:"name"`
+		Type              *fhir.String      `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	smgi.Documentation = raw.Documentation
+	smgi.Extension = raw.Extension
+	smgi.ID = raw.ID
+	smgi.Mode = raw.Mode
+	smgi.ModifierExtension = raw.ModifierExtension
+	smgi.Name = raw.Name
+	smgi.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*StructureMapGroupInput)(nil)
+var _ json.Unmarshaler = (*StructureMapGroupInput)(nil)
+
+func (smgr *StructureMapGroupRule) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (smgr *StructureMapGroupRule) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Dependent     []*StructureMapGroupRuleDependent `json:"dependent"`
+		Documentation *fhir.String                      `json:"documentation"`
+		Extension     []*fhir.Extension                 `json:"extension"`
+
+		ID                string                         `json:"id"`
+		ModifierExtension []*fhir.Extension              `json:"modifierExtension"`
+		Name              *fhir.ID                       `json:"name"`
+		Source            []*StructureMapGroupRuleSource `json:"source"`
+		Target            []*StructureMapGroupRuleTarget `json:"target"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	smgr.Dependent = raw.Dependent
+	smgr.Documentation = raw.Documentation
+	smgr.Extension = raw.Extension
+	smgr.ID = raw.ID
+	smgr.ModifierExtension = raw.ModifierExtension
+	smgr.Name = raw.Name
+	smgr.Source = raw.Source
+	smgr.Target = raw.Target
+	return nil
+}
+
+var _ json.Marshaler = (*StructureMapGroupRule)(nil)
+var _ json.Unmarshaler = (*StructureMapGroupRule)(nil)
+
+func (smgrd *StructureMapGroupRuleDependent) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (smgrd *StructureMapGroupRuleDependent) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.ID          `json:"name"`
+		Variable          []*fhir.String    `json:"variable"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	smgrd.Extension = raw.Extension
+	smgrd.ID = raw.ID
+	smgrd.ModifierExtension = raw.ModifierExtension
+	smgrd.Name = raw.Name
+	smgrd.Variable = raw.Variable
+	return nil
+}
+
+var _ json.Marshaler = (*StructureMapGroupRuleDependent)(nil)
+var _ json.Unmarshaler = (*StructureMapGroupRuleDependent)(nil)
+
+func (smgrs *StructureMapGroupRuleSource) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (smgrs *StructureMapGroupRuleSource) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Check                           *fhir.String              `json:"check"`
+		Condition                       *fhir.String              `json:"condition"`
+		Context                         *fhir.ID                  `json:"context"`
+		DefaultValueBase64Binary        *fhir.Base64Binary        `json:"defaultValueBase64Binary"`
+		DefaultValueBoolean             *fhir.Boolean             `json:"defaultValueBoolean"`
+		DefaultValueCanonical           *fhir.Canonical           `json:"defaultValueCanonical"`
+		DefaultValueCode                *fhir.Code                `json:"defaultValueCode"`
+		DefaultValueDate                *fhir.Date                `json:"defaultValueDate"`
+		DefaultValueDateTime            *fhir.DateTime            `json:"defaultValueDateTime"`
+		DefaultValueDecimal             *fhir.Decimal             `json:"defaultValueDecimal"`
+		DefaultValueID                  *fhir.ID                  `json:"defaultValueID"`
+		DefaultValueInstant             *fhir.Instant             `json:"defaultValueInstant"`
+		DefaultValueInteger             *fhir.Integer             `json:"defaultValueInteger"`
+		DefaultValueMarkdown            *fhir.Markdown            `json:"defaultValueMarkdown"`
+		DefaultValueOID                 *fhir.OID                 `json:"defaultValueOID"`
+		DefaultValuePositiveInt         *fhir.PositiveInt         `json:"defaultValuePositiveInt"`
+		DefaultValueString              *fhir.String              `json:"defaultValueString"`
+		DefaultValueTime                *fhir.Time                `json:"defaultValueTime"`
+		DefaultValueUnsignedInt         *fhir.UnsignedInt         `json:"defaultValueUnsignedInt"`
+		DefaultValueURI                 *fhir.URI                 `json:"defaultValueURI"`
+		DefaultValueURL                 *fhir.URL                 `json:"defaultValueURL"`
+		DefaultValueUUID                *fhir.UUID                `json:"defaultValueUUID"`
+		DefaultValueAddress             *fhir.Address             `json:"defaultValueAddress"`
+		DefaultValueAge                 *fhir.Age                 `json:"defaultValueAge"`
+		DefaultValueAnnotation          *fhir.Annotation          `json:"defaultValueAnnotation"`
+		DefaultValueAttachment          *fhir.Attachment          `json:"defaultValueAttachment"`
+		DefaultValueCodeableConcept     *fhir.CodeableConcept     `json:"defaultValueCodeableConcept"`
+		DefaultValueCoding              *fhir.Coding              `json:"defaultValueCoding"`
+		DefaultValueContactPoint        *fhir.ContactPoint        `json:"defaultValueContactPoint"`
+		DefaultValueCount               *fhir.Count               `json:"defaultValueCount"`
+		DefaultValueDistance            *fhir.Distance            `json:"defaultValueDistance"`
+		DefaultValueDuration            *fhir.Duration            `json:"defaultValueDuration"`
+		DefaultValueHumanName           *fhir.HumanName           `json:"defaultValueHumanName"`
+		DefaultValueIdentifier          *fhir.Identifier          `json:"defaultValueIdentifier"`
+		DefaultValueMoney               *fhir.Money               `json:"defaultValueMoney"`
+		DefaultValuePeriod              *fhir.Period              `json:"defaultValuePeriod"`
+		DefaultValueQuantity            *fhir.Quantity            `json:"defaultValueQuantity"`
+		DefaultValueRange               *fhir.Range               `json:"defaultValueRange"`
+		DefaultValueRatio               *fhir.Ratio               `json:"defaultValueRatio"`
+		DefaultValueReference           *fhir.Reference           `json:"defaultValueReference"`
+		DefaultValueSampledData         *fhir.SampledData         `json:"defaultValueSampledData"`
+		DefaultValueSignature           *fhir.Signature           `json:"defaultValueSignature"`
+		DefaultValueTiming              *fhir.Timing              `json:"defaultValueTiming"`
+		DefaultValueContactDetail       *fhir.ContactDetail       `json:"defaultValueContactDetail"`
+		DefaultValueContributor         *fhir.Contributor         `json:"defaultValueContributor"`
+		DefaultValueDataRequirement     *fhir.DataRequirement     `json:"defaultValueDataRequirement"`
+		DefaultValueExpression          *fhir.Expression          `json:"defaultValueExpression"`
+		DefaultValueParameterDefinition *fhir.ParameterDefinition `json:"defaultValueParameterDefinition"`
+		DefaultValueRelatedArtifact     *fhir.RelatedArtifact     `json:"defaultValueRelatedArtifact"`
+		DefaultValueTriggerDefinition   *fhir.TriggerDefinition   `json:"defaultValueTriggerDefinition"`
+		DefaultValueUsageContext        *fhir.UsageContext        `json:"defaultValueUsageContext"`
+		DefaultValueDosage              *fhir.Dosage              `json:"defaultValueDosage"`
+		DefaultValueMeta                *fhir.Meta                `json:"defaultValueMeta"`
+		Element                         *fhir.String              `json:"element"`
+		Extension                       []*fhir.Extension         `json:"extension"`
+
+		ID                string            `json:"id"`
+		ListMode          *fhir.Code        `json:"listMode"`
+		LogMessage        *fhir.String      `json:"logMessage"`
+		Max               *fhir.String      `json:"max"`
+		Min               *fhir.Integer     `json:"min"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Type              *fhir.String      `json:"type"`
+		Variable          *fhir.ID          `json:"variable"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	smgrs.Check = raw.Check
+	smgrs.Condition = raw.Condition
+	smgrs.Context = raw.Context
+	smgrs.DefaultValue, err = validate.SelectOneOf[fhir.Element]("StructureMap.group.rule.source.defaultValue",
+		raw.DefaultValueBase64Binary,
+		raw.DefaultValueBoolean,
+		raw.DefaultValueCanonical,
+		raw.DefaultValueCode,
+		raw.DefaultValueDate,
+		raw.DefaultValueDateTime,
+		raw.DefaultValueDecimal,
+		raw.DefaultValueID,
+		raw.DefaultValueInstant,
+		raw.DefaultValueInteger,
+		raw.DefaultValueMarkdown,
+		raw.DefaultValueOID,
+		raw.DefaultValuePositiveInt,
+		raw.DefaultValueString,
+		raw.DefaultValueTime,
+		raw.DefaultValueUnsignedInt,
+		raw.DefaultValueURI,
+		raw.DefaultValueURL,
+		raw.DefaultValueUUID,
+		raw.DefaultValueAddress,
+		raw.DefaultValueAge,
+		raw.DefaultValueAnnotation,
+		raw.DefaultValueAttachment,
+		raw.DefaultValueCodeableConcept,
+		raw.DefaultValueCoding,
+		raw.DefaultValueContactPoint,
+		raw.DefaultValueCount,
+		raw.DefaultValueDistance,
+		raw.DefaultValueDuration,
+		raw.DefaultValueHumanName,
+		raw.DefaultValueIdentifier,
+		raw.DefaultValueMoney,
+		raw.DefaultValuePeriod,
+		raw.DefaultValueQuantity,
+		raw.DefaultValueRange,
+		raw.DefaultValueRatio,
+		raw.DefaultValueReference,
+		raw.DefaultValueSampledData,
+		raw.DefaultValueSignature,
+		raw.DefaultValueTiming,
+		raw.DefaultValueContactDetail,
+		raw.DefaultValueContributor,
+		raw.DefaultValueDataRequirement,
+		raw.DefaultValueExpression,
+		raw.DefaultValueParameterDefinition,
+		raw.DefaultValueRelatedArtifact,
+		raw.DefaultValueTriggerDefinition,
+		raw.DefaultValueUsageContext,
+		raw.DefaultValueDosage,
+		raw.DefaultValueMeta)
+	if err != nil {
+		return err
+	}
+	smgrs.Element = raw.Element
+	smgrs.Extension = raw.Extension
+	smgrs.ID = raw.ID
+	smgrs.ListMode = raw.ListMode
+	smgrs.LogMessage = raw.LogMessage
+	smgrs.Max = raw.Max
+	smgrs.Min = raw.Min
+	smgrs.ModifierExtension = raw.ModifierExtension
+	smgrs.Type = raw.Type
+	smgrs.Variable = raw.Variable
+	return nil
+}
+
+var _ json.Marshaler = (*StructureMapGroupRuleSource)(nil)
+var _ json.Unmarshaler = (*StructureMapGroupRuleSource)(nil)
+
+func (smgrt *StructureMapGroupRuleTarget) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (smgrt *StructureMapGroupRuleTarget) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Context     *fhir.ID          `json:"context"`
+		ContextType *fhir.Code        `json:"contextType"`
+		Element     *fhir.String      `json:"element"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string                                  `json:"id"`
+		ListMode          []*fhir.Code                            `json:"listMode"`
+		ListRuleID        *fhir.ID                                `json:"listRuleId"`
+		ModifierExtension []*fhir.Extension                       `json:"modifierExtension"`
+		Parameter         []*StructureMapGroupRuleTargetParameter `json:"parameter"`
+		Transform         *fhir.Code                              `json:"transform"`
+		Variable          *fhir.ID                                `json:"variable"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	smgrt.Context = raw.Context
+	smgrt.ContextType = raw.ContextType
+	smgrt.Element = raw.Element
+	smgrt.Extension = raw.Extension
+	smgrt.ID = raw.ID
+	smgrt.ListMode = raw.ListMode
+	smgrt.ListRuleID = raw.ListRuleID
+	smgrt.ModifierExtension = raw.ModifierExtension
+	smgrt.Parameter = raw.Parameter
+	smgrt.Transform = raw.Transform
+	smgrt.Variable = raw.Variable
+	return nil
+}
+
+var _ json.Marshaler = (*StructureMapGroupRuleTarget)(nil)
+var _ json.Unmarshaler = (*StructureMapGroupRuleTarget)(nil)
+
+func (smgrtp *StructureMapGroupRuleTargetParameter) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (smgrtp *StructureMapGroupRuleTargetParameter) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		ValueID           *fhir.ID          `json:"valueID"`
+		ValueString       *fhir.String      `json:"valueString"`
+		ValueBoolean      *fhir.Boolean     `json:"valueBoolean"`
+		ValueInteger      *fhir.Integer     `json:"valueInteger"`
+		ValueDecimal      *fhir.Decimal     `json:"valueDecimal"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	smgrtp.Extension = raw.Extension
+	smgrtp.ID = raw.ID
+	smgrtp.ModifierExtension = raw.ModifierExtension
+	smgrtp.Value, err = validate.SelectOneOf[fhir.Element]("StructureMap.group.rule.target.parameter.value",
+		raw.ValueID,
+		raw.ValueString,
+		raw.ValueBoolean,
+		raw.ValueInteger,
+		raw.ValueDecimal)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*StructureMapGroupRuleTargetParameter)(nil)
+var _ json.Unmarshaler = (*StructureMapGroupRuleTargetParameter)(nil)
+
+func (sms *StructureMapStructure) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sms *StructureMapStructure) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Alias         *fhir.String      `json:"alias"`
+		Documentation *fhir.String      `json:"documentation"`
+		Extension     []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Mode              *fhir.Code        `json:"mode"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		URL               *fhir.Canonical   `json:"url"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sms.Alias = raw.Alias
+	sms.Documentation = raw.Documentation
+	sms.Extension = raw.Extension
+	sms.ID = raw.ID
+	sms.Mode = raw.Mode
+	sms.ModifierExtension = raw.ModifierExtension
+	sms.URL = raw.URL
+	return nil
+}
+
+var _ json.Marshaler = (*StructureMapStructure)(nil)
+var _ json.Unmarshaler = (*StructureMapStructure)(nil)

@@ -6,8 +6,11 @@
 package medicationadministration
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Describes the event of a patient consuming or otherwise being administered a
@@ -757,3 +760,163 @@ func (a *MedicationAdministrationPerformer) GetModifierExtension() []*fhir.Exten
 	}
 	return a.ModifierExtension
 }
+
+func (ma *MedicationAdministration) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ma *MedicationAdministration) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Category          *fhir.CodeableConcept           `json:"category"`
+		Contained         []fhir.Resource                 `json:"contained"`
+		Context           *fhir.Reference                 `json:"context"`
+		Device            []*fhir.Reference               `json:"device"`
+		Dosage            *MedicationAdministrationDosage `json:"dosage"`
+		EffectiveDateTime *fhir.DateTime                  `json:"effectiveDateTime"`
+		EffectivePeriod   *fhir.Period                    `json:"effectivePeriod"`
+		EventHistory      []*fhir.Reference               `json:"eventHistory"`
+		Extension         []*fhir.Extension               `json:"extension"`
+
+		ID                        string                               `json:"id"`
+		Identifier                []*fhir.Identifier                   `json:"identifier"`
+		ImplicitRules             *fhir.URI                            `json:"implicitRules"`
+		Instantiates              []*fhir.URI                          `json:"instantiates"`
+		Language                  *fhir.Code                           `json:"language"`
+		MedicationCodeableConcept *fhir.CodeableConcept                `json:"medicationCodeableConcept"`
+		MedicationReference       *fhir.Reference                      `json:"medicationReference"`
+		Meta                      *fhir.Meta                           `json:"meta"`
+		ModifierExtension         []*fhir.Extension                    `json:"modifierExtension"`
+		Note                      []*fhir.Annotation                   `json:"note"`
+		PartOf                    []*fhir.Reference                    `json:"partOf"`
+		Performer                 []*MedicationAdministrationPerformer `json:"performer"`
+		ReasonCode                []*fhir.CodeableConcept              `json:"reasonCode"`
+		ReasonReference           []*fhir.Reference                    `json:"reasonReference"`
+		Request                   *fhir.Reference                      `json:"request"`
+		Status                    *fhir.Code                           `json:"status"`
+		StatusReason              []*fhir.CodeableConcept              `json:"statusReason"`
+		Subject                   *fhir.Reference                      `json:"subject"`
+		SupportingInformation     []*fhir.Reference                    `json:"supportingInformation"`
+		Text                      *fhir.Narrative                      `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ma.Category = raw.Category
+	ma.Contained = raw.Contained
+	ma.Context = raw.Context
+	ma.Device = raw.Device
+	ma.Dosage = raw.Dosage
+	ma.Effective, err = validate.SelectOneOf[fhir.Element]("MedicationAdministration.effective",
+		raw.EffectiveDateTime,
+		raw.EffectivePeriod)
+	if err != nil {
+		return err
+	}
+	ma.EventHistory = raw.EventHistory
+	ma.Extension = raw.Extension
+	ma.ID = raw.ID
+	ma.Identifier = raw.Identifier
+	ma.ImplicitRules = raw.ImplicitRules
+	ma.Instantiates = raw.Instantiates
+	ma.Language = raw.Language
+	ma.Medication, err = validate.SelectOneOf[fhir.Element]("MedicationAdministration.medication",
+		raw.MedicationCodeableConcept,
+		raw.MedicationReference)
+	if err != nil {
+		return err
+	}
+	ma.Meta = raw.Meta
+	ma.ModifierExtension = raw.ModifierExtension
+	ma.Note = raw.Note
+	ma.PartOf = raw.PartOf
+	ma.Performer = raw.Performer
+	ma.ReasonCode = raw.ReasonCode
+	ma.ReasonReference = raw.ReasonReference
+	ma.Request = raw.Request
+	ma.Status = raw.Status
+	ma.StatusReason = raw.StatusReason
+	ma.Subject = raw.Subject
+	ma.SupportingInformation = raw.SupportingInformation
+	ma.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationAdministration)(nil)
+var _ json.Unmarshaler = (*MedicationAdministration)(nil)
+
+func (mad *MedicationAdministrationDosage) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mad *MedicationAdministrationDosage) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Dose      *fhir.Quantity    `json:"dose"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		Method            *fhir.CodeableConcept `json:"method"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		RateRatio         *fhir.Ratio           `json:"rateRatio"`
+		RateQuantity      *fhir.Quantity        `json:"rateQuantity"`
+		Route             *fhir.CodeableConcept `json:"route"`
+		Site              *fhir.CodeableConcept `json:"site"`
+		Text              *fhir.String          `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mad.Dose = raw.Dose
+	mad.Extension = raw.Extension
+	mad.ID = raw.ID
+	mad.Method = raw.Method
+	mad.ModifierExtension = raw.ModifierExtension
+	mad.Rate, err = validate.SelectOneOf[fhir.Element]("MedicationAdministration.dosage.rate",
+		raw.RateRatio,
+		raw.RateQuantity)
+	if err != nil {
+		return err
+	}
+	mad.Route = raw.Route
+	mad.Site = raw.Site
+	mad.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationAdministrationDosage)(nil)
+var _ json.Unmarshaler = (*MedicationAdministrationDosage)(nil)
+
+func (a *MedicationAdministrationPerformer) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (a *MedicationAdministrationPerformer) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Actor     *fhir.Reference       `json:"actor"`
+		Extension []*fhir.Extension     `json:"extension"`
+		Function  *fhir.CodeableConcept `json:"function"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	a.Actor = raw.Actor
+	a.Extension = raw.Extension
+	a.Function = raw.Function
+	a.ID = raw.ID
+	a.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationAdministrationPerformer)(nil)
+var _ json.Unmarshaler = (*MedicationAdministrationPerformer)(nil)

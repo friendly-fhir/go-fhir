@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for CodeableConcept Type: A concept that may be
@@ -82,3 +84,31 @@ func (cc *CodeableConcept) GetText() *String {
 	}
 	return cc.Text
 }
+
+func (cc *CodeableConcept) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cc *CodeableConcept) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Coding    []*Coding    `json:"coding"`
+		Extension []*Extension `json:"extension"`
+
+		ID   string  `json:"id"`
+		Text *String `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cc.Coding = raw.Coding
+	cc.Extension = raw.Extension
+	cc.ID = raw.ID
+	cc.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*CodeableConcept)(nil)
+var _ json.Unmarshaler = (*CodeableConcept)(nil)

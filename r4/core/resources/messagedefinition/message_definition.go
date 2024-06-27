@@ -6,8 +6,11 @@
 package messagedefinition
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Defines the characteristics of a message that can be shared between systems,
@@ -758,3 +761,157 @@ func (mdf *MessageDefinitionFocus) GetProfile() *fhir.Canonical {
 	}
 	return mdf.Profile
 }
+
+func (md *MessageDefinition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (md *MessageDefinition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AllowedResponse []*MessageDefinitionAllowedResponse `json:"allowedResponse"`
+		Base            *fhir.Canonical                     `json:"base"`
+		Category        *fhir.Code                          `json:"category"`
+		Contact         []*fhir.ContactDetail               `json:"contact"`
+		Contained       []fhir.Resource                     `json:"contained"`
+		Copyright       *fhir.Markdown                      `json:"copyright"`
+		Date            *fhir.DateTime                      `json:"date"`
+		Description     *fhir.Markdown                      `json:"description"`
+		EventCoding     *fhir.Coding                        `json:"eventCoding"`
+		EventURI        *fhir.URI                           `json:"eventURI"`
+		Experimental    *fhir.Boolean                       `json:"experimental"`
+		Extension       []*fhir.Extension                   `json:"extension"`
+		Focus           []*MessageDefinitionFocus           `json:"focus"`
+		Graph           []*fhir.Canonical                   `json:"graph"`
+
+		ID                string                  `json:"id"`
+		Identifier        []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Jurisdiction      []*fhir.CodeableConcept `json:"jurisdiction"`
+		Language          *fhir.Code              `json:"language"`
+		Meta              *fhir.Meta              `json:"meta"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Name              *fhir.String            `json:"name"`
+		Parent            []*fhir.Canonical       `json:"parent"`
+		Publisher         *fhir.String            `json:"publisher"`
+		Purpose           *fhir.Markdown          `json:"purpose"`
+		Replaces          []*fhir.Canonical       `json:"replaces"`
+		ResponseRequired  *fhir.Code              `json:"responseRequired"`
+		Status            *fhir.Code              `json:"status"`
+		Text              *fhir.Narrative         `json:"text"`
+		Title             *fhir.String            `json:"title"`
+		URL               *fhir.URI               `json:"url"`
+		UseContext        []*fhir.UsageContext    `json:"useContext"`
+		Version           *fhir.String            `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	md.AllowedResponse = raw.AllowedResponse
+	md.Base = raw.Base
+	md.Category = raw.Category
+	md.Contact = raw.Contact
+	md.Contained = raw.Contained
+	md.Copyright = raw.Copyright
+	md.Date = raw.Date
+	md.Description = raw.Description
+	md.Event, err = validate.SelectOneOf[fhir.Element]("MessageDefinition.event",
+		raw.EventCoding,
+		raw.EventURI)
+	if err != nil {
+		return err
+	}
+	md.Experimental = raw.Experimental
+	md.Extension = raw.Extension
+	md.Focus = raw.Focus
+	md.Graph = raw.Graph
+	md.ID = raw.ID
+	md.Identifier = raw.Identifier
+	md.ImplicitRules = raw.ImplicitRules
+	md.Jurisdiction = raw.Jurisdiction
+	md.Language = raw.Language
+	md.Meta = raw.Meta
+	md.ModifierExtension = raw.ModifierExtension
+	md.Name = raw.Name
+	md.Parent = raw.Parent
+	md.Publisher = raw.Publisher
+	md.Purpose = raw.Purpose
+	md.Replaces = raw.Replaces
+	md.ResponseRequired = raw.ResponseRequired
+	md.Status = raw.Status
+	md.Text = raw.Text
+	md.Title = raw.Title
+	md.URL = raw.URL
+	md.UseContext = raw.UseContext
+	md.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*MessageDefinition)(nil)
+var _ json.Unmarshaler = (*MessageDefinition)(nil)
+
+func (mdar *MessageDefinitionAllowedResponse) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mdar *MessageDefinitionAllowedResponse) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Message           *fhir.Canonical   `json:"message"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Situation         *fhir.Markdown    `json:"situation"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mdar.Extension = raw.Extension
+	mdar.ID = raw.ID
+	mdar.Message = raw.Message
+	mdar.ModifierExtension = raw.ModifierExtension
+	mdar.Situation = raw.Situation
+	return nil
+}
+
+var _ json.Marshaler = (*MessageDefinitionAllowedResponse)(nil)
+var _ json.Unmarshaler = (*MessageDefinitionAllowedResponse)(nil)
+
+func (mdf *MessageDefinitionFocus) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mdf *MessageDefinitionFocus) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.Code        `json:"code"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Max               *fhir.String      `json:"max"`
+		Min               *fhir.UnsignedInt `json:"min"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Profile           *fhir.Canonical   `json:"profile"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mdf.Code = raw.Code
+	mdf.Extension = raw.Extension
+	mdf.ID = raw.ID
+	mdf.Max = raw.Max
+	mdf.Min = raw.Min
+	mdf.ModifierExtension = raw.ModifierExtension
+	mdf.Profile = raw.Profile
+	return nil
+}
+
+var _ json.Marshaler = (*MessageDefinitionFocus)(nil)
+var _ json.Unmarshaler = (*MessageDefinitionFocus)(nil)

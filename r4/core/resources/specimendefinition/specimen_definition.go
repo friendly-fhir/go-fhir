@@ -6,8 +6,11 @@
 package specimendefinition
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A kind of specimen with associated set of requirements.
@@ -843,3 +846,209 @@ func (sdtth *SpecimenDefinitionTypeTestedHandling) GetTemperatureRange() *fhir.R
 	}
 	return sdtth.TemperatureRange
 }
+
+func (sd *SpecimenDefinition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sd *SpecimenDefinition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Collection []*fhir.CodeableConcept `json:"collection"`
+		Contained  []fhir.Resource         `json:"contained"`
+		Extension  []*fhir.Extension       `json:"extension"`
+
+		ID                 string                          `json:"id"`
+		Identifier         *fhir.Identifier                `json:"identifier"`
+		ImplicitRules      *fhir.URI                       `json:"implicitRules"`
+		Language           *fhir.Code                      `json:"language"`
+		Meta               *fhir.Meta                      `json:"meta"`
+		ModifierExtension  []*fhir.Extension               `json:"modifierExtension"`
+		PatientPreparation []*fhir.CodeableConcept         `json:"patientPreparation"`
+		Text               *fhir.Narrative                 `json:"text"`
+		TimeAspect         *fhir.String                    `json:"timeAspect"`
+		TypeCollected      *fhir.CodeableConcept           `json:"typeCollected"`
+		TypeTested         []*SpecimenDefinitionTypeTested `json:"typeTested"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sd.Collection = raw.Collection
+	sd.Contained = raw.Contained
+	sd.Extension = raw.Extension
+	sd.ID = raw.ID
+	sd.Identifier = raw.Identifier
+	sd.ImplicitRules = raw.ImplicitRules
+	sd.Language = raw.Language
+	sd.Meta = raw.Meta
+	sd.ModifierExtension = raw.ModifierExtension
+	sd.PatientPreparation = raw.PatientPreparation
+	sd.Text = raw.Text
+	sd.TimeAspect = raw.TimeAspect
+	sd.TypeCollected = raw.TypeCollected
+	sd.TypeTested = raw.TypeTested
+	return nil
+}
+
+var _ json.Marshaler = (*SpecimenDefinition)(nil)
+var _ json.Unmarshaler = (*SpecimenDefinition)(nil)
+
+func (sdtt *SpecimenDefinitionTypeTested) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sdtt *SpecimenDefinitionTypeTested) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Container *SpecimenDefinitionTypeTestedContainer  `json:"container"`
+		Extension []*fhir.Extension                       `json:"extension"`
+		Handling  []*SpecimenDefinitionTypeTestedHandling `json:"handling"`
+
+		ID                 string                  `json:"id"`
+		IsDerived          *fhir.Boolean           `json:"isDerived"`
+		ModifierExtension  []*fhir.Extension       `json:"modifierExtension"`
+		Preference         *fhir.Code              `json:"preference"`
+		RejectionCriterion []*fhir.CodeableConcept `json:"rejectionCriterion"`
+		Requirement        *fhir.String            `json:"requirement"`
+		RetentionTime      *fhir.Duration          `json:"retentionTime"`
+		Type               *fhir.CodeableConcept   `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sdtt.Container = raw.Container
+	sdtt.Extension = raw.Extension
+	sdtt.Handling = raw.Handling
+	sdtt.ID = raw.ID
+	sdtt.IsDerived = raw.IsDerived
+	sdtt.ModifierExtension = raw.ModifierExtension
+	sdtt.Preference = raw.Preference
+	sdtt.RejectionCriterion = raw.RejectionCriterion
+	sdtt.Requirement = raw.Requirement
+	sdtt.RetentionTime = raw.RetentionTime
+	sdtt.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*SpecimenDefinitionTypeTested)(nil)
+var _ json.Unmarshaler = (*SpecimenDefinitionTypeTested)(nil)
+
+func (sdttc *SpecimenDefinitionTypeTestedContainer) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sdttc *SpecimenDefinitionTypeTestedContainer) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Additive    []*SpecimenDefinitionTypeTestedContainerAdditive `json:"additive"`
+		Cap         *fhir.CodeableConcept                            `json:"cap"`
+		Capacity    *fhir.Quantity                                   `json:"capacity"`
+		Description *fhir.String                                     `json:"description"`
+		Extension   []*fhir.Extension                                `json:"extension"`
+
+		ID                    string                `json:"id"`
+		Material              *fhir.CodeableConcept `json:"material"`
+		MinimumVolumeQuantity *fhir.Quantity        `json:"minimumVolumeQuantity"`
+		MinimumVolumeString   *fhir.String          `json:"minimumVolumeString"`
+		ModifierExtension     []*fhir.Extension     `json:"modifierExtension"`
+		Preparation           *fhir.String          `json:"preparation"`
+		Type                  *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sdttc.Additive = raw.Additive
+	sdttc.Cap = raw.Cap
+	sdttc.Capacity = raw.Capacity
+	sdttc.Description = raw.Description
+	sdttc.Extension = raw.Extension
+	sdttc.ID = raw.ID
+	sdttc.Material = raw.Material
+	sdttc.MinimumVolume, err = validate.SelectOneOf[fhir.Element]("SpecimenDefinition.typeTested.container.minimumVolume",
+		raw.MinimumVolumeQuantity,
+		raw.MinimumVolumeString)
+	if err != nil {
+		return err
+	}
+	sdttc.ModifierExtension = raw.ModifierExtension
+	sdttc.Preparation = raw.Preparation
+	sdttc.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*SpecimenDefinitionTypeTestedContainer)(nil)
+var _ json.Unmarshaler = (*SpecimenDefinitionTypeTestedContainer)(nil)
+
+func (sdttca *SpecimenDefinitionTypeTestedContainerAdditive) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sdttca *SpecimenDefinitionTypeTestedContainerAdditive) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AdditiveCodeableConcept *fhir.CodeableConcept `json:"additiveCodeableConcept"`
+		AdditiveReference       *fhir.Reference       `json:"additiveReference"`
+		Extension               []*fhir.Extension     `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sdttca.Additive, err = validate.SelectOneOf[fhir.Element]("SpecimenDefinition.typeTested.container.additive.additive",
+		raw.AdditiveCodeableConcept,
+		raw.AdditiveReference)
+	if err != nil {
+		return err
+	}
+	sdttca.Extension = raw.Extension
+	sdttca.ID = raw.ID
+	sdttca.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*SpecimenDefinitionTypeTestedContainerAdditive)(nil)
+var _ json.Unmarshaler = (*SpecimenDefinitionTypeTestedContainerAdditive)(nil)
+
+func (sdtth *SpecimenDefinitionTypeTestedHandling) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sdtth *SpecimenDefinitionTypeTestedHandling) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                   string                `json:"id"`
+		Instruction          *fhir.String          `json:"instruction"`
+		MaxDuration          *fhir.Duration        `json:"maxDuration"`
+		ModifierExtension    []*fhir.Extension     `json:"modifierExtension"`
+		TemperatureQualifier *fhir.CodeableConcept `json:"temperatureQualifier"`
+		TemperatureRange     *fhir.Range           `json:"temperatureRange"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sdtth.Extension = raw.Extension
+	sdtth.ID = raw.ID
+	sdtth.Instruction = raw.Instruction
+	sdtth.MaxDuration = raw.MaxDuration
+	sdtth.ModifierExtension = raw.ModifierExtension
+	sdtth.TemperatureQualifier = raw.TemperatureQualifier
+	sdtth.TemperatureRange = raw.TemperatureRange
+	return nil
+}
+
+var _ json.Marshaler = (*SpecimenDefinitionTypeTestedHandling)(nil)
+var _ json.Unmarshaler = (*SpecimenDefinitionTypeTestedHandling)(nil)

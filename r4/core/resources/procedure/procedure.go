@@ -6,8 +6,11 @@
 package procedure
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // An action that is or was performed on or for a patient. This can be a
@@ -813,3 +816,169 @@ func (pp *ProcedurePerformer) GetOnBehalfOf() *fhir.Reference {
 	}
 	return pp.OnBehalfOf
 }
+
+func (p *Procedure) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (p *Procedure) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Asserter           *fhir.Reference         `json:"asserter"`
+		BasedOn            []*fhir.Reference       `json:"basedOn"`
+		BodySite           []*fhir.CodeableConcept `json:"bodySite"`
+		Category           *fhir.CodeableConcept   `json:"category"`
+		Code               *fhir.CodeableConcept   `json:"code"`
+		Complication       []*fhir.CodeableConcept `json:"complication"`
+		ComplicationDetail []*fhir.Reference       `json:"complicationDetail"`
+		Contained          []fhir.Resource         `json:"contained"`
+		Encounter          *fhir.Reference         `json:"encounter"`
+		Extension          []*fhir.Extension       `json:"extension"`
+		FocalDevice        []*ProcedureFocalDevice `json:"focalDevice"`
+		FollowUp           []*fhir.CodeableConcept `json:"followUp"`
+
+		ID                    string                  `json:"id"`
+		Identifier            []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules         *fhir.URI               `json:"implicitRules"`
+		InstantiatesCanonical []*fhir.Canonical       `json:"instantiatesCanonical"`
+		InstantiatesURI       []*fhir.URI             `json:"instantiatesUri"`
+		Language              *fhir.Code              `json:"language"`
+		Location              *fhir.Reference         `json:"location"`
+		Meta                  *fhir.Meta              `json:"meta"`
+		ModifierExtension     []*fhir.Extension       `json:"modifierExtension"`
+		Note                  []*fhir.Annotation      `json:"note"`
+		Outcome               *fhir.CodeableConcept   `json:"outcome"`
+		PartOf                []*fhir.Reference       `json:"partOf"`
+		PerformedDateTime     *fhir.DateTime          `json:"performedDateTime"`
+		PerformedPeriod       *fhir.Period            `json:"performedPeriod"`
+		PerformedString       *fhir.String            `json:"performedString"`
+		PerformedAge          *fhir.Age               `json:"performedAge"`
+		PerformedRange        *fhir.Range             `json:"performedRange"`
+		Performer             []*ProcedurePerformer   `json:"performer"`
+		ReasonCode            []*fhir.CodeableConcept `json:"reasonCode"`
+		ReasonReference       []*fhir.Reference       `json:"reasonReference"`
+		Recorder              *fhir.Reference         `json:"recorder"`
+		Report                []*fhir.Reference       `json:"report"`
+		Status                *fhir.Code              `json:"status"`
+		StatusReason          *fhir.CodeableConcept   `json:"statusReason"`
+		Subject               *fhir.Reference         `json:"subject"`
+		Text                  *fhir.Narrative         `json:"text"`
+		UsedCode              []*fhir.CodeableConcept `json:"usedCode"`
+		UsedReference         []*fhir.Reference       `json:"usedReference"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	p.Asserter = raw.Asserter
+	p.BasedOn = raw.BasedOn
+	p.BodySite = raw.BodySite
+	p.Category = raw.Category
+	p.Code = raw.Code
+	p.Complication = raw.Complication
+	p.ComplicationDetail = raw.ComplicationDetail
+	p.Contained = raw.Contained
+	p.Encounter = raw.Encounter
+	p.Extension = raw.Extension
+	p.FocalDevice = raw.FocalDevice
+	p.FollowUp = raw.FollowUp
+	p.ID = raw.ID
+	p.Identifier = raw.Identifier
+	p.ImplicitRules = raw.ImplicitRules
+	p.InstantiatesCanonical = raw.InstantiatesCanonical
+	p.InstantiatesURI = raw.InstantiatesURI
+	p.Language = raw.Language
+	p.Location = raw.Location
+	p.Meta = raw.Meta
+	p.ModifierExtension = raw.ModifierExtension
+	p.Note = raw.Note
+	p.Outcome = raw.Outcome
+	p.PartOf = raw.PartOf
+	p.Performed, err = validate.SelectOneOf[fhir.Element]("Procedure.performed",
+		raw.PerformedDateTime,
+		raw.PerformedPeriod,
+		raw.PerformedString,
+		raw.PerformedAge,
+		raw.PerformedRange)
+	if err != nil {
+		return err
+	}
+	p.Performer = raw.Performer
+	p.ReasonCode = raw.ReasonCode
+	p.ReasonReference = raw.ReasonReference
+	p.Recorder = raw.Recorder
+	p.Report = raw.Report
+	p.Status = raw.Status
+	p.StatusReason = raw.StatusReason
+	p.Subject = raw.Subject
+	p.Text = raw.Text
+	p.UsedCode = raw.UsedCode
+	p.UsedReference = raw.UsedReference
+	return nil
+}
+
+var _ json.Marshaler = (*Procedure)(nil)
+var _ json.Unmarshaler = (*Procedure)(nil)
+
+func (pfd *ProcedureFocalDevice) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pfd *ProcedureFocalDevice) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Action    *fhir.CodeableConcept `json:"action"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string            `json:"id"`
+		Manipulated       *fhir.Reference   `json:"manipulated"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pfd.Action = raw.Action
+	pfd.Extension = raw.Extension
+	pfd.ID = raw.ID
+	pfd.Manipulated = raw.Manipulated
+	pfd.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*ProcedureFocalDevice)(nil)
+var _ json.Unmarshaler = (*ProcedureFocalDevice)(nil)
+
+func (pp *ProcedurePerformer) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pp *ProcedurePerformer) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Actor     *fhir.Reference       `json:"actor"`
+		Extension []*fhir.Extension     `json:"extension"`
+		Function  *fhir.CodeableConcept `json:"function"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		OnBehalfOf        *fhir.Reference   `json:"onBehalfOf"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pp.Actor = raw.Actor
+	pp.Extension = raw.Extension
+	pp.Function = raw.Function
+	pp.ID = raw.ID
+	pp.ModifierExtension = raw.ModifierExtension
+	pp.OnBehalfOf = raw.OnBehalfOf
+	return nil
+}
+
+var _ json.Marshaler = (*ProcedurePerformer)(nil)
+var _ json.Unmarshaler = (*ProcedurePerformer)(nil)

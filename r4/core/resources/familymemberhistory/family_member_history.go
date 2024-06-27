@@ -6,8 +6,11 @@
 package familymemberhistory
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Significant health conditions for a person related to the patient relevant
@@ -725,3 +728,149 @@ func (fmhc *FamilyMemberHistoryCondition) GetOutcome() *fhir.CodeableConcept {
 	}
 	return fmhc.Outcome
 }
+
+func (fmh *FamilyMemberHistory) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (fmh *FamilyMemberHistory) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AgeAge           *fhir.Age                       `json:"ageAge"`
+		AgeRange         *fhir.Range                     `json:"ageRange"`
+		AgeString        *fhir.String                    `json:"ageString"`
+		BornPeriod       *fhir.Period                    `json:"bornPeriod"`
+		BornDate         *fhir.Date                      `json:"bornDate"`
+		BornString       *fhir.String                    `json:"bornString"`
+		Condition        []*FamilyMemberHistoryCondition `json:"condition"`
+		Contained        []fhir.Resource                 `json:"contained"`
+		DataAbsentReason *fhir.CodeableConcept           `json:"dataAbsentReason"`
+		Date             *fhir.DateTime                  `json:"date"`
+		DeceasedBoolean  *fhir.Boolean                   `json:"deceasedBoolean"`
+		DeceasedAge      *fhir.Age                       `json:"deceasedAge"`
+		DeceasedRange    *fhir.Range                     `json:"deceasedRange"`
+		DeceasedDate     *fhir.Date                      `json:"deceasedDate"`
+		DeceasedString   *fhir.String                    `json:"deceasedString"`
+		EstimatedAge     *fhir.Boolean                   `json:"estimatedAge"`
+		Extension        []*fhir.Extension               `json:"extension"`
+
+		ID                    string                  `json:"id"`
+		Identifier            []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules         *fhir.URI               `json:"implicitRules"`
+		InstantiatesCanonical []*fhir.Canonical       `json:"instantiatesCanonical"`
+		InstantiatesURI       []*fhir.URI             `json:"instantiatesUri"`
+		Language              *fhir.Code              `json:"language"`
+		Meta                  *fhir.Meta              `json:"meta"`
+		ModifierExtension     []*fhir.Extension       `json:"modifierExtension"`
+		Name                  *fhir.String            `json:"name"`
+		Note                  []*fhir.Annotation      `json:"note"`
+		Patient               *fhir.Reference         `json:"patient"`
+		ReasonCode            []*fhir.CodeableConcept `json:"reasonCode"`
+		ReasonReference       []*fhir.Reference       `json:"reasonReference"`
+		Relationship          *fhir.CodeableConcept   `json:"relationship"`
+		Sex                   *fhir.CodeableConcept   `json:"sex"`
+		Status                *fhir.Code              `json:"status"`
+		Text                  *fhir.Narrative         `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	fmh.Age, err = validate.SelectOneOf[fhir.Element]("FamilyMemberHistory.age",
+		raw.AgeAge,
+		raw.AgeRange,
+		raw.AgeString)
+	if err != nil {
+		return err
+	}
+	fmh.Born, err = validate.SelectOneOf[fhir.Element]("FamilyMemberHistory.born",
+		raw.BornPeriod,
+		raw.BornDate,
+		raw.BornString)
+	if err != nil {
+		return err
+	}
+	fmh.Condition = raw.Condition
+	fmh.Contained = raw.Contained
+	fmh.DataAbsentReason = raw.DataAbsentReason
+	fmh.Date = raw.Date
+	fmh.Deceased, err = validate.SelectOneOf[fhir.Element]("FamilyMemberHistory.deceased",
+		raw.DeceasedBoolean,
+		raw.DeceasedAge,
+		raw.DeceasedRange,
+		raw.DeceasedDate,
+		raw.DeceasedString)
+	if err != nil {
+		return err
+	}
+	fmh.EstimatedAge = raw.EstimatedAge
+	fmh.Extension = raw.Extension
+	fmh.ID = raw.ID
+	fmh.Identifier = raw.Identifier
+	fmh.ImplicitRules = raw.ImplicitRules
+	fmh.InstantiatesCanonical = raw.InstantiatesCanonical
+	fmh.InstantiatesURI = raw.InstantiatesURI
+	fmh.Language = raw.Language
+	fmh.Meta = raw.Meta
+	fmh.ModifierExtension = raw.ModifierExtension
+	fmh.Name = raw.Name
+	fmh.Note = raw.Note
+	fmh.Patient = raw.Patient
+	fmh.ReasonCode = raw.ReasonCode
+	fmh.ReasonReference = raw.ReasonReference
+	fmh.Relationship = raw.Relationship
+	fmh.Sex = raw.Sex
+	fmh.Status = raw.Status
+	fmh.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*FamilyMemberHistory)(nil)
+var _ json.Unmarshaler = (*FamilyMemberHistory)(nil)
+
+func (fmhc *FamilyMemberHistoryCondition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (fmhc *FamilyMemberHistoryCondition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code               *fhir.CodeableConcept `json:"code"`
+		ContributedToDeath *fhir.Boolean         `json:"contributedToDeath"`
+		Extension          []*fhir.Extension     `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Note              []*fhir.Annotation    `json:"note"`
+		OnsetAge          *fhir.Age             `json:"onsetAge"`
+		OnsetRange        *fhir.Range           `json:"onsetRange"`
+		OnsetPeriod       *fhir.Period          `json:"onsetPeriod"`
+		OnsetString       *fhir.String          `json:"onsetString"`
+		Outcome           *fhir.CodeableConcept `json:"outcome"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	fmhc.Code = raw.Code
+	fmhc.ContributedToDeath = raw.ContributedToDeath
+	fmhc.Extension = raw.Extension
+	fmhc.ID = raw.ID
+	fmhc.ModifierExtension = raw.ModifierExtension
+	fmhc.Note = raw.Note
+	fmhc.Onset, err = validate.SelectOneOf[fhir.Element]("FamilyMemberHistory.condition.onset",
+		raw.OnsetAge,
+		raw.OnsetRange,
+		raw.OnsetPeriod,
+		raw.OnsetString)
+	if err != nil {
+		return err
+	}
+	fmhc.Outcome = raw.Outcome
+	return nil
+}
+
+var _ json.Marshaler = (*FamilyMemberHistoryCondition)(nil)
+var _ json.Unmarshaler = (*FamilyMemberHistoryCondition)(nil)

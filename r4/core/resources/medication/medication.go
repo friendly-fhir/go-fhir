@@ -6,8 +6,11 @@
 package medication
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // This resource is primarily used for the identification and definition of a
@@ -506,3 +509,123 @@ func (mi *MedicationIngredient) GetStrength() *fhir.Ratio {
 	}
 	return mi.Strength
 }
+
+func (m *Medication) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (m *Medication) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Amount    *fhir.Ratio           `json:"amount"`
+		Batch     *MedicationBatch      `json:"batch"`
+		Code      *fhir.CodeableConcept `json:"code"`
+		Contained []fhir.Resource       `json:"contained"`
+		Extension []*fhir.Extension     `json:"extension"`
+		Form      *fhir.CodeableConcept `json:"form"`
+
+		ID                string                  `json:"id"`
+		Identifier        []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Ingredient        []*MedicationIngredient `json:"ingredient"`
+		Language          *fhir.Code              `json:"language"`
+		Manufacturer      *fhir.Reference         `json:"manufacturer"`
+		Meta              *fhir.Meta              `json:"meta"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Status            *fhir.Code              `json:"status"`
+		Text              *fhir.Narrative         `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	m.Amount = raw.Amount
+	m.Batch = raw.Batch
+	m.Code = raw.Code
+	m.Contained = raw.Contained
+	m.Extension = raw.Extension
+	m.Form = raw.Form
+	m.ID = raw.ID
+	m.Identifier = raw.Identifier
+	m.ImplicitRules = raw.ImplicitRules
+	m.Ingredient = raw.Ingredient
+	m.Language = raw.Language
+	m.Manufacturer = raw.Manufacturer
+	m.Meta = raw.Meta
+	m.ModifierExtension = raw.ModifierExtension
+	m.Status = raw.Status
+	m.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*Medication)(nil)
+var _ json.Unmarshaler = (*Medication)(nil)
+
+func (mb *MedicationBatch) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mb *MedicationBatch) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ExpirationDate *fhir.DateTime    `json:"expirationDate"`
+		Extension      []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		LotNumber         *fhir.String      `json:"lotNumber"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mb.ExpirationDate = raw.ExpirationDate
+	mb.Extension = raw.Extension
+	mb.ID = raw.ID
+	mb.LotNumber = raw.LotNumber
+	mb.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationBatch)(nil)
+var _ json.Unmarshaler = (*MedicationBatch)(nil)
+
+func (mi *MedicationIngredient) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mi *MedicationIngredient) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                  string                `json:"id"`
+		IsActive            *fhir.Boolean         `json:"isActive"`
+		ItemCodeableConcept *fhir.CodeableConcept `json:"itemCodeableConcept"`
+		ItemReference       *fhir.Reference       `json:"itemReference"`
+		ModifierExtension   []*fhir.Extension     `json:"modifierExtension"`
+		Strength            *fhir.Ratio           `json:"strength"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mi.Extension = raw.Extension
+	mi.ID = raw.ID
+	mi.IsActive = raw.IsActive
+	mi.Item, err = validate.SelectOneOf[fhir.Element]("Medication.ingredient.item",
+		raw.ItemCodeableConcept,
+		raw.ItemReference)
+	if err != nil {
+		return err
+	}
+	mi.ModifierExtension = raw.ModifierExtension
+	mi.Strength = raw.Strength
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationIngredient)(nil)
+var _ json.Unmarshaler = (*MedicationIngredient)(nil)

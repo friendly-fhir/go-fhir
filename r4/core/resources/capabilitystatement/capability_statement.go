@@ -8,6 +8,8 @@ package capabilitystatement
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A Capability Statement documents a set of capabilities (behaviors) of a FHIR
@@ -2260,3 +2262,537 @@ func (css *CapabilityStatementSoftware) GetVersion() *fhir.String {
 	}
 	return css.Version
 }
+
+func (cs *CapabilityStatement) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cs *CapabilityStatement) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contact      []*fhir.ContactDetail          `json:"contact"`
+		Contained    []fhir.Resource                `json:"contained"`
+		Copyright    *fhir.Markdown                 `json:"copyright"`
+		Date         *fhir.DateTime                 `json:"date"`
+		Description  *fhir.Markdown                 `json:"description"`
+		Document     []*CapabilityStatementDocument `json:"document"`
+		Experimental *fhir.Boolean                  `json:"experimental"`
+		Extension    []*fhir.Extension              `json:"extension"`
+		FhirVersion  *fhir.Code                     `json:"fhirVersion"`
+		Format       []*fhir.Code                   `json:"format"`
+
+		ID                  string                             `json:"id"`
+		Implementation      *CapabilityStatementImplementation `json:"implementation"`
+		ImplementationGuide []*fhir.Canonical                  `json:"implementationGuide"`
+		ImplicitRules       *fhir.URI                          `json:"implicitRules"`
+		Imports             []*fhir.Canonical                  `json:"imports"`
+		Instantiates        []*fhir.Canonical                  `json:"instantiates"`
+		Jurisdiction        []*fhir.CodeableConcept            `json:"jurisdiction"`
+		Kind                *fhir.Code                         `json:"kind"`
+		Language            *fhir.Code                         `json:"language"`
+		Messaging           []*CapabilityStatementMessaging    `json:"messaging"`
+		Meta                *fhir.Meta                         `json:"meta"`
+		ModifierExtension   []*fhir.Extension                  `json:"modifierExtension"`
+		Name                *fhir.String                       `json:"name"`
+		PatchFormat         []*fhir.Code                       `json:"patchFormat"`
+		Publisher           *fhir.String                       `json:"publisher"`
+		Purpose             *fhir.Markdown                     `json:"purpose"`
+		Rest                []*CapabilityStatementRest         `json:"rest"`
+		Software            *CapabilityStatementSoftware       `json:"software"`
+		Status              *fhir.Code                         `json:"status"`
+		Text                *fhir.Narrative                    `json:"text"`
+		Title               *fhir.String                       `json:"title"`
+		URL                 *fhir.URI                          `json:"url"`
+		UseContext          []*fhir.UsageContext               `json:"useContext"`
+		Version             *fhir.String                       `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cs.Contact = raw.Contact
+	cs.Contained = raw.Contained
+	cs.Copyright = raw.Copyright
+	cs.Date = raw.Date
+	cs.Description = raw.Description
+	cs.Document = raw.Document
+	cs.Experimental = raw.Experimental
+	cs.Extension = raw.Extension
+	cs.FhirVersion = raw.FhirVersion
+	cs.Format = raw.Format
+	cs.ID = raw.ID
+	cs.Implementation = raw.Implementation
+	cs.ImplementationGuide = raw.ImplementationGuide
+	cs.ImplicitRules = raw.ImplicitRules
+	cs.Imports = raw.Imports
+	cs.Instantiates = raw.Instantiates
+	cs.Jurisdiction = raw.Jurisdiction
+	cs.Kind = raw.Kind
+	cs.Language = raw.Language
+	cs.Messaging = raw.Messaging
+	cs.Meta = raw.Meta
+	cs.ModifierExtension = raw.ModifierExtension
+	cs.Name = raw.Name
+	cs.PatchFormat = raw.PatchFormat
+	cs.Publisher = raw.Publisher
+	cs.Purpose = raw.Purpose
+	cs.Rest = raw.Rest
+	cs.Software = raw.Software
+	cs.Status = raw.Status
+	cs.Text = raw.Text
+	cs.Title = raw.Title
+	cs.URL = raw.URL
+	cs.UseContext = raw.UseContext
+	cs.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*CapabilityStatement)(nil)
+var _ json.Unmarshaler = (*CapabilityStatement)(nil)
+
+func (csd *CapabilityStatementDocument) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (csd *CapabilityStatementDocument) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Documentation *fhir.Markdown    `json:"documentation"`
+		Extension     []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Mode              *fhir.Code        `json:"mode"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Profile           *fhir.Canonical   `json:"profile"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	csd.Documentation = raw.Documentation
+	csd.Extension = raw.Extension
+	csd.ID = raw.ID
+	csd.Mode = raw.Mode
+	csd.ModifierExtension = raw.ModifierExtension
+	csd.Profile = raw.Profile
+	return nil
+}
+
+var _ json.Marshaler = (*CapabilityStatementDocument)(nil)
+var _ json.Unmarshaler = (*CapabilityStatementDocument)(nil)
+
+func (csi *CapabilityStatementImplementation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (csi *CapabilityStatementImplementation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Custodian   *fhir.Reference   `json:"custodian"`
+		Description *fhir.String      `json:"description"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		URL               *fhir.URL         `json:"url"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	csi.Custodian = raw.Custodian
+	csi.Description = raw.Description
+	csi.Extension = raw.Extension
+	csi.ID = raw.ID
+	csi.ModifierExtension = raw.ModifierExtension
+	csi.URL = raw.URL
+	return nil
+}
+
+var _ json.Marshaler = (*CapabilityStatementImplementation)(nil)
+var _ json.Unmarshaler = (*CapabilityStatementImplementation)(nil)
+
+func (csm *CapabilityStatementMessaging) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (csm *CapabilityStatementMessaging) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Documentation *fhir.Markdown                          `json:"documentation"`
+		Endpoint      []*CapabilityStatementMessagingEndpoint `json:"endpoint"`
+		Extension     []*fhir.Extension                       `json:"extension"`
+
+		ID                string                                          `json:"id"`
+		ModifierExtension []*fhir.Extension                               `json:"modifierExtension"`
+		ReliableCache     *fhir.UnsignedInt                               `json:"reliableCache"`
+		SupportedMessage  []*CapabilityStatementMessagingSupportedMessage `json:"supportedMessage"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	csm.Documentation = raw.Documentation
+	csm.Endpoint = raw.Endpoint
+	csm.Extension = raw.Extension
+	csm.ID = raw.ID
+	csm.ModifierExtension = raw.ModifierExtension
+	csm.ReliableCache = raw.ReliableCache
+	csm.SupportedMessage = raw.SupportedMessage
+	return nil
+}
+
+var _ json.Marshaler = (*CapabilityStatementMessaging)(nil)
+var _ json.Unmarshaler = (*CapabilityStatementMessaging)(nil)
+
+func (csme *CapabilityStatementMessagingEndpoint) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (csme *CapabilityStatementMessagingEndpoint) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Address   *fhir.URL         `json:"address"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Protocol          *fhir.Coding      `json:"protocol"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	csme.Address = raw.Address
+	csme.Extension = raw.Extension
+	csme.ID = raw.ID
+	csme.ModifierExtension = raw.ModifierExtension
+	csme.Protocol = raw.Protocol
+	return nil
+}
+
+var _ json.Marshaler = (*CapabilityStatementMessagingEndpoint)(nil)
+var _ json.Unmarshaler = (*CapabilityStatementMessagingEndpoint)(nil)
+
+func (csmsm *CapabilityStatementMessagingSupportedMessage) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (csmsm *CapabilityStatementMessagingSupportedMessage) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Definition *fhir.Canonical   `json:"definition"`
+		Extension  []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Mode              *fhir.Code        `json:"mode"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	csmsm.Definition = raw.Definition
+	csmsm.Extension = raw.Extension
+	csmsm.ID = raw.ID
+	csmsm.Mode = raw.Mode
+	csmsm.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*CapabilityStatementMessagingSupportedMessage)(nil)
+var _ json.Unmarshaler = (*CapabilityStatementMessagingSupportedMessage)(nil)
+
+func (csr *CapabilityStatementRest) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (csr *CapabilityStatementRest) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Compartment   []*fhir.Canonical `json:"compartment"`
+		Documentation *fhir.Markdown    `json:"documentation"`
+		Extension     []*fhir.Extension `json:"extension"`
+
+		ID                string                                `json:"id"`
+		Interaction       []*CapabilityStatementRestInteraction `json:"interaction"`
+		Mode              *fhir.Code                            `json:"mode"`
+		ModifierExtension []*fhir.Extension                     `json:"modifierExtension"`
+		Resource          []*CapabilityStatementRestResource    `json:"resource"`
+		Security          *CapabilityStatementRestSecurity      `json:"security"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	csr.Compartment = raw.Compartment
+	csr.Documentation = raw.Documentation
+	csr.Extension = raw.Extension
+	csr.ID = raw.ID
+	csr.Interaction = raw.Interaction
+	csr.Mode = raw.Mode
+	csr.ModifierExtension = raw.ModifierExtension
+	csr.Resource = raw.Resource
+	csr.Security = raw.Security
+	return nil
+}
+
+var _ json.Marshaler = (*CapabilityStatementRest)(nil)
+var _ json.Unmarshaler = (*CapabilityStatementRest)(nil)
+
+func (csri *CapabilityStatementRestInteraction) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (csri *CapabilityStatementRestInteraction) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code          *fhir.Code        `json:"code"`
+		Documentation *fhir.Markdown    `json:"documentation"`
+		Extension     []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	csri.Code = raw.Code
+	csri.Documentation = raw.Documentation
+	csri.Extension = raw.Extension
+	csri.ID = raw.ID
+	csri.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*CapabilityStatementRestInteraction)(nil)
+var _ json.Unmarshaler = (*CapabilityStatementRestInteraction)(nil)
+
+func (csrr *CapabilityStatementRestResource) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (csrr *CapabilityStatementRestResource) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ConditionalCreate *fhir.Boolean     `json:"conditionalCreate"`
+		ConditionalDelete *fhir.Code        `json:"conditionalDelete"`
+		ConditionalRead   *fhir.Code        `json:"conditionalRead"`
+		ConditionalUpdate *fhir.Boolean     `json:"conditionalUpdate"`
+		Documentation     *fhir.Markdown    `json:"documentation"`
+		Extension         []*fhir.Extension `json:"extension"`
+
+		ID                string                                        `json:"id"`
+		Interaction       []*CapabilityStatementRestResourceInteraction `json:"interaction"`
+		ModifierExtension []*fhir.Extension                             `json:"modifierExtension"`
+		Operation         []*CapabilityStatementRestResourceOperation   `json:"operation"`
+		Profile           *fhir.Canonical                               `json:"profile"`
+		ReadHistory       *fhir.Boolean                                 `json:"readHistory"`
+		ReferencePolicy   []*fhir.Code                                  `json:"referencePolicy"`
+		SearchInclude     []*fhir.String                                `json:"searchInclude"`
+		SearchParam       []*CapabilityStatementRestResourceSearchParam `json:"searchParam"`
+		SearchRevInclude  []*fhir.String                                `json:"searchRevInclude"`
+		SupportedProfile  []*fhir.Canonical                             `json:"supportedProfile"`
+		Type              *fhir.Code                                    `json:"type"`
+		UpdateCreate      *fhir.Boolean                                 `json:"updateCreate"`
+		Versioning        *fhir.Code                                    `json:"versioning"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	csrr.ConditionalCreate = raw.ConditionalCreate
+	csrr.ConditionalDelete = raw.ConditionalDelete
+	csrr.ConditionalRead = raw.ConditionalRead
+	csrr.ConditionalUpdate = raw.ConditionalUpdate
+	csrr.Documentation = raw.Documentation
+	csrr.Extension = raw.Extension
+	csrr.ID = raw.ID
+	csrr.Interaction = raw.Interaction
+	csrr.ModifierExtension = raw.ModifierExtension
+	csrr.Operation = raw.Operation
+	csrr.Profile = raw.Profile
+	csrr.ReadHistory = raw.ReadHistory
+	csrr.ReferencePolicy = raw.ReferencePolicy
+	csrr.SearchInclude = raw.SearchInclude
+	csrr.SearchParam = raw.SearchParam
+	csrr.SearchRevInclude = raw.SearchRevInclude
+	csrr.SupportedProfile = raw.SupportedProfile
+	csrr.Type = raw.Type
+	csrr.UpdateCreate = raw.UpdateCreate
+	csrr.Versioning = raw.Versioning
+	return nil
+}
+
+var _ json.Marshaler = (*CapabilityStatementRestResource)(nil)
+var _ json.Unmarshaler = (*CapabilityStatementRestResource)(nil)
+
+func (csrri *CapabilityStatementRestResourceInteraction) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (csrri *CapabilityStatementRestResourceInteraction) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code          *fhir.Code        `json:"code"`
+		Documentation *fhir.Markdown    `json:"documentation"`
+		Extension     []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	csrri.Code = raw.Code
+	csrri.Documentation = raw.Documentation
+	csrri.Extension = raw.Extension
+	csrri.ID = raw.ID
+	csrri.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*CapabilityStatementRestResourceInteraction)(nil)
+var _ json.Unmarshaler = (*CapabilityStatementRestResourceInteraction)(nil)
+
+func (csrro *CapabilityStatementRestResourceOperation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (csrro *CapabilityStatementRestResourceOperation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Definition    *fhir.Canonical   `json:"definition"`
+		Documentation *fhir.Markdown    `json:"documentation"`
+		Extension     []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.String      `json:"name"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	csrro.Definition = raw.Definition
+	csrro.Documentation = raw.Documentation
+	csrro.Extension = raw.Extension
+	csrro.ID = raw.ID
+	csrro.ModifierExtension = raw.ModifierExtension
+	csrro.Name = raw.Name
+	return nil
+}
+
+var _ json.Marshaler = (*CapabilityStatementRestResourceOperation)(nil)
+var _ json.Unmarshaler = (*CapabilityStatementRestResourceOperation)(nil)
+
+func (csrrsp *CapabilityStatementRestResourceSearchParam) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (csrrsp *CapabilityStatementRestResourceSearchParam) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Definition    *fhir.Canonical   `json:"definition"`
+		Documentation *fhir.Markdown    `json:"documentation"`
+		Extension     []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.String      `json:"name"`
+		Type              *fhir.Code        `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	csrrsp.Definition = raw.Definition
+	csrrsp.Documentation = raw.Documentation
+	csrrsp.Extension = raw.Extension
+	csrrsp.ID = raw.ID
+	csrrsp.ModifierExtension = raw.ModifierExtension
+	csrrsp.Name = raw.Name
+	csrrsp.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*CapabilityStatementRestResourceSearchParam)(nil)
+var _ json.Unmarshaler = (*CapabilityStatementRestResourceSearchParam)(nil)
+
+func (csrs *CapabilityStatementRestSecurity) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (csrs *CapabilityStatementRestSecurity) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Cors        *fhir.Boolean     `json:"cors"`
+		Description *fhir.Markdown    `json:"description"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string                  `json:"id"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Service           []*fhir.CodeableConcept `json:"service"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	csrs.Cors = raw.Cors
+	csrs.Description = raw.Description
+	csrs.Extension = raw.Extension
+	csrs.ID = raw.ID
+	csrs.ModifierExtension = raw.ModifierExtension
+	csrs.Service = raw.Service
+	return nil
+}
+
+var _ json.Marshaler = (*CapabilityStatementRestSecurity)(nil)
+var _ json.Unmarshaler = (*CapabilityStatementRestSecurity)(nil)
+
+func (css *CapabilityStatementSoftware) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (css *CapabilityStatementSoftware) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.String      `json:"name"`
+		ReleaseDate       *fhir.DateTime    `json:"releaseDate"`
+		Version           *fhir.String      `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	css.Extension = raw.Extension
+	css.ID = raw.ID
+	css.ModifierExtension = raw.ModifierExtension
+	css.Name = raw.Name
+	css.ReleaseDate = raw.ReleaseDate
+	css.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*CapabilityStatementSoftware)(nil)
+var _ json.Unmarshaler = (*CapabilityStatementSoftware)(nil)

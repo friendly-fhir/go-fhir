@@ -8,6 +8,8 @@ package insuranceplan
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Details of a Health Insurance product/plan provided by an organization.
@@ -1376,3 +1378,361 @@ func (ippscbc *InsurancePlanPlanSpecificCostBenefitCost) GetValue() *fhir.Quanti
 	}
 	return ippscbc.Value
 }
+
+func (ip *InsurancePlan) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ip *InsurancePlan) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AdministeredBy *fhir.Reference          `json:"administeredBy"`
+		Alias          []*fhir.String           `json:"alias"`
+		Contact        []*InsurancePlanContact  `json:"contact"`
+		Contained      []fhir.Resource          `json:"contained"`
+		Coverage       []*InsurancePlanCoverage `json:"coverage"`
+		CoverageArea   []*fhir.Reference        `json:"coverageArea"`
+		Endpoint       []*fhir.Reference        `json:"endpoint"`
+		Extension      []*fhir.Extension        `json:"extension"`
+
+		ID                string                  `json:"id"`
+		Identifier        []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Language          *fhir.Code              `json:"language"`
+		Meta              *fhir.Meta              `json:"meta"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Name              *fhir.String            `json:"name"`
+		Network           []*fhir.Reference       `json:"network"`
+		OwnedBy           *fhir.Reference         `json:"ownedBy"`
+		Period            *fhir.Period            `json:"period"`
+		Plan              []*InsurancePlanPlan    `json:"plan"`
+		Status            *fhir.Code              `json:"status"`
+		Text              *fhir.Narrative         `json:"text"`
+		Type              []*fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ip.AdministeredBy = raw.AdministeredBy
+	ip.Alias = raw.Alias
+	ip.Contact = raw.Contact
+	ip.Contained = raw.Contained
+	ip.Coverage = raw.Coverage
+	ip.CoverageArea = raw.CoverageArea
+	ip.Endpoint = raw.Endpoint
+	ip.Extension = raw.Extension
+	ip.ID = raw.ID
+	ip.Identifier = raw.Identifier
+	ip.ImplicitRules = raw.ImplicitRules
+	ip.Language = raw.Language
+	ip.Meta = raw.Meta
+	ip.ModifierExtension = raw.ModifierExtension
+	ip.Name = raw.Name
+	ip.Network = raw.Network
+	ip.OwnedBy = raw.OwnedBy
+	ip.Period = raw.Period
+	ip.Plan = raw.Plan
+	ip.Status = raw.Status
+	ip.Text = raw.Text
+	ip.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*InsurancePlan)(nil)
+var _ json.Unmarshaler = (*InsurancePlan)(nil)
+
+func (ipc *InsurancePlanContact) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ipc *InsurancePlanContact) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Address   *fhir.Address     `json:"address"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Name              *fhir.HumanName       `json:"name"`
+		Purpose           *fhir.CodeableConcept `json:"purpose"`
+		Telecom           []*fhir.ContactPoint  `json:"telecom"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ipc.Address = raw.Address
+	ipc.Extension = raw.Extension
+	ipc.ID = raw.ID
+	ipc.ModifierExtension = raw.ModifierExtension
+	ipc.Name = raw.Name
+	ipc.Purpose = raw.Purpose
+	ipc.Telecom = raw.Telecom
+	return nil
+}
+
+var _ json.Marshaler = (*InsurancePlanContact)(nil)
+var _ json.Unmarshaler = (*InsurancePlanContact)(nil)
+
+func (ipc *InsurancePlanCoverage) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ipc *InsurancePlanCoverage) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Benefit   []*InsurancePlanCoverageBenefit `json:"benefit"`
+		Extension []*fhir.Extension               `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Network           []*fhir.Reference     `json:"network"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ipc.Benefit = raw.Benefit
+	ipc.Extension = raw.Extension
+	ipc.ID = raw.ID
+	ipc.ModifierExtension = raw.ModifierExtension
+	ipc.Network = raw.Network
+	ipc.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*InsurancePlanCoverage)(nil)
+var _ json.Unmarshaler = (*InsurancePlanCoverage)(nil)
+
+func (ipcb *InsurancePlanCoverageBenefit) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ipcb *InsurancePlanCoverageBenefit) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                               `json:"id"`
+		Limit             []*InsurancePlanCoverageBenefitLimit `json:"limit"`
+		ModifierExtension []*fhir.Extension                    `json:"modifierExtension"`
+		Requirement       *fhir.String                         `json:"requirement"`
+		Type              *fhir.CodeableConcept                `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ipcb.Extension = raw.Extension
+	ipcb.ID = raw.ID
+	ipcb.Limit = raw.Limit
+	ipcb.ModifierExtension = raw.ModifierExtension
+	ipcb.Requirement = raw.Requirement
+	ipcb.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*InsurancePlanCoverageBenefit)(nil)
+var _ json.Unmarshaler = (*InsurancePlanCoverageBenefit)(nil)
+
+func (ipcbl *InsurancePlanCoverageBenefitLimit) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ipcbl *InsurancePlanCoverageBenefitLimit) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.CodeableConcept `json:"code"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Value             *fhir.Quantity    `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ipcbl.Code = raw.Code
+	ipcbl.Extension = raw.Extension
+	ipcbl.ID = raw.ID
+	ipcbl.ModifierExtension = raw.ModifierExtension
+	ipcbl.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*InsurancePlanCoverageBenefitLimit)(nil)
+var _ json.Unmarshaler = (*InsurancePlanCoverageBenefitLimit)(nil)
+
+func (ipp *InsurancePlanPlan) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ipp *InsurancePlanPlan) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		CoverageArea []*fhir.Reference               `json:"coverageArea"`
+		Extension    []*fhir.Extension               `json:"extension"`
+		GeneralCost  []*InsurancePlanPlanGeneralCost `json:"generalCost"`
+
+		ID                string                           `json:"id"`
+		Identifier        []*fhir.Identifier               `json:"identifier"`
+		ModifierExtension []*fhir.Extension                `json:"modifierExtension"`
+		Network           []*fhir.Reference                `json:"network"`
+		SpecificCost      []*InsurancePlanPlanSpecificCost `json:"specificCost"`
+		Type              *fhir.CodeableConcept            `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ipp.CoverageArea = raw.CoverageArea
+	ipp.Extension = raw.Extension
+	ipp.GeneralCost = raw.GeneralCost
+	ipp.ID = raw.ID
+	ipp.Identifier = raw.Identifier
+	ipp.ModifierExtension = raw.ModifierExtension
+	ipp.Network = raw.Network
+	ipp.SpecificCost = raw.SpecificCost
+	ipp.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*InsurancePlanPlan)(nil)
+var _ json.Unmarshaler = (*InsurancePlanPlan)(nil)
+
+func (ippgc *InsurancePlanPlanGeneralCost) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ippgc *InsurancePlanPlanGeneralCost) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Comment   *fhir.String      `json:"comment"`
+		Cost      *fhir.Money       `json:"cost"`
+		Extension []*fhir.Extension `json:"extension"`
+		GroupSize *fhir.PositiveInt `json:"groupSize"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ippgc.Comment = raw.Comment
+	ippgc.Cost = raw.Cost
+	ippgc.Extension = raw.Extension
+	ippgc.GroupSize = raw.GroupSize
+	ippgc.ID = raw.ID
+	ippgc.ModifierExtension = raw.ModifierExtension
+	ippgc.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*InsurancePlanPlanGeneralCost)(nil)
+var _ json.Unmarshaler = (*InsurancePlanPlanGeneralCost)(nil)
+
+func (ippsc *InsurancePlanPlanSpecificCost) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ippsc *InsurancePlanPlanSpecificCost) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Benefit   []*InsurancePlanPlanSpecificCostBenefit `json:"benefit"`
+		Category  *fhir.CodeableConcept                   `json:"category"`
+		Extension []*fhir.Extension                       `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ippsc.Benefit = raw.Benefit
+	ippsc.Category = raw.Category
+	ippsc.Extension = raw.Extension
+	ippsc.ID = raw.ID
+	ippsc.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*InsurancePlanPlanSpecificCost)(nil)
+var _ json.Unmarshaler = (*InsurancePlanPlanSpecificCost)(nil)
+
+func (ippscb *InsurancePlanPlanSpecificCostBenefit) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ippscb *InsurancePlanPlanSpecificCostBenefit) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Cost      []*InsurancePlanPlanSpecificCostBenefitCost `json:"cost"`
+		Extension []*fhir.Extension                           `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ippscb.Cost = raw.Cost
+	ippscb.Extension = raw.Extension
+	ippscb.ID = raw.ID
+	ippscb.ModifierExtension = raw.ModifierExtension
+	ippscb.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*InsurancePlanPlanSpecificCostBenefit)(nil)
+var _ json.Unmarshaler = (*InsurancePlanPlanSpecificCostBenefit)(nil)
+
+func (ippscbc *InsurancePlanPlanSpecificCostBenefitCost) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ippscbc *InsurancePlanPlanSpecificCostBenefitCost) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Applicability *fhir.CodeableConcept `json:"applicability"`
+		Extension     []*fhir.Extension     `json:"extension"`
+
+		ID                string                  `json:"id"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Qualifiers        []*fhir.CodeableConcept `json:"qualifiers"`
+		Type              *fhir.CodeableConcept   `json:"type"`
+		Value             *fhir.Quantity          `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ippscbc.Applicability = raw.Applicability
+	ippscbc.Extension = raw.Extension
+	ippscbc.ID = raw.ID
+	ippscbc.ModifierExtension = raw.ModifierExtension
+	ippscbc.Qualifiers = raw.Qualifiers
+	ippscbc.Type = raw.Type
+	ippscbc.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*InsurancePlanPlanSpecificCostBenefitCost)(nil)
+var _ json.Unmarshaler = (*InsurancePlanPlanSpecificCostBenefitCost)(nil)

@@ -8,6 +8,8 @@ package visionprescription
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // An authorization for the provision of glasses and/or contact lenses to a
@@ -614,3 +616,139 @@ func (vplsp *VisionPrescriptionLensSpecificationPrism) GetModifierExtension() []
 	}
 	return vplsp.ModifierExtension
 }
+
+func (vp *VisionPrescription) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (vp *VisionPrescription) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contained   []fhir.Resource   `json:"contained"`
+		Created     *fhir.DateTime    `json:"created"`
+		DateWritten *fhir.DateTime    `json:"dateWritten"`
+		Encounter   *fhir.Reference   `json:"encounter"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string                                 `json:"id"`
+		Identifier        []*fhir.Identifier                     `json:"identifier"`
+		ImplicitRules     *fhir.URI                              `json:"implicitRules"`
+		Language          *fhir.Code                             `json:"language"`
+		LensSpecification []*VisionPrescriptionLensSpecification `json:"lensSpecification"`
+		Meta              *fhir.Meta                             `json:"meta"`
+		ModifierExtension []*fhir.Extension                      `json:"modifierExtension"`
+		Patient           *fhir.Reference                        `json:"patient"`
+		Prescriber        *fhir.Reference                        `json:"prescriber"`
+		Status            *fhir.Code                             `json:"status"`
+		Text              *fhir.Narrative                        `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	vp.Contained = raw.Contained
+	vp.Created = raw.Created
+	vp.DateWritten = raw.DateWritten
+	vp.Encounter = raw.Encounter
+	vp.Extension = raw.Extension
+	vp.ID = raw.ID
+	vp.Identifier = raw.Identifier
+	vp.ImplicitRules = raw.ImplicitRules
+	vp.Language = raw.Language
+	vp.LensSpecification = raw.LensSpecification
+	vp.Meta = raw.Meta
+	vp.ModifierExtension = raw.ModifierExtension
+	vp.Patient = raw.Patient
+	vp.Prescriber = raw.Prescriber
+	vp.Status = raw.Status
+	vp.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*VisionPrescription)(nil)
+var _ json.Unmarshaler = (*VisionPrescription)(nil)
+
+func (vpls *VisionPrescriptionLensSpecification) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (vpls *VisionPrescriptionLensSpecification) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Add       *fhir.Decimal     `json:"add"`
+		Axis      *fhir.Integer     `json:"axis"`
+		BackCurve *fhir.Decimal     `json:"backCurve"`
+		Brand     *fhir.String      `json:"brand"`
+		Color     *fhir.String      `json:"color"`
+		Cylinder  *fhir.Decimal     `json:"cylinder"`
+		Diameter  *fhir.Decimal     `json:"diameter"`
+		Duration  *fhir.Quantity    `json:"duration"`
+		Extension []*fhir.Extension `json:"extension"`
+		Eye       *fhir.Code        `json:"eye"`
+
+		ID                string                                      `json:"id"`
+		ModifierExtension []*fhir.Extension                           `json:"modifierExtension"`
+		Note              []*fhir.Annotation                          `json:"note"`
+		Power             *fhir.Decimal                               `json:"power"`
+		Prism             []*VisionPrescriptionLensSpecificationPrism `json:"prism"`
+		Product           *fhir.CodeableConcept                       `json:"product"`
+		Sphere            *fhir.Decimal                               `json:"sphere"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	vpls.Add = raw.Add
+	vpls.Axis = raw.Axis
+	vpls.BackCurve = raw.BackCurve
+	vpls.Brand = raw.Brand
+	vpls.Color = raw.Color
+	vpls.Cylinder = raw.Cylinder
+	vpls.Diameter = raw.Diameter
+	vpls.Duration = raw.Duration
+	vpls.Extension = raw.Extension
+	vpls.Eye = raw.Eye
+	vpls.ID = raw.ID
+	vpls.ModifierExtension = raw.ModifierExtension
+	vpls.Note = raw.Note
+	vpls.Power = raw.Power
+	vpls.Prism = raw.Prism
+	vpls.Product = raw.Product
+	vpls.Sphere = raw.Sphere
+	return nil
+}
+
+var _ json.Marshaler = (*VisionPrescriptionLensSpecification)(nil)
+var _ json.Unmarshaler = (*VisionPrescriptionLensSpecification)(nil)
+
+func (vplsp *VisionPrescriptionLensSpecificationPrism) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (vplsp *VisionPrescriptionLensSpecificationPrism) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Amount    *fhir.Decimal     `json:"amount"`
+		Base      *fhir.Code        `json:"base"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	vplsp.Amount = raw.Amount
+	vplsp.Base = raw.Base
+	vplsp.Extension = raw.Extension
+	vplsp.ID = raw.ID
+	vplsp.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*VisionPrescriptionLensSpecificationPrism)(nil)
+var _ json.Unmarshaler = (*VisionPrescriptionLensSpecificationPrism)(nil)

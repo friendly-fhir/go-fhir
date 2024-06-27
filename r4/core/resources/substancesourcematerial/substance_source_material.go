@@ -8,6 +8,8 @@ package substancesourcematerial
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Source material shall capture information on the taxonomic and anatomical
@@ -1127,3 +1129,267 @@ func (ssmpd *SubstanceSourceMaterialPartDescription) GetPartLocation() *fhir.Cod
 	}
 	return ssmpd.PartLocation
 }
+
+func (ssm *SubstanceSourceMaterial) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ssm *SubstanceSourceMaterial) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contained            []fhir.Resource                               `json:"contained"`
+		CountryOfOrigin      []*fhir.CodeableConcept                       `json:"countryOfOrigin"`
+		DevelopmentStage     *fhir.CodeableConcept                         `json:"developmentStage"`
+		Extension            []*fhir.Extension                             `json:"extension"`
+		FractionDescription  []*SubstanceSourceMaterialFractionDescription `json:"fractionDescription"`
+		GeographicalLocation []*fhir.String                                `json:"geographicalLocation"`
+
+		ID                  string                                    `json:"id"`
+		ImplicitRules       *fhir.URI                                 `json:"implicitRules"`
+		Language            *fhir.Code                                `json:"language"`
+		Meta                *fhir.Meta                                `json:"meta"`
+		ModifierExtension   []*fhir.Extension                         `json:"modifierExtension"`
+		Organism            *SubstanceSourceMaterialOrganism          `json:"organism"`
+		OrganismID          *fhir.Identifier                          `json:"organismId"`
+		OrganismName        *fhir.String                              `json:"organismName"`
+		ParentSubstanceID   []*fhir.Identifier                        `json:"parentSubstanceId"`
+		ParentSubstanceName []*fhir.String                            `json:"parentSubstanceName"`
+		PartDescription     []*SubstanceSourceMaterialPartDescription `json:"partDescription"`
+		SourceMaterialClass *fhir.CodeableConcept                     `json:"sourceMaterialClass"`
+		SourceMaterialState *fhir.CodeableConcept                     `json:"sourceMaterialState"`
+		SourceMaterialType  *fhir.CodeableConcept                     `json:"sourceMaterialType"`
+		Text                *fhir.Narrative                           `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ssm.Contained = raw.Contained
+	ssm.CountryOfOrigin = raw.CountryOfOrigin
+	ssm.DevelopmentStage = raw.DevelopmentStage
+	ssm.Extension = raw.Extension
+	ssm.FractionDescription = raw.FractionDescription
+	ssm.GeographicalLocation = raw.GeographicalLocation
+	ssm.ID = raw.ID
+	ssm.ImplicitRules = raw.ImplicitRules
+	ssm.Language = raw.Language
+	ssm.Meta = raw.Meta
+	ssm.ModifierExtension = raw.ModifierExtension
+	ssm.Organism = raw.Organism
+	ssm.OrganismID = raw.OrganismID
+	ssm.OrganismName = raw.OrganismName
+	ssm.ParentSubstanceID = raw.ParentSubstanceID
+	ssm.ParentSubstanceName = raw.ParentSubstanceName
+	ssm.PartDescription = raw.PartDescription
+	ssm.SourceMaterialClass = raw.SourceMaterialClass
+	ssm.SourceMaterialState = raw.SourceMaterialState
+	ssm.SourceMaterialType = raw.SourceMaterialType
+	ssm.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceSourceMaterial)(nil)
+var _ json.Unmarshaler = (*SubstanceSourceMaterial)(nil)
+
+func (ssmfd *SubstanceSourceMaterialFractionDescription) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ssmfd *SubstanceSourceMaterialFractionDescription) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+		Fraction  *fhir.String      `json:"fraction"`
+
+		ID                string                `json:"id"`
+		MaterialType      *fhir.CodeableConcept `json:"materialType"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ssmfd.Extension = raw.Extension
+	ssmfd.Fraction = raw.Fraction
+	ssmfd.ID = raw.ID
+	ssmfd.MaterialType = raw.MaterialType
+	ssmfd.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceSourceMaterialFractionDescription)(nil)
+var _ json.Unmarshaler = (*SubstanceSourceMaterialFractionDescription)(nil)
+
+func (ssmo *SubstanceSourceMaterialOrganism) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ssmo *SubstanceSourceMaterialOrganism) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Author    []*SubstanceSourceMaterialOrganismAuthor `json:"author"`
+		Extension []*fhir.Extension                        `json:"extension"`
+		Family    *fhir.CodeableConcept                    `json:"family"`
+		Genus     *fhir.CodeableConcept                    `json:"genus"`
+		Hybrid    *SubstanceSourceMaterialOrganismHybrid   `json:"hybrid"`
+
+		ID                       string                                          `json:"id"`
+		IntraspecificDescription *fhir.String                                    `json:"intraspecificDescription"`
+		IntraspecificType        *fhir.CodeableConcept                           `json:"intraspecificType"`
+		ModifierExtension        []*fhir.Extension                               `json:"modifierExtension"`
+		OrganismGeneral          *SubstanceSourceMaterialOrganismOrganismGeneral `json:"organismGeneral"`
+		Species                  *fhir.CodeableConcept                           `json:"species"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ssmo.Author = raw.Author
+	ssmo.Extension = raw.Extension
+	ssmo.Family = raw.Family
+	ssmo.Genus = raw.Genus
+	ssmo.Hybrid = raw.Hybrid
+	ssmo.ID = raw.ID
+	ssmo.IntraspecificDescription = raw.IntraspecificDescription
+	ssmo.IntraspecificType = raw.IntraspecificType
+	ssmo.ModifierExtension = raw.ModifierExtension
+	ssmo.OrganismGeneral = raw.OrganismGeneral
+	ssmo.Species = raw.Species
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceSourceMaterialOrganism)(nil)
+var _ json.Unmarshaler = (*SubstanceSourceMaterialOrganism)(nil)
+
+func (ssmoa *SubstanceSourceMaterialOrganismAuthor) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ssmoa *SubstanceSourceMaterialOrganismAuthor) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AuthorDescription *fhir.String          `json:"authorDescription"`
+		AuthorType        *fhir.CodeableConcept `json:"authorType"`
+		Extension         []*fhir.Extension     `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ssmoa.AuthorDescription = raw.AuthorDescription
+	ssmoa.AuthorType = raw.AuthorType
+	ssmoa.Extension = raw.Extension
+	ssmoa.ID = raw.ID
+	ssmoa.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceSourceMaterialOrganismAuthor)(nil)
+var _ json.Unmarshaler = (*SubstanceSourceMaterialOrganismAuthor)(nil)
+
+func (ssmoh *SubstanceSourceMaterialOrganismHybrid) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ssmoh *SubstanceSourceMaterialOrganismHybrid) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension  []*fhir.Extension     `json:"extension"`
+		HybridType *fhir.CodeableConcept `json:"hybridType"`
+
+		ID                   string            `json:"id"`
+		MaternalOrganismID   *fhir.String      `json:"maternalOrganismId"`
+		MaternalOrganismName *fhir.String      `json:"maternalOrganismName"`
+		ModifierExtension    []*fhir.Extension `json:"modifierExtension"`
+		PaternalOrganismID   *fhir.String      `json:"paternalOrganismId"`
+		PaternalOrganismName *fhir.String      `json:"paternalOrganismName"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ssmoh.Extension = raw.Extension
+	ssmoh.HybridType = raw.HybridType
+	ssmoh.ID = raw.ID
+	ssmoh.MaternalOrganismID = raw.MaternalOrganismID
+	ssmoh.MaternalOrganismName = raw.MaternalOrganismName
+	ssmoh.ModifierExtension = raw.ModifierExtension
+	ssmoh.PaternalOrganismID = raw.PaternalOrganismID
+	ssmoh.PaternalOrganismName = raw.PaternalOrganismName
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceSourceMaterialOrganismHybrid)(nil)
+var _ json.Unmarshaler = (*SubstanceSourceMaterialOrganismHybrid)(nil)
+
+func (ssmoog *SubstanceSourceMaterialOrganismOrganismGeneral) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ssmoog *SubstanceSourceMaterialOrganismOrganismGeneral) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Class     *fhir.CodeableConcept `json:"class"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string                `json:"id"`
+		Kingdom           *fhir.CodeableConcept `json:"kingdom"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Order             *fhir.CodeableConcept `json:"order"`
+		Phylum            *fhir.CodeableConcept `json:"phylum"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ssmoog.Class = raw.Class
+	ssmoog.Extension = raw.Extension
+	ssmoog.ID = raw.ID
+	ssmoog.Kingdom = raw.Kingdom
+	ssmoog.ModifierExtension = raw.ModifierExtension
+	ssmoog.Order = raw.Order
+	ssmoog.Phylum = raw.Phylum
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceSourceMaterialOrganismOrganismGeneral)(nil)
+var _ json.Unmarshaler = (*SubstanceSourceMaterialOrganismOrganismGeneral)(nil)
+
+func (ssmpd *SubstanceSourceMaterialPartDescription) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ssmpd *SubstanceSourceMaterialPartDescription) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Part              *fhir.CodeableConcept `json:"part"`
+		PartLocation      *fhir.CodeableConcept `json:"partLocation"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ssmpd.Extension = raw.Extension
+	ssmpd.ID = raw.ID
+	ssmpd.ModifierExtension = raw.ModifierExtension
+	ssmpd.Part = raw.Part
+	ssmpd.PartLocation = raw.PartLocation
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceSourceMaterialPartDescription)(nil)
+var _ json.Unmarshaler = (*SubstanceSourceMaterialPartDescription)(nil)

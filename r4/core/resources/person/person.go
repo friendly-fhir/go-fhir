@@ -8,6 +8,8 @@ package person
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Demographics and administrative information about a person independent of a
@@ -385,3 +387,89 @@ func (pl *PersonLink) GetTarget() *fhir.Reference {
 	}
 	return pl.Target
 }
+
+func (p *Person) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (p *Person) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Active    *fhir.Boolean     `json:"active"`
+		Address   []*fhir.Address   `json:"address"`
+		BirthDate *fhir.Date        `json:"birthDate"`
+		Contained []fhir.Resource   `json:"contained"`
+		Extension []*fhir.Extension `json:"extension"`
+		Gender    *fhir.Code        `json:"gender"`
+
+		ID                   string               `json:"id"`
+		Identifier           []*fhir.Identifier   `json:"identifier"`
+		ImplicitRules        *fhir.URI            `json:"implicitRules"`
+		Language             *fhir.Code           `json:"language"`
+		Link                 []*PersonLink        `json:"link"`
+		ManagingOrganization *fhir.Reference      `json:"managingOrganization"`
+		Meta                 *fhir.Meta           `json:"meta"`
+		ModifierExtension    []*fhir.Extension    `json:"modifierExtension"`
+		Name                 []*fhir.HumanName    `json:"name"`
+		Photo                *fhir.Attachment     `json:"photo"`
+		Telecom              []*fhir.ContactPoint `json:"telecom"`
+		Text                 *fhir.Narrative      `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	p.Active = raw.Active
+	p.Address = raw.Address
+	p.BirthDate = raw.BirthDate
+	p.Contained = raw.Contained
+	p.Extension = raw.Extension
+	p.Gender = raw.Gender
+	p.ID = raw.ID
+	p.Identifier = raw.Identifier
+	p.ImplicitRules = raw.ImplicitRules
+	p.Language = raw.Language
+	p.Link = raw.Link
+	p.ManagingOrganization = raw.ManagingOrganization
+	p.Meta = raw.Meta
+	p.ModifierExtension = raw.ModifierExtension
+	p.Name = raw.Name
+	p.Photo = raw.Photo
+	p.Telecom = raw.Telecom
+	p.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*Person)(nil)
+var _ json.Unmarshaler = (*Person)(nil)
+
+func (pl *PersonLink) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pl *PersonLink) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Assurance *fhir.Code        `json:"assurance"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Target            *fhir.Reference   `json:"target"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pl.Assurance = raw.Assurance
+	pl.Extension = raw.Extension
+	pl.ID = raw.ID
+	pl.ModifierExtension = raw.ModifierExtension
+	pl.Target = raw.Target
+	return nil
+}
+
+var _ json.Marshaler = (*PersonLink)(nil)
+var _ json.Unmarshaler = (*PersonLink)(nil)

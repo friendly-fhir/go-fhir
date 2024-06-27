@@ -8,6 +8,8 @@ package bodystructure
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Record details about an anatomical structure. This resource may be used when
@@ -266,3 +268,55 @@ func (bs *BodyStructure) GetText() *fhir.Narrative {
 	}
 	return bs.Text
 }
+
+func (bs *BodyStructure) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (bs *BodyStructure) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Active      *fhir.Boolean     `json:"active"`
+		Contained   []fhir.Resource   `json:"contained"`
+		Description *fhir.String      `json:"description"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string                  `json:"id"`
+		Identifier        []*fhir.Identifier      `json:"identifier"`
+		Image             []*fhir.Attachment      `json:"image"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Language          *fhir.Code              `json:"language"`
+		Location          *fhir.CodeableConcept   `json:"location"`
+		LocationQualifier []*fhir.CodeableConcept `json:"locationQualifier"`
+		Meta              *fhir.Meta              `json:"meta"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Morphology        *fhir.CodeableConcept   `json:"morphology"`
+		Patient           *fhir.Reference         `json:"patient"`
+		Text              *fhir.Narrative         `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	bs.Active = raw.Active
+	bs.Contained = raw.Contained
+	bs.Description = raw.Description
+	bs.Extension = raw.Extension
+	bs.ID = raw.ID
+	bs.Identifier = raw.Identifier
+	bs.Image = raw.Image
+	bs.ImplicitRules = raw.ImplicitRules
+	bs.Language = raw.Language
+	bs.Location = raw.Location
+	bs.LocationQualifier = raw.LocationQualifier
+	bs.Meta = raw.Meta
+	bs.ModifierExtension = raw.ModifierExtension
+	bs.Morphology = raw.Morphology
+	bs.Patient = raw.Patient
+	bs.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*BodyStructure)(nil)
+var _ json.Unmarshaler = (*BodyStructure)(nil)

@@ -8,6 +8,8 @@ package molecularsequence
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Raw data describing a biological sequence.
@@ -1695,3 +1697,383 @@ func (msv *MolecularSequenceVariant) GetVariantPointer() *fhir.Reference {
 	}
 	return msv.VariantPointer
 }
+
+func (ms *MolecularSequence) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ms *MolecularSequence) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contained        []fhir.Resource   `json:"contained"`
+		CoordinateSystem *fhir.Integer     `json:"coordinateSystem"`
+		Device           *fhir.Reference   `json:"device"`
+		Extension        []*fhir.Extension `json:"extension"`
+
+		ID                string                               `json:"id"`
+		Identifier        []*fhir.Identifier                   `json:"identifier"`
+		ImplicitRules     *fhir.URI                            `json:"implicitRules"`
+		Language          *fhir.Code                           `json:"language"`
+		Meta              *fhir.Meta                           `json:"meta"`
+		ModifierExtension []*fhir.Extension                    `json:"modifierExtension"`
+		ObservedSeq       *fhir.String                         `json:"observedSeq"`
+		Patient           *fhir.Reference                      `json:"patient"`
+		Performer         *fhir.Reference                      `json:"performer"`
+		Pointer           []*fhir.Reference                    `json:"pointer"`
+		Quality           []*MolecularSequenceQuality          `json:"quality"`
+		Quantity          *fhir.Quantity                       `json:"quantity"`
+		ReadCoverage      *fhir.Integer                        `json:"readCoverage"`
+		ReferenceSeq      *MolecularSequenceReferenceSeq       `json:"referenceSeq"`
+		Repository        []*MolecularSequenceRepository       `json:"repository"`
+		Specimen          *fhir.Reference                      `json:"specimen"`
+		StructureVariant  []*MolecularSequenceStructureVariant `json:"structureVariant"`
+		Text              *fhir.Narrative                      `json:"text"`
+		Type              *fhir.Code                           `json:"type"`
+		Variant           []*MolecularSequenceVariant          `json:"variant"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ms.Contained = raw.Contained
+	ms.CoordinateSystem = raw.CoordinateSystem
+	ms.Device = raw.Device
+	ms.Extension = raw.Extension
+	ms.ID = raw.ID
+	ms.Identifier = raw.Identifier
+	ms.ImplicitRules = raw.ImplicitRules
+	ms.Language = raw.Language
+	ms.Meta = raw.Meta
+	ms.ModifierExtension = raw.ModifierExtension
+	ms.ObservedSeq = raw.ObservedSeq
+	ms.Patient = raw.Patient
+	ms.Performer = raw.Performer
+	ms.Pointer = raw.Pointer
+	ms.Quality = raw.Quality
+	ms.Quantity = raw.Quantity
+	ms.ReadCoverage = raw.ReadCoverage
+	ms.ReferenceSeq = raw.ReferenceSeq
+	ms.Repository = raw.Repository
+	ms.Specimen = raw.Specimen
+	ms.StructureVariant = raw.StructureVariant
+	ms.Text = raw.Text
+	ms.Type = raw.Type
+	ms.Variant = raw.Variant
+	return nil
+}
+
+var _ json.Marshaler = (*MolecularSequence)(nil)
+var _ json.Unmarshaler = (*MolecularSequence)(nil)
+
+func (msq *MolecularSequenceQuality) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (msq *MolecularSequenceQuality) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		End       *fhir.Integer     `json:"end"`
+		Extension []*fhir.Extension `json:"extension"`
+		FScore    *fhir.Decimal     `json:"fScore"`
+		GtFp      *fhir.Decimal     `json:"gtFp"`
+
+		ID                string                       `json:"id"`
+		Method            *fhir.CodeableConcept        `json:"method"`
+		ModifierExtension []*fhir.Extension            `json:"modifierExtension"`
+		Precision         *fhir.Decimal                `json:"precision"`
+		QueryFp           *fhir.Decimal                `json:"queryFp"`
+		QueryTp           *fhir.Decimal                `json:"queryTp"`
+		Recall            *fhir.Decimal                `json:"recall"`
+		Roc               *MolecularSequenceQualityRoc `json:"roc"`
+		Score             *fhir.Quantity               `json:"score"`
+		StandardSequence  *fhir.CodeableConcept        `json:"standardSequence"`
+		Start             *fhir.Integer                `json:"start"`
+		TruthFn           *fhir.Decimal                `json:"truthFn"`
+		TruthTp           *fhir.Decimal                `json:"truthTp"`
+		Type              *fhir.Code                   `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	msq.End = raw.End
+	msq.Extension = raw.Extension
+	msq.FScore = raw.FScore
+	msq.GtFp = raw.GtFp
+	msq.ID = raw.ID
+	msq.Method = raw.Method
+	msq.ModifierExtension = raw.ModifierExtension
+	msq.Precision = raw.Precision
+	msq.QueryFp = raw.QueryFp
+	msq.QueryTp = raw.QueryTp
+	msq.Recall = raw.Recall
+	msq.Roc = raw.Roc
+	msq.Score = raw.Score
+	msq.StandardSequence = raw.StandardSequence
+	msq.Start = raw.Start
+	msq.TruthFn = raw.TruthFn
+	msq.TruthTp = raw.TruthTp
+	msq.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*MolecularSequenceQuality)(nil)
+var _ json.Unmarshaler = (*MolecularSequenceQuality)(nil)
+
+func (msqr *MolecularSequenceQualityRoc) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (msqr *MolecularSequenceQualityRoc) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+		FMeasure  []*fhir.Decimal   `json:"fMeasure"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		NumFn             []*fhir.Integer   `json:"numFn"`
+		NumFp             []*fhir.Integer   `json:"numFp"`
+		NumTp             []*fhir.Integer   `json:"numTp"`
+		Precision         []*fhir.Decimal   `json:"precision"`
+		Score             []*fhir.Integer   `json:"score"`
+		Sensitivity       []*fhir.Decimal   `json:"sensitivity"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	msqr.Extension = raw.Extension
+	msqr.FMeasure = raw.FMeasure
+	msqr.ID = raw.ID
+	msqr.ModifierExtension = raw.ModifierExtension
+	msqr.NumFn = raw.NumFn
+	msqr.NumFp = raw.NumFp
+	msqr.NumTp = raw.NumTp
+	msqr.Precision = raw.Precision
+	msqr.Score = raw.Score
+	msqr.Sensitivity = raw.Sensitivity
+	return nil
+}
+
+var _ json.Marshaler = (*MolecularSequenceQualityRoc)(nil)
+var _ json.Unmarshaler = (*MolecularSequenceQualityRoc)(nil)
+
+func (msrs *MolecularSequenceReferenceSeq) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (msrs *MolecularSequenceReferenceSeq) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Chromosome  *fhir.CodeableConcept `json:"chromosome"`
+		Extension   []*fhir.Extension     `json:"extension"`
+		GenomeBuild *fhir.String          `json:"genomeBuild"`
+
+		ID                  string                `json:"id"`
+		ModifierExtension   []*fhir.Extension     `json:"modifierExtension"`
+		Orientation         *fhir.Code            `json:"orientation"`
+		ReferenceSeqID      *fhir.CodeableConcept `json:"referenceSeqId"`
+		ReferenceSeqPointer *fhir.Reference       `json:"referenceSeqPointer"`
+		ReferenceSeqString  *fhir.String          `json:"referenceSeqString"`
+		Strand              *fhir.Code            `json:"strand"`
+		WindowEnd           *fhir.Integer         `json:"windowEnd"`
+		WindowStart         *fhir.Integer         `json:"windowStart"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	msrs.Chromosome = raw.Chromosome
+	msrs.Extension = raw.Extension
+	msrs.GenomeBuild = raw.GenomeBuild
+	msrs.ID = raw.ID
+	msrs.ModifierExtension = raw.ModifierExtension
+	msrs.Orientation = raw.Orientation
+	msrs.ReferenceSeqID = raw.ReferenceSeqID
+	msrs.ReferenceSeqPointer = raw.ReferenceSeqPointer
+	msrs.ReferenceSeqString = raw.ReferenceSeqString
+	msrs.Strand = raw.Strand
+	msrs.WindowEnd = raw.WindowEnd
+	msrs.WindowStart = raw.WindowStart
+	return nil
+}
+
+var _ json.Marshaler = (*MolecularSequenceReferenceSeq)(nil)
+var _ json.Unmarshaler = (*MolecularSequenceReferenceSeq)(nil)
+
+func (msr *MolecularSequenceRepository) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (msr *MolecularSequenceRepository) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		DatasetID *fhir.String      `json:"datasetId"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.String      `json:"name"`
+		ReadsetID         *fhir.String      `json:"readsetId"`
+		Type              *fhir.Code        `json:"type"`
+		URL               *fhir.URI         `json:"url"`
+		VariantsetID      *fhir.String      `json:"variantsetId"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	msr.DatasetID = raw.DatasetID
+	msr.Extension = raw.Extension
+	msr.ID = raw.ID
+	msr.ModifierExtension = raw.ModifierExtension
+	msr.Name = raw.Name
+	msr.ReadsetID = raw.ReadsetID
+	msr.Type = raw.Type
+	msr.URL = raw.URL
+	msr.VariantsetID = raw.VariantsetID
+	return nil
+}
+
+var _ json.Marshaler = (*MolecularSequenceRepository)(nil)
+var _ json.Unmarshaler = (*MolecularSequenceRepository)(nil)
+
+func (mssv *MolecularSequenceStructureVariant) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mssv *MolecularSequenceStructureVariant) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Exact     *fhir.Boolean     `json:"exact"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                                  `json:"id"`
+		Inner             *MolecularSequenceStructureVariantInner `json:"inner"`
+		Length            *fhir.Integer                           `json:"length"`
+		ModifierExtension []*fhir.Extension                       `json:"modifierExtension"`
+		Outer             *MolecularSequenceStructureVariantOuter `json:"outer"`
+		VariantType       *fhir.CodeableConcept                   `json:"variantType"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mssv.Exact = raw.Exact
+	mssv.Extension = raw.Extension
+	mssv.ID = raw.ID
+	mssv.Inner = raw.Inner
+	mssv.Length = raw.Length
+	mssv.ModifierExtension = raw.ModifierExtension
+	mssv.Outer = raw.Outer
+	mssv.VariantType = raw.VariantType
+	return nil
+}
+
+var _ json.Marshaler = (*MolecularSequenceStructureVariant)(nil)
+var _ json.Unmarshaler = (*MolecularSequenceStructureVariant)(nil)
+
+func (mssvi *MolecularSequenceStructureVariantInner) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mssvi *MolecularSequenceStructureVariantInner) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		End       *fhir.Integer     `json:"end"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Start             *fhir.Integer     `json:"start"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mssvi.End = raw.End
+	mssvi.Extension = raw.Extension
+	mssvi.ID = raw.ID
+	mssvi.ModifierExtension = raw.ModifierExtension
+	mssvi.Start = raw.Start
+	return nil
+}
+
+var _ json.Marshaler = (*MolecularSequenceStructureVariantInner)(nil)
+var _ json.Unmarshaler = (*MolecularSequenceStructureVariantInner)(nil)
+
+func (mssvo *MolecularSequenceStructureVariantOuter) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mssvo *MolecularSequenceStructureVariantOuter) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		End       *fhir.Integer     `json:"end"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Start             *fhir.Integer     `json:"start"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mssvo.End = raw.End
+	mssvo.Extension = raw.Extension
+	mssvo.ID = raw.ID
+	mssvo.ModifierExtension = raw.ModifierExtension
+	mssvo.Start = raw.Start
+	return nil
+}
+
+var _ json.Marshaler = (*MolecularSequenceStructureVariantOuter)(nil)
+var _ json.Unmarshaler = (*MolecularSequenceStructureVariantOuter)(nil)
+
+func (msv *MolecularSequenceVariant) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (msv *MolecularSequenceVariant) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Cigar     *fhir.String      `json:"cigar"`
+		End       *fhir.Integer     `json:"end"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		ObservedAllele    *fhir.String      `json:"observedAllele"`
+		ReferenceAllele   *fhir.String      `json:"referenceAllele"`
+		Start             *fhir.Integer     `json:"start"`
+		VariantPointer    *fhir.Reference   `json:"variantPointer"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	msv.Cigar = raw.Cigar
+	msv.End = raw.End
+	msv.Extension = raw.Extension
+	msv.ID = raw.ID
+	msv.ModifierExtension = raw.ModifierExtension
+	msv.ObservedAllele = raw.ObservedAllele
+	msv.ReferenceAllele = raw.ReferenceAllele
+	msv.Start = raw.Start
+	msv.VariantPointer = raw.VariantPointer
+	return nil
+}
+
+var _ json.Marshaler = (*MolecularSequenceVariant)(nil)
+var _ json.Unmarshaler = (*MolecularSequenceVariant)(nil)

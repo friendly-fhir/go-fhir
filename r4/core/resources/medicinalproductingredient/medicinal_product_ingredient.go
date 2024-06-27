@@ -8,6 +8,8 @@ package medicinalproductingredient
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // An ingredient of a manufactured item or pharmaceutical product.
@@ -744,3 +746,189 @@ func (mpis *MedicinalProductIngredientSubstance) GetModifierExtension() []*fhir.
 	}
 	return mpis.ModifierExtension
 }
+
+func (mpi *MedicinalProductIngredient) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpi *MedicinalProductIngredient) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AllergenicIndicator *fhir.Boolean     `json:"allergenicIndicator"`
+		Contained           []fhir.Resource   `json:"contained"`
+		Extension           []*fhir.Extension `json:"extension"`
+
+		ID                 string                                          `json:"id"`
+		Identifier         *fhir.Identifier                                `json:"identifier"`
+		ImplicitRules      *fhir.URI                                       `json:"implicitRules"`
+		Language           *fhir.Code                                      `json:"language"`
+		Manufacturer       []*fhir.Reference                               `json:"manufacturer"`
+		Meta               *fhir.Meta                                      `json:"meta"`
+		ModifierExtension  []*fhir.Extension                               `json:"modifierExtension"`
+		Role               *fhir.CodeableConcept                           `json:"role"`
+		SpecifiedSubstance []*MedicinalProductIngredientSpecifiedSubstance `json:"specifiedSubstance"`
+		Substance          *MedicinalProductIngredientSubstance            `json:"substance"`
+		Text               *fhir.Narrative                                 `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpi.AllergenicIndicator = raw.AllergenicIndicator
+	mpi.Contained = raw.Contained
+	mpi.Extension = raw.Extension
+	mpi.ID = raw.ID
+	mpi.Identifier = raw.Identifier
+	mpi.ImplicitRules = raw.ImplicitRules
+	mpi.Language = raw.Language
+	mpi.Manufacturer = raw.Manufacturer
+	mpi.Meta = raw.Meta
+	mpi.ModifierExtension = raw.ModifierExtension
+	mpi.Role = raw.Role
+	mpi.SpecifiedSubstance = raw.SpecifiedSubstance
+	mpi.Substance = raw.Substance
+	mpi.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductIngredient)(nil)
+var _ json.Unmarshaler = (*MedicinalProductIngredient)(nil)
+
+func (mpiss *MedicinalProductIngredientSpecifiedSubstance) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpiss *MedicinalProductIngredientSpecifiedSubstance) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code            *fhir.CodeableConcept `json:"code"`
+		Confidentiality *fhir.CodeableConcept `json:"confidentiality"`
+		Extension       []*fhir.Extension     `json:"extension"`
+		Group           *fhir.CodeableConcept `json:"group"`
+
+		ID                string                                                  `json:"id"`
+		ModifierExtension []*fhir.Extension                                       `json:"modifierExtension"`
+		Strength          []*MedicinalProductIngredientSpecifiedSubstanceStrength `json:"strength"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpiss.Code = raw.Code
+	mpiss.Confidentiality = raw.Confidentiality
+	mpiss.Extension = raw.Extension
+	mpiss.Group = raw.Group
+	mpiss.ID = raw.ID
+	mpiss.ModifierExtension = raw.ModifierExtension
+	mpiss.Strength = raw.Strength
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductIngredientSpecifiedSubstance)(nil)
+var _ json.Unmarshaler = (*MedicinalProductIngredientSpecifiedSubstance)(nil)
+
+func (mpisss *MedicinalProductIngredientSpecifiedSubstanceStrength) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpisss *MedicinalProductIngredientSpecifiedSubstanceStrength) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Concentration         *fhir.Ratio             `json:"concentration"`
+		ConcentrationLowLimit *fhir.Ratio             `json:"concentrationLowLimit"`
+		Country               []*fhir.CodeableConcept `json:"country"`
+		Extension             []*fhir.Extension       `json:"extension"`
+
+		ID                   string                                                                   `json:"id"`
+		MeasurementPoint     *fhir.String                                                             `json:"measurementPoint"`
+		ModifierExtension    []*fhir.Extension                                                        `json:"modifierExtension"`
+		Presentation         *fhir.Ratio                                                              `json:"presentation"`
+		PresentationLowLimit *fhir.Ratio                                                              `json:"presentationLowLimit"`
+		ReferenceStrength    []*MedicinalProductIngredientSpecifiedSubstanceStrengthReferenceStrength `json:"referenceStrength"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpisss.Concentration = raw.Concentration
+	mpisss.ConcentrationLowLimit = raw.ConcentrationLowLimit
+	mpisss.Country = raw.Country
+	mpisss.Extension = raw.Extension
+	mpisss.ID = raw.ID
+	mpisss.MeasurementPoint = raw.MeasurementPoint
+	mpisss.ModifierExtension = raw.ModifierExtension
+	mpisss.Presentation = raw.Presentation
+	mpisss.PresentationLowLimit = raw.PresentationLowLimit
+	mpisss.ReferenceStrength = raw.ReferenceStrength
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductIngredientSpecifiedSubstanceStrength)(nil)
+var _ json.Unmarshaler = (*MedicinalProductIngredientSpecifiedSubstanceStrength)(nil)
+
+func (mpisssrs *MedicinalProductIngredientSpecifiedSubstanceStrengthReferenceStrength) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpisssrs *MedicinalProductIngredientSpecifiedSubstanceStrengthReferenceStrength) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Country   []*fhir.CodeableConcept `json:"country"`
+		Extension []*fhir.Extension       `json:"extension"`
+
+		ID                string                `json:"id"`
+		MeasurementPoint  *fhir.String          `json:"measurementPoint"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Strength          *fhir.Ratio           `json:"strength"`
+		StrengthLowLimit  *fhir.Ratio           `json:"strengthLowLimit"`
+		Substance         *fhir.CodeableConcept `json:"substance"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpisssrs.Country = raw.Country
+	mpisssrs.Extension = raw.Extension
+	mpisssrs.ID = raw.ID
+	mpisssrs.MeasurementPoint = raw.MeasurementPoint
+	mpisssrs.ModifierExtension = raw.ModifierExtension
+	mpisssrs.Strength = raw.Strength
+	mpisssrs.StrengthLowLimit = raw.StrengthLowLimit
+	mpisssrs.Substance = raw.Substance
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductIngredientSpecifiedSubstanceStrengthReferenceStrength)(nil)
+var _ json.Unmarshaler = (*MedicinalProductIngredientSpecifiedSubstanceStrengthReferenceStrength)(nil)
+
+func (mpis *MedicinalProductIngredientSubstance) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpis *MedicinalProductIngredientSubstance) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.CodeableConcept `json:"code"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpis.Code = raw.Code
+	mpis.Extension = raw.Extension
+	mpis.ID = raw.ID
+	mpis.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductIngredientSubstance)(nil)
+var _ json.Unmarshaler = (*MedicinalProductIngredientSubstance)(nil)

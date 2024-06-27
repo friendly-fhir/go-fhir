@@ -8,6 +8,8 @@ package episodeofcare
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // An association between a patient and an organization / healthcare
@@ -532,3 +534,125 @@ func (eocsh *EpisodeOfCareStatusHistory) GetStatus() *fhir.Code {
 	}
 	return eocsh.Status
 }
+
+func (eoc *EpisodeOfCare) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eoc *EpisodeOfCare) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Account     []*fhir.Reference         `json:"account"`
+		CareManager *fhir.Reference           `json:"careManager"`
+		Contained   []fhir.Resource           `json:"contained"`
+		Diagnosis   []*EpisodeOfCareDiagnosis `json:"diagnosis"`
+		Extension   []*fhir.Extension         `json:"extension"`
+
+		ID                   string                        `json:"id"`
+		Identifier           []*fhir.Identifier            `json:"identifier"`
+		ImplicitRules        *fhir.URI                     `json:"implicitRules"`
+		Language             *fhir.Code                    `json:"language"`
+		ManagingOrganization *fhir.Reference               `json:"managingOrganization"`
+		Meta                 *fhir.Meta                    `json:"meta"`
+		ModifierExtension    []*fhir.Extension             `json:"modifierExtension"`
+		Patient              *fhir.Reference               `json:"patient"`
+		Period               *fhir.Period                  `json:"period"`
+		ReferralRequest      []*fhir.Reference             `json:"referralRequest"`
+		Status               *fhir.Code                    `json:"status"`
+		StatusHistory        []*EpisodeOfCareStatusHistory `json:"statusHistory"`
+		Team                 []*fhir.Reference             `json:"team"`
+		Text                 *fhir.Narrative               `json:"text"`
+		Type                 []*fhir.CodeableConcept       `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eoc.Account = raw.Account
+	eoc.CareManager = raw.CareManager
+	eoc.Contained = raw.Contained
+	eoc.Diagnosis = raw.Diagnosis
+	eoc.Extension = raw.Extension
+	eoc.ID = raw.ID
+	eoc.Identifier = raw.Identifier
+	eoc.ImplicitRules = raw.ImplicitRules
+	eoc.Language = raw.Language
+	eoc.ManagingOrganization = raw.ManagingOrganization
+	eoc.Meta = raw.Meta
+	eoc.ModifierExtension = raw.ModifierExtension
+	eoc.Patient = raw.Patient
+	eoc.Period = raw.Period
+	eoc.ReferralRequest = raw.ReferralRequest
+	eoc.Status = raw.Status
+	eoc.StatusHistory = raw.StatusHistory
+	eoc.Team = raw.Team
+	eoc.Text = raw.Text
+	eoc.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*EpisodeOfCare)(nil)
+var _ json.Unmarshaler = (*EpisodeOfCare)(nil)
+
+func (eocd *EpisodeOfCareDiagnosis) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eocd *EpisodeOfCareDiagnosis) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Condition *fhir.Reference   `json:"condition"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Rank              *fhir.PositiveInt     `json:"rank"`
+		Role              *fhir.CodeableConcept `json:"role"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eocd.Condition = raw.Condition
+	eocd.Extension = raw.Extension
+	eocd.ID = raw.ID
+	eocd.ModifierExtension = raw.ModifierExtension
+	eocd.Rank = raw.Rank
+	eocd.Role = raw.Role
+	return nil
+}
+
+var _ json.Marshaler = (*EpisodeOfCareDiagnosis)(nil)
+var _ json.Unmarshaler = (*EpisodeOfCareDiagnosis)(nil)
+
+func (eocsh *EpisodeOfCareStatusHistory) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eocsh *EpisodeOfCareStatusHistory) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Period            *fhir.Period      `json:"period"`
+		Status            *fhir.Code        `json:"status"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eocsh.Extension = raw.Extension
+	eocsh.ID = raw.ID
+	eocsh.ModifierExtension = raw.ModifierExtension
+	eocsh.Period = raw.Period
+	eocsh.Status = raw.Status
+	return nil
+}
+
+var _ json.Marshaler = (*EpisodeOfCareStatusHistory)(nil)
+var _ json.Unmarshaler = (*EpisodeOfCareStatusHistory)(nil)

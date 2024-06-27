@@ -6,8 +6,11 @@
 package patient
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Demographics and other administrative information about an individual or
@@ -788,3 +791,183 @@ func (pl *PatientLink) GetType() *fhir.Code {
 	}
 	return pl.Type
 }
+
+func (p *Patient) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (p *Patient) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Active              *fhir.Boolean           `json:"active"`
+		Address             []*fhir.Address         `json:"address"`
+		BirthDate           *fhir.Date              `json:"birthDate"`
+		Communication       []*PatientCommunication `json:"communication"`
+		Contact             []*PatientContact       `json:"contact"`
+		Contained           []fhir.Resource         `json:"contained"`
+		DeceasedBoolean     *fhir.Boolean           `json:"deceasedBoolean"`
+		DeceasedDateTime    *fhir.DateTime          `json:"deceasedDateTime"`
+		Extension           []*fhir.Extension       `json:"extension"`
+		Gender              *fhir.Code              `json:"gender"`
+		GeneralPractitioner []*fhir.Reference       `json:"generalPractitioner"`
+
+		ID                   string                `json:"id"`
+		Identifier           []*fhir.Identifier    `json:"identifier"`
+		ImplicitRules        *fhir.URI             `json:"implicitRules"`
+		Language             *fhir.Code            `json:"language"`
+		Link                 []*PatientLink        `json:"link"`
+		ManagingOrganization *fhir.Reference       `json:"managingOrganization"`
+		MaritalStatus        *fhir.CodeableConcept `json:"maritalStatus"`
+		Meta                 *fhir.Meta            `json:"meta"`
+		ModifierExtension    []*fhir.Extension     `json:"modifierExtension"`
+		MultipleBirthBoolean *fhir.Boolean         `json:"multipleBirthBoolean"`
+		MultipleBirthInteger *fhir.Integer         `json:"multipleBirthInteger"`
+		Name                 []*fhir.HumanName     `json:"name"`
+		Photo                []*fhir.Attachment    `json:"photo"`
+		Telecom              []*fhir.ContactPoint  `json:"telecom"`
+		Text                 *fhir.Narrative       `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	p.Active = raw.Active
+	p.Address = raw.Address
+	p.BirthDate = raw.BirthDate
+	p.Communication = raw.Communication
+	p.Contact = raw.Contact
+	p.Contained = raw.Contained
+	p.Deceased, err = validate.SelectOneOf[fhir.Element]("Patient.deceased",
+		raw.DeceasedBoolean,
+		raw.DeceasedDateTime)
+	if err != nil {
+		return err
+	}
+	p.Extension = raw.Extension
+	p.Gender = raw.Gender
+	p.GeneralPractitioner = raw.GeneralPractitioner
+	p.ID = raw.ID
+	p.Identifier = raw.Identifier
+	p.ImplicitRules = raw.ImplicitRules
+	p.Language = raw.Language
+	p.Link = raw.Link
+	p.ManagingOrganization = raw.ManagingOrganization
+	p.MaritalStatus = raw.MaritalStatus
+	p.Meta = raw.Meta
+	p.ModifierExtension = raw.ModifierExtension
+	p.MultipleBirth, err = validate.SelectOneOf[fhir.Element]("Patient.multipleBirth",
+		raw.MultipleBirthBoolean,
+		raw.MultipleBirthInteger)
+	if err != nil {
+		return err
+	}
+	p.Name = raw.Name
+	p.Photo = raw.Photo
+	p.Telecom = raw.Telecom
+	p.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*Patient)(nil)
+var _ json.Unmarshaler = (*Patient)(nil)
+
+func (pc *PatientCommunication) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pc *PatientCommunication) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		Language          *fhir.CodeableConcept `json:"language"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Preferred         *fhir.Boolean         `json:"preferred"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pc.Extension = raw.Extension
+	pc.ID = raw.ID
+	pc.Language = raw.Language
+	pc.ModifierExtension = raw.ModifierExtension
+	pc.Preferred = raw.Preferred
+	return nil
+}
+
+var _ json.Marshaler = (*PatientCommunication)(nil)
+var _ json.Unmarshaler = (*PatientCommunication)(nil)
+
+func (pc *PatientContact) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pc *PatientContact) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Address   *fhir.Address     `json:"address"`
+		Extension []*fhir.Extension `json:"extension"`
+		Gender    *fhir.Code        `json:"gender"`
+
+		ID                string                  `json:"id"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Name              *fhir.HumanName         `json:"name"`
+		Organization      *fhir.Reference         `json:"organization"`
+		Period            *fhir.Period            `json:"period"`
+		Relationship      []*fhir.CodeableConcept `json:"relationship"`
+		Telecom           []*fhir.ContactPoint    `json:"telecom"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pc.Address = raw.Address
+	pc.Extension = raw.Extension
+	pc.Gender = raw.Gender
+	pc.ID = raw.ID
+	pc.ModifierExtension = raw.ModifierExtension
+	pc.Name = raw.Name
+	pc.Organization = raw.Organization
+	pc.Period = raw.Period
+	pc.Relationship = raw.Relationship
+	pc.Telecom = raw.Telecom
+	return nil
+}
+
+var _ json.Marshaler = (*PatientContact)(nil)
+var _ json.Unmarshaler = (*PatientContact)(nil)
+
+func (pl *PatientLink) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pl *PatientLink) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Other             *fhir.Reference   `json:"other"`
+		Type              *fhir.Code        `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pl.Extension = raw.Extension
+	pl.ID = raw.ID
+	pl.ModifierExtension = raw.ModifierExtension
+	pl.Other = raw.Other
+	pl.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*PatientLink)(nil)
+var _ json.Unmarshaler = (*PatientLink)(nil)

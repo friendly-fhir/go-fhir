@@ -6,8 +6,11 @@
 package observation
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Measurements and simple assertions made about a patient, device or other
@@ -1119,3 +1122,217 @@ func (orr *ObservationReferenceRange) GetType() *fhir.CodeableConcept {
 	}
 	return orr.Type
 }
+
+func (o *Observation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (o *Observation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		BasedOn           []*fhir.Reference       `json:"basedOn"`
+		BodySite          *fhir.CodeableConcept   `json:"bodySite"`
+		Category          []*fhir.CodeableConcept `json:"category"`
+		Code              *fhir.CodeableConcept   `json:"code"`
+		Component         []*ObservationComponent `json:"component"`
+		Contained         []fhir.Resource         `json:"contained"`
+		DataAbsentReason  *fhir.CodeableConcept   `json:"dataAbsentReason"`
+		DerivedFrom       []*fhir.Reference       `json:"derivedFrom"`
+		Device            *fhir.Reference         `json:"device"`
+		EffectiveDateTime *fhir.DateTime          `json:"effectiveDateTime"`
+		EffectivePeriod   *fhir.Period            `json:"effectivePeriod"`
+		EffectiveTiming   *fhir.Timing            `json:"effectiveTiming"`
+		EffectiveInstant  *fhir.Instant           `json:"effectiveInstant"`
+		Encounter         *fhir.Reference         `json:"encounter"`
+		Extension         []*fhir.Extension       `json:"extension"`
+		Focus             []*fhir.Reference       `json:"focus"`
+		HasMember         []*fhir.Reference       `json:"hasMember"`
+
+		ID                   string                       `json:"id"`
+		Identifier           []*fhir.Identifier           `json:"identifier"`
+		ImplicitRules        *fhir.URI                    `json:"implicitRules"`
+		Interpretation       []*fhir.CodeableConcept      `json:"interpretation"`
+		Issued               *fhir.Instant                `json:"issued"`
+		Language             *fhir.Code                   `json:"language"`
+		Meta                 *fhir.Meta                   `json:"meta"`
+		Method               *fhir.CodeableConcept        `json:"method"`
+		ModifierExtension    []*fhir.Extension            `json:"modifierExtension"`
+		Note                 []*fhir.Annotation           `json:"note"`
+		PartOf               []*fhir.Reference            `json:"partOf"`
+		Performer            []*fhir.Reference            `json:"performer"`
+		ReferenceRange       []*ObservationReferenceRange `json:"referenceRange"`
+		Specimen             *fhir.Reference              `json:"specimen"`
+		Status               *fhir.Code                   `json:"status"`
+		Subject              *fhir.Reference              `json:"subject"`
+		Text                 *fhir.Narrative              `json:"text"`
+		ValueQuantity        *fhir.Quantity               `json:"valueQuantity"`
+		ValueCodeableConcept *fhir.CodeableConcept        `json:"valueCodeableConcept"`
+		ValueString          *fhir.String                 `json:"valueString"`
+		ValueBoolean         *fhir.Boolean                `json:"valueBoolean"`
+		ValueInteger         *fhir.Integer                `json:"valueInteger"`
+		ValueRange           *fhir.Range                  `json:"valueRange"`
+		ValueRatio           *fhir.Ratio                  `json:"valueRatio"`
+		ValueSampledData     *fhir.SampledData            `json:"valueSampledData"`
+		ValueTime            *fhir.Time                   `json:"valueTime"`
+		ValueDateTime        *fhir.DateTime               `json:"valueDateTime"`
+		ValuePeriod          *fhir.Period                 `json:"valuePeriod"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	o.BasedOn = raw.BasedOn
+	o.BodySite = raw.BodySite
+	o.Category = raw.Category
+	o.Code = raw.Code
+	o.Component = raw.Component
+	o.Contained = raw.Contained
+	o.DataAbsentReason = raw.DataAbsentReason
+	o.DerivedFrom = raw.DerivedFrom
+	o.Device = raw.Device
+	o.Effective, err = validate.SelectOneOf[fhir.Element]("Observation.effective",
+		raw.EffectiveDateTime,
+		raw.EffectivePeriod,
+		raw.EffectiveTiming,
+		raw.EffectiveInstant)
+	if err != nil {
+		return err
+	}
+	o.Encounter = raw.Encounter
+	o.Extension = raw.Extension
+	o.Focus = raw.Focus
+	o.HasMember = raw.HasMember
+	o.ID = raw.ID
+	o.Identifier = raw.Identifier
+	o.ImplicitRules = raw.ImplicitRules
+	o.Interpretation = raw.Interpretation
+	o.Issued = raw.Issued
+	o.Language = raw.Language
+	o.Meta = raw.Meta
+	o.Method = raw.Method
+	o.ModifierExtension = raw.ModifierExtension
+	o.Note = raw.Note
+	o.PartOf = raw.PartOf
+	o.Performer = raw.Performer
+	o.ReferenceRange = raw.ReferenceRange
+	o.Specimen = raw.Specimen
+	o.Status = raw.Status
+	o.Subject = raw.Subject
+	o.Text = raw.Text
+	o.Value, err = validate.SelectOneOf[fhir.Element]("Observation.value",
+		raw.ValueQuantity,
+		raw.ValueCodeableConcept,
+		raw.ValueString,
+		raw.ValueBoolean,
+		raw.ValueInteger,
+		raw.ValueRange,
+		raw.ValueRatio,
+		raw.ValueSampledData,
+		raw.ValueTime,
+		raw.ValueDateTime,
+		raw.ValuePeriod)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*Observation)(nil)
+var _ json.Unmarshaler = (*Observation)(nil)
+
+func (oc *ObservationComponent) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (oc *ObservationComponent) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code             *fhir.CodeableConcept `json:"code"`
+		DataAbsentReason *fhir.CodeableConcept `json:"dataAbsentReason"`
+		Extension        []*fhir.Extension     `json:"extension"`
+
+		ID                   string                  `json:"id"`
+		Interpretation       []*fhir.CodeableConcept `json:"interpretation"`
+		ModifierExtension    []*fhir.Extension       `json:"modifierExtension"`
+		ValueQuantity        *fhir.Quantity          `json:"valueQuantity"`
+		ValueCodeableConcept *fhir.CodeableConcept   `json:"valueCodeableConcept"`
+		ValueString          *fhir.String            `json:"valueString"`
+		ValueBoolean         *fhir.Boolean           `json:"valueBoolean"`
+		ValueInteger         *fhir.Integer           `json:"valueInteger"`
+		ValueRange           *fhir.Range             `json:"valueRange"`
+		ValueRatio           *fhir.Ratio             `json:"valueRatio"`
+		ValueSampledData     *fhir.SampledData       `json:"valueSampledData"`
+		ValueTime            *fhir.Time              `json:"valueTime"`
+		ValueDateTime        *fhir.DateTime          `json:"valueDateTime"`
+		ValuePeriod          *fhir.Period            `json:"valuePeriod"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	oc.Code = raw.Code
+	oc.DataAbsentReason = raw.DataAbsentReason
+	oc.Extension = raw.Extension
+	oc.ID = raw.ID
+	oc.Interpretation = raw.Interpretation
+	oc.ModifierExtension = raw.ModifierExtension
+	oc.Value, err = validate.SelectOneOf[fhir.Element]("Observation.component.value",
+		raw.ValueQuantity,
+		raw.ValueCodeableConcept,
+		raw.ValueString,
+		raw.ValueBoolean,
+		raw.ValueInteger,
+		raw.ValueRange,
+		raw.ValueRatio,
+		raw.ValueSampledData,
+		raw.ValueTime,
+		raw.ValueDateTime,
+		raw.ValuePeriod)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*ObservationComponent)(nil)
+var _ json.Unmarshaler = (*ObservationComponent)(nil)
+
+func (orr *ObservationReferenceRange) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (orr *ObservationReferenceRange) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Age       *fhir.Range             `json:"age"`
+		AppliesTo []*fhir.CodeableConcept `json:"appliesTo"`
+		Extension []*fhir.Extension       `json:"extension"`
+		High      *fhir.Quantity          `json:"high"`
+
+		ID                string                `json:"id"`
+		Low               *fhir.Quantity        `json:"low"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Text              *fhir.String          `json:"text"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	orr.Age = raw.Age
+	orr.AppliesTo = raw.AppliesTo
+	orr.Extension = raw.Extension
+	orr.High = raw.High
+	orr.ID = raw.ID
+	orr.Low = raw.Low
+	orr.ModifierExtension = raw.ModifierExtension
+	orr.Text = raw.Text
+	orr.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ObservationReferenceRange)(nil)
+var _ json.Unmarshaler = (*ObservationReferenceRange)(nil)

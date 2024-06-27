@@ -8,6 +8,8 @@ package medicinalproductmanufactured
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The manufactured item as contained in the packaged medicinal product.
@@ -250,3 +252,53 @@ func (mpm *MedicinalProductManufactured) GetUnitOfPresentation() *fhir.CodeableC
 	}
 	return mpm.UnitOfPresentation
 }
+
+func (mpm *MedicinalProductManufactured) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpm *MedicinalProductManufactured) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contained []fhir.Resource   `json:"contained"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                      string                   `json:"id"`
+		ImplicitRules           *fhir.URI                `json:"implicitRules"`
+		Ingredient              []*fhir.Reference        `json:"ingredient"`
+		Language                *fhir.Code               `json:"language"`
+		ManufacturedDoseForm    *fhir.CodeableConcept    `json:"manufacturedDoseForm"`
+		Manufacturer            []*fhir.Reference        `json:"manufacturer"`
+		Meta                    *fhir.Meta               `json:"meta"`
+		ModifierExtension       []*fhir.Extension        `json:"modifierExtension"`
+		OtherCharacteristics    []*fhir.CodeableConcept  `json:"otherCharacteristics"`
+		PhysicalCharacteristics *fhir.ProdCharacteristic `json:"physicalCharacteristics"`
+		Quantity                *fhir.Quantity           `json:"quantity"`
+		Text                    *fhir.Narrative          `json:"text"`
+		UnitOfPresentation      *fhir.CodeableConcept    `json:"unitOfPresentation"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpm.Contained = raw.Contained
+	mpm.Extension = raw.Extension
+	mpm.ID = raw.ID
+	mpm.ImplicitRules = raw.ImplicitRules
+	mpm.Ingredient = raw.Ingredient
+	mpm.Language = raw.Language
+	mpm.ManufacturedDoseForm = raw.ManufacturedDoseForm
+	mpm.Manufacturer = raw.Manufacturer
+	mpm.Meta = raw.Meta
+	mpm.ModifierExtension = raw.ModifierExtension
+	mpm.OtherCharacteristics = raw.OtherCharacteristics
+	mpm.PhysicalCharacteristics = raw.PhysicalCharacteristics
+	mpm.Quantity = raw.Quantity
+	mpm.Text = raw.Text
+	mpm.UnitOfPresentation = raw.UnitOfPresentation
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductManufactured)(nil)
+var _ json.Unmarshaler = (*MedicinalProductManufactured)(nil)

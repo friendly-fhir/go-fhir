@@ -6,7 +6,10 @@
 package fhir
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Timing Type: Specifies an event that may occur
@@ -421,3 +424,97 @@ func (tr *TimingRepeat) GetWhen() []*Code {
 	}
 	return tr.When
 }
+
+func (t *Timing) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (t *Timing) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *CodeableConcept `json:"code"`
+		Event     []*DateTime      `json:"event"`
+		Extension []*Extension     `json:"extension"`
+
+		ID                string        `json:"id"`
+		ModifierExtension []*Extension  `json:"modifierExtension"`
+		Repeat            *TimingRepeat `json:"repeat"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	t.Code = raw.Code
+	t.Event = raw.Event
+	t.Extension = raw.Extension
+	t.ID = raw.ID
+	t.ModifierExtension = raw.ModifierExtension
+	t.Repeat = raw.Repeat
+	return nil
+}
+
+var _ json.Marshaler = (*Timing)(nil)
+var _ json.Unmarshaler = (*Timing)(nil)
+
+func (tr *TimingRepeat) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tr *TimingRepeat) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		BoundsDuration *Duration    `json:"boundsDuration"`
+		BoundsRange    *Range       `json:"boundsRange"`
+		BoundsPeriod   *Period      `json:"boundsPeriod"`
+		Count          *PositiveInt `json:"count"`
+		CountMax       *PositiveInt `json:"countMax"`
+		DayOfWeek      []*Code      `json:"dayOfWeek"`
+		Duration       *Decimal     `json:"duration"`
+		DurationMax    *Decimal     `json:"durationMax"`
+		DurationUnit   *Code        `json:"durationUnit"`
+		Extension      []*Extension `json:"extension"`
+		Frequency      *PositiveInt `json:"frequency"`
+		FrequencyMax   *PositiveInt `json:"frequencyMax"`
+
+		ID         string       `json:"id"`
+		Offset     *UnsignedInt `json:"offset"`
+		Period     *Decimal     `json:"period"`
+		PeriodMax  *Decimal     `json:"periodMax"`
+		PeriodUnit *Code        `json:"periodUnit"`
+		TimeOfDay  []*Time      `json:"timeOfDay"`
+		When       []*Code      `json:"when"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tr.Bounds, err = validate.SelectOneOf[Element]("Timing.repeat.bounds",
+		raw.BoundsDuration,
+		raw.BoundsRange,
+		raw.BoundsPeriod)
+	if err != nil {
+		return err
+	}
+	tr.Count = raw.Count
+	tr.CountMax = raw.CountMax
+	tr.DayOfWeek = raw.DayOfWeek
+	tr.Duration = raw.Duration
+	tr.DurationMax = raw.DurationMax
+	tr.DurationUnit = raw.DurationUnit
+	tr.Extension = raw.Extension
+	tr.Frequency = raw.Frequency
+	tr.FrequencyMax = raw.FrequencyMax
+	tr.ID = raw.ID
+	tr.Offset = raw.Offset
+	tr.Period = raw.Period
+	tr.PeriodMax = raw.PeriodMax
+	tr.PeriodUnit = raw.PeriodUnit
+	tr.TimeOfDay = raw.TimeOfDay
+	tr.When = raw.When
+	return nil
+}
+
+var _ json.Marshaler = (*TimingRepeat)(nil)
+var _ json.Unmarshaler = (*TimingRepeat)(nil)

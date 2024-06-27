@@ -6,8 +6,11 @@
 package supplydelivery
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Record of delivery of what is supplied.
@@ -458,3 +461,105 @@ func (sdsi *SupplyDeliverySuppliedItem) GetQuantity() *fhir.Quantity {
 	}
 	return sdsi.Quantity
 }
+
+func (sd *SupplyDelivery) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sd *SupplyDelivery) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		BasedOn     []*fhir.Reference `json:"basedOn"`
+		Contained   []fhir.Resource   `json:"contained"`
+		Destination *fhir.Reference   `json:"destination"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                 string                      `json:"id"`
+		Identifier         []*fhir.Identifier          `json:"identifier"`
+		ImplicitRules      *fhir.URI                   `json:"implicitRules"`
+		Language           *fhir.Code                  `json:"language"`
+		Meta               *fhir.Meta                  `json:"meta"`
+		ModifierExtension  []*fhir.Extension           `json:"modifierExtension"`
+		OccurrenceDateTime *fhir.DateTime              `json:"occurrenceDateTime"`
+		OccurrencePeriod   *fhir.Period                `json:"occurrencePeriod"`
+		OccurrenceTiming   *fhir.Timing                `json:"occurrenceTiming"`
+		PartOf             []*fhir.Reference           `json:"partOf"`
+		Patient            *fhir.Reference             `json:"patient"`
+		Receiver           []*fhir.Reference           `json:"receiver"`
+		Status             *fhir.Code                  `json:"status"`
+		SuppliedItem       *SupplyDeliverySuppliedItem `json:"suppliedItem"`
+		Supplier           *fhir.Reference             `json:"supplier"`
+		Text               *fhir.Narrative             `json:"text"`
+		Type               *fhir.CodeableConcept       `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sd.BasedOn = raw.BasedOn
+	sd.Contained = raw.Contained
+	sd.Destination = raw.Destination
+	sd.Extension = raw.Extension
+	sd.ID = raw.ID
+	sd.Identifier = raw.Identifier
+	sd.ImplicitRules = raw.ImplicitRules
+	sd.Language = raw.Language
+	sd.Meta = raw.Meta
+	sd.ModifierExtension = raw.ModifierExtension
+	sd.Occurrence, err = validate.SelectOneOf[fhir.Element]("SupplyDelivery.occurrence",
+		raw.OccurrenceDateTime,
+		raw.OccurrencePeriod,
+		raw.OccurrenceTiming)
+	if err != nil {
+		return err
+	}
+	sd.PartOf = raw.PartOf
+	sd.Patient = raw.Patient
+	sd.Receiver = raw.Receiver
+	sd.Status = raw.Status
+	sd.SuppliedItem = raw.SuppliedItem
+	sd.Supplier = raw.Supplier
+	sd.Text = raw.Text
+	sd.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*SupplyDelivery)(nil)
+var _ json.Unmarshaler = (*SupplyDelivery)(nil)
+
+func (sdsi *SupplyDeliverySuppliedItem) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sdsi *SupplyDeliverySuppliedItem) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                  string                `json:"id"`
+		ItemCodeableConcept *fhir.CodeableConcept `json:"itemCodeableConcept"`
+		ItemReference       *fhir.Reference       `json:"itemReference"`
+		ModifierExtension   []*fhir.Extension     `json:"modifierExtension"`
+		Quantity            *fhir.Quantity        `json:"quantity"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sdsi.Extension = raw.Extension
+	sdsi.ID = raw.ID
+	sdsi.Item, err = validate.SelectOneOf[fhir.Element]("SupplyDelivery.suppliedItem.item",
+		raw.ItemCodeableConcept,
+		raw.ItemReference)
+	if err != nil {
+		return err
+	}
+	sdsi.ModifierExtension = raw.ModifierExtension
+	sdsi.Quantity = raw.Quantity
+	return nil
+}
+
+var _ json.Marshaler = (*SupplyDeliverySuppliedItem)(nil)
+var _ json.Unmarshaler = (*SupplyDeliverySuppliedItem)(nil)

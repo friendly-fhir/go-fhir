@@ -6,8 +6,11 @@
 package group
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Represents a defined collection of entities that may be discussed or acted
@@ -595,3 +598,137 @@ func (gm *GroupMember) GetPeriod() *fhir.Period {
 	}
 	return gm.Period
 }
+
+func (g *Group) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (g *Group) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Active         *fhir.Boolean          `json:"active"`
+		Actual         *fhir.Boolean          `json:"actual"`
+		Characteristic []*GroupCharacteristic `json:"characteristic"`
+		Code           *fhir.CodeableConcept  `json:"code"`
+		Contained      []fhir.Resource        `json:"contained"`
+		Extension      []*fhir.Extension      `json:"extension"`
+
+		ID                string             `json:"id"`
+		Identifier        []*fhir.Identifier `json:"identifier"`
+		ImplicitRules     *fhir.URI          `json:"implicitRules"`
+		Language          *fhir.Code         `json:"language"`
+		ManagingEntity    *fhir.Reference    `json:"managingEntity"`
+		Member            []*GroupMember     `json:"member"`
+		Meta              *fhir.Meta         `json:"meta"`
+		ModifierExtension []*fhir.Extension  `json:"modifierExtension"`
+		Name              *fhir.String       `json:"name"`
+		Quantity          *fhir.UnsignedInt  `json:"quantity"`
+		Text              *fhir.Narrative    `json:"text"`
+		Type              *fhir.Code         `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	g.Active = raw.Active
+	g.Actual = raw.Actual
+	g.Characteristic = raw.Characteristic
+	g.Code = raw.Code
+	g.Contained = raw.Contained
+	g.Extension = raw.Extension
+	g.ID = raw.ID
+	g.Identifier = raw.Identifier
+	g.ImplicitRules = raw.ImplicitRules
+	g.Language = raw.Language
+	g.ManagingEntity = raw.ManagingEntity
+	g.Member = raw.Member
+	g.Meta = raw.Meta
+	g.ModifierExtension = raw.ModifierExtension
+	g.Name = raw.Name
+	g.Quantity = raw.Quantity
+	g.Text = raw.Text
+	g.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*Group)(nil)
+var _ json.Unmarshaler = (*Group)(nil)
+
+func (gc *GroupCharacteristic) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (gc *GroupCharacteristic) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.CodeableConcept `json:"code"`
+		Exclude   *fhir.Boolean         `json:"exclude"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                   string                `json:"id"`
+		ModifierExtension    []*fhir.Extension     `json:"modifierExtension"`
+		Period               *fhir.Period          `json:"period"`
+		ValueCodeableConcept *fhir.CodeableConcept `json:"valueCodeableConcept"`
+		ValueBoolean         *fhir.Boolean         `json:"valueBoolean"`
+		ValueQuantity        *fhir.Quantity        `json:"valueQuantity"`
+		ValueRange           *fhir.Range           `json:"valueRange"`
+		ValueReference       *fhir.Reference       `json:"valueReference"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	gc.Code = raw.Code
+	gc.Exclude = raw.Exclude
+	gc.Extension = raw.Extension
+	gc.ID = raw.ID
+	gc.ModifierExtension = raw.ModifierExtension
+	gc.Period = raw.Period
+	gc.Value, err = validate.SelectOneOf[fhir.Element]("Group.characteristic.value",
+		raw.ValueCodeableConcept,
+		raw.ValueBoolean,
+		raw.ValueQuantity,
+		raw.ValueRange,
+		raw.ValueReference)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*GroupCharacteristic)(nil)
+var _ json.Unmarshaler = (*GroupCharacteristic)(nil)
+
+func (gm *GroupMember) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (gm *GroupMember) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Entity    *fhir.Reference   `json:"entity"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Inactive          *fhir.Boolean     `json:"inactive"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Period            *fhir.Period      `json:"period"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	gm.Entity = raw.Entity
+	gm.Extension = raw.Extension
+	gm.ID = raw.ID
+	gm.Inactive = raw.Inactive
+	gm.ModifierExtension = raw.ModifierExtension
+	gm.Period = raw.Period
+	return nil
+}
+
+var _ json.Marshaler = (*GroupMember)(nil)
+var _ json.Unmarshaler = (*GroupMember)(nil)

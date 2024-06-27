@@ -8,6 +8,8 @@ package compartmentdefinition
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A compartment definition that defines how resources are accessed on a
@@ -478,3 +480,99 @@ func (cdr *CompartmentDefinitionResource) GetParam() []*fhir.String {
 	}
 	return cdr.Param
 }
+
+func (cd *CompartmentDefinition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cd *CompartmentDefinition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code         *fhir.Code            `json:"code"`
+		Contact      []*fhir.ContactDetail `json:"contact"`
+		Contained    []fhir.Resource       `json:"contained"`
+		Date         *fhir.DateTime        `json:"date"`
+		Description  *fhir.Markdown        `json:"description"`
+		Experimental *fhir.Boolean         `json:"experimental"`
+		Extension    []*fhir.Extension     `json:"extension"`
+
+		ID                string                           `json:"id"`
+		ImplicitRules     *fhir.URI                        `json:"implicitRules"`
+		Language          *fhir.Code                       `json:"language"`
+		Meta              *fhir.Meta                       `json:"meta"`
+		ModifierExtension []*fhir.Extension                `json:"modifierExtension"`
+		Name              *fhir.String                     `json:"name"`
+		Publisher         *fhir.String                     `json:"publisher"`
+		Purpose           *fhir.Markdown                   `json:"purpose"`
+		Resource          []*CompartmentDefinitionResource `json:"resource"`
+		Search            *fhir.Boolean                    `json:"search"`
+		Status            *fhir.Code                       `json:"status"`
+		Text              *fhir.Narrative                  `json:"text"`
+		URL               *fhir.URI                        `json:"url"`
+		UseContext        []*fhir.UsageContext             `json:"useContext"`
+		Version           *fhir.String                     `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cd.Code = raw.Code
+	cd.Contact = raw.Contact
+	cd.Contained = raw.Contained
+	cd.Date = raw.Date
+	cd.Description = raw.Description
+	cd.Experimental = raw.Experimental
+	cd.Extension = raw.Extension
+	cd.ID = raw.ID
+	cd.ImplicitRules = raw.ImplicitRules
+	cd.Language = raw.Language
+	cd.Meta = raw.Meta
+	cd.ModifierExtension = raw.ModifierExtension
+	cd.Name = raw.Name
+	cd.Publisher = raw.Publisher
+	cd.Purpose = raw.Purpose
+	cd.Resource = raw.Resource
+	cd.Search = raw.Search
+	cd.Status = raw.Status
+	cd.Text = raw.Text
+	cd.URL = raw.URL
+	cd.UseContext = raw.UseContext
+	cd.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*CompartmentDefinition)(nil)
+var _ json.Unmarshaler = (*CompartmentDefinition)(nil)
+
+func (cdr *CompartmentDefinitionResource) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cdr *CompartmentDefinitionResource) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code          *fhir.Code        `json:"code"`
+		Documentation *fhir.String      `json:"documentation"`
+		Extension     []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Param             []*fhir.String    `json:"param"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cdr.Code = raw.Code
+	cdr.Documentation = raw.Documentation
+	cdr.Extension = raw.Extension
+	cdr.ID = raw.ID
+	cdr.ModifierExtension = raw.ModifierExtension
+	cdr.Param = raw.Param
+	return nil
+}
+
+var _ json.Marshaler = (*CompartmentDefinitionResource)(nil)
+var _ json.Unmarshaler = (*CompartmentDefinitionResource)(nil)

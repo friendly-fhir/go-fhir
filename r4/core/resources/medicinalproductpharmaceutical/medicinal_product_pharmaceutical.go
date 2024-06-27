@@ -8,6 +8,8 @@ package medicinalproductpharmaceutical
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A pharmaceutical product described in terms of its composition and dose
@@ -726,3 +728,185 @@ func (mpproatswp *MedicinalProductPharmaceuticalRouteOfAdministrationTargetSpeci
 	}
 	return mpproatswp.Value
 }
+
+func (mpp *MedicinalProductPharmaceutical) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpp *MedicinalProductPharmaceutical) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AdministrableDoseForm *fhir.CodeableConcept                            `json:"administrableDoseForm"`
+		Characteristics       []*MedicinalProductPharmaceuticalCharacteristics `json:"characteristics"`
+		Contained             []fhir.Resource                                  `json:"contained"`
+		Device                []*fhir.Reference                                `json:"device"`
+		Extension             []*fhir.Extension                                `json:"extension"`
+
+		ID                    string                                                 `json:"id"`
+		Identifier            []*fhir.Identifier                                     `json:"identifier"`
+		ImplicitRules         *fhir.URI                                              `json:"implicitRules"`
+		Ingredient            []*fhir.Reference                                      `json:"ingredient"`
+		Language              *fhir.Code                                             `json:"language"`
+		Meta                  *fhir.Meta                                             `json:"meta"`
+		ModifierExtension     []*fhir.Extension                                      `json:"modifierExtension"`
+		RouteOfAdministration []*MedicinalProductPharmaceuticalRouteOfAdministration `json:"routeOfAdministration"`
+		Text                  *fhir.Narrative                                        `json:"text"`
+		UnitOfPresentation    *fhir.CodeableConcept                                  `json:"unitOfPresentation"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpp.AdministrableDoseForm = raw.AdministrableDoseForm
+	mpp.Characteristics = raw.Characteristics
+	mpp.Contained = raw.Contained
+	mpp.Device = raw.Device
+	mpp.Extension = raw.Extension
+	mpp.ID = raw.ID
+	mpp.Identifier = raw.Identifier
+	mpp.ImplicitRules = raw.ImplicitRules
+	mpp.Ingredient = raw.Ingredient
+	mpp.Language = raw.Language
+	mpp.Meta = raw.Meta
+	mpp.ModifierExtension = raw.ModifierExtension
+	mpp.RouteOfAdministration = raw.RouteOfAdministration
+	mpp.Text = raw.Text
+	mpp.UnitOfPresentation = raw.UnitOfPresentation
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductPharmaceutical)(nil)
+var _ json.Unmarshaler = (*MedicinalProductPharmaceutical)(nil)
+
+func (mppc *MedicinalProductPharmaceuticalCharacteristics) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mppc *MedicinalProductPharmaceuticalCharacteristics) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.CodeableConcept `json:"code"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Status            *fhir.CodeableConcept `json:"status"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mppc.Code = raw.Code
+	mppc.Extension = raw.Extension
+	mppc.ID = raw.ID
+	mppc.ModifierExtension = raw.ModifierExtension
+	mppc.Status = raw.Status
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductPharmaceuticalCharacteristics)(nil)
+var _ json.Unmarshaler = (*MedicinalProductPharmaceuticalCharacteristics)(nil)
+
+func (mpproa *MedicinalProductPharmaceuticalRouteOfAdministration) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpproa *MedicinalProductPharmaceuticalRouteOfAdministration) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.CodeableConcept `json:"code"`
+		Extension []*fhir.Extension     `json:"extension"`
+		FirstDose *fhir.Quantity        `json:"firstDose"`
+
+		ID                        string                                                              `json:"id"`
+		MaxDosePerDay             *fhir.Quantity                                                      `json:"maxDosePerDay"`
+		MaxDosePerTreatmentPeriod *fhir.Ratio                                                         `json:"maxDosePerTreatmentPeriod"`
+		MaxSingleDose             *fhir.Quantity                                                      `json:"maxSingleDose"`
+		MaxTreatmentPeriod        *fhir.Duration                                                      `json:"maxTreatmentPeriod"`
+		ModifierExtension         []*fhir.Extension                                                   `json:"modifierExtension"`
+		TargetSpecies             []*MedicinalProductPharmaceuticalRouteOfAdministrationTargetSpecies `json:"targetSpecies"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpproa.Code = raw.Code
+	mpproa.Extension = raw.Extension
+	mpproa.FirstDose = raw.FirstDose
+	mpproa.ID = raw.ID
+	mpproa.MaxDosePerDay = raw.MaxDosePerDay
+	mpproa.MaxDosePerTreatmentPeriod = raw.MaxDosePerTreatmentPeriod
+	mpproa.MaxSingleDose = raw.MaxSingleDose
+	mpproa.MaxTreatmentPeriod = raw.MaxTreatmentPeriod
+	mpproa.ModifierExtension = raw.ModifierExtension
+	mpproa.TargetSpecies = raw.TargetSpecies
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductPharmaceuticalRouteOfAdministration)(nil)
+var _ json.Unmarshaler = (*MedicinalProductPharmaceuticalRouteOfAdministration)(nil)
+
+func (mpproats *MedicinalProductPharmaceuticalRouteOfAdministrationTargetSpecies) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpproats *MedicinalProductPharmaceuticalRouteOfAdministrationTargetSpecies) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.CodeableConcept `json:"code"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string                                                                              `json:"id"`
+		ModifierExtension []*fhir.Extension                                                                   `json:"modifierExtension"`
+		WithdrawalPeriod  []*MedicinalProductPharmaceuticalRouteOfAdministrationTargetSpeciesWithdrawalPeriod `json:"withdrawalPeriod"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpproats.Code = raw.Code
+	mpproats.Extension = raw.Extension
+	mpproats.ID = raw.ID
+	mpproats.ModifierExtension = raw.ModifierExtension
+	mpproats.WithdrawalPeriod = raw.WithdrawalPeriod
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductPharmaceuticalRouteOfAdministrationTargetSpecies)(nil)
+var _ json.Unmarshaler = (*MedicinalProductPharmaceuticalRouteOfAdministrationTargetSpecies)(nil)
+
+func (mpproatswp *MedicinalProductPharmaceuticalRouteOfAdministrationTargetSpeciesWithdrawalPeriod) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpproatswp *MedicinalProductPharmaceuticalRouteOfAdministrationTargetSpeciesWithdrawalPeriod) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                    string                `json:"id"`
+		ModifierExtension     []*fhir.Extension     `json:"modifierExtension"`
+		SupportingInformation *fhir.String          `json:"supportingInformation"`
+		Tissue                *fhir.CodeableConcept `json:"tissue"`
+		Value                 *fhir.Quantity        `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpproatswp.Extension = raw.Extension
+	mpproatswp.ID = raw.ID
+	mpproatswp.ModifierExtension = raw.ModifierExtension
+	mpproatswp.SupportingInformation = raw.SupportingInformation
+	mpproatswp.Tissue = raw.Tissue
+	mpproatswp.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductPharmaceuticalRouteOfAdministrationTargetSpeciesWithdrawalPeriod)(nil)
+var _ json.Unmarshaler = (*MedicinalProductPharmaceuticalRouteOfAdministrationTargetSpeciesWithdrawalPeriod)(nil)

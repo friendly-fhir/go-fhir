@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Period Type: A time period defined by a start
@@ -82,3 +84,31 @@ func (p *Period) GetStart() *DateTime {
 	}
 	return p.Start
 }
+
+func (p *Period) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (p *Period) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		End       *DateTime    `json:"end"`
+		Extension []*Extension `json:"extension"`
+
+		ID    string    `json:"id"`
+		Start *DateTime `json:"start"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	p.End = raw.End
+	p.Extension = raw.Extension
+	p.ID = raw.ID
+	p.Start = raw.Start
+	return nil
+}
+
+var _ json.Marshaler = (*Period)(nil)
+var _ json.Unmarshaler = (*Period)(nil)

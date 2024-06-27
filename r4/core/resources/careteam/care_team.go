@@ -8,6 +8,8 @@ package careteam
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The Care Team includes all the people and organizations who plan to
@@ -460,3 +462,99 @@ func (ctp *CareTeamParticipant) GetRole() []*fhir.CodeableConcept {
 	}
 	return ctp.Role
 }
+
+func (ct *CareTeam) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ct *CareTeam) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Category  []*fhir.CodeableConcept `json:"category"`
+		Contained []fhir.Resource         `json:"contained"`
+		Encounter *fhir.Reference         `json:"encounter"`
+		Extension []*fhir.Extension       `json:"extension"`
+
+		ID                   string                  `json:"id"`
+		Identifier           []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules        *fhir.URI               `json:"implicitRules"`
+		Language             *fhir.Code              `json:"language"`
+		ManagingOrganization []*fhir.Reference       `json:"managingOrganization"`
+		Meta                 *fhir.Meta              `json:"meta"`
+		ModifierExtension    []*fhir.Extension       `json:"modifierExtension"`
+		Name                 *fhir.String            `json:"name"`
+		Note                 []*fhir.Annotation      `json:"note"`
+		Participant          []*CareTeamParticipant  `json:"participant"`
+		Period               *fhir.Period            `json:"period"`
+		ReasonCode           []*fhir.CodeableConcept `json:"reasonCode"`
+		ReasonReference      []*fhir.Reference       `json:"reasonReference"`
+		Status               *fhir.Code              `json:"status"`
+		Subject              *fhir.Reference         `json:"subject"`
+		Telecom              []*fhir.ContactPoint    `json:"telecom"`
+		Text                 *fhir.Narrative         `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ct.Category = raw.Category
+	ct.Contained = raw.Contained
+	ct.Encounter = raw.Encounter
+	ct.Extension = raw.Extension
+	ct.ID = raw.ID
+	ct.Identifier = raw.Identifier
+	ct.ImplicitRules = raw.ImplicitRules
+	ct.Language = raw.Language
+	ct.ManagingOrganization = raw.ManagingOrganization
+	ct.Meta = raw.Meta
+	ct.ModifierExtension = raw.ModifierExtension
+	ct.Name = raw.Name
+	ct.Note = raw.Note
+	ct.Participant = raw.Participant
+	ct.Period = raw.Period
+	ct.ReasonCode = raw.ReasonCode
+	ct.ReasonReference = raw.ReasonReference
+	ct.Status = raw.Status
+	ct.Subject = raw.Subject
+	ct.Telecom = raw.Telecom
+	ct.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*CareTeam)(nil)
+var _ json.Unmarshaler = (*CareTeam)(nil)
+
+func (ctp *CareTeamParticipant) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ctp *CareTeamParticipant) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                  `json:"id"`
+		Member            *fhir.Reference         `json:"member"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		OnBehalfOf        *fhir.Reference         `json:"onBehalfOf"`
+		Period            *fhir.Period            `json:"period"`
+		Role              []*fhir.CodeableConcept `json:"role"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ctp.Extension = raw.Extension
+	ctp.ID = raw.ID
+	ctp.Member = raw.Member
+	ctp.ModifierExtension = raw.ModifierExtension
+	ctp.OnBehalfOf = raw.OnBehalfOf
+	ctp.Period = raw.Period
+	ctp.Role = raw.Role
+	return nil
+}
+
+var _ json.Marshaler = (*CareTeamParticipant)(nil)
+var _ json.Unmarshaler = (*CareTeamParticipant)(nil)

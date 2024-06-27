@@ -6,8 +6,11 @@
 package chargeitem
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The resource ChargeItem describes the provision of healthcare provider
@@ -661,3 +664,135 @@ func (cip *ChargeItemPerformer) GetModifierExtension() []*fhir.Extension {
 	}
 	return cip.ModifierExtension
 }
+
+func (ci *ChargeItem) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ci *ChargeItem) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Account             []*fhir.Reference       `json:"account"`
+		Bodysite            []*fhir.CodeableConcept `json:"bodysite"`
+		Code                *fhir.CodeableConcept   `json:"code"`
+		Contained           []fhir.Resource         `json:"contained"`
+		Context             *fhir.Reference         `json:"context"`
+		CostCenter          *fhir.Reference         `json:"costCenter"`
+		DefinitionCanonical []*fhir.Canonical       `json:"definitionCanonical"`
+		DefinitionURI       []*fhir.URI             `json:"definitionUri"`
+		EnteredDate         *fhir.DateTime          `json:"enteredDate"`
+		Enterer             *fhir.Reference         `json:"enterer"`
+		Extension           []*fhir.Extension       `json:"extension"`
+		FactorOverride      *fhir.Decimal           `json:"factorOverride"`
+
+		ID                     string                  `json:"id"`
+		Identifier             []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules          *fhir.URI               `json:"implicitRules"`
+		Language               *fhir.Code              `json:"language"`
+		Meta                   *fhir.Meta              `json:"meta"`
+		ModifierExtension      []*fhir.Extension       `json:"modifierExtension"`
+		Note                   []*fhir.Annotation      `json:"note"`
+		OccurrenceDateTime     *fhir.DateTime          `json:"occurrenceDateTime"`
+		OccurrencePeriod       *fhir.Period            `json:"occurrencePeriod"`
+		OccurrenceTiming       *fhir.Timing            `json:"occurrenceTiming"`
+		OverrideReason         *fhir.String            `json:"overrideReason"`
+		PartOf                 []*fhir.Reference       `json:"partOf"`
+		Performer              []*ChargeItemPerformer  `json:"performer"`
+		PerformingOrganization *fhir.Reference         `json:"performingOrganization"`
+		PriceOverride          *fhir.Money             `json:"priceOverride"`
+		ProductReference       *fhir.Reference         `json:"productReference"`
+		ProductCodeableConcept *fhir.CodeableConcept   `json:"productCodeableConcept"`
+		Quantity               *fhir.Quantity          `json:"quantity"`
+		Reason                 []*fhir.CodeableConcept `json:"reason"`
+		RequestingOrganization *fhir.Reference         `json:"requestingOrganization"`
+		Service                []*fhir.Reference       `json:"service"`
+		Status                 *fhir.Code              `json:"status"`
+		Subject                *fhir.Reference         `json:"subject"`
+		SupportingInformation  []*fhir.Reference       `json:"supportingInformation"`
+		Text                   *fhir.Narrative         `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ci.Account = raw.Account
+	ci.Bodysite = raw.Bodysite
+	ci.Code = raw.Code
+	ci.Contained = raw.Contained
+	ci.Context = raw.Context
+	ci.CostCenter = raw.CostCenter
+	ci.DefinitionCanonical = raw.DefinitionCanonical
+	ci.DefinitionURI = raw.DefinitionURI
+	ci.EnteredDate = raw.EnteredDate
+	ci.Enterer = raw.Enterer
+	ci.Extension = raw.Extension
+	ci.FactorOverride = raw.FactorOverride
+	ci.ID = raw.ID
+	ci.Identifier = raw.Identifier
+	ci.ImplicitRules = raw.ImplicitRules
+	ci.Language = raw.Language
+	ci.Meta = raw.Meta
+	ci.ModifierExtension = raw.ModifierExtension
+	ci.Note = raw.Note
+	ci.Occurrence, err = validate.SelectOneOf[fhir.Element]("ChargeItem.occurrence",
+		raw.OccurrenceDateTime,
+		raw.OccurrencePeriod,
+		raw.OccurrenceTiming)
+	if err != nil {
+		return err
+	}
+	ci.OverrideReason = raw.OverrideReason
+	ci.PartOf = raw.PartOf
+	ci.Performer = raw.Performer
+	ci.PerformingOrganization = raw.PerformingOrganization
+	ci.PriceOverride = raw.PriceOverride
+	ci.Product, err = validate.SelectOneOf[fhir.Element]("ChargeItem.product",
+		raw.ProductReference,
+		raw.ProductCodeableConcept)
+	if err != nil {
+		return err
+	}
+	ci.Quantity = raw.Quantity
+	ci.Reason = raw.Reason
+	ci.RequestingOrganization = raw.RequestingOrganization
+	ci.Service = raw.Service
+	ci.Status = raw.Status
+	ci.Subject = raw.Subject
+	ci.SupportingInformation = raw.SupportingInformation
+	ci.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*ChargeItem)(nil)
+var _ json.Unmarshaler = (*ChargeItem)(nil)
+
+func (cip *ChargeItemPerformer) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cip *ChargeItemPerformer) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Actor     *fhir.Reference       `json:"actor"`
+		Extension []*fhir.Extension     `json:"extension"`
+		Function  *fhir.CodeableConcept `json:"function"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cip.Actor = raw.Actor
+	cip.Extension = raw.Extension
+	cip.Function = raw.Function
+	cip.ID = raw.ID
+	cip.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*ChargeItemPerformer)(nil)
+var _ json.Unmarshaler = (*ChargeItemPerformer)(nil)

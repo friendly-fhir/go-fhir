@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Attachment Type: For referring to data content
@@ -161,3 +163,43 @@ func (a *Attachment) GetURL() *URL {
 	}
 	return a.URL
 }
+
+func (a *Attachment) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (a *Attachment) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ContentType *Code         `json:"contentType"`
+		Creation    *DateTime     `json:"creation"`
+		Data        *Base64Binary `json:"data"`
+		Extension   []*Extension  `json:"extension"`
+		Hash        *Base64Binary `json:"hash"`
+
+		ID       string       `json:"id"`
+		Language *Code        `json:"language"`
+		Size     *UnsignedInt `json:"size"`
+		Title    *String      `json:"title"`
+		URL      *URL         `json:"url"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	a.ContentType = raw.ContentType
+	a.Creation = raw.Creation
+	a.Data = raw.Data
+	a.Extension = raw.Extension
+	a.Hash = raw.Hash
+	a.ID = raw.ID
+	a.Language = raw.Language
+	a.Size = raw.Size
+	a.Title = raw.Title
+	a.URL = raw.URL
+	return nil
+}
+
+var _ json.Marshaler = (*Attachment)(nil)
+var _ json.Unmarshaler = (*Attachment)(nil)

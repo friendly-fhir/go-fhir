@@ -6,7 +6,10 @@
 package fhir
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for TriggerDefinition Type: A description of a
@@ -173,3 +176,47 @@ func (td *TriggerDefinition) GetType() *Code {
 	}
 	return td.Type
 }
+
+func (td *TriggerDefinition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (td *TriggerDefinition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Condition *Expression        `json:"condition"`
+		Data      []*DataRequirement `json:"data"`
+		Extension []*Extension       `json:"extension"`
+
+		ID              string     `json:"id"`
+		Name            *String    `json:"name"`
+		TimingTiming    *Timing    `json:"timingTiming"`
+		TimingReference *Reference `json:"timingReference"`
+		TimingDate      *Date      `json:"timingDate"`
+		TimingDateTime  *DateTime  `json:"timingDateTime"`
+		Type            *Code      `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	td.Condition = raw.Condition
+	td.Data = raw.Data
+	td.Extension = raw.Extension
+	td.ID = raw.ID
+	td.Name = raw.Name
+	td.Timing, err = validate.SelectOneOf[Element]("TriggerDefinition.timing",
+		raw.TimingTiming,
+		raw.TimingReference,
+		raw.TimingDate,
+		raw.TimingDateTime)
+	if err != nil {
+		return err
+	}
+	td.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*TriggerDefinition)(nil)
+var _ json.Unmarshaler = (*TriggerDefinition)(nil)

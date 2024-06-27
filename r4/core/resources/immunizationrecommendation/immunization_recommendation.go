@@ -6,8 +6,11 @@
 package immunizationrecommendation
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A patient's point-in-time set of recommendations (i.e. forecasting)
@@ -598,3 +601,141 @@ func (irrdc *ImmunizationRecommendationRecommendationDateCriterion) GetValue() *
 	}
 	return irrdc.Value
 }
+
+func (ir *ImmunizationRecommendation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ir *ImmunizationRecommendation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Authority *fhir.Reference   `json:"authority"`
+		Contained []fhir.Resource   `json:"contained"`
+		Date      *fhir.DateTime    `json:"date"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                                      `json:"id"`
+		Identifier        []*fhir.Identifier                          `json:"identifier"`
+		ImplicitRules     *fhir.URI                                   `json:"implicitRules"`
+		Language          *fhir.Code                                  `json:"language"`
+		Meta              *fhir.Meta                                  `json:"meta"`
+		ModifierExtension []*fhir.Extension                           `json:"modifierExtension"`
+		Patient           *fhir.Reference                             `json:"patient"`
+		Recommendation    []*ImmunizationRecommendationRecommendation `json:"recommendation"`
+		Text              *fhir.Narrative                             `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ir.Authority = raw.Authority
+	ir.Contained = raw.Contained
+	ir.Date = raw.Date
+	ir.Extension = raw.Extension
+	ir.ID = raw.ID
+	ir.Identifier = raw.Identifier
+	ir.ImplicitRules = raw.ImplicitRules
+	ir.Language = raw.Language
+	ir.Meta = raw.Meta
+	ir.ModifierExtension = raw.ModifierExtension
+	ir.Patient = raw.Patient
+	ir.Recommendation = raw.Recommendation
+	ir.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*ImmunizationRecommendation)(nil)
+var _ json.Unmarshaler = (*ImmunizationRecommendation)(nil)
+
+func (irr *ImmunizationRecommendationRecommendation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (irr *ImmunizationRecommendationRecommendation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ContraindicatedVaccineCode []*fhir.CodeableConcept                                  `json:"contraindicatedVaccineCode"`
+		DateCriterion              []*ImmunizationRecommendationRecommendationDateCriterion `json:"dateCriterion"`
+		Description                *fhir.String                                             `json:"description"`
+		DoseNumberPositiveInt      *fhir.PositiveInt                                        `json:"doseNumberPositiveInt"`
+		DoseNumberString           *fhir.String                                             `json:"doseNumberString"`
+		Extension                  []*fhir.Extension                                        `json:"extension"`
+		ForecastReason             []*fhir.CodeableConcept                                  `json:"forecastReason"`
+		ForecastStatus             *fhir.CodeableConcept                                    `json:"forecastStatus"`
+
+		ID                           string                  `json:"id"`
+		ModifierExtension            []*fhir.Extension       `json:"modifierExtension"`
+		Series                       *fhir.String            `json:"series"`
+		SeriesDosesPositiveInt       *fhir.PositiveInt       `json:"seriesDosesPositiveInt"`
+		SeriesDosesString            *fhir.String            `json:"seriesDosesString"`
+		SupportingImmunization       []*fhir.Reference       `json:"supportingImmunization"`
+		SupportingPatientInformation []*fhir.Reference       `json:"supportingPatientInformation"`
+		TargetDisease                *fhir.CodeableConcept   `json:"targetDisease"`
+		VaccineCode                  []*fhir.CodeableConcept `json:"vaccineCode"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	irr.ContraindicatedVaccineCode = raw.ContraindicatedVaccineCode
+	irr.DateCriterion = raw.DateCriterion
+	irr.Description = raw.Description
+	irr.DoseNumber, err = validate.SelectOneOf[fhir.Element]("ImmunizationRecommendation.recommendation.doseNumber",
+		raw.DoseNumberPositiveInt,
+		raw.DoseNumberString)
+	if err != nil {
+		return err
+	}
+	irr.Extension = raw.Extension
+	irr.ForecastReason = raw.ForecastReason
+	irr.ForecastStatus = raw.ForecastStatus
+	irr.ID = raw.ID
+	irr.ModifierExtension = raw.ModifierExtension
+	irr.Series = raw.Series
+	irr.SeriesDoses, err = validate.SelectOneOf[fhir.Element]("ImmunizationRecommendation.recommendation.seriesDoses",
+		raw.SeriesDosesPositiveInt,
+		raw.SeriesDosesString)
+	if err != nil {
+		return err
+	}
+	irr.SupportingImmunization = raw.SupportingImmunization
+	irr.SupportingPatientInformation = raw.SupportingPatientInformation
+	irr.TargetDisease = raw.TargetDisease
+	irr.VaccineCode = raw.VaccineCode
+	return nil
+}
+
+var _ json.Marshaler = (*ImmunizationRecommendationRecommendation)(nil)
+var _ json.Unmarshaler = (*ImmunizationRecommendationRecommendation)(nil)
+
+func (irrdc *ImmunizationRecommendationRecommendationDateCriterion) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (irrdc *ImmunizationRecommendationRecommendationDateCriterion) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.CodeableConcept `json:"code"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Value             *fhir.DateTime    `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	irrdc.Code = raw.Code
+	irrdc.Extension = raw.Extension
+	irrdc.ID = raw.ID
+	irrdc.ModifierExtension = raw.ModifierExtension
+	irrdc.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*ImmunizationRecommendationRecommendationDateCriterion)(nil)
+var _ json.Unmarshaler = (*ImmunizationRecommendationRecommendationDateCriterion)(nil)

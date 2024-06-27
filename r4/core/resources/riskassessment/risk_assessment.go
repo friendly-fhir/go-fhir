@@ -6,8 +6,11 @@
 package riskassessment
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // An assessment of the likely outcome(s) for a patient or other subject as
@@ -605,3 +608,129 @@ func (rap *RiskAssessmentPrediction) GetWhenRange() *fhir.Range {
 	}
 	return val
 }
+
+func (ra *RiskAssessment) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ra *RiskAssessment) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		BasedOn   *fhir.Reference       `json:"basedOn"`
+		Basis     []*fhir.Reference     `json:"basis"`
+		Code      *fhir.CodeableConcept `json:"code"`
+		Condition *fhir.Reference       `json:"condition"`
+		Contained []fhir.Resource       `json:"contained"`
+		Encounter *fhir.Reference       `json:"encounter"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                 string                      `json:"id"`
+		Identifier         []*fhir.Identifier          `json:"identifier"`
+		ImplicitRules      *fhir.URI                   `json:"implicitRules"`
+		Language           *fhir.Code                  `json:"language"`
+		Meta               *fhir.Meta                  `json:"meta"`
+		Method             *fhir.CodeableConcept       `json:"method"`
+		Mitigation         *fhir.String                `json:"mitigation"`
+		ModifierExtension  []*fhir.Extension           `json:"modifierExtension"`
+		Note               []*fhir.Annotation          `json:"note"`
+		OccurrenceDateTime *fhir.DateTime              `json:"occurrenceDateTime"`
+		OccurrencePeriod   *fhir.Period                `json:"occurrencePeriod"`
+		Parent             *fhir.Reference             `json:"parent"`
+		Performer          *fhir.Reference             `json:"performer"`
+		Prediction         []*RiskAssessmentPrediction `json:"prediction"`
+		ReasonCode         []*fhir.CodeableConcept     `json:"reasonCode"`
+		ReasonReference    []*fhir.Reference           `json:"reasonReference"`
+		Status             *fhir.Code                  `json:"status"`
+		Subject            *fhir.Reference             `json:"subject"`
+		Text               *fhir.Narrative             `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ra.BasedOn = raw.BasedOn
+	ra.Basis = raw.Basis
+	ra.Code = raw.Code
+	ra.Condition = raw.Condition
+	ra.Contained = raw.Contained
+	ra.Encounter = raw.Encounter
+	ra.Extension = raw.Extension
+	ra.ID = raw.ID
+	ra.Identifier = raw.Identifier
+	ra.ImplicitRules = raw.ImplicitRules
+	ra.Language = raw.Language
+	ra.Meta = raw.Meta
+	ra.Method = raw.Method
+	ra.Mitigation = raw.Mitigation
+	ra.ModifierExtension = raw.ModifierExtension
+	ra.Note = raw.Note
+	ra.Occurrence, err = validate.SelectOneOf[fhir.Element]("RiskAssessment.occurrence",
+		raw.OccurrenceDateTime,
+		raw.OccurrencePeriod)
+	if err != nil {
+		return err
+	}
+	ra.Parent = raw.Parent
+	ra.Performer = raw.Performer
+	ra.Prediction = raw.Prediction
+	ra.ReasonCode = raw.ReasonCode
+	ra.ReasonReference = raw.ReasonReference
+	ra.Status = raw.Status
+	ra.Subject = raw.Subject
+	ra.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*RiskAssessment)(nil)
+var _ json.Unmarshaler = (*RiskAssessment)(nil)
+
+func (rap *RiskAssessmentPrediction) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (rap *RiskAssessmentPrediction) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                 string                `json:"id"`
+		ModifierExtension  []*fhir.Extension     `json:"modifierExtension"`
+		Outcome            *fhir.CodeableConcept `json:"outcome"`
+		ProbabilityDecimal *fhir.Decimal         `json:"probabilityDecimal"`
+		ProbabilityRange   *fhir.Range           `json:"probabilityRange"`
+		QualitativeRisk    *fhir.CodeableConcept `json:"qualitativeRisk"`
+		Rationale          *fhir.String          `json:"rationale"`
+		RelativeRisk       *fhir.Decimal         `json:"relativeRisk"`
+		WhenPeriod         *fhir.Period          `json:"whenPeriod"`
+		WhenRange          *fhir.Range           `json:"whenRange"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	rap.Extension = raw.Extension
+	rap.ID = raw.ID
+	rap.ModifierExtension = raw.ModifierExtension
+	rap.Outcome = raw.Outcome
+	rap.Probability, err = validate.SelectOneOf[fhir.Element]("RiskAssessment.prediction.probability",
+		raw.ProbabilityDecimal,
+		raw.ProbabilityRange)
+	if err != nil {
+		return err
+	}
+	rap.QualitativeRisk = raw.QualitativeRisk
+	rap.Rationale = raw.Rationale
+	rap.RelativeRisk = raw.RelativeRisk
+	rap.When, err = validate.SelectOneOf[fhir.Element]("RiskAssessment.prediction.when",
+		raw.WhenPeriod,
+		raw.WhenRange)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*RiskAssessmentPrediction)(nil)
+var _ json.Unmarshaler = (*RiskAssessmentPrediction)(nil)

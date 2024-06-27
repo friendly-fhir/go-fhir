@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Contributor Type: A contributor to the content
@@ -93,3 +95,33 @@ func (c *Contributor) GetType() *Code {
 	}
 	return c.Type
 }
+
+func (c *Contributor) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (c *Contributor) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contact   []*ContactDetail `json:"contact"`
+		Extension []*Extension     `json:"extension"`
+
+		ID   string  `json:"id"`
+		Name *String `json:"name"`
+		Type *Code   `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	c.Contact = raw.Contact
+	c.Extension = raw.Extension
+	c.ID = raw.ID
+	c.Name = raw.Name
+	c.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*Contributor)(nil)
+var _ json.Unmarshaler = (*Contributor)(nil)

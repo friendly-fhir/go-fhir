@@ -8,6 +8,8 @@ package operationoutcome
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A collection of error, warning, or information messages that result from a
@@ -329,3 +331,79 @@ func (ooi *OperationOutcomeIssue) GetSeverity() *fhir.Code {
 	}
 	return ooi.Severity
 }
+
+func (oo *OperationOutcome) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (oo *OperationOutcome) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contained []fhir.Resource   `json:"contained"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                   `json:"id"`
+		ImplicitRules     *fhir.URI                `json:"implicitRules"`
+		Issue             []*OperationOutcomeIssue `json:"issue"`
+		Language          *fhir.Code               `json:"language"`
+		Meta              *fhir.Meta               `json:"meta"`
+		ModifierExtension []*fhir.Extension        `json:"modifierExtension"`
+		Text              *fhir.Narrative          `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	oo.Contained = raw.Contained
+	oo.Extension = raw.Extension
+	oo.ID = raw.ID
+	oo.ImplicitRules = raw.ImplicitRules
+	oo.Issue = raw.Issue
+	oo.Language = raw.Language
+	oo.Meta = raw.Meta
+	oo.ModifierExtension = raw.ModifierExtension
+	oo.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*OperationOutcome)(nil)
+var _ json.Unmarshaler = (*OperationOutcome)(nil)
+
+func (ooi *OperationOutcomeIssue) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ooi *OperationOutcomeIssue) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code        *fhir.Code            `json:"code"`
+		Details     *fhir.CodeableConcept `json:"details"`
+		Diagnostics *fhir.String          `json:"diagnostics"`
+		Expression  []*fhir.String        `json:"expression"`
+		Extension   []*fhir.Extension     `json:"extension"`
+
+		ID                string            `json:"id"`
+		Location          []*fhir.String    `json:"location"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Severity          *fhir.Code        `json:"severity"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ooi.Code = raw.Code
+	ooi.Details = raw.Details
+	ooi.Diagnostics = raw.Diagnostics
+	ooi.Expression = raw.Expression
+	ooi.Extension = raw.Extension
+	ooi.ID = raw.ID
+	ooi.Location = raw.Location
+	ooi.ModifierExtension = raw.ModifierExtension
+	ooi.Severity = raw.Severity
+	return nil
+}
+
+var _ json.Marshaler = (*OperationOutcomeIssue)(nil)
+var _ json.Unmarshaler = (*OperationOutcomeIssue)(nil)

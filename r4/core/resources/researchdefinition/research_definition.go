@@ -6,8 +6,11 @@
 package researchdefinition
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The ResearchDefinition resource describes the conditional state (population
@@ -680,3 +683,113 @@ func (rd *ResearchDefinition) GetVersion() *fhir.String {
 	}
 	return rd.Version
 }
+
+func (rd *ResearchDefinition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (rd *ResearchDefinition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ApprovalDate        *fhir.Date            `json:"approvalDate"`
+		Author              []*fhir.ContactDetail `json:"author"`
+		Comment             []*fhir.String        `json:"comment"`
+		Contact             []*fhir.ContactDetail `json:"contact"`
+		Contained           []fhir.Resource       `json:"contained"`
+		Copyright           *fhir.Markdown        `json:"copyright"`
+		Date                *fhir.DateTime        `json:"date"`
+		Description         *fhir.Markdown        `json:"description"`
+		Editor              []*fhir.ContactDetail `json:"editor"`
+		EffectivePeriod     *fhir.Period          `json:"effectivePeriod"`
+		Endorser            []*fhir.ContactDetail `json:"endorser"`
+		Experimental        *fhir.Boolean         `json:"experimental"`
+		Exposure            *fhir.Reference       `json:"exposure"`
+		ExposureAlternative *fhir.Reference       `json:"exposureAlternative"`
+		Extension           []*fhir.Extension     `json:"extension"`
+
+		ID                     string                  `json:"id"`
+		Identifier             []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules          *fhir.URI               `json:"implicitRules"`
+		Jurisdiction           []*fhir.CodeableConcept `json:"jurisdiction"`
+		Language               *fhir.Code              `json:"language"`
+		LastReviewDate         *fhir.Date              `json:"lastReviewDate"`
+		Library                []*fhir.Canonical       `json:"library"`
+		Meta                   *fhir.Meta              `json:"meta"`
+		ModifierExtension      []*fhir.Extension       `json:"modifierExtension"`
+		Name                   *fhir.String            `json:"name"`
+		Outcome                *fhir.Reference         `json:"outcome"`
+		Population             *fhir.Reference         `json:"population"`
+		Publisher              *fhir.String            `json:"publisher"`
+		Purpose                *fhir.Markdown          `json:"purpose"`
+		RelatedArtifact        []*fhir.RelatedArtifact `json:"relatedArtifact"`
+		Reviewer               []*fhir.ContactDetail   `json:"reviewer"`
+		ShortTitle             *fhir.String            `json:"shortTitle"`
+		Status                 *fhir.Code              `json:"status"`
+		SubjectCodeableConcept *fhir.CodeableConcept   `json:"subjectCodeableConcept"`
+		SubjectReference       *fhir.Reference         `json:"subjectReference"`
+		Subtitle               *fhir.String            `json:"subtitle"`
+		Text                   *fhir.Narrative         `json:"text"`
+		Title                  *fhir.String            `json:"title"`
+		Topic                  []*fhir.CodeableConcept `json:"topic"`
+		URL                    *fhir.URI               `json:"url"`
+		Usage                  *fhir.String            `json:"usage"`
+		UseContext             []*fhir.UsageContext    `json:"useContext"`
+		Version                *fhir.String            `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	rd.ApprovalDate = raw.ApprovalDate
+	rd.Author = raw.Author
+	rd.Comment = raw.Comment
+	rd.Contact = raw.Contact
+	rd.Contained = raw.Contained
+	rd.Copyright = raw.Copyright
+	rd.Date = raw.Date
+	rd.Description = raw.Description
+	rd.Editor = raw.Editor
+	rd.EffectivePeriod = raw.EffectivePeriod
+	rd.Endorser = raw.Endorser
+	rd.Experimental = raw.Experimental
+	rd.Exposure = raw.Exposure
+	rd.ExposureAlternative = raw.ExposureAlternative
+	rd.Extension = raw.Extension
+	rd.ID = raw.ID
+	rd.Identifier = raw.Identifier
+	rd.ImplicitRules = raw.ImplicitRules
+	rd.Jurisdiction = raw.Jurisdiction
+	rd.Language = raw.Language
+	rd.LastReviewDate = raw.LastReviewDate
+	rd.Library = raw.Library
+	rd.Meta = raw.Meta
+	rd.ModifierExtension = raw.ModifierExtension
+	rd.Name = raw.Name
+	rd.Outcome = raw.Outcome
+	rd.Population = raw.Population
+	rd.Publisher = raw.Publisher
+	rd.Purpose = raw.Purpose
+	rd.RelatedArtifact = raw.RelatedArtifact
+	rd.Reviewer = raw.Reviewer
+	rd.ShortTitle = raw.ShortTitle
+	rd.Status = raw.Status
+	rd.Subject, err = validate.SelectOneOf[fhir.Element]("ResearchDefinition.subject",
+		raw.SubjectCodeableConcept,
+		raw.SubjectReference)
+	if err != nil {
+		return err
+	}
+	rd.Subtitle = raw.Subtitle
+	rd.Text = raw.Text
+	rd.Title = raw.Title
+	rd.Topic = raw.Topic
+	rd.URL = raw.URL
+	rd.Usage = raw.Usage
+	rd.UseContext = raw.UseContext
+	rd.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*ResearchDefinition)(nil)
+var _ json.Unmarshaler = (*ResearchDefinition)(nil)

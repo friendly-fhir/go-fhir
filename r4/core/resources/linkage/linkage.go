@@ -8,6 +8,8 @@ package linkage
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Identifies two or more records (resource instances) that refer to the same
@@ -300,3 +302,75 @@ func (li *LinkageItem) GetType() *fhir.Code {
 	}
 	return li.Type
 }
+
+func (l *Linkage) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (l *Linkage) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Active    *fhir.Boolean     `json:"active"`
+		Author    *fhir.Reference   `json:"author"`
+		Contained []fhir.Resource   `json:"contained"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ImplicitRules     *fhir.URI         `json:"implicitRules"`
+		Item              []*LinkageItem    `json:"item"`
+		Language          *fhir.Code        `json:"language"`
+		Meta              *fhir.Meta        `json:"meta"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Text              *fhir.Narrative   `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	l.Active = raw.Active
+	l.Author = raw.Author
+	l.Contained = raw.Contained
+	l.Extension = raw.Extension
+	l.ID = raw.ID
+	l.ImplicitRules = raw.ImplicitRules
+	l.Item = raw.Item
+	l.Language = raw.Language
+	l.Meta = raw.Meta
+	l.ModifierExtension = raw.ModifierExtension
+	l.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*Linkage)(nil)
+var _ json.Unmarshaler = (*Linkage)(nil)
+
+func (li *LinkageItem) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (li *LinkageItem) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Resource          *fhir.Reference   `json:"resource"`
+		Type              *fhir.Code        `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	li.Extension = raw.Extension
+	li.ID = raw.ID
+	li.ModifierExtension = raw.ModifierExtension
+	li.Resource = raw.Resource
+	li.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*LinkageItem)(nil)
+var _ json.Unmarshaler = (*LinkageItem)(nil)

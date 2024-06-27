@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Address Type: An address expressed using postal
@@ -193,3 +195,47 @@ func (a *Address) GetUse() *Code {
 	}
 	return a.Use
 }
+
+func (a *Address) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (a *Address) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		City      *String      `json:"city"`
+		Country   *String      `json:"country"`
+		District  *String      `json:"district"`
+		Extension []*Extension `json:"extension"`
+
+		ID         string    `json:"id"`
+		Line       []*String `json:"line"`
+		Period     *Period   `json:"period"`
+		PostalCode *String   `json:"postalCode"`
+		State      *String   `json:"state"`
+		Text       *String   `json:"text"`
+		Type       *Code     `json:"type"`
+		Use        *Code     `json:"use"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	a.City = raw.City
+	a.Country = raw.Country
+	a.District = raw.District
+	a.Extension = raw.Extension
+	a.ID = raw.ID
+	a.Line = raw.Line
+	a.Period = raw.Period
+	a.PostalCode = raw.PostalCode
+	a.State = raw.State
+	a.Text = raw.Text
+	a.Type = raw.Type
+	a.Use = raw.Use
+	return nil
+}
+
+var _ json.Marshaler = (*Address)(nil)
+var _ json.Unmarshaler = (*Address)(nil)

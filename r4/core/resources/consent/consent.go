@@ -6,8 +6,11 @@
 package consent
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A record of a healthcare consumer’s choices, which permits or denies
@@ -979,3 +982,239 @@ func (cv *ConsentVerification) GetVerifiedWith() *fhir.Reference {
 	}
 	return cv.VerifiedWith
 }
+
+func (c *Consent) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (c *Consent) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Category  []*fhir.CodeableConcept `json:"category"`
+		Contained []fhir.Resource         `json:"contained"`
+		DateTime  *fhir.DateTime          `json:"dateTime"`
+		Extension []*fhir.Extension       `json:"extension"`
+
+		ID                string                 `json:"id"`
+		Identifier        []*fhir.Identifier     `json:"identifier"`
+		ImplicitRules     *fhir.URI              `json:"implicitRules"`
+		Language          *fhir.Code             `json:"language"`
+		Meta              *fhir.Meta             `json:"meta"`
+		ModifierExtension []*fhir.Extension      `json:"modifierExtension"`
+		Organization      []*fhir.Reference      `json:"organization"`
+		Patient           *fhir.Reference        `json:"patient"`
+		Performer         []*fhir.Reference      `json:"performer"`
+		Policy            []*ConsentPolicy       `json:"policy"`
+		PolicyRule        *fhir.CodeableConcept  `json:"policyRule"`
+		Provision         *ConsentProvision      `json:"provision"`
+		Scope             *fhir.CodeableConcept  `json:"scope"`
+		SourceAttachment  *fhir.Attachment       `json:"sourceAttachment"`
+		SourceReference   *fhir.Reference        `json:"sourceReference"`
+		Status            *fhir.Code             `json:"status"`
+		Text              *fhir.Narrative        `json:"text"`
+		Verification      []*ConsentVerification `json:"verification"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	c.Category = raw.Category
+	c.Contained = raw.Contained
+	c.DateTime = raw.DateTime
+	c.Extension = raw.Extension
+	c.ID = raw.ID
+	c.Identifier = raw.Identifier
+	c.ImplicitRules = raw.ImplicitRules
+	c.Language = raw.Language
+	c.Meta = raw.Meta
+	c.ModifierExtension = raw.ModifierExtension
+	c.Organization = raw.Organization
+	c.Patient = raw.Patient
+	c.Performer = raw.Performer
+	c.Policy = raw.Policy
+	c.PolicyRule = raw.PolicyRule
+	c.Provision = raw.Provision
+	c.Scope = raw.Scope
+	c.Source, err = validate.SelectOneOf[fhir.Element]("Consent.source",
+		raw.SourceAttachment,
+		raw.SourceReference)
+	if err != nil {
+		return err
+	}
+	c.Status = raw.Status
+	c.Text = raw.Text
+	c.Verification = raw.Verification
+	return nil
+}
+
+var _ json.Marshaler = (*Consent)(nil)
+var _ json.Unmarshaler = (*Consent)(nil)
+
+func (cp *ConsentPolicy) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cp *ConsentPolicy) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Authority *fhir.URI         `json:"authority"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		URI               *fhir.URI         `json:"uri"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cp.Authority = raw.Authority
+	cp.Extension = raw.Extension
+	cp.ID = raw.ID
+	cp.ModifierExtension = raw.ModifierExtension
+	cp.URI = raw.URI
+	return nil
+}
+
+var _ json.Marshaler = (*ConsentPolicy)(nil)
+var _ json.Unmarshaler = (*ConsentPolicy)(nil)
+
+func (cp *ConsentProvision) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cp *ConsentProvision) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Action     []*fhir.CodeableConcept  `json:"action"`
+		Actor      []*ConsentProvisionActor `json:"actor"`
+		Class      []*fhir.Coding           `json:"class"`
+		Code       []*fhir.CodeableConcept  `json:"code"`
+		Data       []*ConsentProvisionData  `json:"data"`
+		DataPeriod *fhir.Period             `json:"dataPeriod"`
+		Extension  []*fhir.Extension        `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Period            *fhir.Period      `json:"period"`
+		Purpose           []*fhir.Coding    `json:"purpose"`
+		SecurityLabel     []*fhir.Coding    `json:"securityLabel"`
+		Type              *fhir.Code        `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cp.Action = raw.Action
+	cp.Actor = raw.Actor
+	cp.Class = raw.Class
+	cp.Code = raw.Code
+	cp.Data = raw.Data
+	cp.DataPeriod = raw.DataPeriod
+	cp.Extension = raw.Extension
+	cp.ID = raw.ID
+	cp.ModifierExtension = raw.ModifierExtension
+	cp.Period = raw.Period
+	cp.Purpose = raw.Purpose
+	cp.SecurityLabel = raw.SecurityLabel
+	cp.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ConsentProvision)(nil)
+var _ json.Unmarshaler = (*ConsentProvision)(nil)
+
+func (cpa *ConsentProvisionActor) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cpa *ConsentProvisionActor) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Reference         *fhir.Reference       `json:"reference"`
+		Role              *fhir.CodeableConcept `json:"role"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cpa.Extension = raw.Extension
+	cpa.ID = raw.ID
+	cpa.ModifierExtension = raw.ModifierExtension
+	cpa.Reference = raw.Reference
+	cpa.Role = raw.Role
+	return nil
+}
+
+var _ json.Marshaler = (*ConsentProvisionActor)(nil)
+var _ json.Unmarshaler = (*ConsentProvisionActor)(nil)
+
+func (cpd *ConsentProvisionData) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cpd *ConsentProvisionData) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Meaning           *fhir.Code        `json:"meaning"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Reference         *fhir.Reference   `json:"reference"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cpd.Extension = raw.Extension
+	cpd.ID = raw.ID
+	cpd.Meaning = raw.Meaning
+	cpd.ModifierExtension = raw.ModifierExtension
+	cpd.Reference = raw.Reference
+	return nil
+}
+
+var _ json.Marshaler = (*ConsentProvisionData)(nil)
+var _ json.Unmarshaler = (*ConsentProvisionData)(nil)
+
+func (cv *ConsentVerification) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cv *ConsentVerification) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		VerificationDate  *fhir.DateTime    `json:"verificationDate"`
+		Verified          *fhir.Boolean     `json:"verified"`
+		VerifiedWith      *fhir.Reference   `json:"verifiedWith"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cv.Extension = raw.Extension
+	cv.ID = raw.ID
+	cv.ModifierExtension = raw.ModifierExtension
+	cv.VerificationDate = raw.VerificationDate
+	cv.Verified = raw.Verified
+	cv.VerifiedWith = raw.VerifiedWith
+	return nil
+}
+
+var _ json.Marshaler = (*ConsentVerification)(nil)
+var _ json.Unmarshaler = (*ConsentVerification)(nil)

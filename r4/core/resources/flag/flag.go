@@ -8,6 +8,8 @@ package flag
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Prospective warnings of potential issues when providing care to the patient.
@@ -266,3 +268,55 @@ func (f *Flag) GetText() *fhir.Narrative {
 	}
 	return f.Text
 }
+
+func (f *Flag) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (f *Flag) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Author    *fhir.Reference         `json:"author"`
+		Category  []*fhir.CodeableConcept `json:"category"`
+		Code      *fhir.CodeableConcept   `json:"code"`
+		Contained []fhir.Resource         `json:"contained"`
+		Encounter *fhir.Reference         `json:"encounter"`
+		Extension []*fhir.Extension       `json:"extension"`
+
+		ID                string             `json:"id"`
+		Identifier        []*fhir.Identifier `json:"identifier"`
+		ImplicitRules     *fhir.URI          `json:"implicitRules"`
+		Language          *fhir.Code         `json:"language"`
+		Meta              *fhir.Meta         `json:"meta"`
+		ModifierExtension []*fhir.Extension  `json:"modifierExtension"`
+		Period            *fhir.Period       `json:"period"`
+		Status            *fhir.Code         `json:"status"`
+		Subject           *fhir.Reference    `json:"subject"`
+		Text              *fhir.Narrative    `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	f.Author = raw.Author
+	f.Category = raw.Category
+	f.Code = raw.Code
+	f.Contained = raw.Contained
+	f.Encounter = raw.Encounter
+	f.Extension = raw.Extension
+	f.ID = raw.ID
+	f.Identifier = raw.Identifier
+	f.ImplicitRules = raw.ImplicitRules
+	f.Language = raw.Language
+	f.Meta = raw.Meta
+	f.ModifierExtension = raw.ModifierExtension
+	f.Period = raw.Period
+	f.Status = raw.Status
+	f.Subject = raw.Subject
+	f.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*Flag)(nil)
+var _ json.Unmarshaler = (*Flag)(nil)

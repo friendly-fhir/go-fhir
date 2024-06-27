@@ -6,8 +6,11 @@
 package medicationdispense
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Indicates that a medication product is to be or has been dispensed for a
@@ -767,3 +770,163 @@ func (mds *MedicationDispenseSubstitution) GetWasSubstituted() *fhir.Boolean {
 	}
 	return mds.WasSubstituted
 }
+
+func (md *MedicationDispense) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (md *MedicationDispense) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AuthorizingPrescription []*fhir.Reference     `json:"authorizingPrescription"`
+		Category                *fhir.CodeableConcept `json:"category"`
+		Contained               []fhir.Resource       `json:"contained"`
+		Context                 *fhir.Reference       `json:"context"`
+		DaysSupply              *fhir.Quantity        `json:"daysSupply"`
+		Destination             *fhir.Reference       `json:"destination"`
+		DetectedIssue           []*fhir.Reference     `json:"detectedIssue"`
+		DosageInstruction       []*fhir.Dosage        `json:"dosageInstruction"`
+		EventHistory            []*fhir.Reference     `json:"eventHistory"`
+		Extension               []*fhir.Extension     `json:"extension"`
+
+		ID                          string                          `json:"id"`
+		Identifier                  []*fhir.Identifier              `json:"identifier"`
+		ImplicitRules               *fhir.URI                       `json:"implicitRules"`
+		Language                    *fhir.Code                      `json:"language"`
+		Location                    *fhir.Reference                 `json:"location"`
+		MedicationCodeableConcept   *fhir.CodeableConcept           `json:"medicationCodeableConcept"`
+		MedicationReference         *fhir.Reference                 `json:"medicationReference"`
+		Meta                        *fhir.Meta                      `json:"meta"`
+		ModifierExtension           []*fhir.Extension               `json:"modifierExtension"`
+		Note                        []*fhir.Annotation              `json:"note"`
+		PartOf                      []*fhir.Reference               `json:"partOf"`
+		Performer                   []*MedicationDispensePerformer  `json:"performer"`
+		Quantity                    *fhir.Quantity                  `json:"quantity"`
+		Receiver                    []*fhir.Reference               `json:"receiver"`
+		Status                      *fhir.Code                      `json:"status"`
+		StatusReasonCodeableConcept *fhir.CodeableConcept           `json:"statusReasonCodeableConcept"`
+		StatusReasonReference       *fhir.Reference                 `json:"statusReasonReference"`
+		Subject                     *fhir.Reference                 `json:"subject"`
+		Substitution                *MedicationDispenseSubstitution `json:"substitution"`
+		SupportingInformation       []*fhir.Reference               `json:"supportingInformation"`
+		Text                        *fhir.Narrative                 `json:"text"`
+		Type                        *fhir.CodeableConcept           `json:"type"`
+		WhenHandedOver              *fhir.DateTime                  `json:"whenHandedOver"`
+		WhenPrepared                *fhir.DateTime                  `json:"whenPrepared"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	md.AuthorizingPrescription = raw.AuthorizingPrescription
+	md.Category = raw.Category
+	md.Contained = raw.Contained
+	md.Context = raw.Context
+	md.DaysSupply = raw.DaysSupply
+	md.Destination = raw.Destination
+	md.DetectedIssue = raw.DetectedIssue
+	md.DosageInstruction = raw.DosageInstruction
+	md.EventHistory = raw.EventHistory
+	md.Extension = raw.Extension
+	md.ID = raw.ID
+	md.Identifier = raw.Identifier
+	md.ImplicitRules = raw.ImplicitRules
+	md.Language = raw.Language
+	md.Location = raw.Location
+	md.Medication, err = validate.SelectOneOf[fhir.Element]("MedicationDispense.medication",
+		raw.MedicationCodeableConcept,
+		raw.MedicationReference)
+	if err != nil {
+		return err
+	}
+	md.Meta = raw.Meta
+	md.ModifierExtension = raw.ModifierExtension
+	md.Note = raw.Note
+	md.PartOf = raw.PartOf
+	md.Performer = raw.Performer
+	md.Quantity = raw.Quantity
+	md.Receiver = raw.Receiver
+	md.Status = raw.Status
+	md.StatusReason, err = validate.SelectOneOf[fhir.Element]("MedicationDispense.statusReason",
+		raw.StatusReasonCodeableConcept,
+		raw.StatusReasonReference)
+	if err != nil {
+		return err
+	}
+	md.Subject = raw.Subject
+	md.Substitution = raw.Substitution
+	md.SupportingInformation = raw.SupportingInformation
+	md.Text = raw.Text
+	md.Type = raw.Type
+	md.WhenHandedOver = raw.WhenHandedOver
+	md.WhenPrepared = raw.WhenPrepared
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationDispense)(nil)
+var _ json.Unmarshaler = (*MedicationDispense)(nil)
+
+func (mdp *MedicationDispensePerformer) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mdp *MedicationDispensePerformer) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Actor     *fhir.Reference       `json:"actor"`
+		Extension []*fhir.Extension     `json:"extension"`
+		Function  *fhir.CodeableConcept `json:"function"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mdp.Actor = raw.Actor
+	mdp.Extension = raw.Extension
+	mdp.Function = raw.Function
+	mdp.ID = raw.ID
+	mdp.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationDispensePerformer)(nil)
+var _ json.Unmarshaler = (*MedicationDispensePerformer)(nil)
+
+func (mds *MedicationDispenseSubstitution) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mds *MedicationDispenseSubstitution) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                  `json:"id"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Reason            []*fhir.CodeableConcept `json:"reason"`
+		ResponsibleParty  []*fhir.Reference       `json:"responsibleParty"`
+		Type              *fhir.CodeableConcept   `json:"type"`
+		WasSubstituted    *fhir.Boolean           `json:"wasSubstituted"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mds.Extension = raw.Extension
+	mds.ID = raw.ID
+	mds.ModifierExtension = raw.ModifierExtension
+	mds.Reason = raw.Reason
+	mds.ResponsibleParty = raw.ResponsibleParty
+	mds.Type = raw.Type
+	mds.WasSubstituted = raw.WasSubstituted
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationDispenseSubstitution)(nil)
+var _ json.Unmarshaler = (*MedicationDispenseSubstitution)(nil)

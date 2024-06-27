@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for ContactPoint Type: Details for all kinds of
@@ -123,3 +125,37 @@ func (cp *ContactPoint) GetValue() *String {
 	}
 	return cp.Value
 }
+
+func (cp *ContactPoint) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cp *ContactPoint) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*Extension `json:"extension"`
+
+		ID     string       `json:"id"`
+		Period *Period      `json:"period"`
+		Rank   *PositiveInt `json:"rank"`
+		System *Code        `json:"system"`
+		Use    *Code        `json:"use"`
+		Value  *String      `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cp.Extension = raw.Extension
+	cp.ID = raw.ID
+	cp.Period = raw.Period
+	cp.Rank = raw.Rank
+	cp.System = raw.System
+	cp.Use = raw.Use
+	cp.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*ContactPoint)(nil)
+var _ json.Unmarshaler = (*ContactPoint)(nil)

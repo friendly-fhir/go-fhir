@@ -8,6 +8,8 @@ package chargeitemdefinition
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The ChargeItemDefinition resource provides the properties that apply to the
@@ -839,3 +841,179 @@ func (cidpgpc *ChargeItemDefinitionPropertyGroupPriceComponent) GetType() *fhir.
 	}
 	return cidpgpc.Type
 }
+
+func (cid *ChargeItemDefinition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cid *ChargeItemDefinition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Applicability   []*ChargeItemDefinitionApplicability `json:"applicability"`
+		ApprovalDate    *fhir.Date                           `json:"approvalDate"`
+		Code            *fhir.CodeableConcept                `json:"code"`
+		Contact         []*fhir.ContactDetail                `json:"contact"`
+		Contained       []fhir.Resource                      `json:"contained"`
+		Copyright       *fhir.Markdown                       `json:"copyright"`
+		Date            *fhir.DateTime                       `json:"date"`
+		DerivedFromURI  []*fhir.URI                          `json:"derivedFromUri"`
+		Description     *fhir.Markdown                       `json:"description"`
+		EffectivePeriod *fhir.Period                         `json:"effectivePeriod"`
+		Experimental    *fhir.Boolean                        `json:"experimental"`
+		Extension       []*fhir.Extension                    `json:"extension"`
+
+		ID                string                               `json:"id"`
+		Identifier        []*fhir.Identifier                   `json:"identifier"`
+		ImplicitRules     *fhir.URI                            `json:"implicitRules"`
+		Instance          []*fhir.Reference                    `json:"instance"`
+		Jurisdiction      []*fhir.CodeableConcept              `json:"jurisdiction"`
+		Language          *fhir.Code                           `json:"language"`
+		LastReviewDate    *fhir.Date                           `json:"lastReviewDate"`
+		Meta              *fhir.Meta                           `json:"meta"`
+		ModifierExtension []*fhir.Extension                    `json:"modifierExtension"`
+		PartOf            []*fhir.Canonical                    `json:"partOf"`
+		PropertyGroup     []*ChargeItemDefinitionPropertyGroup `json:"propertyGroup"`
+		Publisher         *fhir.String                         `json:"publisher"`
+		Replaces          []*fhir.Canonical                    `json:"replaces"`
+		Status            *fhir.Code                           `json:"status"`
+		Text              *fhir.Narrative                      `json:"text"`
+		Title             *fhir.String                         `json:"title"`
+		URL               *fhir.URI                            `json:"url"`
+		UseContext        []*fhir.UsageContext                 `json:"useContext"`
+		Version           *fhir.String                         `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cid.Applicability = raw.Applicability
+	cid.ApprovalDate = raw.ApprovalDate
+	cid.Code = raw.Code
+	cid.Contact = raw.Contact
+	cid.Contained = raw.Contained
+	cid.Copyright = raw.Copyright
+	cid.Date = raw.Date
+	cid.DerivedFromURI = raw.DerivedFromURI
+	cid.Description = raw.Description
+	cid.EffectivePeriod = raw.EffectivePeriod
+	cid.Experimental = raw.Experimental
+	cid.Extension = raw.Extension
+	cid.ID = raw.ID
+	cid.Identifier = raw.Identifier
+	cid.ImplicitRules = raw.ImplicitRules
+	cid.Instance = raw.Instance
+	cid.Jurisdiction = raw.Jurisdiction
+	cid.Language = raw.Language
+	cid.LastReviewDate = raw.LastReviewDate
+	cid.Meta = raw.Meta
+	cid.ModifierExtension = raw.ModifierExtension
+	cid.PartOf = raw.PartOf
+	cid.PropertyGroup = raw.PropertyGroup
+	cid.Publisher = raw.Publisher
+	cid.Replaces = raw.Replaces
+	cid.Status = raw.Status
+	cid.Text = raw.Text
+	cid.Title = raw.Title
+	cid.URL = raw.URL
+	cid.UseContext = raw.UseContext
+	cid.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*ChargeItemDefinition)(nil)
+var _ json.Unmarshaler = (*ChargeItemDefinition)(nil)
+
+func (cida *ChargeItemDefinitionApplicability) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cida *ChargeItemDefinitionApplicability) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description *fhir.String      `json:"description"`
+		Expression  *fhir.String      `json:"expression"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Language          *fhir.String      `json:"language"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cida.Description = raw.Description
+	cida.Expression = raw.Expression
+	cida.Extension = raw.Extension
+	cida.ID = raw.ID
+	cida.Language = raw.Language
+	cida.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*ChargeItemDefinitionApplicability)(nil)
+var _ json.Unmarshaler = (*ChargeItemDefinitionApplicability)(nil)
+
+func (cidpg *ChargeItemDefinitionPropertyGroup) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cidpg *ChargeItemDefinitionPropertyGroup) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                                             `json:"id"`
+		ModifierExtension []*fhir.Extension                                  `json:"modifierExtension"`
+		PriceComponent    []*ChargeItemDefinitionPropertyGroupPriceComponent `json:"priceComponent"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cidpg.Extension = raw.Extension
+	cidpg.ID = raw.ID
+	cidpg.ModifierExtension = raw.ModifierExtension
+	cidpg.PriceComponent = raw.PriceComponent
+	return nil
+}
+
+var _ json.Marshaler = (*ChargeItemDefinitionPropertyGroup)(nil)
+var _ json.Unmarshaler = (*ChargeItemDefinitionPropertyGroup)(nil)
+
+func (cidpgpc *ChargeItemDefinitionPropertyGroupPriceComponent) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cidpgpc *ChargeItemDefinitionPropertyGroupPriceComponent) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Amount    *fhir.Money           `json:"amount"`
+		Code      *fhir.CodeableConcept `json:"code"`
+		Extension []*fhir.Extension     `json:"extension"`
+		Factor    *fhir.Decimal         `json:"factor"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Type              *fhir.Code        `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cidpgpc.Amount = raw.Amount
+	cidpgpc.Code = raw.Code
+	cidpgpc.Extension = raw.Extension
+	cidpgpc.Factor = raw.Factor
+	cidpgpc.ID = raw.ID
+	cidpgpc.ModifierExtension = raw.ModifierExtension
+	cidpgpc.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ChargeItemDefinitionPropertyGroupPriceComponent)(nil)
+var _ json.Unmarshaler = (*ChargeItemDefinitionPropertyGroupPriceComponent)(nil)

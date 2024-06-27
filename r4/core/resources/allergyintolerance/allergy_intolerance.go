@@ -6,8 +6,11 @@
 package allergyintolerance
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Risk of harmful or undesirable, physiological response which is unique to an
@@ -626,3 +629,123 @@ func (air *AllergyIntoleranceReaction) GetSubstance() *fhir.CodeableConcept {
 	}
 	return air.Substance
 }
+
+func (ai *AllergyIntolerance) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ai *AllergyIntolerance) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Asserter       *fhir.Reference       `json:"asserter"`
+		Category       []*fhir.Code          `json:"category"`
+		ClinicalStatus *fhir.CodeableConcept `json:"clinicalStatus"`
+		Code           *fhir.CodeableConcept `json:"code"`
+		Contained      []fhir.Resource       `json:"contained"`
+		Criticality    *fhir.Code            `json:"criticality"`
+		Encounter      *fhir.Reference       `json:"encounter"`
+		Extension      []*fhir.Extension     `json:"extension"`
+
+		ID                 string                        `json:"id"`
+		Identifier         []*fhir.Identifier            `json:"identifier"`
+		ImplicitRules      *fhir.URI                     `json:"implicitRules"`
+		Language           *fhir.Code                    `json:"language"`
+		LastOccurrence     *fhir.DateTime                `json:"lastOccurrence"`
+		Meta               *fhir.Meta                    `json:"meta"`
+		ModifierExtension  []*fhir.Extension             `json:"modifierExtension"`
+		Note               []*fhir.Annotation            `json:"note"`
+		OnsetDateTime      *fhir.DateTime                `json:"onsetDateTime"`
+		OnsetAge           *fhir.Age                     `json:"onsetAge"`
+		OnsetPeriod        *fhir.Period                  `json:"onsetPeriod"`
+		OnsetRange         *fhir.Range                   `json:"onsetRange"`
+		OnsetString        *fhir.String                  `json:"onsetString"`
+		Patient            *fhir.Reference               `json:"patient"`
+		Reaction           []*AllergyIntoleranceReaction `json:"reaction"`
+		RecordedDate       *fhir.DateTime                `json:"recordedDate"`
+		Recorder           *fhir.Reference               `json:"recorder"`
+		Text               *fhir.Narrative               `json:"text"`
+		Type               *fhir.Code                    `json:"type"`
+		VerificationStatus *fhir.CodeableConcept         `json:"verificationStatus"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ai.Asserter = raw.Asserter
+	ai.Category = raw.Category
+	ai.ClinicalStatus = raw.ClinicalStatus
+	ai.Code = raw.Code
+	ai.Contained = raw.Contained
+	ai.Criticality = raw.Criticality
+	ai.Encounter = raw.Encounter
+	ai.Extension = raw.Extension
+	ai.ID = raw.ID
+	ai.Identifier = raw.Identifier
+	ai.ImplicitRules = raw.ImplicitRules
+	ai.Language = raw.Language
+	ai.LastOccurrence = raw.LastOccurrence
+	ai.Meta = raw.Meta
+	ai.ModifierExtension = raw.ModifierExtension
+	ai.Note = raw.Note
+	ai.Onset, err = validate.SelectOneOf[fhir.Element]("AllergyIntolerance.onset",
+		raw.OnsetDateTime,
+		raw.OnsetAge,
+		raw.OnsetPeriod,
+		raw.OnsetRange,
+		raw.OnsetString)
+	if err != nil {
+		return err
+	}
+	ai.Patient = raw.Patient
+	ai.Reaction = raw.Reaction
+	ai.RecordedDate = raw.RecordedDate
+	ai.Recorder = raw.Recorder
+	ai.Text = raw.Text
+	ai.Type = raw.Type
+	ai.VerificationStatus = raw.VerificationStatus
+	return nil
+}
+
+var _ json.Marshaler = (*AllergyIntolerance)(nil)
+var _ json.Unmarshaler = (*AllergyIntolerance)(nil)
+
+func (air *AllergyIntoleranceReaction) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (air *AllergyIntoleranceReaction) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description   *fhir.String          `json:"description"`
+		ExposureRoute *fhir.CodeableConcept `json:"exposureRoute"`
+		Extension     []*fhir.Extension     `json:"extension"`
+
+		ID                string                  `json:"id"`
+		Manifestation     []*fhir.CodeableConcept `json:"manifestation"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Note              []*fhir.Annotation      `json:"note"`
+		Onset             *fhir.DateTime          `json:"onset"`
+		Severity          *fhir.Code              `json:"severity"`
+		Substance         *fhir.CodeableConcept   `json:"substance"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	air.Description = raw.Description
+	air.ExposureRoute = raw.ExposureRoute
+	air.Extension = raw.Extension
+	air.ID = raw.ID
+	air.Manifestation = raw.Manifestation
+	air.ModifierExtension = raw.ModifierExtension
+	air.Note = raw.Note
+	air.Onset = raw.Onset
+	air.Severity = raw.Severity
+	air.Substance = raw.Substance
+	return nil
+}
+
+var _ json.Marshaler = (*AllergyIntoleranceReaction)(nil)
+var _ json.Unmarshaler = (*AllergyIntoleranceReaction)(nil)

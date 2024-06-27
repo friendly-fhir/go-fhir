@@ -6,8 +6,11 @@
 package media
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A photo, video, or audio recording acquired or used in healthcare. The
@@ -481,3 +484,89 @@ func (m *Media) GetWidth() *fhir.PositiveInt {
 	}
 	return m.Width
 }
+
+func (m *Media) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (m *Media) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		BasedOn         []*fhir.Reference     `json:"basedOn"`
+		BodySite        *fhir.CodeableConcept `json:"bodySite"`
+		Contained       []fhir.Resource       `json:"contained"`
+		Content         *fhir.Attachment      `json:"content"`
+		CreatedDateTime *fhir.DateTime        `json:"createdDateTime"`
+		CreatedPeriod   *fhir.Period          `json:"createdPeriod"`
+		Device          *fhir.Reference       `json:"device"`
+		DeviceName      *fhir.String          `json:"deviceName"`
+		Duration        *fhir.Decimal         `json:"duration"`
+		Encounter       *fhir.Reference       `json:"encounter"`
+		Extension       []*fhir.Extension     `json:"extension"`
+		Frames          *fhir.PositiveInt     `json:"frames"`
+		Height          *fhir.PositiveInt     `json:"height"`
+
+		ID                string                  `json:"id"`
+		Identifier        []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Issued            *fhir.Instant           `json:"issued"`
+		Language          *fhir.Code              `json:"language"`
+		Meta              *fhir.Meta              `json:"meta"`
+		Modality          *fhir.CodeableConcept   `json:"modality"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Note              []*fhir.Annotation      `json:"note"`
+		Operator          *fhir.Reference         `json:"operator"`
+		PartOf            []*fhir.Reference       `json:"partOf"`
+		ReasonCode        []*fhir.CodeableConcept `json:"reasonCode"`
+		Status            *fhir.Code              `json:"status"`
+		Subject           *fhir.Reference         `json:"subject"`
+		Text              *fhir.Narrative         `json:"text"`
+		Type              *fhir.CodeableConcept   `json:"type"`
+		View              *fhir.CodeableConcept   `json:"view"`
+		Width             *fhir.PositiveInt       `json:"width"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	m.BasedOn = raw.BasedOn
+	m.BodySite = raw.BodySite
+	m.Contained = raw.Contained
+	m.Content = raw.Content
+	m.Created, err = validate.SelectOneOf[fhir.Element]("Media.created",
+		raw.CreatedDateTime,
+		raw.CreatedPeriod)
+	if err != nil {
+		return err
+	}
+	m.Device = raw.Device
+	m.DeviceName = raw.DeviceName
+	m.Duration = raw.Duration
+	m.Encounter = raw.Encounter
+	m.Extension = raw.Extension
+	m.Frames = raw.Frames
+	m.Height = raw.Height
+	m.ID = raw.ID
+	m.Identifier = raw.Identifier
+	m.ImplicitRules = raw.ImplicitRules
+	m.Issued = raw.Issued
+	m.Language = raw.Language
+	m.Meta = raw.Meta
+	m.Modality = raw.Modality
+	m.ModifierExtension = raw.ModifierExtension
+	m.Note = raw.Note
+	m.Operator = raw.Operator
+	m.PartOf = raw.PartOf
+	m.ReasonCode = raw.ReasonCode
+	m.Status = raw.Status
+	m.Subject = raw.Subject
+	m.Text = raw.Text
+	m.Type = raw.Type
+	m.View = raw.View
+	m.Width = raw.Width
+	return nil
+}
+
+var _ json.Marshaler = (*Media)(nil)
+var _ json.Unmarshaler = (*Media)(nil)

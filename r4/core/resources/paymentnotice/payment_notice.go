@@ -8,6 +8,8 @@ package paymentnotice
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // This resource provides the status of the payment for goods and services
@@ -315,3 +317,63 @@ func (pn *PaymentNotice) GetText() *fhir.Narrative {
 	}
 	return pn.Text
 }
+
+func (pn *PaymentNotice) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pn *PaymentNotice) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Amount    *fhir.Money       `json:"amount"`
+		Contained []fhir.Resource   `json:"contained"`
+		Created   *fhir.DateTime    `json:"created"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		Identifier        []*fhir.Identifier    `json:"identifier"`
+		ImplicitRules     *fhir.URI             `json:"implicitRules"`
+		Language          *fhir.Code            `json:"language"`
+		Meta              *fhir.Meta            `json:"meta"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Payee             *fhir.Reference       `json:"payee"`
+		Payment           *fhir.Reference       `json:"payment"`
+		PaymentDate       *fhir.Date            `json:"paymentDate"`
+		PaymentStatus     *fhir.CodeableConcept `json:"paymentStatus"`
+		Provider          *fhir.Reference       `json:"provider"`
+		Recipient         *fhir.Reference       `json:"recipient"`
+		Request           *fhir.Reference       `json:"request"`
+		Response          *fhir.Reference       `json:"response"`
+		Status            *fhir.Code            `json:"status"`
+		Text              *fhir.Narrative       `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pn.Amount = raw.Amount
+	pn.Contained = raw.Contained
+	pn.Created = raw.Created
+	pn.Extension = raw.Extension
+	pn.ID = raw.ID
+	pn.Identifier = raw.Identifier
+	pn.ImplicitRules = raw.ImplicitRules
+	pn.Language = raw.Language
+	pn.Meta = raw.Meta
+	pn.ModifierExtension = raw.ModifierExtension
+	pn.Payee = raw.Payee
+	pn.Payment = raw.Payment
+	pn.PaymentDate = raw.PaymentDate
+	pn.PaymentStatus = raw.PaymentStatus
+	pn.Provider = raw.Provider
+	pn.Recipient = raw.Recipient
+	pn.Request = raw.Request
+	pn.Response = raw.Response
+	pn.Status = raw.Status
+	pn.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*PaymentNotice)(nil)
+var _ json.Unmarshaler = (*PaymentNotice)(nil)

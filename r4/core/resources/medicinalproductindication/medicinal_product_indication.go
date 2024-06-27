@@ -6,8 +6,11 @@
 package medicinalproductindication
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Indication for the Medicinal Product.
@@ -397,3 +400,93 @@ func (mpiot *MedicinalProductIndicationOtherTherapy) GetTherapyRelationshipType(
 	}
 	return mpiot.TherapyRelationshipType
 }
+
+func (mpi *MedicinalProductIndication) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpi *MedicinalProductIndication) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Comorbidity             []*fhir.CodeableConcept `json:"comorbidity"`
+		Contained               []fhir.Resource         `json:"contained"`
+		DiseaseStatus           *fhir.CodeableConcept   `json:"diseaseStatus"`
+		DiseaseSymptomProcedure *fhir.CodeableConcept   `json:"diseaseSymptomProcedure"`
+		Duration                *fhir.Quantity          `json:"duration"`
+		Extension               []*fhir.Extension       `json:"extension"`
+
+		ID                string                                    `json:"id"`
+		ImplicitRules     *fhir.URI                                 `json:"implicitRules"`
+		IntendedEffect    *fhir.CodeableConcept                     `json:"intendedEffect"`
+		Language          *fhir.Code                                `json:"language"`
+		Meta              *fhir.Meta                                `json:"meta"`
+		ModifierExtension []*fhir.Extension                         `json:"modifierExtension"`
+		OtherTherapy      []*MedicinalProductIndicationOtherTherapy `json:"otherTherapy"`
+		Population        []*fhir.Population                        `json:"population"`
+		Subject           []*fhir.Reference                         `json:"subject"`
+		Text              *fhir.Narrative                           `json:"text"`
+		UndesirableEffect []*fhir.Reference                         `json:"undesirableEffect"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpi.Comorbidity = raw.Comorbidity
+	mpi.Contained = raw.Contained
+	mpi.DiseaseStatus = raw.DiseaseStatus
+	mpi.DiseaseSymptomProcedure = raw.DiseaseSymptomProcedure
+	mpi.Duration = raw.Duration
+	mpi.Extension = raw.Extension
+	mpi.ID = raw.ID
+	mpi.ImplicitRules = raw.ImplicitRules
+	mpi.IntendedEffect = raw.IntendedEffect
+	mpi.Language = raw.Language
+	mpi.Meta = raw.Meta
+	mpi.ModifierExtension = raw.ModifierExtension
+	mpi.OtherTherapy = raw.OtherTherapy
+	mpi.Population = raw.Population
+	mpi.Subject = raw.Subject
+	mpi.Text = raw.Text
+	mpi.UndesirableEffect = raw.UndesirableEffect
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductIndication)(nil)
+var _ json.Unmarshaler = (*MedicinalProductIndication)(nil)
+
+func (mpiot *MedicinalProductIndicationOtherTherapy) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpiot *MedicinalProductIndicationOtherTherapy) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                        string                `json:"id"`
+		MedicationCodeableConcept *fhir.CodeableConcept `json:"medicationCodeableConcept"`
+		MedicationReference       *fhir.Reference       `json:"medicationReference"`
+		ModifierExtension         []*fhir.Extension     `json:"modifierExtension"`
+		TherapyRelationshipType   *fhir.CodeableConcept `json:"therapyRelationshipType"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpiot.Extension = raw.Extension
+	mpiot.ID = raw.ID
+	mpiot.Medication, err = validate.SelectOneOf[fhir.Element]("MedicinalProductIndication.otherTherapy.medication",
+		raw.MedicationCodeableConcept,
+		raw.MedicationReference)
+	if err != nil {
+		return err
+	}
+	mpiot.ModifierExtension = raw.ModifierExtension
+	mpiot.TherapyRelationshipType = raw.TherapyRelationshipType
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductIndicationOtherTherapy)(nil)
+var _ json.Unmarshaler = (*MedicinalProductIndicationOtherTherapy)(nil)

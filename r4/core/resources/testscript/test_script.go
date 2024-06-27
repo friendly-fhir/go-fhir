@@ -8,6 +8,8 @@ package testscript
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A structured set of tests against a FHIR server or client implementation to
@@ -2688,3 +2690,651 @@ func (tsv *TestScriptVariable) GetSourceID() *fhir.ID {
 	}
 	return tsv.SourceID
 }
+
+func (ts *TestScript) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ts *TestScript) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contact      []*fhir.ContactDetail    `json:"contact"`
+		Contained    []fhir.Resource          `json:"contained"`
+		Copyright    *fhir.Markdown           `json:"copyright"`
+		Date         *fhir.DateTime           `json:"date"`
+		Description  *fhir.Markdown           `json:"description"`
+		Destination  []*TestScriptDestination `json:"destination"`
+		Experimental *fhir.Boolean            `json:"experimental"`
+		Extension    []*fhir.Extension        `json:"extension"`
+		Fixture      []*TestScriptFixture     `json:"fixture"`
+
+		ID                string                  `json:"id"`
+		Identifier        *fhir.Identifier        `json:"identifier"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Jurisdiction      []*fhir.CodeableConcept `json:"jurisdiction"`
+		Language          *fhir.Code              `json:"language"`
+		Meta              *fhir.Meta              `json:"meta"`
+		Metadata          *TestScriptMetadata     `json:"metadata"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Name              *fhir.String            `json:"name"`
+		Origin            []*TestScriptOrigin     `json:"origin"`
+		Profile           []*fhir.Reference       `json:"profile"`
+		Publisher         *fhir.String            `json:"publisher"`
+		Purpose           *fhir.Markdown          `json:"purpose"`
+		Setup             *TestScriptSetup        `json:"setup"`
+		Status            *fhir.Code              `json:"status"`
+		Teardown          *TestScriptTeardown     `json:"teardown"`
+		Test              []*TestScriptTest       `json:"test"`
+		Text              *fhir.Narrative         `json:"text"`
+		Title             *fhir.String            `json:"title"`
+		URL               *fhir.URI               `json:"url"`
+		UseContext        []*fhir.UsageContext    `json:"useContext"`
+		Variable          []*TestScriptVariable   `json:"variable"`
+		Version           *fhir.String            `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ts.Contact = raw.Contact
+	ts.Contained = raw.Contained
+	ts.Copyright = raw.Copyright
+	ts.Date = raw.Date
+	ts.Description = raw.Description
+	ts.Destination = raw.Destination
+	ts.Experimental = raw.Experimental
+	ts.Extension = raw.Extension
+	ts.Fixture = raw.Fixture
+	ts.ID = raw.ID
+	ts.Identifier = raw.Identifier
+	ts.ImplicitRules = raw.ImplicitRules
+	ts.Jurisdiction = raw.Jurisdiction
+	ts.Language = raw.Language
+	ts.Meta = raw.Meta
+	ts.Metadata = raw.Metadata
+	ts.ModifierExtension = raw.ModifierExtension
+	ts.Name = raw.Name
+	ts.Origin = raw.Origin
+	ts.Profile = raw.Profile
+	ts.Publisher = raw.Publisher
+	ts.Purpose = raw.Purpose
+	ts.Setup = raw.Setup
+	ts.Status = raw.Status
+	ts.Teardown = raw.Teardown
+	ts.Test = raw.Test
+	ts.Text = raw.Text
+	ts.Title = raw.Title
+	ts.URL = raw.URL
+	ts.UseContext = raw.UseContext
+	ts.Variable = raw.Variable
+	ts.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*TestScript)(nil)
+var _ json.Unmarshaler = (*TestScript)(nil)
+
+func (tsd *TestScriptDestination) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tsd *TestScriptDestination) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Index             *fhir.Integer     `json:"index"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Profile           *fhir.Coding      `json:"profile"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tsd.Extension = raw.Extension
+	tsd.ID = raw.ID
+	tsd.Index = raw.Index
+	tsd.ModifierExtension = raw.ModifierExtension
+	tsd.Profile = raw.Profile
+	return nil
+}
+
+var _ json.Marshaler = (*TestScriptDestination)(nil)
+var _ json.Unmarshaler = (*TestScriptDestination)(nil)
+
+func (tsf *TestScriptFixture) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tsf *TestScriptFixture) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Autocreate *fhir.Boolean     `json:"autocreate"`
+		Autodelete *fhir.Boolean     `json:"autodelete"`
+		Extension  []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Resource          *fhir.Reference   `json:"resource"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tsf.Autocreate = raw.Autocreate
+	tsf.Autodelete = raw.Autodelete
+	tsf.Extension = raw.Extension
+	tsf.ID = raw.ID
+	tsf.ModifierExtension = raw.ModifierExtension
+	tsf.Resource = raw.Resource
+	return nil
+}
+
+var _ json.Marshaler = (*TestScriptFixture)(nil)
+var _ json.Unmarshaler = (*TestScriptFixture)(nil)
+
+func (tsm *TestScriptMetadata) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tsm *TestScriptMetadata) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Capability []*TestScriptMetadataCapability `json:"capability"`
+		Extension  []*fhir.Extension               `json:"extension"`
+
+		ID                string                    `json:"id"`
+		Link              []*TestScriptMetadataLink `json:"link"`
+		ModifierExtension []*fhir.Extension         `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tsm.Capability = raw.Capability
+	tsm.Extension = raw.Extension
+	tsm.ID = raw.ID
+	tsm.Link = raw.Link
+	tsm.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*TestScriptMetadata)(nil)
+var _ json.Unmarshaler = (*TestScriptMetadata)(nil)
+
+func (tsmc *TestScriptMetadataCapability) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tsmc *TestScriptMetadataCapability) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Capabilities *fhir.Canonical   `json:"capabilities"`
+		Description  *fhir.String      `json:"description"`
+		Destination  *fhir.Integer     `json:"destination"`
+		Extension    []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Link              []*fhir.URI       `json:"link"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Origin            []*fhir.Integer   `json:"origin"`
+		Required          *fhir.Boolean     `json:"required"`
+		Validated         *fhir.Boolean     `json:"validated"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tsmc.Capabilities = raw.Capabilities
+	tsmc.Description = raw.Description
+	tsmc.Destination = raw.Destination
+	tsmc.Extension = raw.Extension
+	tsmc.ID = raw.ID
+	tsmc.Link = raw.Link
+	tsmc.ModifierExtension = raw.ModifierExtension
+	tsmc.Origin = raw.Origin
+	tsmc.Required = raw.Required
+	tsmc.Validated = raw.Validated
+	return nil
+}
+
+var _ json.Marshaler = (*TestScriptMetadataCapability)(nil)
+var _ json.Unmarshaler = (*TestScriptMetadataCapability)(nil)
+
+func (tsml *TestScriptMetadataLink) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tsml *TestScriptMetadataLink) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description *fhir.String      `json:"description"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		URL               *fhir.URI         `json:"url"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tsml.Description = raw.Description
+	tsml.Extension = raw.Extension
+	tsml.ID = raw.ID
+	tsml.ModifierExtension = raw.ModifierExtension
+	tsml.URL = raw.URL
+	return nil
+}
+
+var _ json.Marshaler = (*TestScriptMetadataLink)(nil)
+var _ json.Unmarshaler = (*TestScriptMetadataLink)(nil)
+
+func (tso *TestScriptOrigin) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tso *TestScriptOrigin) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Index             *fhir.Integer     `json:"index"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Profile           *fhir.Coding      `json:"profile"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tso.Extension = raw.Extension
+	tso.ID = raw.ID
+	tso.Index = raw.Index
+	tso.ModifierExtension = raw.ModifierExtension
+	tso.Profile = raw.Profile
+	return nil
+}
+
+var _ json.Marshaler = (*TestScriptOrigin)(nil)
+var _ json.Unmarshaler = (*TestScriptOrigin)(nil)
+
+func (tss *TestScriptSetup) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tss *TestScriptSetup) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Action    []*TestScriptSetupAction `json:"action"`
+		Extension []*fhir.Extension        `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tss.Action = raw.Action
+	tss.Extension = raw.Extension
+	tss.ID = raw.ID
+	tss.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*TestScriptSetup)(nil)
+var _ json.Unmarshaler = (*TestScriptSetup)(nil)
+
+func (tssa *TestScriptSetupAction) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tssa *TestScriptSetupAction) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Assert    *TestScriptSetupActionAssert `json:"assert"`
+		Extension []*fhir.Extension            `json:"extension"`
+
+		ID                string                          `json:"id"`
+		ModifierExtension []*fhir.Extension               `json:"modifierExtension"`
+		Operation         *TestScriptSetupActionOperation `json:"operation"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tssa.Assert = raw.Assert
+	tssa.Extension = raw.Extension
+	tssa.ID = raw.ID
+	tssa.ModifierExtension = raw.ModifierExtension
+	tssa.Operation = raw.Operation
+	return nil
+}
+
+var _ json.Marshaler = (*TestScriptSetupAction)(nil)
+var _ json.Unmarshaler = (*TestScriptSetupAction)(nil)
+
+func (tssaa *TestScriptSetupActionAssert) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tssaa *TestScriptSetupActionAssert) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		CompareToSourceExpression *fhir.String      `json:"compareToSourceExpression"`
+		CompareToSourceID         *fhir.String      `json:"compareToSourceId"`
+		CompareToSourcePath       *fhir.String      `json:"compareToSourcePath"`
+		ContentType               *fhir.Code        `json:"contentType"`
+		Description               *fhir.String      `json:"description"`
+		Direction                 *fhir.Code        `json:"direction"`
+		Expression                *fhir.String      `json:"expression"`
+		Extension                 []*fhir.Extension `json:"extension"`
+		HeaderField               *fhir.String      `json:"headerField"`
+
+		ID                string            `json:"id"`
+		Label             *fhir.String      `json:"label"`
+		MinimumID         *fhir.String      `json:"minimumId"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		NavigationLinks   *fhir.Boolean     `json:"navigationLinks"`
+		Operator          *fhir.Code        `json:"operator"`
+		Path              *fhir.String      `json:"path"`
+		RequestMethod     *fhir.Code        `json:"requestMethod"`
+		RequestURL        *fhir.String      `json:"requestUrl"`
+		Resource          *fhir.Code        `json:"resource"`
+		Response          *fhir.Code        `json:"response"`
+		ResponseCode      *fhir.String      `json:"responseCode"`
+		SourceID          *fhir.ID          `json:"sourceId"`
+		ValidateProfileID *fhir.ID          `json:"validateProfileId"`
+		Value             *fhir.String      `json:"value"`
+		WarningOnly       *fhir.Boolean     `json:"warningOnly"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tssaa.CompareToSourceExpression = raw.CompareToSourceExpression
+	tssaa.CompareToSourceID = raw.CompareToSourceID
+	tssaa.CompareToSourcePath = raw.CompareToSourcePath
+	tssaa.ContentType = raw.ContentType
+	tssaa.Description = raw.Description
+	tssaa.Direction = raw.Direction
+	tssaa.Expression = raw.Expression
+	tssaa.Extension = raw.Extension
+	tssaa.HeaderField = raw.HeaderField
+	tssaa.ID = raw.ID
+	tssaa.Label = raw.Label
+	tssaa.MinimumID = raw.MinimumID
+	tssaa.ModifierExtension = raw.ModifierExtension
+	tssaa.NavigationLinks = raw.NavigationLinks
+	tssaa.Operator = raw.Operator
+	tssaa.Path = raw.Path
+	tssaa.RequestMethod = raw.RequestMethod
+	tssaa.RequestURL = raw.RequestURL
+	tssaa.Resource = raw.Resource
+	tssaa.Response = raw.Response
+	tssaa.ResponseCode = raw.ResponseCode
+	tssaa.SourceID = raw.SourceID
+	tssaa.ValidateProfileID = raw.ValidateProfileID
+	tssaa.Value = raw.Value
+	tssaa.WarningOnly = raw.WarningOnly
+	return nil
+}
+
+var _ json.Marshaler = (*TestScriptSetupActionAssert)(nil)
+var _ json.Unmarshaler = (*TestScriptSetupActionAssert)(nil)
+
+func (tssao *TestScriptSetupActionOperation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tssao *TestScriptSetupActionOperation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Accept           *fhir.Code        `json:"accept"`
+		ContentType      *fhir.Code        `json:"contentType"`
+		Description      *fhir.String      `json:"description"`
+		Destination      *fhir.Integer     `json:"destination"`
+		EncodeRequestURL *fhir.Boolean     `json:"encodeRequestUrl"`
+		Extension        []*fhir.Extension `json:"extension"`
+
+		ID                string                                         `json:"id"`
+		Label             *fhir.String                                   `json:"label"`
+		Method            *fhir.Code                                     `json:"method"`
+		ModifierExtension []*fhir.Extension                              `json:"modifierExtension"`
+		Origin            *fhir.Integer                                  `json:"origin"`
+		Params            *fhir.String                                   `json:"params"`
+		RequestHeader     []*TestScriptSetupActionOperationRequestHeader `json:"requestHeader"`
+		RequestID         *fhir.ID                                       `json:"requestId"`
+		Resource          *fhir.Code                                     `json:"resource"`
+		ResponseID        *fhir.ID                                       `json:"responseId"`
+		SourceID          *fhir.ID                                       `json:"sourceId"`
+		TargetID          *fhir.ID                                       `json:"targetId"`
+		Type              *fhir.Coding                                   `json:"type"`
+		URL               *fhir.String                                   `json:"url"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tssao.Accept = raw.Accept
+	tssao.ContentType = raw.ContentType
+	tssao.Description = raw.Description
+	tssao.Destination = raw.Destination
+	tssao.EncodeRequestURL = raw.EncodeRequestURL
+	tssao.Extension = raw.Extension
+	tssao.ID = raw.ID
+	tssao.Label = raw.Label
+	tssao.Method = raw.Method
+	tssao.ModifierExtension = raw.ModifierExtension
+	tssao.Origin = raw.Origin
+	tssao.Params = raw.Params
+	tssao.RequestHeader = raw.RequestHeader
+	tssao.RequestID = raw.RequestID
+	tssao.Resource = raw.Resource
+	tssao.ResponseID = raw.ResponseID
+	tssao.SourceID = raw.SourceID
+	tssao.TargetID = raw.TargetID
+	tssao.Type = raw.Type
+	tssao.URL = raw.URL
+	return nil
+}
+
+var _ json.Marshaler = (*TestScriptSetupActionOperation)(nil)
+var _ json.Unmarshaler = (*TestScriptSetupActionOperation)(nil)
+
+func (tssaorh *TestScriptSetupActionOperationRequestHeader) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tssaorh *TestScriptSetupActionOperationRequestHeader) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+		Field     *fhir.String      `json:"field"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Value             *fhir.String      `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tssaorh.Extension = raw.Extension
+	tssaorh.Field = raw.Field
+	tssaorh.ID = raw.ID
+	tssaorh.ModifierExtension = raw.ModifierExtension
+	tssaorh.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*TestScriptSetupActionOperationRequestHeader)(nil)
+var _ json.Unmarshaler = (*TestScriptSetupActionOperationRequestHeader)(nil)
+
+func (tst *TestScriptTeardown) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tst *TestScriptTeardown) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Action    []*TestScriptTeardownAction `json:"action"`
+		Extension []*fhir.Extension           `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tst.Action = raw.Action
+	tst.Extension = raw.Extension
+	tst.ID = raw.ID
+	tst.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*TestScriptTeardown)(nil)
+var _ json.Unmarshaler = (*TestScriptTeardown)(nil)
+
+func (tsta *TestScriptTeardownAction) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tsta *TestScriptTeardownAction) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tsta.Extension = raw.Extension
+	tsta.ID = raw.ID
+	tsta.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*TestScriptTeardownAction)(nil)
+var _ json.Unmarshaler = (*TestScriptTeardownAction)(nil)
+
+func (tst *TestScriptTest) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tst *TestScriptTest) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Action      []*TestScriptTestAction `json:"action"`
+		Description *fhir.String            `json:"description"`
+		Extension   []*fhir.Extension       `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.String      `json:"name"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tst.Action = raw.Action
+	tst.Description = raw.Description
+	tst.Extension = raw.Extension
+	tst.ID = raw.ID
+	tst.ModifierExtension = raw.ModifierExtension
+	tst.Name = raw.Name
+	return nil
+}
+
+var _ json.Marshaler = (*TestScriptTest)(nil)
+var _ json.Unmarshaler = (*TestScriptTest)(nil)
+
+func (tsta *TestScriptTestAction) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tsta *TestScriptTestAction) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tsta.Extension = raw.Extension
+	tsta.ID = raw.ID
+	tsta.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*TestScriptTestAction)(nil)
+var _ json.Unmarshaler = (*TestScriptTestAction)(nil)
+
+func (tsv *TestScriptVariable) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tsv *TestScriptVariable) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		DefaultValue *fhir.String      `json:"defaultValue"`
+		Description  *fhir.String      `json:"description"`
+		Expression   *fhir.String      `json:"expression"`
+		Extension    []*fhir.Extension `json:"extension"`
+		HeaderField  *fhir.String      `json:"headerField"`
+		Hint         *fhir.String      `json:"hint"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.String      `json:"name"`
+		Path              *fhir.String      `json:"path"`
+		SourceID          *fhir.ID          `json:"sourceId"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tsv.DefaultValue = raw.DefaultValue
+	tsv.Description = raw.Description
+	tsv.Expression = raw.Expression
+	tsv.Extension = raw.Extension
+	tsv.HeaderField = raw.HeaderField
+	tsv.Hint = raw.Hint
+	tsv.ID = raw.ID
+	tsv.ModifierExtension = raw.ModifierExtension
+	tsv.Name = raw.Name
+	tsv.Path = raw.Path
+	tsv.SourceID = raw.SourceID
+	return nil
+}
+
+var _ json.Marshaler = (*TestScriptVariable)(nil)
+var _ json.Unmarshaler = (*TestScriptVariable)(nil)

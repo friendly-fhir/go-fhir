@@ -1,17 +1,21 @@
 {{- $zero := "nil" -}}
-{{- with .Builtin -}}
-  {{- if eq .Name "integer" -}}
-    {{- $zero = "0" -}}
-  {{- else if eq .Name "positiveInt" -}}
-    {{- $zero = "0" -}}
-  {{- else if eq .Name "unsignedInt" -}}
-    {{- $zero = "0" -}}
-  {{- else if eq .Name "decimal" -}}
-    {{- $zero = "0.0" -}}
-  {{- else if eq .Name "boolean" -}}
-    {{- $zero = "false" -}}
-  {{- else -}}
-    {{- $zero = "\"\"" -}}
+{{- if or (eq .Name "positiveInt") (eq .Name "unsignedInt") -}}
+  {{- $type = "0" -}}
+{{- else -}}
+  {{- with .Builtin -}}
+    {{- if eq .Name "integer" -}}
+      {{- $zero = "0" -}}
+    {{- else if eq .Name "positiveInt" -}}
+      {{- $zero = "0" -}}
+    {{- else if eq .Name "unsignedInt" -}}
+      {{- $zero = "0" -}}
+    {{- else if eq .Name "decimal" -}}
+      {{- $zero = "0.0" -}}
+    {{- else if eq .Name "boolean" -}}
+      {{- $zero = "false" -}}
+    {{- else -}}
+      {{- $zero = "\"\"" -}}
+    {{- end -}}
   {{- end -}}
 {{- end -}}
 {{- $zero -}}

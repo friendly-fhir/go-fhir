@@ -6,8 +6,11 @@
 package coverageeligibilityresponse
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // This resource provides eligibility and plan details from the processing of
@@ -1042,3 +1045,239 @@ func (ceriib *CoverageEligibilityResponseInsuranceItemBenefit) GetUsedMoney() *f
 	}
 	return val
 }
+
+func (cer *CoverageEligibilityResponse) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cer *CoverageEligibilityResponse) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contained   []fhir.Resource                     `json:"contained"`
+		Created     *fhir.DateTime                      `json:"created"`
+		Disposition *fhir.String                        `json:"disposition"`
+		Error       []*CoverageEligibilityResponseError `json:"error"`
+		Extension   []*fhir.Extension                   `json:"extension"`
+		Form        *fhir.CodeableConcept               `json:"form"`
+
+		ID                string                                  `json:"id"`
+		Identifier        []*fhir.Identifier                      `json:"identifier"`
+		ImplicitRules     *fhir.URI                               `json:"implicitRules"`
+		Insurance         []*CoverageEligibilityResponseInsurance `json:"insurance"`
+		Insurer           *fhir.Reference                         `json:"insurer"`
+		Language          *fhir.Code                              `json:"language"`
+		Meta              *fhir.Meta                              `json:"meta"`
+		ModifierExtension []*fhir.Extension                       `json:"modifierExtension"`
+		Outcome           *fhir.Code                              `json:"outcome"`
+		Patient           *fhir.Reference                         `json:"patient"`
+		PreAuthRef        *fhir.String                            `json:"preAuthRef"`
+		Purpose           []*fhir.Code                            `json:"purpose"`
+		Request           *fhir.Reference                         `json:"request"`
+		Requestor         *fhir.Reference                         `json:"requestor"`
+		ServicedDate      *fhir.Date                              `json:"servicedDate"`
+		ServicedPeriod    *fhir.Period                            `json:"servicedPeriod"`
+		Status            *fhir.Code                              `json:"status"`
+		Text              *fhir.Narrative                         `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cer.Contained = raw.Contained
+	cer.Created = raw.Created
+	cer.Disposition = raw.Disposition
+	cer.Error = raw.Error
+	cer.Extension = raw.Extension
+	cer.Form = raw.Form
+	cer.ID = raw.ID
+	cer.Identifier = raw.Identifier
+	cer.ImplicitRules = raw.ImplicitRules
+	cer.Insurance = raw.Insurance
+	cer.Insurer = raw.Insurer
+	cer.Language = raw.Language
+	cer.Meta = raw.Meta
+	cer.ModifierExtension = raw.ModifierExtension
+	cer.Outcome = raw.Outcome
+	cer.Patient = raw.Patient
+	cer.PreAuthRef = raw.PreAuthRef
+	cer.Purpose = raw.Purpose
+	cer.Request = raw.Request
+	cer.Requestor = raw.Requestor
+	cer.Serviced, err = validate.SelectOneOf[fhir.Element]("CoverageEligibilityResponse.serviced",
+		raw.ServicedDate,
+		raw.ServicedPeriod)
+	if err != nil {
+		return err
+	}
+	cer.Status = raw.Status
+	cer.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*CoverageEligibilityResponse)(nil)
+var _ json.Unmarshaler = (*CoverageEligibilityResponse)(nil)
+
+func (cere *CoverageEligibilityResponseError) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cere *CoverageEligibilityResponseError) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.CodeableConcept `json:"code"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cere.Code = raw.Code
+	cere.Extension = raw.Extension
+	cere.ID = raw.ID
+	cere.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*CoverageEligibilityResponseError)(nil)
+var _ json.Unmarshaler = (*CoverageEligibilityResponseError)(nil)
+
+func (ceri *CoverageEligibilityResponseInsurance) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ceri *CoverageEligibilityResponseInsurance) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		BenefitPeriod *fhir.Period      `json:"benefitPeriod"`
+		Coverage      *fhir.Reference   `json:"coverage"`
+		Extension     []*fhir.Extension `json:"extension"`
+
+		ID                string                                      `json:"id"`
+		Inforce           *fhir.Boolean                               `json:"inforce"`
+		Item              []*CoverageEligibilityResponseInsuranceItem `json:"item"`
+		ModifierExtension []*fhir.Extension                           `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ceri.BenefitPeriod = raw.BenefitPeriod
+	ceri.Coverage = raw.Coverage
+	ceri.Extension = raw.Extension
+	ceri.ID = raw.ID
+	ceri.Inforce = raw.Inforce
+	ceri.Item = raw.Item
+	ceri.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*CoverageEligibilityResponseInsurance)(nil)
+var _ json.Unmarshaler = (*CoverageEligibilityResponseInsurance)(nil)
+
+func (cerii *CoverageEligibilityResponseInsuranceItem) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cerii *CoverageEligibilityResponseInsuranceItem) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AuthorizationRequired   *fhir.Boolean                                      `json:"authorizationRequired"`
+		AuthorizationSupporting []*fhir.CodeableConcept                            `json:"authorizationSupporting"`
+		AuthorizationURL        *fhir.URI                                          `json:"authorizationUrl"`
+		Benefit                 []*CoverageEligibilityResponseInsuranceItemBenefit `json:"benefit"`
+		Category                *fhir.CodeableConcept                              `json:"category"`
+		Description             *fhir.String                                       `json:"description"`
+		Excluded                *fhir.Boolean                                      `json:"excluded"`
+		Extension               []*fhir.Extension                                  `json:"extension"`
+
+		ID                string                  `json:"id"`
+		Modifier          []*fhir.CodeableConcept `json:"modifier"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Name              *fhir.String            `json:"name"`
+		Network           *fhir.CodeableConcept   `json:"network"`
+		ProductOrService  *fhir.CodeableConcept   `json:"productOrService"`
+		Provider          *fhir.Reference         `json:"provider"`
+		Term              *fhir.CodeableConcept   `json:"term"`
+		Unit              *fhir.CodeableConcept   `json:"unit"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cerii.AuthorizationRequired = raw.AuthorizationRequired
+	cerii.AuthorizationSupporting = raw.AuthorizationSupporting
+	cerii.AuthorizationURL = raw.AuthorizationURL
+	cerii.Benefit = raw.Benefit
+	cerii.Category = raw.Category
+	cerii.Description = raw.Description
+	cerii.Excluded = raw.Excluded
+	cerii.Extension = raw.Extension
+	cerii.ID = raw.ID
+	cerii.Modifier = raw.Modifier
+	cerii.ModifierExtension = raw.ModifierExtension
+	cerii.Name = raw.Name
+	cerii.Network = raw.Network
+	cerii.ProductOrService = raw.ProductOrService
+	cerii.Provider = raw.Provider
+	cerii.Term = raw.Term
+	cerii.Unit = raw.Unit
+	return nil
+}
+
+var _ json.Marshaler = (*CoverageEligibilityResponseInsuranceItem)(nil)
+var _ json.Unmarshaler = (*CoverageEligibilityResponseInsuranceItem)(nil)
+
+func (ceriib *CoverageEligibilityResponseInsuranceItemBenefit) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ceriib *CoverageEligibilityResponseInsuranceItemBenefit) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AllowedUnsignedInt *fhir.UnsignedInt `json:"allowedUnsignedInt"`
+		AllowedString      *fhir.String      `json:"allowedString"`
+		AllowedMoney       *fhir.Money       `json:"allowedMoney"`
+		Extension          []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Type              *fhir.CodeableConcept `json:"type"`
+		UsedUnsignedInt   *fhir.UnsignedInt     `json:"usedUnsignedInt"`
+		UsedString        *fhir.String          `json:"usedString"`
+		UsedMoney         *fhir.Money           `json:"usedMoney"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ceriib.Allowed, err = validate.SelectOneOf[fhir.Element]("CoverageEligibilityResponse.insurance.item.benefit.allowed",
+		raw.AllowedUnsignedInt,
+		raw.AllowedString,
+		raw.AllowedMoney)
+	if err != nil {
+		return err
+	}
+	ceriib.Extension = raw.Extension
+	ceriib.ID = raw.ID
+	ceriib.ModifierExtension = raw.ModifierExtension
+	ceriib.Type = raw.Type
+	ceriib.Used, err = validate.SelectOneOf[fhir.Element]("CoverageEligibilityResponse.insurance.item.benefit.used",
+		raw.UsedUnsignedInt,
+		raw.UsedString,
+		raw.UsedMoney)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*CoverageEligibilityResponseInsuranceItemBenefit)(nil)
+var _ json.Unmarshaler = (*CoverageEligibilityResponseInsuranceItemBenefit)(nil)

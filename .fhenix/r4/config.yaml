@@ -38,7 +38,7 @@ transformations:
     template: 'templates/complex.go.tmpl'
   - input:
       type: StructureDefinition
-      if: '{{ and (not .IsConstraint) (eq .Kind "resource") }}'
+      if: '{{ and (not .IsConstraint) (eq .Kind "resource") (not .IsAbstract) }}'
     output: '{{ .Package | replace "." "/" | cutprefix "hl7/fhir/" }}/resources/{{ .Name | lowercase }}/{{ .Name | snakecase }}.go'
     template:
       default: 'templates/resource.go.tmpl'

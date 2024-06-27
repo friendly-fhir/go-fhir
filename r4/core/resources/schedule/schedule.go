@@ -8,6 +8,8 @@ package schedule
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A container for slots of time that may be available for booking
@@ -270,3 +272,55 @@ func (s *Schedule) GetText() *fhir.Narrative {
 	}
 	return s.Text
 }
+
+func (s *Schedule) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (s *Schedule) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Active    *fhir.Boolean     `json:"active"`
+		Actor     []*fhir.Reference `json:"actor"`
+		Comment   *fhir.String      `json:"comment"`
+		Contained []fhir.Resource   `json:"contained"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                  `json:"id"`
+		Identifier        []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Language          *fhir.Code              `json:"language"`
+		Meta              *fhir.Meta              `json:"meta"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		PlanningHorizon   *fhir.Period            `json:"planningHorizon"`
+		ServiceCategory   []*fhir.CodeableConcept `json:"serviceCategory"`
+		ServiceType       []*fhir.CodeableConcept `json:"serviceType"`
+		Specialty         []*fhir.CodeableConcept `json:"specialty"`
+		Text              *fhir.Narrative         `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	s.Active = raw.Active
+	s.Actor = raw.Actor
+	s.Comment = raw.Comment
+	s.Contained = raw.Contained
+	s.Extension = raw.Extension
+	s.ID = raw.ID
+	s.Identifier = raw.Identifier
+	s.ImplicitRules = raw.ImplicitRules
+	s.Language = raw.Language
+	s.Meta = raw.Meta
+	s.ModifierExtension = raw.ModifierExtension
+	s.PlanningHorizon = raw.PlanningHorizon
+	s.ServiceCategory = raw.ServiceCategory
+	s.ServiceType = raw.ServiceType
+	s.Specialty = raw.Specialty
+	s.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*Schedule)(nil)
+var _ json.Unmarshaler = (*Schedule)(nil)

@@ -6,8 +6,11 @@
 package devicedefinition
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The characteristics, operational status and capabilities of a
@@ -1102,3 +1105,275 @@ func (ddudi *DeviceDefinitionUdiDeviceIdentifier) GetModifierExtension() []*fhir
 	}
 	return ddudi.ModifierExtension
 }
+
+func (dd *DeviceDefinition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (dd *DeviceDefinition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Capability []*DeviceDefinitionCapability `json:"capability"`
+		Contact    []*fhir.ContactPoint          `json:"contact"`
+		Contained  []fhir.Resource               `json:"contained"`
+		DeviceName []*DeviceDefinitionDeviceName `json:"deviceName"`
+		Extension  []*fhir.Extension             `json:"extension"`
+
+		ID                      string                                 `json:"id"`
+		Identifier              []*fhir.Identifier                     `json:"identifier"`
+		ImplicitRules           *fhir.URI                              `json:"implicitRules"`
+		Language                *fhir.Code                             `json:"language"`
+		LanguageCode            []*fhir.CodeableConcept                `json:"languageCode"`
+		ManufacturerString      *fhir.String                           `json:"manufacturerString"`
+		ManufacturerReference   *fhir.Reference                        `json:"manufacturerReference"`
+		Material                []*DeviceDefinitionMaterial            `json:"material"`
+		Meta                    *fhir.Meta                             `json:"meta"`
+		ModelNumber             *fhir.String                           `json:"modelNumber"`
+		ModifierExtension       []*fhir.Extension                      `json:"modifierExtension"`
+		Note                    []*fhir.Annotation                     `json:"note"`
+		OnlineInformation       *fhir.URI                              `json:"onlineInformation"`
+		Owner                   *fhir.Reference                        `json:"owner"`
+		ParentDevice            *fhir.Reference                        `json:"parentDevice"`
+		PhysicalCharacteristics *fhir.ProdCharacteristic               `json:"physicalCharacteristics"`
+		Property                []*DeviceDefinitionProperty            `json:"property"`
+		Quantity                *fhir.Quantity                         `json:"quantity"`
+		Safety                  []*fhir.CodeableConcept                `json:"safety"`
+		ShelfLifeStorage        []*fhir.ProductShelfLife               `json:"shelfLifeStorage"`
+		Specialization          []*DeviceDefinitionSpecialization      `json:"specialization"`
+		Text                    *fhir.Narrative                        `json:"text"`
+		Type                    *fhir.CodeableConcept                  `json:"type"`
+		UdiDeviceIdentifier     []*DeviceDefinitionUdiDeviceIdentifier `json:"udiDeviceIdentifier"`
+		URL                     *fhir.URI                              `json:"url"`
+		Version                 []*fhir.String                         `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	dd.Capability = raw.Capability
+	dd.Contact = raw.Contact
+	dd.Contained = raw.Contained
+	dd.DeviceName = raw.DeviceName
+	dd.Extension = raw.Extension
+	dd.ID = raw.ID
+	dd.Identifier = raw.Identifier
+	dd.ImplicitRules = raw.ImplicitRules
+	dd.Language = raw.Language
+	dd.LanguageCode = raw.LanguageCode
+	dd.Manufacturer, err = validate.SelectOneOf[fhir.Element]("DeviceDefinition.manufacturer",
+		raw.ManufacturerString,
+		raw.ManufacturerReference)
+	if err != nil {
+		return err
+	}
+	dd.Material = raw.Material
+	dd.Meta = raw.Meta
+	dd.ModelNumber = raw.ModelNumber
+	dd.ModifierExtension = raw.ModifierExtension
+	dd.Note = raw.Note
+	dd.OnlineInformation = raw.OnlineInformation
+	dd.Owner = raw.Owner
+	dd.ParentDevice = raw.ParentDevice
+	dd.PhysicalCharacteristics = raw.PhysicalCharacteristics
+	dd.Property = raw.Property
+	dd.Quantity = raw.Quantity
+	dd.Safety = raw.Safety
+	dd.ShelfLifeStorage = raw.ShelfLifeStorage
+	dd.Specialization = raw.Specialization
+	dd.Text = raw.Text
+	dd.Type = raw.Type
+	dd.UdiDeviceIdentifier = raw.UdiDeviceIdentifier
+	dd.URL = raw.URL
+	dd.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*DeviceDefinition)(nil)
+var _ json.Unmarshaler = (*DeviceDefinition)(nil)
+
+func (ddc *DeviceDefinitionCapability) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ddc *DeviceDefinitionCapability) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description []*fhir.CodeableConcept `json:"description"`
+		Extension   []*fhir.Extension       `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ddc.Description = raw.Description
+	ddc.Extension = raw.Extension
+	ddc.ID = raw.ID
+	ddc.ModifierExtension = raw.ModifierExtension
+	ddc.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*DeviceDefinitionCapability)(nil)
+var _ json.Unmarshaler = (*DeviceDefinitionCapability)(nil)
+
+func (dddn *DeviceDefinitionDeviceName) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (dddn *DeviceDefinitionDeviceName) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.String      `json:"name"`
+		Type              *fhir.Code        `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	dddn.Extension = raw.Extension
+	dddn.ID = raw.ID
+	dddn.ModifierExtension = raw.ModifierExtension
+	dddn.Name = raw.Name
+	dddn.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*DeviceDefinitionDeviceName)(nil)
+var _ json.Unmarshaler = (*DeviceDefinitionDeviceName)(nil)
+
+func (ddm *DeviceDefinitionMaterial) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ddm *DeviceDefinitionMaterial) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AllergenicIndicator *fhir.Boolean     `json:"allergenicIndicator"`
+		Alternate           *fhir.Boolean     `json:"alternate"`
+		Extension           []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Substance         *fhir.CodeableConcept `json:"substance"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ddm.AllergenicIndicator = raw.AllergenicIndicator
+	ddm.Alternate = raw.Alternate
+	ddm.Extension = raw.Extension
+	ddm.ID = raw.ID
+	ddm.ModifierExtension = raw.ModifierExtension
+	ddm.Substance = raw.Substance
+	return nil
+}
+
+var _ json.Marshaler = (*DeviceDefinitionMaterial)(nil)
+var _ json.Unmarshaler = (*DeviceDefinitionMaterial)(nil)
+
+func (ddp *DeviceDefinitionProperty) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ddp *DeviceDefinitionProperty) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                  `json:"id"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Type              *fhir.CodeableConcept   `json:"type"`
+		ValueCode         []*fhir.CodeableConcept `json:"valueCode"`
+		ValueQuantity     []*fhir.Quantity        `json:"valueQuantity"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ddp.Extension = raw.Extension
+	ddp.ID = raw.ID
+	ddp.ModifierExtension = raw.ModifierExtension
+	ddp.Type = raw.Type
+	ddp.ValueCode = raw.ValueCode
+	ddp.ValueQuantity = raw.ValueQuantity
+	return nil
+}
+
+var _ json.Marshaler = (*DeviceDefinitionProperty)(nil)
+var _ json.Unmarshaler = (*DeviceDefinitionProperty)(nil)
+
+func (dds *DeviceDefinitionSpecialization) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (dds *DeviceDefinitionSpecialization) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		SystemType        *fhir.String      `json:"systemType"`
+		Version           *fhir.String      `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	dds.Extension = raw.Extension
+	dds.ID = raw.ID
+	dds.ModifierExtension = raw.ModifierExtension
+	dds.SystemType = raw.SystemType
+	dds.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*DeviceDefinitionSpecialization)(nil)
+var _ json.Unmarshaler = (*DeviceDefinitionSpecialization)(nil)
+
+func (ddudi *DeviceDefinitionUdiDeviceIdentifier) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ddudi *DeviceDefinitionUdiDeviceIdentifier) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		DeviceIdentifier *fhir.String      `json:"deviceIdentifier"`
+		Extension        []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Issuer            *fhir.URI         `json:"issuer"`
+		Jurisdiction      *fhir.URI         `json:"jurisdiction"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ddudi.DeviceIdentifier = raw.DeviceIdentifier
+	ddudi.Extension = raw.Extension
+	ddudi.ID = raw.ID
+	ddudi.Issuer = raw.Issuer
+	ddudi.Jurisdiction = raw.Jurisdiction
+	ddudi.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*DeviceDefinitionUdiDeviceIdentifier)(nil)
+var _ json.Unmarshaler = (*DeviceDefinitionUdiDeviceIdentifier)(nil)

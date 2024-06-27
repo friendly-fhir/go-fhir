@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Duration Type: A length of time.
@@ -121,3 +123,37 @@ func (d *Duration) GetValue() *Decimal {
 	}
 	return d.Value
 }
+
+func (d *Duration) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (d *Duration) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code       *Code        `json:"code"`
+		Comparator *Code        `json:"comparator"`
+		Extension  []*Extension `json:"extension"`
+
+		ID     string   `json:"id"`
+		System *URI     `json:"system"`
+		Unit   *String  `json:"unit"`
+		Value  *Decimal `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	d.Code = raw.Code
+	d.Comparator = raw.Comparator
+	d.Extension = raw.Extension
+	d.ID = raw.ID
+	d.System = raw.System
+	d.Unit = raw.Unit
+	d.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*Duration)(nil)
+var _ json.Unmarshaler = (*Duration)(nil)

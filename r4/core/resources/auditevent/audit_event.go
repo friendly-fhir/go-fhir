@@ -6,8 +6,11 @@
 package auditevent
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A record of an event made for purposes of maintaining a security log.
@@ -1061,3 +1064,251 @@ func (aes *AuditEventSource) GetType() []*fhir.Coding {
 	}
 	return aes.Type
 }
+
+func (ae *AuditEvent) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ae *AuditEvent) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Action    *fhir.Code          `json:"action"`
+		Agent     []*AuditEventAgent  `json:"agent"`
+		Contained []fhir.Resource     `json:"contained"`
+		Entity    []*AuditEventEntity `json:"entity"`
+		Extension []*fhir.Extension   `json:"extension"`
+
+		ID                string                  `json:"id"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Language          *fhir.Code              `json:"language"`
+		Meta              *fhir.Meta              `json:"meta"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Outcome           *fhir.Code              `json:"outcome"`
+		OutcomeDesc       *fhir.String            `json:"outcomeDesc"`
+		Period            *fhir.Period            `json:"period"`
+		PurposeOfEvent    []*fhir.CodeableConcept `json:"purposeOfEvent"`
+		Recorded          *fhir.Instant           `json:"recorded"`
+		Source            *AuditEventSource       `json:"source"`
+		Subtype           []*fhir.Coding          `json:"subtype"`
+		Text              *fhir.Narrative         `json:"text"`
+		Type              *fhir.Coding            `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ae.Action = raw.Action
+	ae.Agent = raw.Agent
+	ae.Contained = raw.Contained
+	ae.Entity = raw.Entity
+	ae.Extension = raw.Extension
+	ae.ID = raw.ID
+	ae.ImplicitRules = raw.ImplicitRules
+	ae.Language = raw.Language
+	ae.Meta = raw.Meta
+	ae.ModifierExtension = raw.ModifierExtension
+	ae.Outcome = raw.Outcome
+	ae.OutcomeDesc = raw.OutcomeDesc
+	ae.Period = raw.Period
+	ae.PurposeOfEvent = raw.PurposeOfEvent
+	ae.Recorded = raw.Recorded
+	ae.Source = raw.Source
+	ae.Subtype = raw.Subtype
+	ae.Text = raw.Text
+	ae.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*AuditEvent)(nil)
+var _ json.Unmarshaler = (*AuditEvent)(nil)
+
+func (aea *AuditEventAgent) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (aea *AuditEventAgent) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AltID     *fhir.String      `json:"altId"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                  `json:"id"`
+		Location          *fhir.Reference         `json:"location"`
+		Media             *fhir.Coding            `json:"media"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Name              *fhir.String            `json:"name"`
+		Network           *AuditEventAgentNetwork `json:"network"`
+		Policy            []*fhir.URI             `json:"policy"`
+		PurposeOfUse      []*fhir.CodeableConcept `json:"purposeOfUse"`
+		Requestor         *fhir.Boolean           `json:"requestor"`
+		Role              []*fhir.CodeableConcept `json:"role"`
+		Type              *fhir.CodeableConcept   `json:"type"`
+		Who               *fhir.Reference         `json:"who"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	aea.AltID = raw.AltID
+	aea.Extension = raw.Extension
+	aea.ID = raw.ID
+	aea.Location = raw.Location
+	aea.Media = raw.Media
+	aea.ModifierExtension = raw.ModifierExtension
+	aea.Name = raw.Name
+	aea.Network = raw.Network
+	aea.Policy = raw.Policy
+	aea.PurposeOfUse = raw.PurposeOfUse
+	aea.Requestor = raw.Requestor
+	aea.Role = raw.Role
+	aea.Type = raw.Type
+	aea.Who = raw.Who
+	return nil
+}
+
+var _ json.Marshaler = (*AuditEventAgent)(nil)
+var _ json.Unmarshaler = (*AuditEventAgent)(nil)
+
+func (aean *AuditEventAgentNetwork) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (aean *AuditEventAgentNetwork) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Address   *fhir.String      `json:"address"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Type              *fhir.Code        `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	aean.Address = raw.Address
+	aean.Extension = raw.Extension
+	aean.ID = raw.ID
+	aean.ModifierExtension = raw.ModifierExtension
+	aean.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*AuditEventAgentNetwork)(nil)
+var _ json.Unmarshaler = (*AuditEventAgentNetwork)(nil)
+
+func (aee *AuditEventEntity) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (aee *AuditEventEntity) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description *fhir.String              `json:"description"`
+		Detail      []*AuditEventEntityDetail `json:"detail"`
+		Extension   []*fhir.Extension         `json:"extension"`
+
+		ID                string             `json:"id"`
+		Lifecycle         *fhir.Coding       `json:"lifecycle"`
+		ModifierExtension []*fhir.Extension  `json:"modifierExtension"`
+		Name              *fhir.String       `json:"name"`
+		Query             *fhir.Base64Binary `json:"query"`
+		Role              *fhir.Coding       `json:"role"`
+		SecurityLabel     []*fhir.Coding     `json:"securityLabel"`
+		Type              *fhir.Coding       `json:"type"`
+		What              *fhir.Reference    `json:"what"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	aee.Description = raw.Description
+	aee.Detail = raw.Detail
+	aee.Extension = raw.Extension
+	aee.ID = raw.ID
+	aee.Lifecycle = raw.Lifecycle
+	aee.ModifierExtension = raw.ModifierExtension
+	aee.Name = raw.Name
+	aee.Query = raw.Query
+	aee.Role = raw.Role
+	aee.SecurityLabel = raw.SecurityLabel
+	aee.Type = raw.Type
+	aee.What = raw.What
+	return nil
+}
+
+var _ json.Marshaler = (*AuditEventEntity)(nil)
+var _ json.Unmarshaler = (*AuditEventEntity)(nil)
+
+func (aeed *AuditEventEntityDetail) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (aeed *AuditEventEntityDetail) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string             `json:"id"`
+		ModifierExtension []*fhir.Extension  `json:"modifierExtension"`
+		Type              *fhir.String       `json:"type"`
+		ValueString       *fhir.String       `json:"valueString"`
+		ValueBase64Binary *fhir.Base64Binary `json:"valueBase64Binary"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	aeed.Extension = raw.Extension
+	aeed.ID = raw.ID
+	aeed.ModifierExtension = raw.ModifierExtension
+	aeed.Type = raw.Type
+	aeed.Value, err = validate.SelectOneOf[fhir.Element]("AuditEvent.entity.detail.value",
+		raw.ValueString,
+		raw.ValueBase64Binary)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*AuditEventEntityDetail)(nil)
+var _ json.Unmarshaler = (*AuditEventEntityDetail)(nil)
+
+func (aes *AuditEventSource) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (aes *AuditEventSource) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Observer          *fhir.Reference   `json:"observer"`
+		Site              *fhir.String      `json:"site"`
+		Type              []*fhir.Coding    `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	aes.Extension = raw.Extension
+	aes.ID = raw.ID
+	aes.ModifierExtension = raw.ModifierExtension
+	aes.Observer = raw.Observer
+	aes.Site = raw.Site
+	aes.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*AuditEventSource)(nil)
+var _ json.Unmarshaler = (*AuditEventSource)(nil)

@@ -6,8 +6,11 @@
 package specimen
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A sample to be used for analysis.
@@ -868,3 +871,201 @@ func (sp *SpecimenProcessing) GetTimePeriod() *fhir.Period {
 	}
 	return val
 }
+
+func (s *Specimen) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (s *Specimen) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AccessionIdentifier *fhir.Identifier        `json:"accessionIdentifier"`
+		Collection          *SpecimenCollection     `json:"collection"`
+		Condition           []*fhir.CodeableConcept `json:"condition"`
+		Contained           []fhir.Resource         `json:"contained"`
+		Container           []*SpecimenContainer    `json:"container"`
+		Extension           []*fhir.Extension       `json:"extension"`
+
+		ID                string                `json:"id"`
+		Identifier        []*fhir.Identifier    `json:"identifier"`
+		ImplicitRules     *fhir.URI             `json:"implicitRules"`
+		Language          *fhir.Code            `json:"language"`
+		Meta              *fhir.Meta            `json:"meta"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Note              []*fhir.Annotation    `json:"note"`
+		Parent            []*fhir.Reference     `json:"parent"`
+		Processing        []*SpecimenProcessing `json:"processing"`
+		ReceivedTime      *fhir.DateTime        `json:"receivedTime"`
+		Request           []*fhir.Reference     `json:"request"`
+		Status            *fhir.Code            `json:"status"`
+		Subject           *fhir.Reference       `json:"subject"`
+		Text              *fhir.Narrative       `json:"text"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	s.AccessionIdentifier = raw.AccessionIdentifier
+	s.Collection = raw.Collection
+	s.Condition = raw.Condition
+	s.Contained = raw.Contained
+	s.Container = raw.Container
+	s.Extension = raw.Extension
+	s.ID = raw.ID
+	s.Identifier = raw.Identifier
+	s.ImplicitRules = raw.ImplicitRules
+	s.Language = raw.Language
+	s.Meta = raw.Meta
+	s.ModifierExtension = raw.ModifierExtension
+	s.Note = raw.Note
+	s.Parent = raw.Parent
+	s.Processing = raw.Processing
+	s.ReceivedTime = raw.ReceivedTime
+	s.Request = raw.Request
+	s.Status = raw.Status
+	s.Subject = raw.Subject
+	s.Text = raw.Text
+	s.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*Specimen)(nil)
+var _ json.Unmarshaler = (*Specimen)(nil)
+
+func (sc *SpecimenCollection) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sc *SpecimenCollection) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		BodySite                     *fhir.CodeableConcept `json:"bodySite"`
+		CollectedDateTime            *fhir.DateTime        `json:"collectedDateTime"`
+		CollectedPeriod              *fhir.Period          `json:"collectedPeriod"`
+		Collector                    *fhir.Reference       `json:"collector"`
+		Duration                     *fhir.Duration        `json:"duration"`
+		Extension                    []*fhir.Extension     `json:"extension"`
+		FastingStatusCodeableConcept *fhir.CodeableConcept `json:"fastingStatusCodeableConcept"`
+		FastingStatusDuration        *fhir.Duration        `json:"fastingStatusDuration"`
+
+		ID                string                `json:"id"`
+		Method            *fhir.CodeableConcept `json:"method"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Quantity          *fhir.Quantity        `json:"quantity"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sc.BodySite = raw.BodySite
+	sc.Collected, err = validate.SelectOneOf[fhir.Element]("Specimen.collection.collected",
+		raw.CollectedDateTime,
+		raw.CollectedPeriod)
+	if err != nil {
+		return err
+	}
+	sc.Collector = raw.Collector
+	sc.Duration = raw.Duration
+	sc.Extension = raw.Extension
+	sc.FastingStatus, err = validate.SelectOneOf[fhir.Element]("Specimen.collection.fastingStatus",
+		raw.FastingStatusCodeableConcept,
+		raw.FastingStatusDuration)
+	if err != nil {
+		return err
+	}
+	sc.ID = raw.ID
+	sc.Method = raw.Method
+	sc.ModifierExtension = raw.ModifierExtension
+	sc.Quantity = raw.Quantity
+	return nil
+}
+
+var _ json.Marshaler = (*SpecimenCollection)(nil)
+var _ json.Unmarshaler = (*SpecimenCollection)(nil)
+
+func (sc *SpecimenContainer) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sc *SpecimenContainer) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AdditiveCodeableConcept *fhir.CodeableConcept `json:"additiveCodeableConcept"`
+		AdditiveReference       *fhir.Reference       `json:"additiveReference"`
+		Capacity                *fhir.Quantity        `json:"capacity"`
+		Description             *fhir.String          `json:"description"`
+		Extension               []*fhir.Extension     `json:"extension"`
+
+		ID                string                `json:"id"`
+		Identifier        []*fhir.Identifier    `json:"identifier"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		SpecimenQuantity  *fhir.Quantity        `json:"specimenQuantity"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sc.Additive, err = validate.SelectOneOf[fhir.Element]("Specimen.container.additive",
+		raw.AdditiveCodeableConcept,
+		raw.AdditiveReference)
+	if err != nil {
+		return err
+	}
+	sc.Capacity = raw.Capacity
+	sc.Description = raw.Description
+	sc.Extension = raw.Extension
+	sc.ID = raw.ID
+	sc.Identifier = raw.Identifier
+	sc.ModifierExtension = raw.ModifierExtension
+	sc.SpecimenQuantity = raw.SpecimenQuantity
+	sc.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*SpecimenContainer)(nil)
+var _ json.Unmarshaler = (*SpecimenContainer)(nil)
+
+func (sp *SpecimenProcessing) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sp *SpecimenProcessing) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Additive    []*fhir.Reference `json:"additive"`
+		Description *fhir.String      `json:"description"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Procedure         *fhir.CodeableConcept `json:"procedure"`
+		TimeDateTime      *fhir.DateTime        `json:"timeDateTime"`
+		TimePeriod        *fhir.Period          `json:"timePeriod"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sp.Additive = raw.Additive
+	sp.Description = raw.Description
+	sp.Extension = raw.Extension
+	sp.ID = raw.ID
+	sp.ModifierExtension = raw.ModifierExtension
+	sp.Procedure = raw.Procedure
+	sp.Time, err = validate.SelectOneOf[fhir.Element]("Specimen.processing.time",
+		raw.TimeDateTime,
+		raw.TimePeriod)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*SpecimenProcessing)(nil)
+var _ json.Unmarshaler = (*SpecimenProcessing)(nil)

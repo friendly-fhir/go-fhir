@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Range Type: A set of ordered Quantities defined
@@ -79,3 +81,31 @@ func (r *Range) GetLow() *Quantity {
 	}
 	return r.Low
 }
+
+func (r *Range) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (r *Range) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*Extension `json:"extension"`
+		High      *Quantity    `json:"high"`
+
+		ID  string    `json:"id"`
+		Low *Quantity `json:"low"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	r.Extension = raw.Extension
+	r.High = raw.High
+	r.ID = raw.ID
+	r.Low = raw.Low
+	return nil
+}
+
+var _ json.Marshaler = (*Range)(nil)
+var _ json.Unmarshaler = (*Range)(nil)

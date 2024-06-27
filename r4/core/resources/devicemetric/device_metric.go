@@ -8,6 +8,8 @@ package devicemetric
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Describes a measurement, calculation or setting capability of a medical
@@ -423,3 +425,91 @@ func (dmc *DeviceMetricCalibration) GetType() *fhir.Code {
 	}
 	return dmc.Type
 }
+
+func (dm *DeviceMetric) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (dm *DeviceMetric) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Calibration []*DeviceMetricCalibration `json:"calibration"`
+		Category    *fhir.Code                 `json:"category"`
+		Color       *fhir.Code                 `json:"color"`
+		Contained   []fhir.Resource            `json:"contained"`
+		Extension   []*fhir.Extension          `json:"extension"`
+
+		ID                string                `json:"id"`
+		Identifier        []*fhir.Identifier    `json:"identifier"`
+		ImplicitRules     *fhir.URI             `json:"implicitRules"`
+		Language          *fhir.Code            `json:"language"`
+		MeasurementPeriod *fhir.Timing          `json:"measurementPeriod"`
+		Meta              *fhir.Meta            `json:"meta"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		OperationalStatus *fhir.Code            `json:"operationalStatus"`
+		Parent            *fhir.Reference       `json:"parent"`
+		Source            *fhir.Reference       `json:"source"`
+		Text              *fhir.Narrative       `json:"text"`
+		Type              *fhir.CodeableConcept `json:"type"`
+		Unit              *fhir.CodeableConcept `json:"unit"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	dm.Calibration = raw.Calibration
+	dm.Category = raw.Category
+	dm.Color = raw.Color
+	dm.Contained = raw.Contained
+	dm.Extension = raw.Extension
+	dm.ID = raw.ID
+	dm.Identifier = raw.Identifier
+	dm.ImplicitRules = raw.ImplicitRules
+	dm.Language = raw.Language
+	dm.MeasurementPeriod = raw.MeasurementPeriod
+	dm.Meta = raw.Meta
+	dm.ModifierExtension = raw.ModifierExtension
+	dm.OperationalStatus = raw.OperationalStatus
+	dm.Parent = raw.Parent
+	dm.Source = raw.Source
+	dm.Text = raw.Text
+	dm.Type = raw.Type
+	dm.Unit = raw.Unit
+	return nil
+}
+
+var _ json.Marshaler = (*DeviceMetric)(nil)
+var _ json.Unmarshaler = (*DeviceMetric)(nil)
+
+func (dmc *DeviceMetricCalibration) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (dmc *DeviceMetricCalibration) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		State             *fhir.Code        `json:"state"`
+		Time              *fhir.Instant     `json:"time"`
+		Type              *fhir.Code        `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	dmc.Extension = raw.Extension
+	dmc.ID = raw.ID
+	dmc.ModifierExtension = raw.ModifierExtension
+	dmc.State = raw.State
+	dmc.Time = raw.Time
+	dmc.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*DeviceMetricCalibration)(nil)
+var _ json.Unmarshaler = (*DeviceMetricCalibration)(nil)

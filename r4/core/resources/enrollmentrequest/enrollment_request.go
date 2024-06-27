@@ -8,6 +8,8 @@ package enrollmentrequest
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // This resource provides the insurance enrollment details to the insurer
@@ -249,3 +251,53 @@ func (er *EnrollmentRequest) GetText() *fhir.Narrative {
 	}
 	return er.Text
 }
+
+func (er *EnrollmentRequest) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (er *EnrollmentRequest) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Candidate *fhir.Reference   `json:"candidate"`
+		Contained []fhir.Resource   `json:"contained"`
+		Coverage  *fhir.Reference   `json:"coverage"`
+		Created   *fhir.DateTime    `json:"created"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string             `json:"id"`
+		Identifier        []*fhir.Identifier `json:"identifier"`
+		ImplicitRules     *fhir.URI          `json:"implicitRules"`
+		Insurer           *fhir.Reference    `json:"insurer"`
+		Language          *fhir.Code         `json:"language"`
+		Meta              *fhir.Meta         `json:"meta"`
+		ModifierExtension []*fhir.Extension  `json:"modifierExtension"`
+		Provider          *fhir.Reference    `json:"provider"`
+		Status            *fhir.Code         `json:"status"`
+		Text              *fhir.Narrative    `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	er.Candidate = raw.Candidate
+	er.Contained = raw.Contained
+	er.Coverage = raw.Coverage
+	er.Created = raw.Created
+	er.Extension = raw.Extension
+	er.ID = raw.ID
+	er.Identifier = raw.Identifier
+	er.ImplicitRules = raw.ImplicitRules
+	er.Insurer = raw.Insurer
+	er.Language = raw.Language
+	er.Meta = raw.Meta
+	er.ModifierExtension = raw.ModifierExtension
+	er.Provider = raw.Provider
+	er.Status = raw.Status
+	er.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*EnrollmentRequest)(nil)
+var _ json.Unmarshaler = (*EnrollmentRequest)(nil)

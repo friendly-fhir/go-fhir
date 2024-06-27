@@ -6,8 +6,11 @@
 package coverageeligibilityrequest
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The CoverageEligibilityRequest provides patient and insurance coverage
@@ -918,3 +921,217 @@ func (cersi *CoverageEligibilityRequestSupportingInfo) GetSequence() *fhir.Posit
 	}
 	return cersi.Sequence
 }
+
+func (cer *CoverageEligibilityRequest) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cer *CoverageEligibilityRequest) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contained []fhir.Resource   `json:"contained"`
+		Created   *fhir.DateTime    `json:"created"`
+		Enterer   *fhir.Reference   `json:"enterer"`
+		Extension []*fhir.Extension `json:"extension"`
+		Facility  *fhir.Reference   `json:"facility"`
+
+		ID                string                                      `json:"id"`
+		Identifier        []*fhir.Identifier                          `json:"identifier"`
+		ImplicitRules     *fhir.URI                                   `json:"implicitRules"`
+		Insurance         []*CoverageEligibilityRequestInsurance      `json:"insurance"`
+		Insurer           *fhir.Reference                             `json:"insurer"`
+		Item              []*CoverageEligibilityRequestItem           `json:"item"`
+		Language          *fhir.Code                                  `json:"language"`
+		Meta              *fhir.Meta                                  `json:"meta"`
+		ModifierExtension []*fhir.Extension                           `json:"modifierExtension"`
+		Patient           *fhir.Reference                             `json:"patient"`
+		Priority          *fhir.CodeableConcept                       `json:"priority"`
+		Provider          *fhir.Reference                             `json:"provider"`
+		Purpose           []*fhir.Code                                `json:"purpose"`
+		ServicedDate      *fhir.Date                                  `json:"servicedDate"`
+		ServicedPeriod    *fhir.Period                                `json:"servicedPeriod"`
+		Status            *fhir.Code                                  `json:"status"`
+		SupportingInfo    []*CoverageEligibilityRequestSupportingInfo `json:"supportingInfo"`
+		Text              *fhir.Narrative                             `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cer.Contained = raw.Contained
+	cer.Created = raw.Created
+	cer.Enterer = raw.Enterer
+	cer.Extension = raw.Extension
+	cer.Facility = raw.Facility
+	cer.ID = raw.ID
+	cer.Identifier = raw.Identifier
+	cer.ImplicitRules = raw.ImplicitRules
+	cer.Insurance = raw.Insurance
+	cer.Insurer = raw.Insurer
+	cer.Item = raw.Item
+	cer.Language = raw.Language
+	cer.Meta = raw.Meta
+	cer.ModifierExtension = raw.ModifierExtension
+	cer.Patient = raw.Patient
+	cer.Priority = raw.Priority
+	cer.Provider = raw.Provider
+	cer.Purpose = raw.Purpose
+	cer.Serviced, err = validate.SelectOneOf[fhir.Element]("CoverageEligibilityRequest.serviced",
+		raw.ServicedDate,
+		raw.ServicedPeriod)
+	if err != nil {
+		return err
+	}
+	cer.Status = raw.Status
+	cer.SupportingInfo = raw.SupportingInfo
+	cer.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*CoverageEligibilityRequest)(nil)
+var _ json.Unmarshaler = (*CoverageEligibilityRequest)(nil)
+
+func (ceri *CoverageEligibilityRequestInsurance) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ceri *CoverageEligibilityRequestInsurance) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		BusinessArrangement *fhir.String      `json:"businessArrangement"`
+		Coverage            *fhir.Reference   `json:"coverage"`
+		Extension           []*fhir.Extension `json:"extension"`
+		Focal               *fhir.Boolean     `json:"focal"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ceri.BusinessArrangement = raw.BusinessArrangement
+	ceri.Coverage = raw.Coverage
+	ceri.Extension = raw.Extension
+	ceri.Focal = raw.Focal
+	ceri.ID = raw.ID
+	ceri.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*CoverageEligibilityRequestInsurance)(nil)
+var _ json.Unmarshaler = (*CoverageEligibilityRequestInsurance)(nil)
+
+func (ceri *CoverageEligibilityRequestItem) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ceri *CoverageEligibilityRequestItem) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Category  *fhir.CodeableConcept                      `json:"category"`
+		Detail    []*fhir.Reference                          `json:"detail"`
+		Diagnosis []*CoverageEligibilityRequestItemDiagnosis `json:"diagnosis"`
+		Extension []*fhir.Extension                          `json:"extension"`
+		Facility  *fhir.Reference                            `json:"facility"`
+
+		ID                     string                  `json:"id"`
+		Modifier               []*fhir.CodeableConcept `json:"modifier"`
+		ModifierExtension      []*fhir.Extension       `json:"modifierExtension"`
+		ProductOrService       *fhir.CodeableConcept   `json:"productOrService"`
+		Provider               *fhir.Reference         `json:"provider"`
+		Quantity               *fhir.Quantity          `json:"quantity"`
+		SupportingInfoSequence []*fhir.PositiveInt     `json:"supportingInfoSequence"`
+		UnitPrice              *fhir.Money             `json:"unitPrice"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ceri.Category = raw.Category
+	ceri.Detail = raw.Detail
+	ceri.Diagnosis = raw.Diagnosis
+	ceri.Extension = raw.Extension
+	ceri.Facility = raw.Facility
+	ceri.ID = raw.ID
+	ceri.Modifier = raw.Modifier
+	ceri.ModifierExtension = raw.ModifierExtension
+	ceri.ProductOrService = raw.ProductOrService
+	ceri.Provider = raw.Provider
+	ceri.Quantity = raw.Quantity
+	ceri.SupportingInfoSequence = raw.SupportingInfoSequence
+	ceri.UnitPrice = raw.UnitPrice
+	return nil
+}
+
+var _ json.Marshaler = (*CoverageEligibilityRequestItem)(nil)
+var _ json.Unmarshaler = (*CoverageEligibilityRequestItem)(nil)
+
+func (cerid *CoverageEligibilityRequestItemDiagnosis) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cerid *CoverageEligibilityRequestItemDiagnosis) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		DiagnosisCodeableConcept *fhir.CodeableConcept `json:"diagnosisCodeableConcept"`
+		DiagnosisReference       *fhir.Reference       `json:"diagnosisReference"`
+		Extension                []*fhir.Extension     `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cerid.Diagnosis, err = validate.SelectOneOf[fhir.Element]("CoverageEligibilityRequest.item.diagnosis.diagnosis",
+		raw.DiagnosisCodeableConcept,
+		raw.DiagnosisReference)
+	if err != nil {
+		return err
+	}
+	cerid.Extension = raw.Extension
+	cerid.ID = raw.ID
+	cerid.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*CoverageEligibilityRequestItemDiagnosis)(nil)
+var _ json.Unmarshaler = (*CoverageEligibilityRequestItemDiagnosis)(nil)
+
+func (cersi *CoverageEligibilityRequestSupportingInfo) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cersi *CoverageEligibilityRequestSupportingInfo) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AppliesToAll *fhir.Boolean     `json:"appliesToAll"`
+		Extension    []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Information       *fhir.Reference   `json:"information"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Sequence          *fhir.PositiveInt `json:"sequence"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cersi.AppliesToAll = raw.AppliesToAll
+	cersi.Extension = raw.Extension
+	cersi.ID = raw.ID
+	cersi.Information = raw.Information
+	cersi.ModifierExtension = raw.ModifierExtension
+	cersi.Sequence = raw.Sequence
+	return nil
+}
+
+var _ json.Marshaler = (*CoverageEligibilityRequestSupportingInfo)(nil)
+var _ json.Unmarshaler = (*CoverageEligibilityRequestSupportingInfo)(nil)

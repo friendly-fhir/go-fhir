@@ -6,8 +6,11 @@
 package goal
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Describes the intended objective(s) for a patient, group or organization
@@ -620,3 +623,131 @@ func (gt *GoalTarget) GetModifierExtension() []*fhir.Extension {
 	}
 	return gt.ModifierExtension
 }
+
+func (g *Goal) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (g *Goal) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AchievementStatus *fhir.CodeableConcept   `json:"achievementStatus"`
+		Addresses         []*fhir.Reference       `json:"addresses"`
+		Category          []*fhir.CodeableConcept `json:"category"`
+		Contained         []fhir.Resource         `json:"contained"`
+		Description       *fhir.CodeableConcept   `json:"description"`
+		ExpressedBy       *fhir.Reference         `json:"expressedBy"`
+		Extension         []*fhir.Extension       `json:"extension"`
+
+		ID                   string                  `json:"id"`
+		Identifier           []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules        *fhir.URI               `json:"implicitRules"`
+		Language             *fhir.Code              `json:"language"`
+		LifecycleStatus      *fhir.Code              `json:"lifecycleStatus"`
+		Meta                 *fhir.Meta              `json:"meta"`
+		ModifierExtension    []*fhir.Extension       `json:"modifierExtension"`
+		Note                 []*fhir.Annotation      `json:"note"`
+		OutcomeCode          []*fhir.CodeableConcept `json:"outcomeCode"`
+		OutcomeReference     []*fhir.Reference       `json:"outcomeReference"`
+		Priority             *fhir.CodeableConcept   `json:"priority"`
+		StartDate            *fhir.Date              `json:"startDate"`
+		StartCodeableConcept *fhir.CodeableConcept   `json:"startCodeableConcept"`
+		StatusDate           *fhir.Date              `json:"statusDate"`
+		StatusReason         *fhir.String            `json:"statusReason"`
+		Subject              *fhir.Reference         `json:"subject"`
+		Target               []*GoalTarget           `json:"target"`
+		Text                 *fhir.Narrative         `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	g.AchievementStatus = raw.AchievementStatus
+	g.Addresses = raw.Addresses
+	g.Category = raw.Category
+	g.Contained = raw.Contained
+	g.Description = raw.Description
+	g.ExpressedBy = raw.ExpressedBy
+	g.Extension = raw.Extension
+	g.ID = raw.ID
+	g.Identifier = raw.Identifier
+	g.ImplicitRules = raw.ImplicitRules
+	g.Language = raw.Language
+	g.LifecycleStatus = raw.LifecycleStatus
+	g.Meta = raw.Meta
+	g.ModifierExtension = raw.ModifierExtension
+	g.Note = raw.Note
+	g.OutcomeCode = raw.OutcomeCode
+	g.OutcomeReference = raw.OutcomeReference
+	g.Priority = raw.Priority
+	g.Start, err = validate.SelectOneOf[fhir.Element]("Goal.start",
+		raw.StartDate,
+		raw.StartCodeableConcept)
+	if err != nil {
+		return err
+	}
+	g.StatusDate = raw.StatusDate
+	g.StatusReason = raw.StatusReason
+	g.Subject = raw.Subject
+	g.Target = raw.Target
+	g.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*Goal)(nil)
+var _ json.Unmarshaler = (*Goal)(nil)
+
+func (gt *GoalTarget) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (gt *GoalTarget) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		DetailQuantity        *fhir.Quantity        `json:"detailQuantity"`
+		DetailRange           *fhir.Range           `json:"detailRange"`
+		DetailCodeableConcept *fhir.CodeableConcept `json:"detailCodeableConcept"`
+		DetailString          *fhir.String          `json:"detailString"`
+		DetailBoolean         *fhir.Boolean         `json:"detailBoolean"`
+		DetailInteger         *fhir.Integer         `json:"detailInteger"`
+		DetailRatio           *fhir.Ratio           `json:"detailRatio"`
+		DueDate               *fhir.Date            `json:"dueDate"`
+		DueDuration           *fhir.Duration        `json:"dueDuration"`
+		Extension             []*fhir.Extension     `json:"extension"`
+
+		ID                string                `json:"id"`
+		Measure           *fhir.CodeableConcept `json:"measure"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	gt.Detail, err = validate.SelectOneOf[fhir.Element]("Goal.target.detail",
+		raw.DetailQuantity,
+		raw.DetailRange,
+		raw.DetailCodeableConcept,
+		raw.DetailString,
+		raw.DetailBoolean,
+		raw.DetailInteger,
+		raw.DetailRatio)
+	if err != nil {
+		return err
+	}
+	gt.Due, err = validate.SelectOneOf[fhir.Element]("Goal.target.due",
+		raw.DueDate,
+		raw.DueDuration)
+	if err != nil {
+		return err
+	}
+	gt.Extension = raw.Extension
+	gt.ID = raw.ID
+	gt.Measure = raw.Measure
+	gt.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*GoalTarget)(nil)
+var _ json.Unmarshaler = (*GoalTarget)(nil)

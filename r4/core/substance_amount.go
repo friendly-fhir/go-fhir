@@ -6,7 +6,10 @@
 package fhir
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for SubstanceAmount Type: Chemical substances are a
@@ -251,3 +254,73 @@ func (sarr *SubstanceAmountReferenceRange) GetLowLimit() *Quantity {
 	}
 	return sarr.LowLimit
 }
+
+func (sa *SubstanceAmount) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sa *SubstanceAmount) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AmountText     *String          `json:"amountText"`
+		AmountType     *CodeableConcept `json:"amountType"`
+		AmountQuantity *Quantity        `json:"amountQuantity"`
+		AmountRange    *Range           `json:"amountRange"`
+		AmountString   *String          `json:"amountString"`
+		Extension      []*Extension     `json:"extension"`
+
+		ID                string                         `json:"id"`
+		ModifierExtension []*Extension                   `json:"modifierExtension"`
+		ReferenceRange    *SubstanceAmountReferenceRange `json:"referenceRange"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sa.AmountText = raw.AmountText
+	sa.AmountType = raw.AmountType
+	sa.Amount, err = validate.SelectOneOf[Element]("SubstanceAmount.amount",
+		raw.AmountQuantity,
+		raw.AmountRange,
+		raw.AmountString)
+	if err != nil {
+		return err
+	}
+	sa.Extension = raw.Extension
+	sa.ID = raw.ID
+	sa.ModifierExtension = raw.ModifierExtension
+	sa.ReferenceRange = raw.ReferenceRange
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceAmount)(nil)
+var _ json.Unmarshaler = (*SubstanceAmount)(nil)
+
+func (sarr *SubstanceAmountReferenceRange) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sarr *SubstanceAmountReferenceRange) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*Extension `json:"extension"`
+		HighLimit *Quantity    `json:"highLimit"`
+
+		ID       string    `json:"id"`
+		LowLimit *Quantity `json:"lowLimit"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sarr.Extension = raw.Extension
+	sarr.HighLimit = raw.HighLimit
+	sarr.ID = raw.ID
+	sarr.LowLimit = raw.LowLimit
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceAmountReferenceRange)(nil)
+var _ json.Unmarshaler = (*SubstanceAmountReferenceRange)(nil)

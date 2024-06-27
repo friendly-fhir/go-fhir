@@ -6,8 +6,11 @@
 package contract
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Legally enforceable, formally recorded unilateral or bilateral directive
@@ -3337,3 +3340,759 @@ func (ctsl *ContractTermSecurityLabel) GetNumber() []*fhir.UnsignedInt {
 	}
 	return ctsl.Number
 }
+
+func (c *Contract) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (c *Contract) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Alias             []*fhir.String             `json:"alias"`
+		Applies           *fhir.Period               `json:"applies"`
+		Author            *fhir.Reference            `json:"author"`
+		Authority         []*fhir.Reference          `json:"authority"`
+		Contained         []fhir.Resource            `json:"contained"`
+		ContentDefinition *ContractContentDefinition `json:"contentDefinition"`
+		ContentDerivative *fhir.CodeableConcept      `json:"contentDerivative"`
+		Domain            []*fhir.Reference          `json:"domain"`
+		ExpirationType    *fhir.CodeableConcept      `json:"expirationType"`
+		Extension         []*fhir.Extension          `json:"extension"`
+		Friendly          []*ContractFriendly        `json:"friendly"`
+
+		ID                       string                  `json:"id"`
+		Identifier               []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules            *fhir.URI               `json:"implicitRules"`
+		InstantiatesCanonical    *fhir.Reference         `json:"instantiatesCanonical"`
+		InstantiatesURI          *fhir.URI               `json:"instantiatesUri"`
+		Issued                   *fhir.DateTime          `json:"issued"`
+		Language                 *fhir.Code              `json:"language"`
+		Legal                    []*ContractLegal        `json:"legal"`
+		LegalState               *fhir.CodeableConcept   `json:"legalState"`
+		LegallyBindingAttachment *fhir.Attachment        `json:"legallyBindingAttachment"`
+		LegallyBindingReference  *fhir.Reference         `json:"legallyBindingReference"`
+		Meta                     *fhir.Meta              `json:"meta"`
+		ModifierExtension        []*fhir.Extension       `json:"modifierExtension"`
+		Name                     *fhir.String            `json:"name"`
+		RelevantHistory          []*fhir.Reference       `json:"relevantHistory"`
+		Rule                     []*ContractRule         `json:"rule"`
+		Scope                    *fhir.CodeableConcept   `json:"scope"`
+		Signer                   []*ContractSigner       `json:"signer"`
+		Site                     []*fhir.Reference       `json:"site"`
+		Status                   *fhir.Code              `json:"status"`
+		SubType                  []*fhir.CodeableConcept `json:"subType"`
+		Subject                  []*fhir.Reference       `json:"subject"`
+		Subtitle                 *fhir.String            `json:"subtitle"`
+		SupportingInfo           []*fhir.Reference       `json:"supportingInfo"`
+		Term                     []*ContractTerm         `json:"term"`
+		Text                     *fhir.Narrative         `json:"text"`
+		Title                    *fhir.String            `json:"title"`
+		TopicCodeableConcept     *fhir.CodeableConcept   `json:"topicCodeableConcept"`
+		TopicReference           *fhir.Reference         `json:"topicReference"`
+		Type                     *fhir.CodeableConcept   `json:"type"`
+		URL                      *fhir.URI               `json:"url"`
+		Version                  *fhir.String            `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	c.Alias = raw.Alias
+	c.Applies = raw.Applies
+	c.Author = raw.Author
+	c.Authority = raw.Authority
+	c.Contained = raw.Contained
+	c.ContentDefinition = raw.ContentDefinition
+	c.ContentDerivative = raw.ContentDerivative
+	c.Domain = raw.Domain
+	c.ExpirationType = raw.ExpirationType
+	c.Extension = raw.Extension
+	c.Friendly = raw.Friendly
+	c.ID = raw.ID
+	c.Identifier = raw.Identifier
+	c.ImplicitRules = raw.ImplicitRules
+	c.InstantiatesCanonical = raw.InstantiatesCanonical
+	c.InstantiatesURI = raw.InstantiatesURI
+	c.Issued = raw.Issued
+	c.Language = raw.Language
+	c.Legal = raw.Legal
+	c.LegalState = raw.LegalState
+	c.LegallyBinding, err = validate.SelectOneOf[fhir.Element]("Contract.legallyBinding",
+		raw.LegallyBindingAttachment,
+		raw.LegallyBindingReference)
+	if err != nil {
+		return err
+	}
+	c.Meta = raw.Meta
+	c.ModifierExtension = raw.ModifierExtension
+	c.Name = raw.Name
+	c.RelevantHistory = raw.RelevantHistory
+	c.Rule = raw.Rule
+	c.Scope = raw.Scope
+	c.Signer = raw.Signer
+	c.Site = raw.Site
+	c.Status = raw.Status
+	c.SubType = raw.SubType
+	c.Subject = raw.Subject
+	c.Subtitle = raw.Subtitle
+	c.SupportingInfo = raw.SupportingInfo
+	c.Term = raw.Term
+	c.Text = raw.Text
+	c.Title = raw.Title
+	c.Topic, err = validate.SelectOneOf[fhir.Element]("Contract.topic",
+		raw.TopicCodeableConcept,
+		raw.TopicReference)
+	if err != nil {
+		return err
+	}
+	c.Type = raw.Type
+	c.URL = raw.URL
+	c.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*Contract)(nil)
+var _ json.Unmarshaler = (*Contract)(nil)
+
+func (ccd *ContractContentDefinition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ccd *ContractContentDefinition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Copyright *fhir.Markdown    `json:"copyright"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		PublicationDate   *fhir.DateTime        `json:"publicationDate"`
+		PublicationStatus *fhir.Code            `json:"publicationStatus"`
+		Publisher         *fhir.Reference       `json:"publisher"`
+		SubType           *fhir.CodeableConcept `json:"subType"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ccd.Copyright = raw.Copyright
+	ccd.Extension = raw.Extension
+	ccd.ID = raw.ID
+	ccd.ModifierExtension = raw.ModifierExtension
+	ccd.PublicationDate = raw.PublicationDate
+	ccd.PublicationStatus = raw.PublicationStatus
+	ccd.Publisher = raw.Publisher
+	ccd.SubType = raw.SubType
+	ccd.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ContractContentDefinition)(nil)
+var _ json.Unmarshaler = (*ContractContentDefinition)(nil)
+
+func (cf *ContractFriendly) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cf *ContractFriendly) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ContentAttachment *fhir.Attachment  `json:"contentAttachment"`
+		ContentReference  *fhir.Reference   `json:"contentReference"`
+		Extension         []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cf.Content, err = validate.SelectOneOf[fhir.Element]("Contract.friendly.content",
+		raw.ContentAttachment,
+		raw.ContentReference)
+	if err != nil {
+		return err
+	}
+	cf.Extension = raw.Extension
+	cf.ID = raw.ID
+	cf.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*ContractFriendly)(nil)
+var _ json.Unmarshaler = (*ContractFriendly)(nil)
+
+func (cl *ContractLegal) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cl *ContractLegal) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ContentAttachment *fhir.Attachment  `json:"contentAttachment"`
+		ContentReference  *fhir.Reference   `json:"contentReference"`
+		Extension         []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cl.Content, err = validate.SelectOneOf[fhir.Element]("Contract.legal.content",
+		raw.ContentAttachment,
+		raw.ContentReference)
+	if err != nil {
+		return err
+	}
+	cl.Extension = raw.Extension
+	cl.ID = raw.ID
+	cl.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*ContractLegal)(nil)
+var _ json.Unmarshaler = (*ContractLegal)(nil)
+
+func (cr *ContractRule) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cr *ContractRule) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ContentAttachment *fhir.Attachment  `json:"contentAttachment"`
+		ContentReference  *fhir.Reference   `json:"contentReference"`
+		Extension         []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cr.Content, err = validate.SelectOneOf[fhir.Element]("Contract.rule.content",
+		raw.ContentAttachment,
+		raw.ContentReference)
+	if err != nil {
+		return err
+	}
+	cr.Extension = raw.Extension
+	cr.ID = raw.ID
+	cr.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*ContractRule)(nil)
+var _ json.Unmarshaler = (*ContractRule)(nil)
+
+func (cs *ContractSigner) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cs *ContractSigner) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Party             *fhir.Reference   `json:"party"`
+		Signature         []*fhir.Signature `json:"signature"`
+		Type              *fhir.Coding      `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cs.Extension = raw.Extension
+	cs.ID = raw.ID
+	cs.ModifierExtension = raw.ModifierExtension
+	cs.Party = raw.Party
+	cs.Signature = raw.Signature
+	cs.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ContractSigner)(nil)
+var _ json.Unmarshaler = (*ContractSigner)(nil)
+
+func (ct *ContractTerm) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ct *ContractTerm) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Action    []*ContractTermAction `json:"action"`
+		Applies   *fhir.Period          `json:"applies"`
+		Asset     []*ContractTermAsset  `json:"asset"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                   string                       `json:"id"`
+		Identifier           *fhir.Identifier             `json:"identifier"`
+		Issued               *fhir.DateTime               `json:"issued"`
+		ModifierExtension    []*fhir.Extension            `json:"modifierExtension"`
+		Offer                *ContractTermOffer           `json:"offer"`
+		SecurityLabel        []*ContractTermSecurityLabel `json:"securityLabel"`
+		SubType              *fhir.CodeableConcept        `json:"subType"`
+		Text                 *fhir.String                 `json:"text"`
+		TopicCodeableConcept *fhir.CodeableConcept        `json:"topicCodeableConcept"`
+		TopicReference       *fhir.Reference              `json:"topicReference"`
+		Type                 *fhir.CodeableConcept        `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ct.Action = raw.Action
+	ct.Applies = raw.Applies
+	ct.Asset = raw.Asset
+	ct.Extension = raw.Extension
+	ct.ID = raw.ID
+	ct.Identifier = raw.Identifier
+	ct.Issued = raw.Issued
+	ct.ModifierExtension = raw.ModifierExtension
+	ct.Offer = raw.Offer
+	ct.SecurityLabel = raw.SecurityLabel
+	ct.SubType = raw.SubType
+	ct.Text = raw.Text
+	ct.Topic, err = validate.SelectOneOf[fhir.Element]("Contract.term.topic",
+		raw.TopicCodeableConcept,
+		raw.TopicReference)
+	if err != nil {
+		return err
+	}
+	ct.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ContractTerm)(nil)
+var _ json.Unmarshaler = (*ContractTerm)(nil)
+
+func (cta *ContractTermAction) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cta *ContractTermAction) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Context       *fhir.Reference   `json:"context"`
+		ContextLinkID []*fhir.String    `json:"contextLinkId"`
+		DoNotPerform  *fhir.Boolean     `json:"doNotPerform"`
+		Extension     []*fhir.Extension `json:"extension"`
+
+		ID                  string                       `json:"id"`
+		Intent              *fhir.CodeableConcept        `json:"intent"`
+		LinkID              []*fhir.String               `json:"linkId"`
+		ModifierExtension   []*fhir.Extension            `json:"modifierExtension"`
+		Note                []*fhir.Annotation           `json:"note"`
+		OccurrenceDateTime  *fhir.DateTime               `json:"occurrenceDateTime"`
+		OccurrencePeriod    *fhir.Period                 `json:"occurrencePeriod"`
+		OccurrenceTiming    *fhir.Timing                 `json:"occurrenceTiming"`
+		Performer           *fhir.Reference              `json:"performer"`
+		PerformerLinkID     []*fhir.String               `json:"performerLinkId"`
+		PerformerRole       *fhir.CodeableConcept        `json:"performerRole"`
+		PerformerType       []*fhir.CodeableConcept      `json:"performerType"`
+		Reason              []*fhir.String               `json:"reason"`
+		ReasonCode          []*fhir.CodeableConcept      `json:"reasonCode"`
+		ReasonLinkID        []*fhir.String               `json:"reasonLinkId"`
+		ReasonReference     []*fhir.Reference            `json:"reasonReference"`
+		Requester           []*fhir.Reference            `json:"requester"`
+		RequesterLinkID     []*fhir.String               `json:"requesterLinkId"`
+		SecurityLabelNumber []*fhir.UnsignedInt          `json:"securityLabelNumber"`
+		Status              *fhir.CodeableConcept        `json:"status"`
+		Subject             []*ContractTermActionSubject `json:"subject"`
+		Type                *fhir.CodeableConcept        `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cta.Context = raw.Context
+	cta.ContextLinkID = raw.ContextLinkID
+	cta.DoNotPerform = raw.DoNotPerform
+	cta.Extension = raw.Extension
+	cta.ID = raw.ID
+	cta.Intent = raw.Intent
+	cta.LinkID = raw.LinkID
+	cta.ModifierExtension = raw.ModifierExtension
+	cta.Note = raw.Note
+	cta.Occurrence, err = validate.SelectOneOf[fhir.Element]("Contract.term.action.occurrence",
+		raw.OccurrenceDateTime,
+		raw.OccurrencePeriod,
+		raw.OccurrenceTiming)
+	if err != nil {
+		return err
+	}
+	cta.Performer = raw.Performer
+	cta.PerformerLinkID = raw.PerformerLinkID
+	cta.PerformerRole = raw.PerformerRole
+	cta.PerformerType = raw.PerformerType
+	cta.Reason = raw.Reason
+	cta.ReasonCode = raw.ReasonCode
+	cta.ReasonLinkID = raw.ReasonLinkID
+	cta.ReasonReference = raw.ReasonReference
+	cta.Requester = raw.Requester
+	cta.RequesterLinkID = raw.RequesterLinkID
+	cta.SecurityLabelNumber = raw.SecurityLabelNumber
+	cta.Status = raw.Status
+	cta.Subject = raw.Subject
+	cta.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ContractTermAction)(nil)
+var _ json.Unmarshaler = (*ContractTermAction)(nil)
+
+func (ctas *ContractTermActionSubject) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ctas *ContractTermActionSubject) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Reference         []*fhir.Reference     `json:"reference"`
+		Role              *fhir.CodeableConcept `json:"role"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ctas.Extension = raw.Extension
+	ctas.ID = raw.ID
+	ctas.ModifierExtension = raw.ModifierExtension
+	ctas.Reference = raw.Reference
+	ctas.Role = raw.Role
+	return nil
+}
+
+var _ json.Marshaler = (*ContractTermActionSubject)(nil)
+var _ json.Unmarshaler = (*ContractTermActionSubject)(nil)
+
+func (cta *ContractTermAsset) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cta *ContractTermAsset) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Condition *fhir.String                `json:"condition"`
+		Context   []*ContractTermAssetContext `json:"context"`
+		Extension []*fhir.Extension           `json:"extension"`
+
+		ID                  string                         `json:"id"`
+		LinkID              []*fhir.String                 `json:"linkId"`
+		ModifierExtension   []*fhir.Extension              `json:"modifierExtension"`
+		Period              []*fhir.Period                 `json:"period"`
+		PeriodType          []*fhir.CodeableConcept        `json:"periodType"`
+		Relationship        *fhir.Coding                   `json:"relationship"`
+		Scope               *fhir.CodeableConcept          `json:"scope"`
+		SecurityLabelNumber []*fhir.UnsignedInt            `json:"securityLabelNumber"`
+		Subtype             []*fhir.CodeableConcept        `json:"subtype"`
+		Text                *fhir.String                   `json:"text"`
+		Type                []*fhir.CodeableConcept        `json:"type"`
+		TypeReference       []*fhir.Reference              `json:"typeReference"`
+		UsePeriod           []*fhir.Period                 `json:"usePeriod"`
+		ValuedItem          []*ContractTermAssetValuedItem `json:"valuedItem"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cta.Condition = raw.Condition
+	cta.Context = raw.Context
+	cta.Extension = raw.Extension
+	cta.ID = raw.ID
+	cta.LinkID = raw.LinkID
+	cta.ModifierExtension = raw.ModifierExtension
+	cta.Period = raw.Period
+	cta.PeriodType = raw.PeriodType
+	cta.Relationship = raw.Relationship
+	cta.Scope = raw.Scope
+	cta.SecurityLabelNumber = raw.SecurityLabelNumber
+	cta.Subtype = raw.Subtype
+	cta.Text = raw.Text
+	cta.Type = raw.Type
+	cta.TypeReference = raw.TypeReference
+	cta.UsePeriod = raw.UsePeriod
+	cta.ValuedItem = raw.ValuedItem
+	return nil
+}
+
+var _ json.Marshaler = (*ContractTermAsset)(nil)
+var _ json.Unmarshaler = (*ContractTermAsset)(nil)
+
+func (ctac *ContractTermAssetContext) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ctac *ContractTermAssetContext) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      []*fhir.CodeableConcept `json:"code"`
+		Extension []*fhir.Extension       `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Reference         *fhir.Reference   `json:"reference"`
+		Text              *fhir.String      `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ctac.Code = raw.Code
+	ctac.Extension = raw.Extension
+	ctac.ID = raw.ID
+	ctac.ModifierExtension = raw.ModifierExtension
+	ctac.Reference = raw.Reference
+	ctac.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*ContractTermAssetContext)(nil)
+var _ json.Unmarshaler = (*ContractTermAssetContext)(nil)
+
+func (ctavi *ContractTermAssetValuedItem) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ctavi *ContractTermAssetValuedItem) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		EffectiveTime         *fhir.DateTime        `json:"effectiveTime"`
+		EntityCodeableConcept *fhir.CodeableConcept `json:"entityCodeableConcept"`
+		EntityReference       *fhir.Reference       `json:"entityReference"`
+		Extension             []*fhir.Extension     `json:"extension"`
+		Factor                *fhir.Decimal         `json:"factor"`
+
+		ID                  string              `json:"id"`
+		Identifier          *fhir.Identifier    `json:"identifier"`
+		LinkID              []*fhir.String      `json:"linkId"`
+		ModifierExtension   []*fhir.Extension   `json:"modifierExtension"`
+		Net                 *fhir.Money         `json:"net"`
+		Payment             *fhir.String        `json:"payment"`
+		PaymentDate         *fhir.DateTime      `json:"paymentDate"`
+		Points              *fhir.Decimal       `json:"points"`
+		Quantity            *fhir.Quantity      `json:"quantity"`
+		Recipient           *fhir.Reference     `json:"recipient"`
+		Responsible         *fhir.Reference     `json:"responsible"`
+		SecurityLabelNumber []*fhir.UnsignedInt `json:"securityLabelNumber"`
+		UnitPrice           *fhir.Money         `json:"unitPrice"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ctavi.EffectiveTime = raw.EffectiveTime
+	ctavi.Entity, err = validate.SelectOneOf[fhir.Element]("Contract.term.asset.valuedItem.entity",
+		raw.EntityCodeableConcept,
+		raw.EntityReference)
+	if err != nil {
+		return err
+	}
+	ctavi.Extension = raw.Extension
+	ctavi.Factor = raw.Factor
+	ctavi.ID = raw.ID
+	ctavi.Identifier = raw.Identifier
+	ctavi.LinkID = raw.LinkID
+	ctavi.ModifierExtension = raw.ModifierExtension
+	ctavi.Net = raw.Net
+	ctavi.Payment = raw.Payment
+	ctavi.PaymentDate = raw.PaymentDate
+	ctavi.Points = raw.Points
+	ctavi.Quantity = raw.Quantity
+	ctavi.Recipient = raw.Recipient
+	ctavi.Responsible = raw.Responsible
+	ctavi.SecurityLabelNumber = raw.SecurityLabelNumber
+	ctavi.UnitPrice = raw.UnitPrice
+	return nil
+}
+
+var _ json.Marshaler = (*ContractTermAssetValuedItem)(nil)
+var _ json.Unmarshaler = (*ContractTermAssetValuedItem)(nil)
+
+func (cto *ContractTermOffer) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cto *ContractTermOffer) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Answer       []*ContractTermOfferAnswer `json:"answer"`
+		Decision     *fhir.CodeableConcept      `json:"decision"`
+		DecisionMode []*fhir.CodeableConcept    `json:"decisionMode"`
+		Extension    []*fhir.Extension          `json:"extension"`
+
+		ID                  string                    `json:"id"`
+		Identifier          []*fhir.Identifier        `json:"identifier"`
+		LinkID              []*fhir.String            `json:"linkId"`
+		ModifierExtension   []*fhir.Extension         `json:"modifierExtension"`
+		Party               []*ContractTermOfferParty `json:"party"`
+		SecurityLabelNumber []*fhir.UnsignedInt       `json:"securityLabelNumber"`
+		Text                *fhir.String              `json:"text"`
+		Topic               *fhir.Reference           `json:"topic"`
+		Type                *fhir.CodeableConcept     `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cto.Answer = raw.Answer
+	cto.Decision = raw.Decision
+	cto.DecisionMode = raw.DecisionMode
+	cto.Extension = raw.Extension
+	cto.ID = raw.ID
+	cto.Identifier = raw.Identifier
+	cto.LinkID = raw.LinkID
+	cto.ModifierExtension = raw.ModifierExtension
+	cto.Party = raw.Party
+	cto.SecurityLabelNumber = raw.SecurityLabelNumber
+	cto.Text = raw.Text
+	cto.Topic = raw.Topic
+	cto.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ContractTermOffer)(nil)
+var _ json.Unmarshaler = (*ContractTermOffer)(nil)
+
+func (ctoa *ContractTermOfferAnswer) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ctoa *ContractTermOfferAnswer) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		ValueBoolean      *fhir.Boolean     `json:"valueBoolean"`
+		ValueDecimal      *fhir.Decimal     `json:"valueDecimal"`
+		ValueInteger      *fhir.Integer     `json:"valueInteger"`
+		ValueDate         *fhir.Date        `json:"valueDate"`
+		ValueDateTime     *fhir.DateTime    `json:"valueDateTime"`
+		ValueTime         *fhir.Time        `json:"valueTime"`
+		ValueString       *fhir.String      `json:"valueString"`
+		ValueURI          *fhir.URI         `json:"valueURI"`
+		ValueAttachment   *fhir.Attachment  `json:"valueAttachment"`
+		ValueCoding       *fhir.Coding      `json:"valueCoding"`
+		ValueQuantity     *fhir.Quantity    `json:"valueQuantity"`
+		ValueReference    *fhir.Reference   `json:"valueReference"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ctoa.Extension = raw.Extension
+	ctoa.ID = raw.ID
+	ctoa.ModifierExtension = raw.ModifierExtension
+	ctoa.Value, err = validate.SelectOneOf[fhir.Element]("Contract.term.offer.answer.value",
+		raw.ValueBoolean,
+		raw.ValueDecimal,
+		raw.ValueInteger,
+		raw.ValueDate,
+		raw.ValueDateTime,
+		raw.ValueTime,
+		raw.ValueString,
+		raw.ValueURI,
+		raw.ValueAttachment,
+		raw.ValueCoding,
+		raw.ValueQuantity,
+		raw.ValueReference)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*ContractTermOfferAnswer)(nil)
+var _ json.Unmarshaler = (*ContractTermOfferAnswer)(nil)
+
+func (ctop *ContractTermOfferParty) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ctop *ContractTermOfferParty) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Reference         []*fhir.Reference     `json:"reference"`
+		Role              *fhir.CodeableConcept `json:"role"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ctop.Extension = raw.Extension
+	ctop.ID = raw.ID
+	ctop.ModifierExtension = raw.ModifierExtension
+	ctop.Reference = raw.Reference
+	ctop.Role = raw.Role
+	return nil
+}
+
+var _ json.Marshaler = (*ContractTermOfferParty)(nil)
+var _ json.Unmarshaler = (*ContractTermOfferParty)(nil)
+
+func (ctsl *ContractTermSecurityLabel) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ctsl *ContractTermSecurityLabel) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Category       []*fhir.Coding    `json:"category"`
+		Classification *fhir.Coding      `json:"classification"`
+		Control        []*fhir.Coding    `json:"control"`
+		Extension      []*fhir.Extension `json:"extension"`
+
+		ID                string              `json:"id"`
+		ModifierExtension []*fhir.Extension   `json:"modifierExtension"`
+		Number            []*fhir.UnsignedInt `json:"number"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ctsl.Category = raw.Category
+	ctsl.Classification = raw.Classification
+	ctsl.Control = raw.Control
+	ctsl.Extension = raw.Extension
+	ctsl.ID = raw.ID
+	ctsl.ModifierExtension = raw.ModifierExtension
+	ctsl.Number = raw.Number
+	return nil
+}
+
+var _ json.Marshaler = (*ContractTermSecurityLabel)(nil)
+var _ json.Unmarshaler = (*ContractTermSecurityLabel)(nil)

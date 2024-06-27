@@ -8,6 +8,8 @@ package documentreference
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A reference to a document of any kind for any purpose. Provides metadata
@@ -751,3 +753,171 @@ func (drrt *DocumentReferenceRelatesTo) GetTarget() *fhir.Reference {
 	}
 	return drrt.Target
 }
+
+func (dr *DocumentReference) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (dr *DocumentReference) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Authenticator *fhir.Reference             `json:"authenticator"`
+		Author        []*fhir.Reference           `json:"author"`
+		Category      []*fhir.CodeableConcept     `json:"category"`
+		Contained     []fhir.Resource             `json:"contained"`
+		Content       []*DocumentReferenceContent `json:"content"`
+		Context       *DocumentReferenceContext   `json:"context"`
+		Custodian     *fhir.Reference             `json:"custodian"`
+		Date          *fhir.Instant               `json:"date"`
+		Description   *fhir.String                `json:"description"`
+		DocStatus     *fhir.Code                  `json:"docStatus"`
+		Extension     []*fhir.Extension           `json:"extension"`
+
+		ID                string                        `json:"id"`
+		Identifier        []*fhir.Identifier            `json:"identifier"`
+		ImplicitRules     *fhir.URI                     `json:"implicitRules"`
+		Language          *fhir.Code                    `json:"language"`
+		MasterIdentifier  *fhir.Identifier              `json:"masterIdentifier"`
+		Meta              *fhir.Meta                    `json:"meta"`
+		ModifierExtension []*fhir.Extension             `json:"modifierExtension"`
+		RelatesTo         []*DocumentReferenceRelatesTo `json:"relatesTo"`
+		SecurityLabel     []*fhir.CodeableConcept       `json:"securityLabel"`
+		Status            *fhir.Code                    `json:"status"`
+		Subject           *fhir.Reference               `json:"subject"`
+		Text              *fhir.Narrative               `json:"text"`
+		Type              *fhir.CodeableConcept         `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	dr.Authenticator = raw.Authenticator
+	dr.Author = raw.Author
+	dr.Category = raw.Category
+	dr.Contained = raw.Contained
+	dr.Content = raw.Content
+	dr.Context = raw.Context
+	dr.Custodian = raw.Custodian
+	dr.Date = raw.Date
+	dr.Description = raw.Description
+	dr.DocStatus = raw.DocStatus
+	dr.Extension = raw.Extension
+	dr.ID = raw.ID
+	dr.Identifier = raw.Identifier
+	dr.ImplicitRules = raw.ImplicitRules
+	dr.Language = raw.Language
+	dr.MasterIdentifier = raw.MasterIdentifier
+	dr.Meta = raw.Meta
+	dr.ModifierExtension = raw.ModifierExtension
+	dr.RelatesTo = raw.RelatesTo
+	dr.SecurityLabel = raw.SecurityLabel
+	dr.Status = raw.Status
+	dr.Subject = raw.Subject
+	dr.Text = raw.Text
+	dr.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*DocumentReference)(nil)
+var _ json.Unmarshaler = (*DocumentReference)(nil)
+
+func (drc *DocumentReferenceContent) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (drc *DocumentReferenceContent) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Attachment *fhir.Attachment  `json:"attachment"`
+		Extension  []*fhir.Extension `json:"extension"`
+		Format     *fhir.Coding      `json:"format"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	drc.Attachment = raw.Attachment
+	drc.Extension = raw.Extension
+	drc.Format = raw.Format
+	drc.ID = raw.ID
+	drc.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*DocumentReferenceContent)(nil)
+var _ json.Unmarshaler = (*DocumentReferenceContent)(nil)
+
+func (drc *DocumentReferenceContext) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (drc *DocumentReferenceContext) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Encounter    []*fhir.Reference       `json:"encounter"`
+		Event        []*fhir.CodeableConcept `json:"event"`
+		Extension    []*fhir.Extension       `json:"extension"`
+		FacilityType *fhir.CodeableConcept   `json:"facilityType"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Period            *fhir.Period          `json:"period"`
+		PracticeSetting   *fhir.CodeableConcept `json:"practiceSetting"`
+		Related           []*fhir.Reference     `json:"related"`
+		SourcePatientInfo *fhir.Reference       `json:"sourcePatientInfo"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	drc.Encounter = raw.Encounter
+	drc.Event = raw.Event
+	drc.Extension = raw.Extension
+	drc.FacilityType = raw.FacilityType
+	drc.ID = raw.ID
+	drc.ModifierExtension = raw.ModifierExtension
+	drc.Period = raw.Period
+	drc.PracticeSetting = raw.PracticeSetting
+	drc.Related = raw.Related
+	drc.SourcePatientInfo = raw.SourcePatientInfo
+	return nil
+}
+
+var _ json.Marshaler = (*DocumentReferenceContext)(nil)
+var _ json.Unmarshaler = (*DocumentReferenceContext)(nil)
+
+func (drrt *DocumentReferenceRelatesTo) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (drrt *DocumentReferenceRelatesTo) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.Code        `json:"code"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Target            *fhir.Reference   `json:"target"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	drrt.Code = raw.Code
+	drrt.Extension = raw.Extension
+	drrt.ID = raw.ID
+	drrt.ModifierExtension = raw.ModifierExtension
+	drrt.Target = raw.Target
+	return nil
+}
+
+var _ json.Marshaler = (*DocumentReferenceRelatesTo)(nil)
+var _ json.Unmarshaler = (*DocumentReferenceRelatesTo)(nil)

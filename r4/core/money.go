@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Money Type: An amount of economic utility in
@@ -79,3 +81,31 @@ func (m *Money) GetValue() *Decimal {
 	}
 	return m.Value
 }
+
+func (m *Money) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (m *Money) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Currency  *Code        `json:"currency"`
+		Extension []*Extension `json:"extension"`
+
+		ID    string   `json:"id"`
+		Value *Decimal `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	m.Currency = raw.Currency
+	m.Extension = raw.Extension
+	m.ID = raw.ID
+	m.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*Money)(nil)
+var _ json.Unmarshaler = (*Money)(nil)

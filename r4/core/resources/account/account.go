@@ -8,6 +8,8 @@ package account
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A financial tool for tracking value accrued for a particular purpose. In the
@@ -526,3 +528,123 @@ func (ag *AccountGuarantor) GetPeriod() *fhir.Period {
 	}
 	return ag.Period
 }
+
+func (a *Account) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (a *Account) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contained   []fhir.Resource     `json:"contained"`
+		Coverage    []*AccountCoverage  `json:"coverage"`
+		Description *fhir.String        `json:"description"`
+		Extension   []*fhir.Extension   `json:"extension"`
+		Guarantor   []*AccountGuarantor `json:"guarantor"`
+
+		ID                string                `json:"id"`
+		Identifier        []*fhir.Identifier    `json:"identifier"`
+		ImplicitRules     *fhir.URI             `json:"implicitRules"`
+		Language          *fhir.Code            `json:"language"`
+		Meta              *fhir.Meta            `json:"meta"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Name              *fhir.String          `json:"name"`
+		Owner             *fhir.Reference       `json:"owner"`
+		PartOf            *fhir.Reference       `json:"partOf"`
+		ServicePeriod     *fhir.Period          `json:"servicePeriod"`
+		Status            *fhir.Code            `json:"status"`
+		Subject           []*fhir.Reference     `json:"subject"`
+		Text              *fhir.Narrative       `json:"text"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	a.Contained = raw.Contained
+	a.Coverage = raw.Coverage
+	a.Description = raw.Description
+	a.Extension = raw.Extension
+	a.Guarantor = raw.Guarantor
+	a.ID = raw.ID
+	a.Identifier = raw.Identifier
+	a.ImplicitRules = raw.ImplicitRules
+	a.Language = raw.Language
+	a.Meta = raw.Meta
+	a.ModifierExtension = raw.ModifierExtension
+	a.Name = raw.Name
+	a.Owner = raw.Owner
+	a.PartOf = raw.PartOf
+	a.ServicePeriod = raw.ServicePeriod
+	a.Status = raw.Status
+	a.Subject = raw.Subject
+	a.Text = raw.Text
+	a.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*Account)(nil)
+var _ json.Unmarshaler = (*Account)(nil)
+
+func (ac *AccountCoverage) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ac *AccountCoverage) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Coverage  *fhir.Reference   `json:"coverage"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Priority          *fhir.PositiveInt `json:"priority"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ac.Coverage = raw.Coverage
+	ac.Extension = raw.Extension
+	ac.ID = raw.ID
+	ac.ModifierExtension = raw.ModifierExtension
+	ac.Priority = raw.Priority
+	return nil
+}
+
+var _ json.Marshaler = (*AccountCoverage)(nil)
+var _ json.Unmarshaler = (*AccountCoverage)(nil)
+
+func (ag *AccountGuarantor) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ag *AccountGuarantor) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		OnHold            *fhir.Boolean     `json:"onHold"`
+		Party             *fhir.Reference   `json:"party"`
+		Period            *fhir.Period      `json:"period"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ag.Extension = raw.Extension
+	ag.ID = raw.ID
+	ag.ModifierExtension = raw.ModifierExtension
+	ag.OnHold = raw.OnHold
+	ag.Party = raw.Party
+	ag.Period = raw.Period
+	return nil
+}
+
+var _ json.Marshaler = (*AccountGuarantor)(nil)
+var _ json.Unmarshaler = (*AccountGuarantor)(nil)

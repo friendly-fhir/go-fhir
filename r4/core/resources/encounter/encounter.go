@@ -8,6 +8,8 @@ package encounter
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // An interaction between a patient and healthcare provider(s) for the purpose
@@ -1231,3 +1233,287 @@ func (esh *EncounterStatusHistory) GetStatus() *fhir.Code {
 	}
 	return esh.Status
 }
+
+func (e *Encounter) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (e *Encounter) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Account         []*fhir.Reference         `json:"account"`
+		Appointment     []*fhir.Reference         `json:"appointment"`
+		BasedOn         []*fhir.Reference         `json:"basedOn"`
+		Class           *fhir.Coding              `json:"class"`
+		ClassHistory    []*EncounterClassHistory  `json:"classHistory"`
+		Contained       []fhir.Resource           `json:"contained"`
+		Diagnosis       []*EncounterDiagnosis     `json:"diagnosis"`
+		EpisodeOfCare   []*fhir.Reference         `json:"episodeOfCare"`
+		Extension       []*fhir.Extension         `json:"extension"`
+		Hospitalization *EncounterHospitalization `json:"hospitalization"`
+
+		ID                string                    `json:"id"`
+		Identifier        []*fhir.Identifier        `json:"identifier"`
+		ImplicitRules     *fhir.URI                 `json:"implicitRules"`
+		Language          *fhir.Code                `json:"language"`
+		Length            *fhir.Duration            `json:"length"`
+		Location          []*EncounterLocation      `json:"location"`
+		Meta              *fhir.Meta                `json:"meta"`
+		ModifierExtension []*fhir.Extension         `json:"modifierExtension"`
+		PartOf            *fhir.Reference           `json:"partOf"`
+		Participant       []*EncounterParticipant   `json:"participant"`
+		Period            *fhir.Period              `json:"period"`
+		Priority          *fhir.CodeableConcept     `json:"priority"`
+		ReasonCode        []*fhir.CodeableConcept   `json:"reasonCode"`
+		ReasonReference   []*fhir.Reference         `json:"reasonReference"`
+		ServiceProvider   *fhir.Reference           `json:"serviceProvider"`
+		ServiceType       *fhir.CodeableConcept     `json:"serviceType"`
+		Status            *fhir.Code                `json:"status"`
+		StatusHistory     []*EncounterStatusHistory `json:"statusHistory"`
+		Subject           *fhir.Reference           `json:"subject"`
+		Text              *fhir.Narrative           `json:"text"`
+		Type              []*fhir.CodeableConcept   `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	e.Account = raw.Account
+	e.Appointment = raw.Appointment
+	e.BasedOn = raw.BasedOn
+	e.Class = raw.Class
+	e.ClassHistory = raw.ClassHistory
+	e.Contained = raw.Contained
+	e.Diagnosis = raw.Diagnosis
+	e.EpisodeOfCare = raw.EpisodeOfCare
+	e.Extension = raw.Extension
+	e.Hospitalization = raw.Hospitalization
+	e.ID = raw.ID
+	e.Identifier = raw.Identifier
+	e.ImplicitRules = raw.ImplicitRules
+	e.Language = raw.Language
+	e.Length = raw.Length
+	e.Location = raw.Location
+	e.Meta = raw.Meta
+	e.ModifierExtension = raw.ModifierExtension
+	e.PartOf = raw.PartOf
+	e.Participant = raw.Participant
+	e.Period = raw.Period
+	e.Priority = raw.Priority
+	e.ReasonCode = raw.ReasonCode
+	e.ReasonReference = raw.ReasonReference
+	e.ServiceProvider = raw.ServiceProvider
+	e.ServiceType = raw.ServiceType
+	e.Status = raw.Status
+	e.StatusHistory = raw.StatusHistory
+	e.Subject = raw.Subject
+	e.Text = raw.Text
+	e.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*Encounter)(nil)
+var _ json.Unmarshaler = (*Encounter)(nil)
+
+func (ech *EncounterClassHistory) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ech *EncounterClassHistory) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Class     *fhir.Coding      `json:"class"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Period            *fhir.Period      `json:"period"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ech.Class = raw.Class
+	ech.Extension = raw.Extension
+	ech.ID = raw.ID
+	ech.ModifierExtension = raw.ModifierExtension
+	ech.Period = raw.Period
+	return nil
+}
+
+var _ json.Marshaler = (*EncounterClassHistory)(nil)
+var _ json.Unmarshaler = (*EncounterClassHistory)(nil)
+
+func (ed *EncounterDiagnosis) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ed *EncounterDiagnosis) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Condition *fhir.Reference   `json:"condition"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Rank              *fhir.PositiveInt     `json:"rank"`
+		Use               *fhir.CodeableConcept `json:"use"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ed.Condition = raw.Condition
+	ed.Extension = raw.Extension
+	ed.ID = raw.ID
+	ed.ModifierExtension = raw.ModifierExtension
+	ed.Rank = raw.Rank
+	ed.Use = raw.Use
+	return nil
+}
+
+var _ json.Marshaler = (*EncounterDiagnosis)(nil)
+var _ json.Unmarshaler = (*EncounterDiagnosis)(nil)
+
+func (eh *EncounterHospitalization) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eh *EncounterHospitalization) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AdmitSource          *fhir.CodeableConcept   `json:"admitSource"`
+		Destination          *fhir.Reference         `json:"destination"`
+		DietPreference       []*fhir.CodeableConcept `json:"dietPreference"`
+		DischargeDisposition *fhir.CodeableConcept   `json:"dischargeDisposition"`
+		Extension            []*fhir.Extension       `json:"extension"`
+
+		ID                     string                  `json:"id"`
+		ModifierExtension      []*fhir.Extension       `json:"modifierExtension"`
+		Origin                 *fhir.Reference         `json:"origin"`
+		PreAdmissionIdentifier *fhir.Identifier        `json:"preAdmissionIdentifier"`
+		ReAdmission            *fhir.CodeableConcept   `json:"reAdmission"`
+		SpecialArrangement     []*fhir.CodeableConcept `json:"specialArrangement"`
+		SpecialCourtesy        []*fhir.CodeableConcept `json:"specialCourtesy"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eh.AdmitSource = raw.AdmitSource
+	eh.Destination = raw.Destination
+	eh.DietPreference = raw.DietPreference
+	eh.DischargeDisposition = raw.DischargeDisposition
+	eh.Extension = raw.Extension
+	eh.ID = raw.ID
+	eh.ModifierExtension = raw.ModifierExtension
+	eh.Origin = raw.Origin
+	eh.PreAdmissionIdentifier = raw.PreAdmissionIdentifier
+	eh.ReAdmission = raw.ReAdmission
+	eh.SpecialArrangement = raw.SpecialArrangement
+	eh.SpecialCourtesy = raw.SpecialCourtesy
+	return nil
+}
+
+var _ json.Marshaler = (*EncounterHospitalization)(nil)
+var _ json.Unmarshaler = (*EncounterHospitalization)(nil)
+
+func (el *EncounterLocation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (el *EncounterLocation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		Location          *fhir.Reference       `json:"location"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Period            *fhir.Period          `json:"period"`
+		PhysicalType      *fhir.CodeableConcept `json:"physicalType"`
+		Status            *fhir.Code            `json:"status"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	el.Extension = raw.Extension
+	el.ID = raw.ID
+	el.Location = raw.Location
+	el.ModifierExtension = raw.ModifierExtension
+	el.Period = raw.Period
+	el.PhysicalType = raw.PhysicalType
+	el.Status = raw.Status
+	return nil
+}
+
+var _ json.Marshaler = (*EncounterLocation)(nil)
+var _ json.Unmarshaler = (*EncounterLocation)(nil)
+
+func (ep *EncounterParticipant) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ep *EncounterParticipant) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                  `json:"id"`
+		Individual        *fhir.Reference         `json:"individual"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Period            *fhir.Period            `json:"period"`
+		Type              []*fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ep.Extension = raw.Extension
+	ep.ID = raw.ID
+	ep.Individual = raw.Individual
+	ep.ModifierExtension = raw.ModifierExtension
+	ep.Period = raw.Period
+	ep.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*EncounterParticipant)(nil)
+var _ json.Unmarshaler = (*EncounterParticipant)(nil)
+
+func (esh *EncounterStatusHistory) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (esh *EncounterStatusHistory) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Period            *fhir.Period      `json:"period"`
+		Status            *fhir.Code        `json:"status"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	esh.Extension = raw.Extension
+	esh.ID = raw.ID
+	esh.ModifierExtension = raw.ModifierExtension
+	esh.Period = raw.Period
+	esh.Status = raw.Status
+	return nil
+}
+
+var _ json.Marshaler = (*EncounterStatusHistory)(nil)
+var _ json.Unmarshaler = (*EncounterStatusHistory)(nil)

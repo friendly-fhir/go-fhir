@@ -6,8 +6,11 @@
 package claim
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A provider issued list of professional services and products which have been
@@ -2618,3 +2621,589 @@ func (csi *ClaimSupportingInfo) GetValueReference() *fhir.Reference {
 	}
 	return val
 }
+
+func (c *Claim) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (c *Claim) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Accident       *ClaimAccident        `json:"accident"`
+		BillablePeriod *fhir.Period          `json:"billablePeriod"`
+		CareTeam       []*ClaimCareTeam      `json:"careTeam"`
+		Contained      []fhir.Resource       `json:"contained"`
+		Created        *fhir.DateTime        `json:"created"`
+		Diagnosis      []*ClaimDiagnosis     `json:"diagnosis"`
+		Enterer        *fhir.Reference       `json:"enterer"`
+		Extension      []*fhir.Extension     `json:"extension"`
+		Facility       *fhir.Reference       `json:"facility"`
+		FundsReserve   *fhir.CodeableConcept `json:"fundsReserve"`
+
+		ID                   string                 `json:"id"`
+		Identifier           []*fhir.Identifier     `json:"identifier"`
+		ImplicitRules        *fhir.URI              `json:"implicitRules"`
+		Insurance            []*ClaimInsurance      `json:"insurance"`
+		Insurer              *fhir.Reference        `json:"insurer"`
+		Item                 []*ClaimItem           `json:"item"`
+		Language             *fhir.Code             `json:"language"`
+		Meta                 *fhir.Meta             `json:"meta"`
+		ModifierExtension    []*fhir.Extension      `json:"modifierExtension"`
+		OriginalPrescription *fhir.Reference        `json:"originalPrescription"`
+		Patient              *fhir.Reference        `json:"patient"`
+		Payee                *ClaimPayee            `json:"payee"`
+		Prescription         *fhir.Reference        `json:"prescription"`
+		Priority             *fhir.CodeableConcept  `json:"priority"`
+		Procedure            []*ClaimProcedure      `json:"procedure"`
+		Provider             *fhir.Reference        `json:"provider"`
+		Referral             *fhir.Reference        `json:"referral"`
+		Related              []*ClaimRelated        `json:"related"`
+		Status               *fhir.Code             `json:"status"`
+		SubType              *fhir.CodeableConcept  `json:"subType"`
+		SupportingInfo       []*ClaimSupportingInfo `json:"supportingInfo"`
+		Text                 *fhir.Narrative        `json:"text"`
+		Total                *fhir.Money            `json:"total"`
+		Type                 *fhir.CodeableConcept  `json:"type"`
+		Use                  *fhir.Code             `json:"use"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	c.Accident = raw.Accident
+	c.BillablePeriod = raw.BillablePeriod
+	c.CareTeam = raw.CareTeam
+	c.Contained = raw.Contained
+	c.Created = raw.Created
+	c.Diagnosis = raw.Diagnosis
+	c.Enterer = raw.Enterer
+	c.Extension = raw.Extension
+	c.Facility = raw.Facility
+	c.FundsReserve = raw.FundsReserve
+	c.ID = raw.ID
+	c.Identifier = raw.Identifier
+	c.ImplicitRules = raw.ImplicitRules
+	c.Insurance = raw.Insurance
+	c.Insurer = raw.Insurer
+	c.Item = raw.Item
+	c.Language = raw.Language
+	c.Meta = raw.Meta
+	c.ModifierExtension = raw.ModifierExtension
+	c.OriginalPrescription = raw.OriginalPrescription
+	c.Patient = raw.Patient
+	c.Payee = raw.Payee
+	c.Prescription = raw.Prescription
+	c.Priority = raw.Priority
+	c.Procedure = raw.Procedure
+	c.Provider = raw.Provider
+	c.Referral = raw.Referral
+	c.Related = raw.Related
+	c.Status = raw.Status
+	c.SubType = raw.SubType
+	c.SupportingInfo = raw.SupportingInfo
+	c.Text = raw.Text
+	c.Total = raw.Total
+	c.Type = raw.Type
+	c.Use = raw.Use
+	return nil
+}
+
+var _ json.Marshaler = (*Claim)(nil)
+var _ json.Unmarshaler = (*Claim)(nil)
+
+func (ca *ClaimAccident) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ca *ClaimAccident) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Date      *fhir.Date        `json:"date"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		LocationAddress   *fhir.Address         `json:"locationAddress"`
+		LocationReference *fhir.Reference       `json:"locationReference"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ca.Date = raw.Date
+	ca.Extension = raw.Extension
+	ca.ID = raw.ID
+	ca.Location, err = validate.SelectOneOf[fhir.Element]("Claim.accident.location",
+		raw.LocationAddress,
+		raw.LocationReference)
+	if err != nil {
+		return err
+	}
+	ca.ModifierExtension = raw.ModifierExtension
+	ca.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ClaimAccident)(nil)
+var _ json.Unmarshaler = (*ClaimAccident)(nil)
+
+func (cct *ClaimCareTeam) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cct *ClaimCareTeam) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Provider          *fhir.Reference       `json:"provider"`
+		Qualification     *fhir.CodeableConcept `json:"qualification"`
+		Responsible       *fhir.Boolean         `json:"responsible"`
+		Role              *fhir.CodeableConcept `json:"role"`
+		Sequence          *fhir.PositiveInt     `json:"sequence"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cct.Extension = raw.Extension
+	cct.ID = raw.ID
+	cct.ModifierExtension = raw.ModifierExtension
+	cct.Provider = raw.Provider
+	cct.Qualification = raw.Qualification
+	cct.Responsible = raw.Responsible
+	cct.Role = raw.Role
+	cct.Sequence = raw.Sequence
+	return nil
+}
+
+var _ json.Marshaler = (*ClaimCareTeam)(nil)
+var _ json.Unmarshaler = (*ClaimCareTeam)(nil)
+
+func (cd *ClaimDiagnosis) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cd *ClaimDiagnosis) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		DiagnosisCodeableConcept *fhir.CodeableConcept `json:"diagnosisCodeableConcept"`
+		DiagnosisReference       *fhir.Reference       `json:"diagnosisReference"`
+		Extension                []*fhir.Extension     `json:"extension"`
+
+		ID                string                  `json:"id"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		OnAdmission       *fhir.CodeableConcept   `json:"onAdmission"`
+		PackageCode       *fhir.CodeableConcept   `json:"packageCode"`
+		Sequence          *fhir.PositiveInt       `json:"sequence"`
+		Type              []*fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cd.Diagnosis, err = validate.SelectOneOf[fhir.Element]("Claim.diagnosis.diagnosis",
+		raw.DiagnosisCodeableConcept,
+		raw.DiagnosisReference)
+	if err != nil {
+		return err
+	}
+	cd.Extension = raw.Extension
+	cd.ID = raw.ID
+	cd.ModifierExtension = raw.ModifierExtension
+	cd.OnAdmission = raw.OnAdmission
+	cd.PackageCode = raw.PackageCode
+	cd.Sequence = raw.Sequence
+	cd.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ClaimDiagnosis)(nil)
+var _ json.Unmarshaler = (*ClaimDiagnosis)(nil)
+
+func (ci *ClaimInsurance) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ci *ClaimInsurance) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		BusinessArrangement *fhir.String      `json:"businessArrangement"`
+		ClaimResponse       *fhir.Reference   `json:"claimResponse"`
+		Coverage            *fhir.Reference   `json:"coverage"`
+		Extension           []*fhir.Extension `json:"extension"`
+		Focal               *fhir.Boolean     `json:"focal"`
+
+		ID                string            `json:"id"`
+		Identifier        *fhir.Identifier  `json:"identifier"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		PreAuthRef        []*fhir.String    `json:"preAuthRef"`
+		Sequence          *fhir.PositiveInt `json:"sequence"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ci.BusinessArrangement = raw.BusinessArrangement
+	ci.ClaimResponse = raw.ClaimResponse
+	ci.Coverage = raw.Coverage
+	ci.Extension = raw.Extension
+	ci.Focal = raw.Focal
+	ci.ID = raw.ID
+	ci.Identifier = raw.Identifier
+	ci.ModifierExtension = raw.ModifierExtension
+	ci.PreAuthRef = raw.PreAuthRef
+	ci.Sequence = raw.Sequence
+	return nil
+}
+
+var _ json.Marshaler = (*ClaimInsurance)(nil)
+var _ json.Unmarshaler = (*ClaimInsurance)(nil)
+
+func (ci *ClaimItem) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ci *ClaimItem) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		BodySite          *fhir.CodeableConcept `json:"bodySite"`
+		CareTeamSequence  []*fhir.PositiveInt   `json:"careTeamSequence"`
+		Category          *fhir.CodeableConcept `json:"category"`
+		Detail            []*ClaimItemDetail    `json:"detail"`
+		DiagnosisSequence []*fhir.PositiveInt   `json:"diagnosisSequence"`
+		Encounter         []*fhir.Reference     `json:"encounter"`
+		Extension         []*fhir.Extension     `json:"extension"`
+		Factor            *fhir.Decimal         `json:"factor"`
+
+		ID                      string                  `json:"id"`
+		InformationSequence     []*fhir.PositiveInt     `json:"informationSequence"`
+		LocationCodeableConcept *fhir.CodeableConcept   `json:"locationCodeableConcept"`
+		LocationAddress         *fhir.Address           `json:"locationAddress"`
+		LocationReference       *fhir.Reference         `json:"locationReference"`
+		Modifier                []*fhir.CodeableConcept `json:"modifier"`
+		ModifierExtension       []*fhir.Extension       `json:"modifierExtension"`
+		Net                     *fhir.Money             `json:"net"`
+		ProcedureSequence       []*fhir.PositiveInt     `json:"procedureSequence"`
+		ProductOrService        *fhir.CodeableConcept   `json:"productOrService"`
+		ProgramCode             []*fhir.CodeableConcept `json:"programCode"`
+		Quantity                *fhir.Quantity          `json:"quantity"`
+		Revenue                 *fhir.CodeableConcept   `json:"revenue"`
+		Sequence                *fhir.PositiveInt       `json:"sequence"`
+		ServicedDate            *fhir.Date              `json:"servicedDate"`
+		ServicedPeriod          *fhir.Period            `json:"servicedPeriod"`
+		SubSite                 []*fhir.CodeableConcept `json:"subSite"`
+		Udi                     []*fhir.Reference       `json:"udi"`
+		UnitPrice               *fhir.Money             `json:"unitPrice"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ci.BodySite = raw.BodySite
+	ci.CareTeamSequence = raw.CareTeamSequence
+	ci.Category = raw.Category
+	ci.Detail = raw.Detail
+	ci.DiagnosisSequence = raw.DiagnosisSequence
+	ci.Encounter = raw.Encounter
+	ci.Extension = raw.Extension
+	ci.Factor = raw.Factor
+	ci.ID = raw.ID
+	ci.InformationSequence = raw.InformationSequence
+	ci.Location, err = validate.SelectOneOf[fhir.Element]("Claim.item.location",
+		raw.LocationCodeableConcept,
+		raw.LocationAddress,
+		raw.LocationReference)
+	if err != nil {
+		return err
+	}
+	ci.Modifier = raw.Modifier
+	ci.ModifierExtension = raw.ModifierExtension
+	ci.Net = raw.Net
+	ci.ProcedureSequence = raw.ProcedureSequence
+	ci.ProductOrService = raw.ProductOrService
+	ci.ProgramCode = raw.ProgramCode
+	ci.Quantity = raw.Quantity
+	ci.Revenue = raw.Revenue
+	ci.Sequence = raw.Sequence
+	ci.Serviced, err = validate.SelectOneOf[fhir.Element]("Claim.item.serviced",
+		raw.ServicedDate,
+		raw.ServicedPeriod)
+	if err != nil {
+		return err
+	}
+	ci.SubSite = raw.SubSite
+	ci.Udi = raw.Udi
+	ci.UnitPrice = raw.UnitPrice
+	return nil
+}
+
+var _ json.Marshaler = (*ClaimItem)(nil)
+var _ json.Unmarshaler = (*ClaimItem)(nil)
+
+func (cid *ClaimItemDetail) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cid *ClaimItemDetail) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Category  *fhir.CodeableConcept `json:"category"`
+		Extension []*fhir.Extension     `json:"extension"`
+		Factor    *fhir.Decimal         `json:"factor"`
+
+		ID                string                      `json:"id"`
+		Modifier          []*fhir.CodeableConcept     `json:"modifier"`
+		ModifierExtension []*fhir.Extension           `json:"modifierExtension"`
+		Net               *fhir.Money                 `json:"net"`
+		ProductOrService  *fhir.CodeableConcept       `json:"productOrService"`
+		ProgramCode       []*fhir.CodeableConcept     `json:"programCode"`
+		Quantity          *fhir.Quantity              `json:"quantity"`
+		Revenue           *fhir.CodeableConcept       `json:"revenue"`
+		Sequence          *fhir.PositiveInt           `json:"sequence"`
+		SubDetail         []*ClaimItemDetailSubDetail `json:"subDetail"`
+		Udi               []*fhir.Reference           `json:"udi"`
+		UnitPrice         *fhir.Money                 `json:"unitPrice"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cid.Category = raw.Category
+	cid.Extension = raw.Extension
+	cid.Factor = raw.Factor
+	cid.ID = raw.ID
+	cid.Modifier = raw.Modifier
+	cid.ModifierExtension = raw.ModifierExtension
+	cid.Net = raw.Net
+	cid.ProductOrService = raw.ProductOrService
+	cid.ProgramCode = raw.ProgramCode
+	cid.Quantity = raw.Quantity
+	cid.Revenue = raw.Revenue
+	cid.Sequence = raw.Sequence
+	cid.SubDetail = raw.SubDetail
+	cid.Udi = raw.Udi
+	cid.UnitPrice = raw.UnitPrice
+	return nil
+}
+
+var _ json.Marshaler = (*ClaimItemDetail)(nil)
+var _ json.Unmarshaler = (*ClaimItemDetail)(nil)
+
+func (cidsd *ClaimItemDetailSubDetail) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cidsd *ClaimItemDetailSubDetail) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Category  *fhir.CodeableConcept `json:"category"`
+		Extension []*fhir.Extension     `json:"extension"`
+		Factor    *fhir.Decimal         `json:"factor"`
+
+		ID                string                  `json:"id"`
+		Modifier          []*fhir.CodeableConcept `json:"modifier"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Net               *fhir.Money             `json:"net"`
+		ProductOrService  *fhir.CodeableConcept   `json:"productOrService"`
+		ProgramCode       []*fhir.CodeableConcept `json:"programCode"`
+		Quantity          *fhir.Quantity          `json:"quantity"`
+		Revenue           *fhir.CodeableConcept   `json:"revenue"`
+		Sequence          *fhir.PositiveInt       `json:"sequence"`
+		Udi               []*fhir.Reference       `json:"udi"`
+		UnitPrice         *fhir.Money             `json:"unitPrice"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cidsd.Category = raw.Category
+	cidsd.Extension = raw.Extension
+	cidsd.Factor = raw.Factor
+	cidsd.ID = raw.ID
+	cidsd.Modifier = raw.Modifier
+	cidsd.ModifierExtension = raw.ModifierExtension
+	cidsd.Net = raw.Net
+	cidsd.ProductOrService = raw.ProductOrService
+	cidsd.ProgramCode = raw.ProgramCode
+	cidsd.Quantity = raw.Quantity
+	cidsd.Revenue = raw.Revenue
+	cidsd.Sequence = raw.Sequence
+	cidsd.Udi = raw.Udi
+	cidsd.UnitPrice = raw.UnitPrice
+	return nil
+}
+
+var _ json.Marshaler = (*ClaimItemDetailSubDetail)(nil)
+var _ json.Unmarshaler = (*ClaimItemDetailSubDetail)(nil)
+
+func (cp *ClaimPayee) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cp *ClaimPayee) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Party             *fhir.Reference       `json:"party"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cp.Extension = raw.Extension
+	cp.ID = raw.ID
+	cp.ModifierExtension = raw.ModifierExtension
+	cp.Party = raw.Party
+	cp.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ClaimPayee)(nil)
+var _ json.Unmarshaler = (*ClaimPayee)(nil)
+
+func (cp *ClaimProcedure) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cp *ClaimProcedure) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Date      *fhir.DateTime    `json:"date"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                       string                  `json:"id"`
+		ModifierExtension        []*fhir.Extension       `json:"modifierExtension"`
+		ProcedureCodeableConcept *fhir.CodeableConcept   `json:"procedureCodeableConcept"`
+		ProcedureReference       *fhir.Reference         `json:"procedureReference"`
+		Sequence                 *fhir.PositiveInt       `json:"sequence"`
+		Type                     []*fhir.CodeableConcept `json:"type"`
+		Udi                      []*fhir.Reference       `json:"udi"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cp.Date = raw.Date
+	cp.Extension = raw.Extension
+	cp.ID = raw.ID
+	cp.ModifierExtension = raw.ModifierExtension
+	cp.Procedure, err = validate.SelectOneOf[fhir.Element]("Claim.procedure.procedure",
+		raw.ProcedureCodeableConcept,
+		raw.ProcedureReference)
+	if err != nil {
+		return err
+	}
+	cp.Sequence = raw.Sequence
+	cp.Type = raw.Type
+	cp.Udi = raw.Udi
+	return nil
+}
+
+var _ json.Marshaler = (*ClaimProcedure)(nil)
+var _ json.Unmarshaler = (*ClaimProcedure)(nil)
+
+func (cr *ClaimRelated) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cr *ClaimRelated) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Claim     *fhir.Reference   `json:"claim"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Reference         *fhir.Identifier      `json:"reference"`
+		Relationship      *fhir.CodeableConcept `json:"relationship"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cr.Claim = raw.Claim
+	cr.Extension = raw.Extension
+	cr.ID = raw.ID
+	cr.ModifierExtension = raw.ModifierExtension
+	cr.Reference = raw.Reference
+	cr.Relationship = raw.Relationship
+	return nil
+}
+
+var _ json.Marshaler = (*ClaimRelated)(nil)
+var _ json.Unmarshaler = (*ClaimRelated)(nil)
+
+func (csi *ClaimSupportingInfo) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (csi *ClaimSupportingInfo) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Category  *fhir.CodeableConcept `json:"category"`
+		Code      *fhir.CodeableConcept `json:"code"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Reason            *fhir.CodeableConcept `json:"reason"`
+		Sequence          *fhir.PositiveInt     `json:"sequence"`
+		TimingDate        *fhir.Date            `json:"timingDate"`
+		TimingPeriod      *fhir.Period          `json:"timingPeriod"`
+		ValueBoolean      *fhir.Boolean         `json:"valueBoolean"`
+		ValueString       *fhir.String          `json:"valueString"`
+		ValueQuantity     *fhir.Quantity        `json:"valueQuantity"`
+		ValueAttachment   *fhir.Attachment      `json:"valueAttachment"`
+		ValueReference    *fhir.Reference       `json:"valueReference"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	csi.Category = raw.Category
+	csi.Code = raw.Code
+	csi.Extension = raw.Extension
+	csi.ID = raw.ID
+	csi.ModifierExtension = raw.ModifierExtension
+	csi.Reason = raw.Reason
+	csi.Sequence = raw.Sequence
+	csi.Timing, err = validate.SelectOneOf[fhir.Element]("Claim.supportingInfo.timing",
+		raw.TimingDate,
+		raw.TimingPeriod)
+	if err != nil {
+		return err
+	}
+	csi.Value, err = validate.SelectOneOf[fhir.Element]("Claim.supportingInfo.value",
+		raw.ValueBoolean,
+		raw.ValueString,
+		raw.ValueQuantity,
+		raw.ValueAttachment,
+		raw.ValueReference)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*ClaimSupportingInfo)(nil)
+var _ json.Unmarshaler = (*ClaimSupportingInfo)(nil)

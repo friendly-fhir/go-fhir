@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for HumanName Type: A human's name with the ability
@@ -149,3 +151,41 @@ func (hn *HumanName) GetUse() *Code {
 	}
 	return hn.Use
 }
+
+func (hn *HumanName) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (hn *HumanName) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*Extension `json:"extension"`
+		Family    *String      `json:"family"`
+		Given     []*String    `json:"given"`
+
+		ID     string    `json:"id"`
+		Period *Period   `json:"period"`
+		Prefix []*String `json:"prefix"`
+		Suffix []*String `json:"suffix"`
+		Text   *String   `json:"text"`
+		Use    *Code     `json:"use"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	hn.Extension = raw.Extension
+	hn.Family = raw.Family
+	hn.Given = raw.Given
+	hn.ID = raw.ID
+	hn.Period = raw.Period
+	hn.Prefix = raw.Prefix
+	hn.Suffix = raw.Suffix
+	hn.Text = raw.Text
+	hn.Use = raw.Use
+	return nil
+}
+
+var _ json.Marshaler = (*HumanName)(nil)
+var _ json.Unmarshaler = (*HumanName)(nil)

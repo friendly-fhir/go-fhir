@@ -6,8 +6,11 @@
 package provenance
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Provenance of a resource is a record that describes entities and processes
@@ -548,3 +551,129 @@ func (pe *ProvenanceEntity) GetWhat() *fhir.Reference {
 	}
 	return pe.What
 }
+
+func (p *Provenance) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (p *Provenance) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Activity  *fhir.CodeableConcept `json:"activity"`
+		Agent     []*ProvenanceAgent    `json:"agent"`
+		Contained []fhir.Resource       `json:"contained"`
+		Entity    []*ProvenanceEntity   `json:"entity"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string                  `json:"id"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Language          *fhir.Code              `json:"language"`
+		Location          *fhir.Reference         `json:"location"`
+		Meta              *fhir.Meta              `json:"meta"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		OccurredPeriod    *fhir.Period            `json:"occurredPeriod"`
+		OccurredDateTime  *fhir.DateTime          `json:"occurredDateTime"`
+		Policy            []*fhir.URI             `json:"policy"`
+		Reason            []*fhir.CodeableConcept `json:"reason"`
+		Recorded          *fhir.Instant           `json:"recorded"`
+		Signature         []*fhir.Signature       `json:"signature"`
+		Target            []*fhir.Reference       `json:"target"`
+		Text              *fhir.Narrative         `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	p.Activity = raw.Activity
+	p.Agent = raw.Agent
+	p.Contained = raw.Contained
+	p.Entity = raw.Entity
+	p.Extension = raw.Extension
+	p.ID = raw.ID
+	p.ImplicitRules = raw.ImplicitRules
+	p.Language = raw.Language
+	p.Location = raw.Location
+	p.Meta = raw.Meta
+	p.ModifierExtension = raw.ModifierExtension
+	p.Occurred, err = validate.SelectOneOf[fhir.Element]("Provenance.occurred",
+		raw.OccurredPeriod,
+		raw.OccurredDateTime)
+	if err != nil {
+		return err
+	}
+	p.Policy = raw.Policy
+	p.Reason = raw.Reason
+	p.Recorded = raw.Recorded
+	p.Signature = raw.Signature
+	p.Target = raw.Target
+	p.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*Provenance)(nil)
+var _ json.Unmarshaler = (*Provenance)(nil)
+
+func (pa *ProvenanceAgent) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pa *ProvenanceAgent) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                  `json:"id"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		OnBehalfOf        *fhir.Reference         `json:"onBehalfOf"`
+		Role              []*fhir.CodeableConcept `json:"role"`
+		Type              *fhir.CodeableConcept   `json:"type"`
+		Who               *fhir.Reference         `json:"who"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pa.Extension = raw.Extension
+	pa.ID = raw.ID
+	pa.ModifierExtension = raw.ModifierExtension
+	pa.OnBehalfOf = raw.OnBehalfOf
+	pa.Role = raw.Role
+	pa.Type = raw.Type
+	pa.Who = raw.Who
+	return nil
+}
+
+var _ json.Marshaler = (*ProvenanceAgent)(nil)
+var _ json.Unmarshaler = (*ProvenanceAgent)(nil)
+
+func (pe *ProvenanceEntity) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pe *ProvenanceEntity) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Role              *fhir.Code        `json:"role"`
+		What              *fhir.Reference   `json:"what"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pe.Extension = raw.Extension
+	pe.ID = raw.ID
+	pe.ModifierExtension = raw.ModifierExtension
+	pe.Role = raw.Role
+	pe.What = raw.What
+	return nil
+}
+
+var _ json.Marshaler = (*ProvenanceEntity)(nil)
+var _ json.Unmarshaler = (*ProvenanceEntity)(nil)

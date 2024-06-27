@@ -6,8 +6,11 @@
 package researchelementdefinition
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The ResearchElementDefinition resource describes a "PICO" element that
@@ -1034,3 +1037,191 @@ func (redc *ResearchElementDefinitionCharacteristic) GetUsageContext() []*fhir.U
 	}
 	return redc.UsageContext
 }
+
+func (red *ResearchElementDefinition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (red *ResearchElementDefinition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ApprovalDate    *fhir.Date                                 `json:"approvalDate"`
+		Author          []*fhir.ContactDetail                      `json:"author"`
+		Characteristic  []*ResearchElementDefinitionCharacteristic `json:"characteristic"`
+		Comment         []*fhir.String                             `json:"comment"`
+		Contact         []*fhir.ContactDetail                      `json:"contact"`
+		Contained       []fhir.Resource                            `json:"contained"`
+		Copyright       *fhir.Markdown                             `json:"copyright"`
+		Date            *fhir.DateTime                             `json:"date"`
+		Description     *fhir.Markdown                             `json:"description"`
+		Editor          []*fhir.ContactDetail                      `json:"editor"`
+		EffectivePeriod *fhir.Period                               `json:"effectivePeriod"`
+		Endorser        []*fhir.ContactDetail                      `json:"endorser"`
+		Experimental    *fhir.Boolean                              `json:"experimental"`
+		Extension       []*fhir.Extension                          `json:"extension"`
+
+		ID                     string                  `json:"id"`
+		Identifier             []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules          *fhir.URI               `json:"implicitRules"`
+		Jurisdiction           []*fhir.CodeableConcept `json:"jurisdiction"`
+		Language               *fhir.Code              `json:"language"`
+		LastReviewDate         *fhir.Date              `json:"lastReviewDate"`
+		Library                []*fhir.Canonical       `json:"library"`
+		Meta                   *fhir.Meta              `json:"meta"`
+		ModifierExtension      []*fhir.Extension       `json:"modifierExtension"`
+		Name                   *fhir.String            `json:"name"`
+		Publisher              *fhir.String            `json:"publisher"`
+		Purpose                *fhir.Markdown          `json:"purpose"`
+		RelatedArtifact        []*fhir.RelatedArtifact `json:"relatedArtifact"`
+		Reviewer               []*fhir.ContactDetail   `json:"reviewer"`
+		ShortTitle             *fhir.String            `json:"shortTitle"`
+		Status                 *fhir.Code              `json:"status"`
+		SubjectCodeableConcept *fhir.CodeableConcept   `json:"subjectCodeableConcept"`
+		SubjectReference       *fhir.Reference         `json:"subjectReference"`
+		Subtitle               *fhir.String            `json:"subtitle"`
+		Text                   *fhir.Narrative         `json:"text"`
+		Title                  *fhir.String            `json:"title"`
+		Topic                  []*fhir.CodeableConcept `json:"topic"`
+		Type                   *fhir.Code              `json:"type"`
+		URL                    *fhir.URI               `json:"url"`
+		Usage                  *fhir.String            `json:"usage"`
+		UseContext             []*fhir.UsageContext    `json:"useContext"`
+		VariableType           *fhir.Code              `json:"variableType"`
+		Version                *fhir.String            `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	red.ApprovalDate = raw.ApprovalDate
+	red.Author = raw.Author
+	red.Characteristic = raw.Characteristic
+	red.Comment = raw.Comment
+	red.Contact = raw.Contact
+	red.Contained = raw.Contained
+	red.Copyright = raw.Copyright
+	red.Date = raw.Date
+	red.Description = raw.Description
+	red.Editor = raw.Editor
+	red.EffectivePeriod = raw.EffectivePeriod
+	red.Endorser = raw.Endorser
+	red.Experimental = raw.Experimental
+	red.Extension = raw.Extension
+	red.ID = raw.ID
+	red.Identifier = raw.Identifier
+	red.ImplicitRules = raw.ImplicitRules
+	red.Jurisdiction = raw.Jurisdiction
+	red.Language = raw.Language
+	red.LastReviewDate = raw.LastReviewDate
+	red.Library = raw.Library
+	red.Meta = raw.Meta
+	red.ModifierExtension = raw.ModifierExtension
+	red.Name = raw.Name
+	red.Publisher = raw.Publisher
+	red.Purpose = raw.Purpose
+	red.RelatedArtifact = raw.RelatedArtifact
+	red.Reviewer = raw.Reviewer
+	red.ShortTitle = raw.ShortTitle
+	red.Status = raw.Status
+	red.Subject, err = validate.SelectOneOf[fhir.Element]("ResearchElementDefinition.subject",
+		raw.SubjectCodeableConcept,
+		raw.SubjectReference)
+	if err != nil {
+		return err
+	}
+	red.Subtitle = raw.Subtitle
+	red.Text = raw.Text
+	red.Title = raw.Title
+	red.Topic = raw.Topic
+	red.Type = raw.Type
+	red.URL = raw.URL
+	red.Usage = raw.Usage
+	red.UseContext = raw.UseContext
+	red.VariableType = raw.VariableType
+	red.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*ResearchElementDefinition)(nil)
+var _ json.Unmarshaler = (*ResearchElementDefinition)(nil)
+
+func (redc *ResearchElementDefinitionCharacteristic) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (redc *ResearchElementDefinitionCharacteristic) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		DefinitionCodeableConcept *fhir.CodeableConcept `json:"definitionCodeableConcept"`
+		DefinitionCanonical       *fhir.Canonical       `json:"definitionCanonical"`
+		DefinitionExpression      *fhir.Expression      `json:"definitionExpression"`
+		DefinitionDataRequirement *fhir.DataRequirement `json:"definitionDataRequirement"`
+		Exclude                   *fhir.Boolean         `json:"exclude"`
+		Extension                 []*fhir.Extension     `json:"extension"`
+
+		ID                                string                `json:"id"`
+		ModifierExtension                 []*fhir.Extension     `json:"modifierExtension"`
+		ParticipantEffectiveDescription   *fhir.String          `json:"participantEffectiveDescription"`
+		ParticipantEffectiveGroupMeasure  *fhir.Code            `json:"participantEffectiveGroupMeasure"`
+		ParticipantEffectiveTimeFromStart *fhir.Duration        `json:"participantEffectiveTimeFromStart"`
+		ParticipantEffectiveDateTime      *fhir.DateTime        `json:"participantEffectiveDateTime"`
+		ParticipantEffectivePeriod        *fhir.Period          `json:"participantEffectivePeriod"`
+		ParticipantEffectiveDuration      *fhir.Duration        `json:"participantEffectiveDuration"`
+		ParticipantEffectiveTiming        *fhir.Timing          `json:"participantEffectiveTiming"`
+		StudyEffectiveDescription         *fhir.String          `json:"studyEffectiveDescription"`
+		StudyEffectiveGroupMeasure        *fhir.Code            `json:"studyEffectiveGroupMeasure"`
+		StudyEffectiveTimeFromStart       *fhir.Duration        `json:"studyEffectiveTimeFromStart"`
+		StudyEffectiveDateTime            *fhir.DateTime        `json:"studyEffectiveDateTime"`
+		StudyEffectivePeriod              *fhir.Period          `json:"studyEffectivePeriod"`
+		StudyEffectiveDuration            *fhir.Duration        `json:"studyEffectiveDuration"`
+		StudyEffectiveTiming              *fhir.Timing          `json:"studyEffectiveTiming"`
+		UnitOfMeasure                     *fhir.CodeableConcept `json:"unitOfMeasure"`
+		UsageContext                      []*fhir.UsageContext  `json:"usageContext"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	redc.Definition, err = validate.SelectOneOf[fhir.Element]("ResearchElementDefinition.characteristic.definition",
+		raw.DefinitionCodeableConcept,
+		raw.DefinitionCanonical,
+		raw.DefinitionExpression,
+		raw.DefinitionDataRequirement)
+	if err != nil {
+		return err
+	}
+	redc.Exclude = raw.Exclude
+	redc.Extension = raw.Extension
+	redc.ID = raw.ID
+	redc.ModifierExtension = raw.ModifierExtension
+	redc.ParticipantEffectiveDescription = raw.ParticipantEffectiveDescription
+	redc.ParticipantEffectiveGroupMeasure = raw.ParticipantEffectiveGroupMeasure
+	redc.ParticipantEffectiveTimeFromStart = raw.ParticipantEffectiveTimeFromStart
+	redc.ParticipantEffective, err = validate.SelectOneOf[fhir.Element]("ResearchElementDefinition.characteristic.participantEffective",
+		raw.ParticipantEffectiveDateTime,
+		raw.ParticipantEffectivePeriod,
+		raw.ParticipantEffectiveDuration,
+		raw.ParticipantEffectiveTiming)
+	if err != nil {
+		return err
+	}
+	redc.StudyEffectiveDescription = raw.StudyEffectiveDescription
+	redc.StudyEffectiveGroupMeasure = raw.StudyEffectiveGroupMeasure
+	redc.StudyEffectiveTimeFromStart = raw.StudyEffectiveTimeFromStart
+	redc.StudyEffective, err = validate.SelectOneOf[fhir.Element]("ResearchElementDefinition.characteristic.studyEffective",
+		raw.StudyEffectiveDateTime,
+		raw.StudyEffectivePeriod,
+		raw.StudyEffectiveDuration,
+		raw.StudyEffectiveTiming)
+	if err != nil {
+		return err
+	}
+	redc.UnitOfMeasure = raw.UnitOfMeasure
+	redc.UsageContext = raw.UsageContext
+	return nil
+}
+
+var _ json.Marshaler = (*ResearchElementDefinitionCharacteristic)(nil)
+var _ json.Unmarshaler = (*ResearchElementDefinitionCharacteristic)(nil)

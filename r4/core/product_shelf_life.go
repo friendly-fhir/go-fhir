@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for ProductShelfLife Type: The shelf-life and
@@ -142,3 +144,37 @@ func (psl *ProductShelfLife) GetType() *CodeableConcept {
 	}
 	return psl.Type
 }
+
+func (psl *ProductShelfLife) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (psl *ProductShelfLife) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*Extension `json:"extension"`
+
+		ID                           string             `json:"id"`
+		Identifier                   *Identifier        `json:"identifier"`
+		ModifierExtension            []*Extension       `json:"modifierExtension"`
+		Period                       *Quantity          `json:"period"`
+		SpecialPrecautionsForStorage []*CodeableConcept `json:"specialPrecautionsForStorage"`
+		Type                         *CodeableConcept   `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	psl.Extension = raw.Extension
+	psl.ID = raw.ID
+	psl.Identifier = raw.Identifier
+	psl.ModifierExtension = raw.ModifierExtension
+	psl.Period = raw.Period
+	psl.SpecialPrecautionsForStorage = raw.SpecialPrecautionsForStorage
+	psl.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ProductShelfLife)(nil)
+var _ json.Unmarshaler = (*ProductShelfLife)(nil)

@@ -6,8 +6,11 @@
 package substancereferenceinformation
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Todo.
@@ -769,3 +772,197 @@ func (srit *SubstanceReferenceInformationTarget) GetType() *fhir.CodeableConcept
 	}
 	return srit.Type
 }
+
+func (sri *SubstanceReferenceInformation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sri *SubstanceReferenceInformation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Classification []*SubstanceReferenceInformationClassification `json:"classification"`
+		Comment        *fhir.String                                   `json:"comment"`
+		Contained      []fhir.Resource                                `json:"contained"`
+		Extension      []*fhir.Extension                              `json:"extension"`
+		Gene           []*SubstanceReferenceInformationGene           `json:"gene"`
+		GeneElement    []*SubstanceReferenceInformationGeneElement    `json:"geneElement"`
+
+		ID                string                                 `json:"id"`
+		ImplicitRules     *fhir.URI                              `json:"implicitRules"`
+		Language          *fhir.Code                             `json:"language"`
+		Meta              *fhir.Meta                             `json:"meta"`
+		ModifierExtension []*fhir.Extension                      `json:"modifierExtension"`
+		Target            []*SubstanceReferenceInformationTarget `json:"target"`
+		Text              *fhir.Narrative                        `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sri.Classification = raw.Classification
+	sri.Comment = raw.Comment
+	sri.Contained = raw.Contained
+	sri.Extension = raw.Extension
+	sri.Gene = raw.Gene
+	sri.GeneElement = raw.GeneElement
+	sri.ID = raw.ID
+	sri.ImplicitRules = raw.ImplicitRules
+	sri.Language = raw.Language
+	sri.Meta = raw.Meta
+	sri.ModifierExtension = raw.ModifierExtension
+	sri.Target = raw.Target
+	sri.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceReferenceInformation)(nil)
+var _ json.Unmarshaler = (*SubstanceReferenceInformation)(nil)
+
+func (sric *SubstanceReferenceInformationClassification) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sric *SubstanceReferenceInformationClassification) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Classification *fhir.CodeableConcept `json:"classification"`
+		Domain         *fhir.CodeableConcept `json:"domain"`
+		Extension      []*fhir.Extension     `json:"extension"`
+
+		ID                string                  `json:"id"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Source            []*fhir.Reference       `json:"source"`
+		Subtype           []*fhir.CodeableConcept `json:"subtype"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sric.Classification = raw.Classification
+	sric.Domain = raw.Domain
+	sric.Extension = raw.Extension
+	sric.ID = raw.ID
+	sric.ModifierExtension = raw.ModifierExtension
+	sric.Source = raw.Source
+	sric.Subtype = raw.Subtype
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceReferenceInformationClassification)(nil)
+var _ json.Unmarshaler = (*SubstanceReferenceInformationClassification)(nil)
+
+func (srig *SubstanceReferenceInformationGene) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (srig *SubstanceReferenceInformationGene) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension          []*fhir.Extension     `json:"extension"`
+		Gene               *fhir.CodeableConcept `json:"gene"`
+		GeneSequenceOrigin *fhir.CodeableConcept `json:"geneSequenceOrigin"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Source            []*fhir.Reference `json:"source"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	srig.Extension = raw.Extension
+	srig.Gene = raw.Gene
+	srig.GeneSequenceOrigin = raw.GeneSequenceOrigin
+	srig.ID = raw.ID
+	srig.ModifierExtension = raw.ModifierExtension
+	srig.Source = raw.Source
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceReferenceInformationGene)(nil)
+var _ json.Unmarshaler = (*SubstanceReferenceInformationGene)(nil)
+
+func (srige *SubstanceReferenceInformationGeneElement) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (srige *SubstanceReferenceInformationGeneElement) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Element   *fhir.Identifier  `json:"element"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Source            []*fhir.Reference     `json:"source"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	srige.Element = raw.Element
+	srige.Extension = raw.Extension
+	srige.ID = raw.ID
+	srige.ModifierExtension = raw.ModifierExtension
+	srige.Source = raw.Source
+	srige.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceReferenceInformationGeneElement)(nil)
+var _ json.Unmarshaler = (*SubstanceReferenceInformationGeneElement)(nil)
+
+func (srit *SubstanceReferenceInformationTarget) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (srit *SubstanceReferenceInformationTarget) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AmountType     *fhir.CodeableConcept `json:"amountType"`
+		AmountQuantity *fhir.Quantity        `json:"amountQuantity"`
+		AmountRange    *fhir.Range           `json:"amountRange"`
+		AmountString   *fhir.String          `json:"amountString"`
+		Extension      []*fhir.Extension     `json:"extension"`
+
+		ID                string                `json:"id"`
+		Interaction       *fhir.CodeableConcept `json:"interaction"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Organism          *fhir.CodeableConcept `json:"organism"`
+		OrganismType      *fhir.CodeableConcept `json:"organismType"`
+		Source            []*fhir.Reference     `json:"source"`
+		Target            *fhir.Identifier      `json:"target"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	srit.AmountType = raw.AmountType
+	srit.Amount, err = validate.SelectOneOf[fhir.Element]("SubstanceReferenceInformation.target.amount",
+		raw.AmountQuantity,
+		raw.AmountRange,
+		raw.AmountString)
+	if err != nil {
+		return err
+	}
+	srit.Extension = raw.Extension
+	srit.ID = raw.ID
+	srit.Interaction = raw.Interaction
+	srit.ModifierExtension = raw.ModifierExtension
+	srit.Organism = raw.Organism
+	srit.OrganismType = raw.OrganismType
+	srit.Source = raw.Source
+	srit.Target = raw.Target
+	srit.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceReferenceInformationTarget)(nil)
+var _ json.Unmarshaler = (*SubstanceReferenceInformationTarget)(nil)

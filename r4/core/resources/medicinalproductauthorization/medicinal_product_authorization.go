@@ -6,8 +6,11 @@
 package medicinalproductauthorization
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The regulatory authorization of a medicinal product.
@@ -637,3 +640,145 @@ func (mpap *MedicinalProductAuthorizationProcedure) GetType() *fhir.CodeableConc
 	}
 	return mpap.Type
 }
+
+func (mpa *MedicinalProductAuthorization) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpa *MedicinalProductAuthorization) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contained                []fhir.Resource         `json:"contained"`
+		Country                  []*fhir.CodeableConcept `json:"country"`
+		DataExclusivityPeriod    *fhir.Period            `json:"dataExclusivityPeriod"`
+		DateOfFirstAuthorization *fhir.DateTime          `json:"dateOfFirstAuthorization"`
+		Extension                []*fhir.Extension       `json:"extension"`
+		Holder                   *fhir.Reference         `json:"holder"`
+
+		ID                          string                                                      `json:"id"`
+		Identifier                  []*fhir.Identifier                                          `json:"identifier"`
+		ImplicitRules               *fhir.URI                                                   `json:"implicitRules"`
+		InternationalBirthDate      *fhir.DateTime                                              `json:"internationalBirthDate"`
+		Jurisdiction                []*fhir.CodeableConcept                                     `json:"jurisdiction"`
+		JurisdictionalAuthorization []*MedicinalProductAuthorizationJurisdictionalAuthorization `json:"jurisdictionalAuthorization"`
+		Language                    *fhir.Code                                                  `json:"language"`
+		LegalBasis                  *fhir.CodeableConcept                                       `json:"legalBasis"`
+		Meta                        *fhir.Meta                                                  `json:"meta"`
+		ModifierExtension           []*fhir.Extension                                           `json:"modifierExtension"`
+		Procedure                   *MedicinalProductAuthorizationProcedure                     `json:"procedure"`
+		Regulator                   *fhir.Reference                                             `json:"regulator"`
+		RestoreDate                 *fhir.DateTime                                              `json:"restoreDate"`
+		Status                      *fhir.CodeableConcept                                       `json:"status"`
+		StatusDate                  *fhir.DateTime                                              `json:"statusDate"`
+		Subject                     *fhir.Reference                                             `json:"subject"`
+		Text                        *fhir.Narrative                                             `json:"text"`
+		ValidityPeriod              *fhir.Period                                                `json:"validityPeriod"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpa.Contained = raw.Contained
+	mpa.Country = raw.Country
+	mpa.DataExclusivityPeriod = raw.DataExclusivityPeriod
+	mpa.DateOfFirstAuthorization = raw.DateOfFirstAuthorization
+	mpa.Extension = raw.Extension
+	mpa.Holder = raw.Holder
+	mpa.ID = raw.ID
+	mpa.Identifier = raw.Identifier
+	mpa.ImplicitRules = raw.ImplicitRules
+	mpa.InternationalBirthDate = raw.InternationalBirthDate
+	mpa.Jurisdiction = raw.Jurisdiction
+	mpa.JurisdictionalAuthorization = raw.JurisdictionalAuthorization
+	mpa.Language = raw.Language
+	mpa.LegalBasis = raw.LegalBasis
+	mpa.Meta = raw.Meta
+	mpa.ModifierExtension = raw.ModifierExtension
+	mpa.Procedure = raw.Procedure
+	mpa.Regulator = raw.Regulator
+	mpa.RestoreDate = raw.RestoreDate
+	mpa.Status = raw.Status
+	mpa.StatusDate = raw.StatusDate
+	mpa.Subject = raw.Subject
+	mpa.Text = raw.Text
+	mpa.ValidityPeriod = raw.ValidityPeriod
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductAuthorization)(nil)
+var _ json.Unmarshaler = (*MedicinalProductAuthorization)(nil)
+
+func (mpaja *MedicinalProductAuthorizationJurisdictionalAuthorization) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpaja *MedicinalProductAuthorizationJurisdictionalAuthorization) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Country   *fhir.CodeableConcept `json:"country"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                  string                  `json:"id"`
+		Identifier          []*fhir.Identifier      `json:"identifier"`
+		Jurisdiction        []*fhir.CodeableConcept `json:"jurisdiction"`
+		LegalStatusOfSupply *fhir.CodeableConcept   `json:"legalStatusOfSupply"`
+		ModifierExtension   []*fhir.Extension       `json:"modifierExtension"`
+		ValidityPeriod      *fhir.Period            `json:"validityPeriod"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpaja.Country = raw.Country
+	mpaja.Extension = raw.Extension
+	mpaja.ID = raw.ID
+	mpaja.Identifier = raw.Identifier
+	mpaja.Jurisdiction = raw.Jurisdiction
+	mpaja.LegalStatusOfSupply = raw.LegalStatusOfSupply
+	mpaja.ModifierExtension = raw.ModifierExtension
+	mpaja.ValidityPeriod = raw.ValidityPeriod
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductAuthorizationJurisdictionalAuthorization)(nil)
+var _ json.Unmarshaler = (*MedicinalProductAuthorizationJurisdictionalAuthorization)(nil)
+
+func (mpap *MedicinalProductAuthorizationProcedure) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpap *MedicinalProductAuthorizationProcedure) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		DatePeriod   *fhir.Period      `json:"datePeriod"`
+		DateDateTime *fhir.DateTime    `json:"dateDateTime"`
+		Extension    []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		Identifier        *fhir.Identifier      `json:"identifier"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpap.Date, err = validate.SelectOneOf[fhir.Element]("MedicinalProductAuthorization.procedure.date",
+		raw.DatePeriod,
+		raw.DateDateTime)
+	if err != nil {
+		return err
+	}
+	mpap.Extension = raw.Extension
+	mpap.ID = raw.ID
+	mpap.Identifier = raw.Identifier
+	mpap.ModifierExtension = raw.ModifierExtension
+	mpap.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductAuthorizationProcedure)(nil)
+var _ json.Unmarshaler = (*MedicinalProductAuthorizationProcedure)(nil)

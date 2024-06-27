@@ -6,8 +6,11 @@
 package requestgroup
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A group of related requests that can be used to capture intended activities
@@ -1019,3 +1022,219 @@ func (rgara *RequestGroupActionRelatedAction) GetRelationship() *fhir.Code {
 	}
 	return rgara.Relationship
 }
+
+func (rg *RequestGroup) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (rg *RequestGroup) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Action          []*RequestGroupAction `json:"action"`
+		Author          *fhir.Reference       `json:"author"`
+		AuthoredOn      *fhir.DateTime        `json:"authoredOn"`
+		BasedOn         []*fhir.Reference     `json:"basedOn"`
+		Code            *fhir.CodeableConcept `json:"code"`
+		Contained       []fhir.Resource       `json:"contained"`
+		Encounter       *fhir.Reference       `json:"encounter"`
+		Extension       []*fhir.Extension     `json:"extension"`
+		GroupIdentifier *fhir.Identifier      `json:"groupIdentifier"`
+
+		ID                    string                  `json:"id"`
+		Identifier            []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules         *fhir.URI               `json:"implicitRules"`
+		InstantiatesCanonical []*fhir.Canonical       `json:"instantiatesCanonical"`
+		InstantiatesURI       []*fhir.URI             `json:"instantiatesUri"`
+		Intent                *fhir.Code              `json:"intent"`
+		Language              *fhir.Code              `json:"language"`
+		Meta                  *fhir.Meta              `json:"meta"`
+		ModifierExtension     []*fhir.Extension       `json:"modifierExtension"`
+		Note                  []*fhir.Annotation      `json:"note"`
+		Priority              *fhir.Code              `json:"priority"`
+		ReasonCode            []*fhir.CodeableConcept `json:"reasonCode"`
+		ReasonReference       []*fhir.Reference       `json:"reasonReference"`
+		Replaces              []*fhir.Reference       `json:"replaces"`
+		Status                *fhir.Code              `json:"status"`
+		Subject               *fhir.Reference         `json:"subject"`
+		Text                  *fhir.Narrative         `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	rg.Action = raw.Action
+	rg.Author = raw.Author
+	rg.AuthoredOn = raw.AuthoredOn
+	rg.BasedOn = raw.BasedOn
+	rg.Code = raw.Code
+	rg.Contained = raw.Contained
+	rg.Encounter = raw.Encounter
+	rg.Extension = raw.Extension
+	rg.GroupIdentifier = raw.GroupIdentifier
+	rg.ID = raw.ID
+	rg.Identifier = raw.Identifier
+	rg.ImplicitRules = raw.ImplicitRules
+	rg.InstantiatesCanonical = raw.InstantiatesCanonical
+	rg.InstantiatesURI = raw.InstantiatesURI
+	rg.Intent = raw.Intent
+	rg.Language = raw.Language
+	rg.Meta = raw.Meta
+	rg.ModifierExtension = raw.ModifierExtension
+	rg.Note = raw.Note
+	rg.Priority = raw.Priority
+	rg.ReasonCode = raw.ReasonCode
+	rg.ReasonReference = raw.ReasonReference
+	rg.Replaces = raw.Replaces
+	rg.Status = raw.Status
+	rg.Subject = raw.Subject
+	rg.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*RequestGroup)(nil)
+var _ json.Unmarshaler = (*RequestGroup)(nil)
+
+func (rga *RequestGroupAction) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (rga *RequestGroupAction) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		CardinalityBehavior *fhir.Code                     `json:"cardinalityBehavior"`
+		Code                []*fhir.CodeableConcept        `json:"code"`
+		Condition           []*RequestGroupActionCondition `json:"condition"`
+		Description         *fhir.String                   `json:"description"`
+		Documentation       []*fhir.RelatedArtifact        `json:"documentation"`
+		Extension           []*fhir.Extension              `json:"extension"`
+		GroupingBehavior    *fhir.Code                     `json:"groupingBehavior"`
+
+		ID                string                             `json:"id"`
+		ModifierExtension []*fhir.Extension                  `json:"modifierExtension"`
+		Participant       []*fhir.Reference                  `json:"participant"`
+		PrecheckBehavior  *fhir.Code                         `json:"precheckBehavior"`
+		Prefix            *fhir.String                       `json:"prefix"`
+		Priority          *fhir.Code                         `json:"priority"`
+		RelatedAction     []*RequestGroupActionRelatedAction `json:"relatedAction"`
+		RequiredBehavior  *fhir.Code                         `json:"requiredBehavior"`
+		Resource          *fhir.Reference                    `json:"resource"`
+		SelectionBehavior *fhir.Code                         `json:"selectionBehavior"`
+		TextEquivalent    *fhir.String                       `json:"textEquivalent"`
+		TimingDateTime    *fhir.DateTime                     `json:"timingDateTime"`
+		TimingAge         *fhir.Age                          `json:"timingAge"`
+		TimingPeriod      *fhir.Period                       `json:"timingPeriod"`
+		TimingDuration    *fhir.Duration                     `json:"timingDuration"`
+		TimingRange       *fhir.Range                        `json:"timingRange"`
+		TimingTiming      *fhir.Timing                       `json:"timingTiming"`
+		Title             *fhir.String                       `json:"title"`
+		Type              *fhir.CodeableConcept              `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	rga.CardinalityBehavior = raw.CardinalityBehavior
+	rga.Code = raw.Code
+	rga.Condition = raw.Condition
+	rga.Description = raw.Description
+	rga.Documentation = raw.Documentation
+	rga.Extension = raw.Extension
+	rga.GroupingBehavior = raw.GroupingBehavior
+	rga.ID = raw.ID
+	rga.ModifierExtension = raw.ModifierExtension
+	rga.Participant = raw.Participant
+	rga.PrecheckBehavior = raw.PrecheckBehavior
+	rga.Prefix = raw.Prefix
+	rga.Priority = raw.Priority
+	rga.RelatedAction = raw.RelatedAction
+	rga.RequiredBehavior = raw.RequiredBehavior
+	rga.Resource = raw.Resource
+	rga.SelectionBehavior = raw.SelectionBehavior
+	rga.TextEquivalent = raw.TextEquivalent
+	rga.Timing, err = validate.SelectOneOf[fhir.Element]("RequestGroup.action.timing",
+		raw.TimingDateTime,
+		raw.TimingAge,
+		raw.TimingPeriod,
+		raw.TimingDuration,
+		raw.TimingRange,
+		raw.TimingTiming)
+	if err != nil {
+		return err
+	}
+	rga.Title = raw.Title
+	rga.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*RequestGroupAction)(nil)
+var _ json.Unmarshaler = (*RequestGroupAction)(nil)
+
+func (rgac *RequestGroupActionCondition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (rgac *RequestGroupActionCondition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Expression *fhir.Expression  `json:"expression"`
+		Extension  []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Kind              *fhir.Code        `json:"kind"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	rgac.Expression = raw.Expression
+	rgac.Extension = raw.Extension
+	rgac.ID = raw.ID
+	rgac.Kind = raw.Kind
+	rgac.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*RequestGroupActionCondition)(nil)
+var _ json.Unmarshaler = (*RequestGroupActionCondition)(nil)
+
+func (rgara *RequestGroupActionRelatedAction) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (rgara *RequestGroupActionRelatedAction) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ActionID  *fhir.ID          `json:"actionId"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		OffsetDuration    *fhir.Duration    `json:"offsetDuration"`
+		OffsetRange       *fhir.Range       `json:"offsetRange"`
+		Relationship      *fhir.Code        `json:"relationship"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	rgara.ActionID = raw.ActionID
+	rgara.Extension = raw.Extension
+	rgara.ID = raw.ID
+	rgara.ModifierExtension = raw.ModifierExtension
+	rgara.Offset, err = validate.SelectOneOf[fhir.Element]("RequestGroup.action.relatedAction.offset",
+		raw.OffsetDuration,
+		raw.OffsetRange)
+	if err != nil {
+		return err
+	}
+	rgara.Relationship = raw.Relationship
+	return nil
+}
+
+var _ json.Marshaler = (*RequestGroupActionRelatedAction)(nil)
+var _ json.Unmarshaler = (*RequestGroupActionRelatedAction)(nil)

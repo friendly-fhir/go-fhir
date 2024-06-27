@@ -6,8 +6,11 @@
 package devicerequest
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Represents a request for a patient to employ a medical device. The device
@@ -688,3 +691,141 @@ func (drp *DeviceRequestParameter) GetValueBoolean() *fhir.Boolean {
 	}
 	return val
 }
+
+func (dr *DeviceRequest) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (dr *DeviceRequest) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AuthoredOn          *fhir.DateTime        `json:"authoredOn"`
+		BasedOn             []*fhir.Reference     `json:"basedOn"`
+		CodeReference       *fhir.Reference       `json:"codeReference"`
+		CodeCodeableConcept *fhir.CodeableConcept `json:"codeCodeableConcept"`
+		Contained           []fhir.Resource       `json:"contained"`
+		Encounter           *fhir.Reference       `json:"encounter"`
+		Extension           []*fhir.Extension     `json:"extension"`
+		GroupIdentifier     *fhir.Identifier      `json:"groupIdentifier"`
+
+		ID                    string                    `json:"id"`
+		Identifier            []*fhir.Identifier        `json:"identifier"`
+		ImplicitRules         *fhir.URI                 `json:"implicitRules"`
+		InstantiatesCanonical []*fhir.Canonical         `json:"instantiatesCanonical"`
+		InstantiatesURI       []*fhir.URI               `json:"instantiatesUri"`
+		Insurance             []*fhir.Reference         `json:"insurance"`
+		Intent                *fhir.Code                `json:"intent"`
+		Language              *fhir.Code                `json:"language"`
+		Meta                  *fhir.Meta                `json:"meta"`
+		ModifierExtension     []*fhir.Extension         `json:"modifierExtension"`
+		Note                  []*fhir.Annotation        `json:"note"`
+		OccurrenceDateTime    *fhir.DateTime            `json:"occurrenceDateTime"`
+		OccurrencePeriod      *fhir.Period              `json:"occurrencePeriod"`
+		OccurrenceTiming      *fhir.Timing              `json:"occurrenceTiming"`
+		Parameter             []*DeviceRequestParameter `json:"parameter"`
+		Performer             *fhir.Reference           `json:"performer"`
+		PerformerType         *fhir.CodeableConcept     `json:"performerType"`
+		PriorRequest          []*fhir.Reference         `json:"priorRequest"`
+		Priority              *fhir.Code                `json:"priority"`
+		ReasonCode            []*fhir.CodeableConcept   `json:"reasonCode"`
+		ReasonReference       []*fhir.Reference         `json:"reasonReference"`
+		RelevantHistory       []*fhir.Reference         `json:"relevantHistory"`
+		Requester             *fhir.Reference           `json:"requester"`
+		Status                *fhir.Code                `json:"status"`
+		Subject               *fhir.Reference           `json:"subject"`
+		SupportingInfo        []*fhir.Reference         `json:"supportingInfo"`
+		Text                  *fhir.Narrative           `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	dr.AuthoredOn = raw.AuthoredOn
+	dr.BasedOn = raw.BasedOn
+	dr.Code, err = validate.SelectOneOf[fhir.Element]("DeviceRequest.code",
+		raw.CodeReference,
+		raw.CodeCodeableConcept)
+	if err != nil {
+		return err
+	}
+	dr.Contained = raw.Contained
+	dr.Encounter = raw.Encounter
+	dr.Extension = raw.Extension
+	dr.GroupIdentifier = raw.GroupIdentifier
+	dr.ID = raw.ID
+	dr.Identifier = raw.Identifier
+	dr.ImplicitRules = raw.ImplicitRules
+	dr.InstantiatesCanonical = raw.InstantiatesCanonical
+	dr.InstantiatesURI = raw.InstantiatesURI
+	dr.Insurance = raw.Insurance
+	dr.Intent = raw.Intent
+	dr.Language = raw.Language
+	dr.Meta = raw.Meta
+	dr.ModifierExtension = raw.ModifierExtension
+	dr.Note = raw.Note
+	dr.Occurrence, err = validate.SelectOneOf[fhir.Element]("DeviceRequest.occurrence",
+		raw.OccurrenceDateTime,
+		raw.OccurrencePeriod,
+		raw.OccurrenceTiming)
+	if err != nil {
+		return err
+	}
+	dr.Parameter = raw.Parameter
+	dr.Performer = raw.Performer
+	dr.PerformerType = raw.PerformerType
+	dr.PriorRequest = raw.PriorRequest
+	dr.Priority = raw.Priority
+	dr.ReasonCode = raw.ReasonCode
+	dr.ReasonReference = raw.ReasonReference
+	dr.RelevantHistory = raw.RelevantHistory
+	dr.Requester = raw.Requester
+	dr.Status = raw.Status
+	dr.Subject = raw.Subject
+	dr.SupportingInfo = raw.SupportingInfo
+	dr.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*DeviceRequest)(nil)
+var _ json.Unmarshaler = (*DeviceRequest)(nil)
+
+func (drp *DeviceRequestParameter) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (drp *DeviceRequestParameter) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.CodeableConcept `json:"code"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                   string                `json:"id"`
+		ModifierExtension    []*fhir.Extension     `json:"modifierExtension"`
+		ValueCodeableConcept *fhir.CodeableConcept `json:"valueCodeableConcept"`
+		ValueQuantity        *fhir.Quantity        `json:"valueQuantity"`
+		ValueRange           *fhir.Range           `json:"valueRange"`
+		ValueBoolean         *fhir.Boolean         `json:"valueBoolean"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	drp.Code = raw.Code
+	drp.Extension = raw.Extension
+	drp.ID = raw.ID
+	drp.ModifierExtension = raw.ModifierExtension
+	drp.Value, err = validate.SelectOneOf[fhir.Element]("DeviceRequest.parameter.value",
+		raw.ValueCodeableConcept,
+		raw.ValueQuantity,
+		raw.ValueRange,
+		raw.ValueBoolean)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*DeviceRequestParameter)(nil)
+var _ json.Unmarshaler = (*DeviceRequestParameter)(nil)

@@ -6,8 +6,11 @@
 package deviceusestatement
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A record of a device being used by a patient where the record is the result
@@ -371,3 +374,73 @@ func (dus *DeviceUseStatement) GetTimingDateTime() *fhir.DateTime {
 	}
 	return val
 }
+
+func (dus *DeviceUseStatement) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (dus *DeviceUseStatement) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		BasedOn     []*fhir.Reference     `json:"basedOn"`
+		BodySite    *fhir.CodeableConcept `json:"bodySite"`
+		Contained   []fhir.Resource       `json:"contained"`
+		DerivedFrom []*fhir.Reference     `json:"derivedFrom"`
+		Device      *fhir.Reference       `json:"device"`
+		Extension   []*fhir.Extension     `json:"extension"`
+
+		ID                string                  `json:"id"`
+		Identifier        []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Language          *fhir.Code              `json:"language"`
+		Meta              *fhir.Meta              `json:"meta"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Note              []*fhir.Annotation      `json:"note"`
+		ReasonCode        []*fhir.CodeableConcept `json:"reasonCode"`
+		ReasonReference   []*fhir.Reference       `json:"reasonReference"`
+		RecordedOn        *fhir.DateTime          `json:"recordedOn"`
+		Source            *fhir.Reference         `json:"source"`
+		Status            *fhir.Code              `json:"status"`
+		Subject           *fhir.Reference         `json:"subject"`
+		Text              *fhir.Narrative         `json:"text"`
+		TimingTiming      *fhir.Timing            `json:"timingTiming"`
+		TimingPeriod      *fhir.Period            `json:"timingPeriod"`
+		TimingDateTime    *fhir.DateTime          `json:"timingDateTime"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	dus.BasedOn = raw.BasedOn
+	dus.BodySite = raw.BodySite
+	dus.Contained = raw.Contained
+	dus.DerivedFrom = raw.DerivedFrom
+	dus.Device = raw.Device
+	dus.Extension = raw.Extension
+	dus.ID = raw.ID
+	dus.Identifier = raw.Identifier
+	dus.ImplicitRules = raw.ImplicitRules
+	dus.Language = raw.Language
+	dus.Meta = raw.Meta
+	dus.ModifierExtension = raw.ModifierExtension
+	dus.Note = raw.Note
+	dus.ReasonCode = raw.ReasonCode
+	dus.ReasonReference = raw.ReasonReference
+	dus.RecordedOn = raw.RecordedOn
+	dus.Source = raw.Source
+	dus.Status = raw.Status
+	dus.Subject = raw.Subject
+	dus.Text = raw.Text
+	dus.Timing, err = validate.SelectOneOf[fhir.Element]("DeviceUseStatement.timing",
+		raw.TimingTiming,
+		raw.TimingPeriod,
+		raw.TimingDateTime)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*DeviceUseStatement)(nil)
+var _ json.Unmarshaler = (*DeviceUseStatement)(nil)

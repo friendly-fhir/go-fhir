@@ -6,8 +6,11 @@
 package substancespecification
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The detailed description of a substance, typically at a level beyond what is
@@ -1954,3 +1957,477 @@ func (sssr *SubstanceSpecificationStructureRepresentation) GetType() *fhir.Codea
 	}
 	return sssr.Type
 }
+
+func (ss *SubstanceSpecification) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ss *SubstanceSpecification) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code        []*SubstanceSpecificationCode `json:"code"`
+		Comment     *fhir.String                  `json:"comment"`
+		Contained   []fhir.Resource               `json:"contained"`
+		Description *fhir.String                  `json:"description"`
+		Domain      *fhir.CodeableConcept         `json:"domain"`
+		Extension   []*fhir.Extension             `json:"extension"`
+
+		ID                   string                                `json:"id"`
+		Identifier           *fhir.Identifier                      `json:"identifier"`
+		ImplicitRules        *fhir.URI                             `json:"implicitRules"`
+		Language             *fhir.Code                            `json:"language"`
+		Meta                 *fhir.Meta                            `json:"meta"`
+		ModifierExtension    []*fhir.Extension                     `json:"modifierExtension"`
+		Moiety               []*SubstanceSpecificationMoiety       `json:"moiety"`
+		Name                 []*SubstanceSpecificationName         `json:"name"`
+		NucleicAcid          *fhir.Reference                       `json:"nucleicAcid"`
+		Polymer              *fhir.Reference                       `json:"polymer"`
+		Property             []*SubstanceSpecificationProperty     `json:"property"`
+		Protein              *fhir.Reference                       `json:"protein"`
+		ReferenceInformation *fhir.Reference                       `json:"referenceInformation"`
+		Relationship         []*SubstanceSpecificationRelationship `json:"relationship"`
+		Source               []*fhir.Reference                     `json:"source"`
+		SourceMaterial       *fhir.Reference                       `json:"sourceMaterial"`
+		Status               *fhir.CodeableConcept                 `json:"status"`
+		Structure            *SubstanceSpecificationStructure      `json:"structure"`
+		Text                 *fhir.Narrative                       `json:"text"`
+		Type                 *fhir.CodeableConcept                 `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ss.Code = raw.Code
+	ss.Comment = raw.Comment
+	ss.Contained = raw.Contained
+	ss.Description = raw.Description
+	ss.Domain = raw.Domain
+	ss.Extension = raw.Extension
+	ss.ID = raw.ID
+	ss.Identifier = raw.Identifier
+	ss.ImplicitRules = raw.ImplicitRules
+	ss.Language = raw.Language
+	ss.Meta = raw.Meta
+	ss.ModifierExtension = raw.ModifierExtension
+	ss.Moiety = raw.Moiety
+	ss.Name = raw.Name
+	ss.NucleicAcid = raw.NucleicAcid
+	ss.Polymer = raw.Polymer
+	ss.Property = raw.Property
+	ss.Protein = raw.Protein
+	ss.ReferenceInformation = raw.ReferenceInformation
+	ss.Relationship = raw.Relationship
+	ss.Source = raw.Source
+	ss.SourceMaterial = raw.SourceMaterial
+	ss.Status = raw.Status
+	ss.Structure = raw.Structure
+	ss.Text = raw.Text
+	ss.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceSpecification)(nil)
+var _ json.Unmarshaler = (*SubstanceSpecification)(nil)
+
+func (ssc *SubstanceSpecificationCode) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ssc *SubstanceSpecificationCode) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.CodeableConcept `json:"code"`
+		Comment   *fhir.String          `json:"comment"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Source            []*fhir.Reference     `json:"source"`
+		Status            *fhir.CodeableConcept `json:"status"`
+		StatusDate        *fhir.DateTime        `json:"statusDate"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ssc.Code = raw.Code
+	ssc.Comment = raw.Comment
+	ssc.Extension = raw.Extension
+	ssc.ID = raw.ID
+	ssc.ModifierExtension = raw.ModifierExtension
+	ssc.Source = raw.Source
+	ssc.Status = raw.Status
+	ssc.StatusDate = raw.StatusDate
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceSpecificationCode)(nil)
+var _ json.Unmarshaler = (*SubstanceSpecificationCode)(nil)
+
+func (ssm *SubstanceSpecificationMoiety) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ssm *SubstanceSpecificationMoiety) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AmountQuantity *fhir.Quantity    `json:"amountQuantity"`
+		AmountString   *fhir.String      `json:"amountString"`
+		Extension      []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		Identifier        *fhir.Identifier      `json:"identifier"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		MolecularFormula  *fhir.String          `json:"molecularFormula"`
+		Name              *fhir.String          `json:"name"`
+		OpticalActivity   *fhir.CodeableConcept `json:"opticalActivity"`
+		Role              *fhir.CodeableConcept `json:"role"`
+		Stereochemistry   *fhir.CodeableConcept `json:"stereochemistry"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ssm.Amount, err = validate.SelectOneOf[fhir.Element]("SubstanceSpecification.moiety.amount",
+		raw.AmountQuantity,
+		raw.AmountString)
+	if err != nil {
+		return err
+	}
+	ssm.Extension = raw.Extension
+	ssm.ID = raw.ID
+	ssm.Identifier = raw.Identifier
+	ssm.ModifierExtension = raw.ModifierExtension
+	ssm.MolecularFormula = raw.MolecularFormula
+	ssm.Name = raw.Name
+	ssm.OpticalActivity = raw.OpticalActivity
+	ssm.Role = raw.Role
+	ssm.Stereochemistry = raw.Stereochemistry
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceSpecificationMoiety)(nil)
+var _ json.Unmarshaler = (*SubstanceSpecificationMoiety)(nil)
+
+func (ssn *SubstanceSpecificationName) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ssn *SubstanceSpecificationName) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Domain    []*fhir.CodeableConcept `json:"domain"`
+		Extension []*fhir.Extension       `json:"extension"`
+
+		ID                string                                `json:"id"`
+		Jurisdiction      []*fhir.CodeableConcept               `json:"jurisdiction"`
+		Language          []*fhir.CodeableConcept               `json:"language"`
+		ModifierExtension []*fhir.Extension                     `json:"modifierExtension"`
+		Name              *fhir.String                          `json:"name"`
+		Official          []*SubstanceSpecificationNameOfficial `json:"official"`
+		Preferred         *fhir.Boolean                         `json:"preferred"`
+		Source            []*fhir.Reference                     `json:"source"`
+		Status            *fhir.CodeableConcept                 `json:"status"`
+		Type              *fhir.CodeableConcept                 `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ssn.Domain = raw.Domain
+	ssn.Extension = raw.Extension
+	ssn.ID = raw.ID
+	ssn.Jurisdiction = raw.Jurisdiction
+	ssn.Language = raw.Language
+	ssn.ModifierExtension = raw.ModifierExtension
+	ssn.Name = raw.Name
+	ssn.Official = raw.Official
+	ssn.Preferred = raw.Preferred
+	ssn.Source = raw.Source
+	ssn.Status = raw.Status
+	ssn.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceSpecificationName)(nil)
+var _ json.Unmarshaler = (*SubstanceSpecificationName)(nil)
+
+func (ssno *SubstanceSpecificationNameOfficial) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ssno *SubstanceSpecificationNameOfficial) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Authority *fhir.CodeableConcept `json:"authority"`
+		Date      *fhir.DateTime        `json:"date"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Status            *fhir.CodeableConcept `json:"status"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ssno.Authority = raw.Authority
+	ssno.Date = raw.Date
+	ssno.Extension = raw.Extension
+	ssno.ID = raw.ID
+	ssno.ModifierExtension = raw.ModifierExtension
+	ssno.Status = raw.Status
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceSpecificationNameOfficial)(nil)
+var _ json.Unmarshaler = (*SubstanceSpecificationNameOfficial)(nil)
+
+func (ssp *SubstanceSpecificationProperty) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ssp *SubstanceSpecificationProperty) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AmountQuantity                   *fhir.Quantity        `json:"amountQuantity"`
+		AmountString                     *fhir.String          `json:"amountString"`
+		Category                         *fhir.CodeableConcept `json:"category"`
+		Code                             *fhir.CodeableConcept `json:"code"`
+		DefiningSubstanceReference       *fhir.Reference       `json:"definingSubstanceReference"`
+		DefiningSubstanceCodeableConcept *fhir.CodeableConcept `json:"definingSubstanceCodeableConcept"`
+		Extension                        []*fhir.Extension     `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Parameters        *fhir.String      `json:"parameters"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ssp.Amount, err = validate.SelectOneOf[fhir.Element]("SubstanceSpecification.property.amount",
+		raw.AmountQuantity,
+		raw.AmountString)
+	if err != nil {
+		return err
+	}
+	ssp.Category = raw.Category
+	ssp.Code = raw.Code
+	ssp.DefiningSubstance, err = validate.SelectOneOf[fhir.Element]("SubstanceSpecification.property.definingSubstance",
+		raw.DefiningSubstanceReference,
+		raw.DefiningSubstanceCodeableConcept)
+	if err != nil {
+		return err
+	}
+	ssp.Extension = raw.Extension
+	ssp.ID = raw.ID
+	ssp.ModifierExtension = raw.ModifierExtension
+	ssp.Parameters = raw.Parameters
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceSpecificationProperty)(nil)
+var _ json.Unmarshaler = (*SubstanceSpecificationProperty)(nil)
+
+func (ssr *SubstanceSpecificationRelationship) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ssr *SubstanceSpecificationRelationship) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AmountRatioLowLimit *fhir.Ratio           `json:"amountRatioLowLimit"`
+		AmountType          *fhir.CodeableConcept `json:"amountType"`
+		AmountQuantity      *fhir.Quantity        `json:"amountQuantity"`
+		AmountRange         *fhir.Range           `json:"amountRange"`
+		AmountRatio         *fhir.Ratio           `json:"amountRatio"`
+		AmountString        *fhir.String          `json:"amountString"`
+		Extension           []*fhir.Extension     `json:"extension"`
+
+		ID                       string                `json:"id"`
+		IsDefining               *fhir.Boolean         `json:"isDefining"`
+		ModifierExtension        []*fhir.Extension     `json:"modifierExtension"`
+		Relationship             *fhir.CodeableConcept `json:"relationship"`
+		Source                   []*fhir.Reference     `json:"source"`
+		SubstanceReference       *fhir.Reference       `json:"substanceReference"`
+		SubstanceCodeableConcept *fhir.CodeableConcept `json:"substanceCodeableConcept"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ssr.AmountRatioLowLimit = raw.AmountRatioLowLimit
+	ssr.AmountType = raw.AmountType
+	ssr.Amount, err = validate.SelectOneOf[fhir.Element]("SubstanceSpecification.relationship.amount",
+		raw.AmountQuantity,
+		raw.AmountRange,
+		raw.AmountRatio,
+		raw.AmountString)
+	if err != nil {
+		return err
+	}
+	ssr.Extension = raw.Extension
+	ssr.ID = raw.ID
+	ssr.IsDefining = raw.IsDefining
+	ssr.ModifierExtension = raw.ModifierExtension
+	ssr.Relationship = raw.Relationship
+	ssr.Source = raw.Source
+	ssr.Substance, err = validate.SelectOneOf[fhir.Element]("SubstanceSpecification.relationship.substance",
+		raw.SubstanceReference,
+		raw.SubstanceCodeableConcept)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceSpecificationRelationship)(nil)
+var _ json.Unmarshaler = (*SubstanceSpecificationRelationship)(nil)
+
+func (sss *SubstanceSpecificationStructure) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sss *SubstanceSpecificationStructure) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                       string                                           `json:"id"`
+		Isotope                  []*SubstanceSpecificationStructureIsotope        `json:"isotope"`
+		ModifierExtension        []*fhir.Extension                                `json:"modifierExtension"`
+		MolecularFormula         *fhir.String                                     `json:"molecularFormula"`
+		MolecularFormulaByMoiety *fhir.String                                     `json:"molecularFormulaByMoiety"`
+		OpticalActivity          *fhir.CodeableConcept                            `json:"opticalActivity"`
+		Representation           []*SubstanceSpecificationStructureRepresentation `json:"representation"`
+		Source                   []*fhir.Reference                                `json:"source"`
+		Stereochemistry          *fhir.CodeableConcept                            `json:"stereochemistry"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sss.Extension = raw.Extension
+	sss.ID = raw.ID
+	sss.Isotope = raw.Isotope
+	sss.ModifierExtension = raw.ModifierExtension
+	sss.MolecularFormula = raw.MolecularFormula
+	sss.MolecularFormulaByMoiety = raw.MolecularFormulaByMoiety
+	sss.OpticalActivity = raw.OpticalActivity
+	sss.Representation = raw.Representation
+	sss.Source = raw.Source
+	sss.Stereochemistry = raw.Stereochemistry
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceSpecificationStructure)(nil)
+var _ json.Unmarshaler = (*SubstanceSpecificationStructure)(nil)
+
+func (sssi *SubstanceSpecificationStructureIsotope) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sssi *SubstanceSpecificationStructureIsotope) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+		HalfLife  *fhir.Quantity    `json:"halfLife"`
+
+		ID                string                                                 `json:"id"`
+		Identifier        *fhir.Identifier                                       `json:"identifier"`
+		ModifierExtension []*fhir.Extension                                      `json:"modifierExtension"`
+		MolecularWeight   *SubstanceSpecificationStructureIsotopeMolecularWeight `json:"molecularWeight"`
+		Name              *fhir.CodeableConcept                                  `json:"name"`
+		Substitution      *fhir.CodeableConcept                                  `json:"substitution"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sssi.Extension = raw.Extension
+	sssi.HalfLife = raw.HalfLife
+	sssi.ID = raw.ID
+	sssi.Identifier = raw.Identifier
+	sssi.ModifierExtension = raw.ModifierExtension
+	sssi.MolecularWeight = raw.MolecularWeight
+	sssi.Name = raw.Name
+	sssi.Substitution = raw.Substitution
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceSpecificationStructureIsotope)(nil)
+var _ json.Unmarshaler = (*SubstanceSpecificationStructureIsotope)(nil)
+
+func (sssimw *SubstanceSpecificationStructureIsotopeMolecularWeight) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sssimw *SubstanceSpecificationStructureIsotopeMolecularWeight) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Amount    *fhir.Quantity    `json:"amount"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		Method            *fhir.CodeableConcept `json:"method"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sssimw.Amount = raw.Amount
+	sssimw.Extension = raw.Extension
+	sssimw.ID = raw.ID
+	sssimw.Method = raw.Method
+	sssimw.ModifierExtension = raw.ModifierExtension
+	sssimw.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceSpecificationStructureIsotopeMolecularWeight)(nil)
+var _ json.Unmarshaler = (*SubstanceSpecificationStructureIsotopeMolecularWeight)(nil)
+
+func (sssr *SubstanceSpecificationStructureRepresentation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sssr *SubstanceSpecificationStructureRepresentation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Attachment *fhir.Attachment  `json:"attachment"`
+		Extension  []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Representation    *fhir.String          `json:"representation"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sssr.Attachment = raw.Attachment
+	sssr.Extension = raw.Extension
+	sssr.ID = raw.ID
+	sssr.ModifierExtension = raw.ModifierExtension
+	sssr.Representation = raw.Representation
+	sssr.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceSpecificationStructureRepresentation)(nil)
+var _ json.Unmarshaler = (*SubstanceSpecificationStructureRepresentation)(nil)

@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Identifier Type: An identifier - identifies
@@ -135,3 +137,39 @@ func (i *Identifier) GetValue() *String {
 	}
 	return i.Value
 }
+
+func (i *Identifier) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (i *Identifier) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Assigner  *Reference   `json:"assigner"`
+		Extension []*Extension `json:"extension"`
+
+		ID     string           `json:"id"`
+		Period *Period          `json:"period"`
+		System *URI             `json:"system"`
+		Type   *CodeableConcept `json:"type"`
+		Use    *Code            `json:"use"`
+		Value  *String          `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	i.Assigner = raw.Assigner
+	i.Extension = raw.Extension
+	i.ID = raw.ID
+	i.Period = raw.Period
+	i.System = raw.System
+	i.Type = raw.Type
+	i.Use = raw.Use
+	i.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*Identifier)(nil)
+var _ json.Unmarshaler = (*Identifier)(nil)

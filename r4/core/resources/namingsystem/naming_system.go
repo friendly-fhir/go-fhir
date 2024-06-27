@@ -8,6 +8,8 @@ package namingsystem
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A curated namespace that issues unique symbols within that namespace for the
@@ -487,3 +489,101 @@ func (nsui *NamingSystemUniqueID) GetValue() *fhir.String {
 	}
 	return nsui.Value
 }
+
+func (ns *NamingSystem) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ns *NamingSystem) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contact     []*fhir.ContactDetail `json:"contact"`
+		Contained   []fhir.Resource       `json:"contained"`
+		Date        *fhir.DateTime        `json:"date"`
+		Description *fhir.Markdown        `json:"description"`
+		Extension   []*fhir.Extension     `json:"extension"`
+
+		ID                string                  `json:"id"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Jurisdiction      []*fhir.CodeableConcept `json:"jurisdiction"`
+		Kind              *fhir.Code              `json:"kind"`
+		Language          *fhir.Code              `json:"language"`
+		Meta              *fhir.Meta              `json:"meta"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Name              *fhir.String            `json:"name"`
+		Publisher         *fhir.String            `json:"publisher"`
+		Responsible       *fhir.String            `json:"responsible"`
+		Status            *fhir.Code              `json:"status"`
+		Text              *fhir.Narrative         `json:"text"`
+		Type              *fhir.CodeableConcept   `json:"type"`
+		UniqueID          []*NamingSystemUniqueID `json:"uniqueId"`
+		Usage             *fhir.String            `json:"usage"`
+		UseContext        []*fhir.UsageContext    `json:"useContext"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ns.Contact = raw.Contact
+	ns.Contained = raw.Contained
+	ns.Date = raw.Date
+	ns.Description = raw.Description
+	ns.Extension = raw.Extension
+	ns.ID = raw.ID
+	ns.ImplicitRules = raw.ImplicitRules
+	ns.Jurisdiction = raw.Jurisdiction
+	ns.Kind = raw.Kind
+	ns.Language = raw.Language
+	ns.Meta = raw.Meta
+	ns.ModifierExtension = raw.ModifierExtension
+	ns.Name = raw.Name
+	ns.Publisher = raw.Publisher
+	ns.Responsible = raw.Responsible
+	ns.Status = raw.Status
+	ns.Text = raw.Text
+	ns.Type = raw.Type
+	ns.UniqueID = raw.UniqueID
+	ns.Usage = raw.Usage
+	ns.UseContext = raw.UseContext
+	return nil
+}
+
+var _ json.Marshaler = (*NamingSystem)(nil)
+var _ json.Unmarshaler = (*NamingSystem)(nil)
+
+func (nsui *NamingSystemUniqueID) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (nsui *NamingSystemUniqueID) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Comment   *fhir.String      `json:"comment"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Period            *fhir.Period      `json:"period"`
+		Preferred         *fhir.Boolean     `json:"preferred"`
+		Type              *fhir.Code        `json:"type"`
+		Value             *fhir.String      `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	nsui.Comment = raw.Comment
+	nsui.Extension = raw.Extension
+	nsui.ID = raw.ID
+	nsui.ModifierExtension = raw.ModifierExtension
+	nsui.Period = raw.Period
+	nsui.Preferred = raw.Preferred
+	nsui.Type = raw.Type
+	nsui.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*NamingSystemUniqueID)(nil)
+var _ json.Unmarshaler = (*NamingSystemUniqueID)(nil)

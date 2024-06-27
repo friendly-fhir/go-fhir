@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for SampledData Type: A series of measurements
@@ -154,3 +156,41 @@ func (sd *SampledData) GetUpperLimit() *Decimal {
 	}
 	return sd.UpperLimit
 }
+
+func (sd *SampledData) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sd *SampledData) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Data       *String      `json:"data"`
+		Dimensions *PositiveInt `json:"dimensions"`
+		Extension  []*Extension `json:"extension"`
+		Factor     *Decimal     `json:"factor"`
+
+		ID         string    `json:"id"`
+		LowerLimit *Decimal  `json:"lowerLimit"`
+		Origin     *Quantity `json:"origin"`
+		Period     *Decimal  `json:"period"`
+		UpperLimit *Decimal  `json:"upperLimit"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sd.Data = raw.Data
+	sd.Dimensions = raw.Dimensions
+	sd.Extension = raw.Extension
+	sd.Factor = raw.Factor
+	sd.ID = raw.ID
+	sd.LowerLimit = raw.LowerLimit
+	sd.Origin = raw.Origin
+	sd.Period = raw.Period
+	sd.UpperLimit = raw.UpperLimit
+	return nil
+}
+
+var _ json.Marshaler = (*SampledData)(nil)
+var _ json.Unmarshaler = (*SampledData)(nil)

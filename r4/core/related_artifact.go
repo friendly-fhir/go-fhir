@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for RelatedArtifact Type: Related artifacts such as
@@ -149,3 +151,41 @@ func (ra *RelatedArtifact) GetURL() *URL {
 	}
 	return ra.URL
 }
+
+func (ra *RelatedArtifact) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ra *RelatedArtifact) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Citation  *Markdown    `json:"citation"`
+		Display   *String      `json:"display"`
+		Document  *Attachment  `json:"document"`
+		Extension []*Extension `json:"extension"`
+
+		ID       string     `json:"id"`
+		Label    *String    `json:"label"`
+		Resource *Canonical `json:"resource"`
+		Type     *Code      `json:"type"`
+		URL      *URL       `json:"url"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ra.Citation = raw.Citation
+	ra.Display = raw.Display
+	ra.Document = raw.Document
+	ra.Extension = raw.Extension
+	ra.ID = raw.ID
+	ra.Label = raw.Label
+	ra.Resource = raw.Resource
+	ra.Type = raw.Type
+	ra.URL = raw.URL
+	return nil
+}
+
+var _ json.Marshaler = (*RelatedArtifact)(nil)
+var _ json.Unmarshaler = (*RelatedArtifact)(nil)

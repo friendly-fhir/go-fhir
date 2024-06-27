@@ -6,7 +6,10 @@
 package fhir
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for UsageContext Type: Specifies
@@ -132,3 +135,41 @@ func (uc *UsageContext) GetValueReference() *Reference {
 	}
 	return val
 }
+
+func (uc *UsageContext) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (uc *UsageContext) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *Coding      `json:"code"`
+		Extension []*Extension `json:"extension"`
+
+		ID                   string           `json:"id"`
+		ValueCodeableConcept *CodeableConcept `json:"valueCodeableConcept"`
+		ValueQuantity        *Quantity        `json:"valueQuantity"`
+		ValueRange           *Range           `json:"valueRange"`
+		ValueReference       *Reference       `json:"valueReference"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	uc.Code = raw.Code
+	uc.Extension = raw.Extension
+	uc.ID = raw.ID
+	uc.Value, err = validate.SelectOneOf[Element]("UsageContext.value",
+		raw.ValueCodeableConcept,
+		raw.ValueQuantity,
+		raw.ValueRange,
+		raw.ValueReference)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*UsageContext)(nil)
+var _ json.Unmarshaler = (*UsageContext)(nil)

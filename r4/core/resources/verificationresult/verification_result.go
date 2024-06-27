@@ -8,6 +8,8 @@ package verificationresult
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Describes validation requirements, source(s), status and dates for one or
@@ -796,3 +798,181 @@ func (vrv *VerificationResultValidator) GetOrganization() *fhir.Reference {
 	}
 	return vrv.Organization
 }
+
+func (vr *VerificationResult) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (vr *VerificationResult) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Attestation   *VerificationResultAttestation `json:"attestation"`
+		Contained     []fhir.Resource                `json:"contained"`
+		Extension     []*fhir.Extension              `json:"extension"`
+		FailureAction *fhir.CodeableConcept          `json:"failureAction"`
+		Frequency     *fhir.Timing                   `json:"frequency"`
+
+		ID                string                             `json:"id"`
+		ImplicitRules     *fhir.URI                          `json:"implicitRules"`
+		Language          *fhir.Code                         `json:"language"`
+		LastPerformed     *fhir.DateTime                     `json:"lastPerformed"`
+		Meta              *fhir.Meta                         `json:"meta"`
+		ModifierExtension []*fhir.Extension                  `json:"modifierExtension"`
+		Need              *fhir.CodeableConcept              `json:"need"`
+		NextScheduled     *fhir.Date                         `json:"nextScheduled"`
+		PrimarySource     []*VerificationResultPrimarySource `json:"primarySource"`
+		Status            *fhir.Code                         `json:"status"`
+		StatusDate        *fhir.DateTime                     `json:"statusDate"`
+		Target            []*fhir.Reference                  `json:"target"`
+		TargetLocation    []*fhir.String                     `json:"targetLocation"`
+		Text              *fhir.Narrative                    `json:"text"`
+		ValidationProcess []*fhir.CodeableConcept            `json:"validationProcess"`
+		ValidationType    *fhir.CodeableConcept              `json:"validationType"`
+		Validator         []*VerificationResultValidator     `json:"validator"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	vr.Attestation = raw.Attestation
+	vr.Contained = raw.Contained
+	vr.Extension = raw.Extension
+	vr.FailureAction = raw.FailureAction
+	vr.Frequency = raw.Frequency
+	vr.ID = raw.ID
+	vr.ImplicitRules = raw.ImplicitRules
+	vr.Language = raw.Language
+	vr.LastPerformed = raw.LastPerformed
+	vr.Meta = raw.Meta
+	vr.ModifierExtension = raw.ModifierExtension
+	vr.Need = raw.Need
+	vr.NextScheduled = raw.NextScheduled
+	vr.PrimarySource = raw.PrimarySource
+	vr.Status = raw.Status
+	vr.StatusDate = raw.StatusDate
+	vr.Target = raw.Target
+	vr.TargetLocation = raw.TargetLocation
+	vr.Text = raw.Text
+	vr.ValidationProcess = raw.ValidationProcess
+	vr.ValidationType = raw.ValidationType
+	vr.Validator = raw.Validator
+	return nil
+}
+
+var _ json.Marshaler = (*VerificationResult)(nil)
+var _ json.Unmarshaler = (*VerificationResult)(nil)
+
+func (vra *VerificationResultAttestation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (vra *VerificationResultAttestation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		CommunicationMethod *fhir.CodeableConcept `json:"communicationMethod"`
+		Date                *fhir.Date            `json:"date"`
+		Extension           []*fhir.Extension     `json:"extension"`
+
+		ID                        string            `json:"id"`
+		ModifierExtension         []*fhir.Extension `json:"modifierExtension"`
+		OnBehalfOf                *fhir.Reference   `json:"onBehalfOf"`
+		ProxyIdentityCertificate  *fhir.String      `json:"proxyIdentityCertificate"`
+		ProxySignature            *fhir.Signature   `json:"proxySignature"`
+		SourceIdentityCertificate *fhir.String      `json:"sourceIdentityCertificate"`
+		SourceSignature           *fhir.Signature   `json:"sourceSignature"`
+		Who                       *fhir.Reference   `json:"who"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	vra.CommunicationMethod = raw.CommunicationMethod
+	vra.Date = raw.Date
+	vra.Extension = raw.Extension
+	vra.ID = raw.ID
+	vra.ModifierExtension = raw.ModifierExtension
+	vra.OnBehalfOf = raw.OnBehalfOf
+	vra.ProxyIdentityCertificate = raw.ProxyIdentityCertificate
+	vra.ProxySignature = raw.ProxySignature
+	vra.SourceIdentityCertificate = raw.SourceIdentityCertificate
+	vra.SourceSignature = raw.SourceSignature
+	vra.Who = raw.Who
+	return nil
+}
+
+var _ json.Marshaler = (*VerificationResultAttestation)(nil)
+var _ json.Unmarshaler = (*VerificationResultAttestation)(nil)
+
+func (vrps *VerificationResultPrimarySource) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (vrps *VerificationResultPrimarySource) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		CanPushUpdates      *fhir.CodeableConcept   `json:"canPushUpdates"`
+		CommunicationMethod []*fhir.CodeableConcept `json:"communicationMethod"`
+		Extension           []*fhir.Extension       `json:"extension"`
+
+		ID                string                  `json:"id"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		PushTypeAvailable []*fhir.CodeableConcept `json:"pushTypeAvailable"`
+		Type              []*fhir.CodeableConcept `json:"type"`
+		ValidationDate    *fhir.DateTime          `json:"validationDate"`
+		ValidationStatus  *fhir.CodeableConcept   `json:"validationStatus"`
+		Who               *fhir.Reference         `json:"who"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	vrps.CanPushUpdates = raw.CanPushUpdates
+	vrps.CommunicationMethod = raw.CommunicationMethod
+	vrps.Extension = raw.Extension
+	vrps.ID = raw.ID
+	vrps.ModifierExtension = raw.ModifierExtension
+	vrps.PushTypeAvailable = raw.PushTypeAvailable
+	vrps.Type = raw.Type
+	vrps.ValidationDate = raw.ValidationDate
+	vrps.ValidationStatus = raw.ValidationStatus
+	vrps.Who = raw.Who
+	return nil
+}
+
+var _ json.Marshaler = (*VerificationResultPrimarySource)(nil)
+var _ json.Unmarshaler = (*VerificationResultPrimarySource)(nil)
+
+func (vrv *VerificationResultValidator) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (vrv *VerificationResultValidator) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AttestationSignature *fhir.Signature   `json:"attestationSignature"`
+		Extension            []*fhir.Extension `json:"extension"`
+
+		ID                  string            `json:"id"`
+		IdentityCertificate *fhir.String      `json:"identityCertificate"`
+		ModifierExtension   []*fhir.Extension `json:"modifierExtension"`
+		Organization        *fhir.Reference   `json:"organization"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	vrv.AttestationSignature = raw.AttestationSignature
+	vrv.Extension = raw.Extension
+	vrv.ID = raw.ID
+	vrv.IdentityCertificate = raw.IdentityCertificate
+	vrv.ModifierExtension = raw.ModifierExtension
+	vrv.Organization = raw.Organization
+	return nil
+}
+
+var _ json.Marshaler = (*VerificationResultValidator)(nil)
+var _ json.Unmarshaler = (*VerificationResultValidator)(nil)

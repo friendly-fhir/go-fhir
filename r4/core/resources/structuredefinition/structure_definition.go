@@ -8,6 +8,8 @@ package structuredefinition
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A definition of a FHIR structure. This resource is used to describe the
@@ -953,3 +955,213 @@ func (sds *StructureDefinitionSnapshot) GetModifierExtension() []*fhir.Extension
 	}
 	return sds.ModifierExtension
 }
+
+func (sd *StructureDefinition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sd *StructureDefinition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Abstract         *fhir.Boolean                    `json:"abstract"`
+		BaseDefinition   *fhir.Canonical                  `json:"baseDefinition"`
+		Contact          []*fhir.ContactDetail            `json:"contact"`
+		Contained        []fhir.Resource                  `json:"contained"`
+		Context          []*StructureDefinitionContext    `json:"context"`
+		ContextInvariant []*fhir.String                   `json:"contextInvariant"`
+		Copyright        *fhir.Markdown                   `json:"copyright"`
+		Date             *fhir.DateTime                   `json:"date"`
+		Derivation       *fhir.Code                       `json:"derivation"`
+		Description      *fhir.Markdown                   `json:"description"`
+		Differential     *StructureDefinitionDifferential `json:"differential"`
+		Experimental     *fhir.Boolean                    `json:"experimental"`
+		Extension        []*fhir.Extension                `json:"extension"`
+		FhirVersion      *fhir.Code                       `json:"fhirVersion"`
+
+		ID                string                        `json:"id"`
+		Identifier        []*fhir.Identifier            `json:"identifier"`
+		ImplicitRules     *fhir.URI                     `json:"implicitRules"`
+		Jurisdiction      []*fhir.CodeableConcept       `json:"jurisdiction"`
+		Keyword           []*fhir.Coding                `json:"keyword"`
+		Kind              *fhir.Code                    `json:"kind"`
+		Language          *fhir.Code                    `json:"language"`
+		Mapping           []*StructureDefinitionMapping `json:"mapping"`
+		Meta              *fhir.Meta                    `json:"meta"`
+		ModifierExtension []*fhir.Extension             `json:"modifierExtension"`
+		Name              *fhir.String                  `json:"name"`
+		Publisher         *fhir.String                  `json:"publisher"`
+		Purpose           *fhir.Markdown                `json:"purpose"`
+		Snapshot          *StructureDefinitionSnapshot  `json:"snapshot"`
+		Status            *fhir.Code                    `json:"status"`
+		Text              *fhir.Narrative               `json:"text"`
+		Title             *fhir.String                  `json:"title"`
+		Type              *fhir.URI                     `json:"type"`
+		URL               *fhir.URI                     `json:"url"`
+		UseContext        []*fhir.UsageContext          `json:"useContext"`
+		Version           *fhir.String                  `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sd.Abstract = raw.Abstract
+	sd.BaseDefinition = raw.BaseDefinition
+	sd.Contact = raw.Contact
+	sd.Contained = raw.Contained
+	sd.Context = raw.Context
+	sd.ContextInvariant = raw.ContextInvariant
+	sd.Copyright = raw.Copyright
+	sd.Date = raw.Date
+	sd.Derivation = raw.Derivation
+	sd.Description = raw.Description
+	sd.Differential = raw.Differential
+	sd.Experimental = raw.Experimental
+	sd.Extension = raw.Extension
+	sd.FhirVersion = raw.FhirVersion
+	sd.ID = raw.ID
+	sd.Identifier = raw.Identifier
+	sd.ImplicitRules = raw.ImplicitRules
+	sd.Jurisdiction = raw.Jurisdiction
+	sd.Keyword = raw.Keyword
+	sd.Kind = raw.Kind
+	sd.Language = raw.Language
+	sd.Mapping = raw.Mapping
+	sd.Meta = raw.Meta
+	sd.ModifierExtension = raw.ModifierExtension
+	sd.Name = raw.Name
+	sd.Publisher = raw.Publisher
+	sd.Purpose = raw.Purpose
+	sd.Snapshot = raw.Snapshot
+	sd.Status = raw.Status
+	sd.Text = raw.Text
+	sd.Title = raw.Title
+	sd.Type = raw.Type
+	sd.URL = raw.URL
+	sd.UseContext = raw.UseContext
+	sd.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*StructureDefinition)(nil)
+var _ json.Unmarshaler = (*StructureDefinition)(nil)
+
+func (sdc *StructureDefinitionContext) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sdc *StructureDefinitionContext) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Expression *fhir.String      `json:"expression"`
+		Extension  []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Type              *fhir.Code        `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sdc.Expression = raw.Expression
+	sdc.Extension = raw.Extension
+	sdc.ID = raw.ID
+	sdc.ModifierExtension = raw.ModifierExtension
+	sdc.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*StructureDefinitionContext)(nil)
+var _ json.Unmarshaler = (*StructureDefinitionContext)(nil)
+
+func (sdd *StructureDefinitionDifferential) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sdd *StructureDefinitionDifferential) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Element   []*fhir.ElementDefinition `json:"element"`
+		Extension []*fhir.Extension         `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sdd.Element = raw.Element
+	sdd.Extension = raw.Extension
+	sdd.ID = raw.ID
+	sdd.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*StructureDefinitionDifferential)(nil)
+var _ json.Unmarshaler = (*StructureDefinitionDifferential)(nil)
+
+func (sdm *StructureDefinitionMapping) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sdm *StructureDefinitionMapping) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Comment   *fhir.String      `json:"comment"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Identity          *fhir.ID          `json:"identity"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.String      `json:"name"`
+		URI               *fhir.URI         `json:"uri"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sdm.Comment = raw.Comment
+	sdm.Extension = raw.Extension
+	sdm.ID = raw.ID
+	sdm.Identity = raw.Identity
+	sdm.ModifierExtension = raw.ModifierExtension
+	sdm.Name = raw.Name
+	sdm.URI = raw.URI
+	return nil
+}
+
+var _ json.Marshaler = (*StructureDefinitionMapping)(nil)
+var _ json.Unmarshaler = (*StructureDefinitionMapping)(nil)
+
+func (sds *StructureDefinitionSnapshot) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sds *StructureDefinitionSnapshot) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Element   []*fhir.ElementDefinition `json:"element"`
+		Extension []*fhir.Extension         `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sds.Element = raw.Element
+	sds.Extension = raw.Extension
+	sds.ID = raw.ID
+	sds.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*StructureDefinitionSnapshot)(nil)
+var _ json.Unmarshaler = (*StructureDefinitionSnapshot)(nil)

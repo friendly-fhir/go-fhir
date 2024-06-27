@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for ParameterDefinition Type: The parameters to the
@@ -151,3 +153,41 @@ func (pd *ParameterDefinition) GetUse() *Code {
 	}
 	return pd.Use
 }
+
+func (pd *ParameterDefinition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pd *ParameterDefinition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Documentation *String      `json:"documentation"`
+		Extension     []*Extension `json:"extension"`
+
+		ID      string     `json:"id"`
+		Max     *String    `json:"max"`
+		Min     *Integer   `json:"min"`
+		Name    *Code      `json:"name"`
+		Profile *Canonical `json:"profile"`
+		Type    *Code      `json:"type"`
+		Use     *Code      `json:"use"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pd.Documentation = raw.Documentation
+	pd.Extension = raw.Extension
+	pd.ID = raw.ID
+	pd.Max = raw.Max
+	pd.Min = raw.Min
+	pd.Name = raw.Name
+	pd.Profile = raw.Profile
+	pd.Type = raw.Type
+	pd.Use = raw.Use
+	return nil
+}
+
+var _ json.Marshaler = (*ParameterDefinition)(nil)
+var _ json.Unmarshaler = (*ParameterDefinition)(nil)

@@ -8,6 +8,8 @@ package documentmanifest
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A collection of documents compiled for a purpose together with metadata that
@@ -426,3 +428,93 @@ func (dmr *DocumentManifestRelated) GetRef() *fhir.Reference {
 	}
 	return dmr.Ref
 }
+
+func (dm *DocumentManifest) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (dm *DocumentManifest) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Author      []*fhir.Reference `json:"author"`
+		Contained   []fhir.Resource   `json:"contained"`
+		Content     []*fhir.Reference `json:"content"`
+		Created     *fhir.DateTime    `json:"created"`
+		Description *fhir.String      `json:"description"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string                     `json:"id"`
+		Identifier        []*fhir.Identifier         `json:"identifier"`
+		ImplicitRules     *fhir.URI                  `json:"implicitRules"`
+		Language          *fhir.Code                 `json:"language"`
+		MasterIdentifier  *fhir.Identifier           `json:"masterIdentifier"`
+		Meta              *fhir.Meta                 `json:"meta"`
+		ModifierExtension []*fhir.Extension          `json:"modifierExtension"`
+		Recipient         []*fhir.Reference          `json:"recipient"`
+		Related           []*DocumentManifestRelated `json:"related"`
+		Source            *fhir.URI                  `json:"source"`
+		Status            *fhir.Code                 `json:"status"`
+		Subject           *fhir.Reference            `json:"subject"`
+		Text              *fhir.Narrative            `json:"text"`
+		Type              *fhir.CodeableConcept      `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	dm.Author = raw.Author
+	dm.Contained = raw.Contained
+	dm.Content = raw.Content
+	dm.Created = raw.Created
+	dm.Description = raw.Description
+	dm.Extension = raw.Extension
+	dm.ID = raw.ID
+	dm.Identifier = raw.Identifier
+	dm.ImplicitRules = raw.ImplicitRules
+	dm.Language = raw.Language
+	dm.MasterIdentifier = raw.MasterIdentifier
+	dm.Meta = raw.Meta
+	dm.ModifierExtension = raw.ModifierExtension
+	dm.Recipient = raw.Recipient
+	dm.Related = raw.Related
+	dm.Source = raw.Source
+	dm.Status = raw.Status
+	dm.Subject = raw.Subject
+	dm.Text = raw.Text
+	dm.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*DocumentManifest)(nil)
+var _ json.Unmarshaler = (*DocumentManifest)(nil)
+
+func (dmr *DocumentManifestRelated) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (dmr *DocumentManifestRelated) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Identifier        *fhir.Identifier  `json:"identifier"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Ref               *fhir.Reference   `json:"ref"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	dmr.Extension = raw.Extension
+	dmr.ID = raw.ID
+	dmr.Identifier = raw.Identifier
+	dmr.ModifierExtension = raw.ModifierExtension
+	dmr.Ref = raw.Ref
+	return nil
+}
+
+var _ json.Marshaler = (*DocumentManifestRelated)(nil)
+var _ json.Unmarshaler = (*DocumentManifestRelated)(nil)

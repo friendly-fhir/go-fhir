@@ -6,8 +6,11 @@
 package medicationknowledge
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Information about a medication that is used to support knowledge.
@@ -2205,3 +2208,601 @@ func (mkrmk *MedicationKnowledgeRelatedMedicationKnowledge) GetType() *fhir.Code
 	}
 	return mkrmk.Type
 }
+
+func (mk *MedicationKnowledge) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mk *MedicationKnowledge) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AdministrationGuidelines []*MedicationKnowledgeAdministrationGuidelines `json:"administrationGuidelines"`
+		Amount                   *fhir.Quantity                                 `json:"amount"`
+		AssociatedMedication     []*fhir.Reference                              `json:"associatedMedication"`
+		Code                     *fhir.CodeableConcept                          `json:"code"`
+		Contained                []fhir.Resource                                `json:"contained"`
+		Contraindication         []*fhir.Reference                              `json:"contraindication"`
+		Cost                     []*MedicationKnowledgeCost                     `json:"cost"`
+		DoseForm                 *fhir.CodeableConcept                          `json:"doseForm"`
+		DrugCharacteristic       []*MedicationKnowledgeDrugCharacteristic       `json:"drugCharacteristic"`
+		Extension                []*fhir.Extension                              `json:"extension"`
+
+		ID                         string                                           `json:"id"`
+		ImplicitRules              *fhir.URI                                        `json:"implicitRules"`
+		Ingredient                 []*MedicationKnowledgeIngredient                 `json:"ingredient"`
+		IntendedRoute              []*fhir.CodeableConcept                          `json:"intendedRoute"`
+		Kinetics                   []*MedicationKnowledgeKinetics                   `json:"kinetics"`
+		Language                   *fhir.Code                                       `json:"language"`
+		Manufacturer               *fhir.Reference                                  `json:"manufacturer"`
+		MedicineClassification     []*MedicationKnowledgeMedicineClassification     `json:"medicineClassification"`
+		Meta                       *fhir.Meta                                       `json:"meta"`
+		ModifierExtension          []*fhir.Extension                                `json:"modifierExtension"`
+		MonitoringProgram          []*MedicationKnowledgeMonitoringProgram          `json:"monitoringProgram"`
+		Monograph                  []*MedicationKnowledgeMonograph                  `json:"monograph"`
+		Packaging                  *MedicationKnowledgePackaging                    `json:"packaging"`
+		PreparationInstruction     *fhir.Markdown                                   `json:"preparationInstruction"`
+		ProductType                []*fhir.CodeableConcept                          `json:"productType"`
+		Regulatory                 []*MedicationKnowledgeRegulatory                 `json:"regulatory"`
+		RelatedMedicationKnowledge []*MedicationKnowledgeRelatedMedicationKnowledge `json:"relatedMedicationKnowledge"`
+		Status                     *fhir.Code                                       `json:"status"`
+		Synonym                    []*fhir.String                                   `json:"synonym"`
+		Text                       *fhir.Narrative                                  `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mk.AdministrationGuidelines = raw.AdministrationGuidelines
+	mk.Amount = raw.Amount
+	mk.AssociatedMedication = raw.AssociatedMedication
+	mk.Code = raw.Code
+	mk.Contained = raw.Contained
+	mk.Contraindication = raw.Contraindication
+	mk.Cost = raw.Cost
+	mk.DoseForm = raw.DoseForm
+	mk.DrugCharacteristic = raw.DrugCharacteristic
+	mk.Extension = raw.Extension
+	mk.ID = raw.ID
+	mk.ImplicitRules = raw.ImplicitRules
+	mk.Ingredient = raw.Ingredient
+	mk.IntendedRoute = raw.IntendedRoute
+	mk.Kinetics = raw.Kinetics
+	mk.Language = raw.Language
+	mk.Manufacturer = raw.Manufacturer
+	mk.MedicineClassification = raw.MedicineClassification
+	mk.Meta = raw.Meta
+	mk.ModifierExtension = raw.ModifierExtension
+	mk.MonitoringProgram = raw.MonitoringProgram
+	mk.Monograph = raw.Monograph
+	mk.Packaging = raw.Packaging
+	mk.PreparationInstruction = raw.PreparationInstruction
+	mk.ProductType = raw.ProductType
+	mk.Regulatory = raw.Regulatory
+	mk.RelatedMedicationKnowledge = raw.RelatedMedicationKnowledge
+	mk.Status = raw.Status
+	mk.Synonym = raw.Synonym
+	mk.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationKnowledge)(nil)
+var _ json.Unmarshaler = (*MedicationKnowledge)(nil)
+
+func (mkag *MedicationKnowledgeAdministrationGuidelines) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mkag *MedicationKnowledgeAdministrationGuidelines) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Dosage    []*MedicationKnowledgeAdministrationGuidelinesDosage `json:"dosage"`
+		Extension []*fhir.Extension                                    `json:"extension"`
+
+		ID                        string                                                               `json:"id"`
+		IndicationCodeableConcept *fhir.CodeableConcept                                                `json:"indicationCodeableConcept"`
+		IndicationReference       *fhir.Reference                                                      `json:"indicationReference"`
+		ModifierExtension         []*fhir.Extension                                                    `json:"modifierExtension"`
+		PatientCharacteristics    []*MedicationKnowledgeAdministrationGuidelinesPatientCharacteristics `json:"patientCharacteristics"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mkag.Dosage = raw.Dosage
+	mkag.Extension = raw.Extension
+	mkag.ID = raw.ID
+	mkag.Indication, err = validate.SelectOneOf[fhir.Element]("MedicationKnowledge.administrationGuidelines.indication",
+		raw.IndicationCodeableConcept,
+		raw.IndicationReference)
+	if err != nil {
+		return err
+	}
+	mkag.ModifierExtension = raw.ModifierExtension
+	mkag.PatientCharacteristics = raw.PatientCharacteristics
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationKnowledgeAdministrationGuidelines)(nil)
+var _ json.Unmarshaler = (*MedicationKnowledgeAdministrationGuidelines)(nil)
+
+func (mkagd *MedicationKnowledgeAdministrationGuidelinesDosage) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mkagd *MedicationKnowledgeAdministrationGuidelinesDosage) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Dosage    []*fhir.Dosage    `json:"dosage"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mkagd.Dosage = raw.Dosage
+	mkagd.Extension = raw.Extension
+	mkagd.ID = raw.ID
+	mkagd.ModifierExtension = raw.ModifierExtension
+	mkagd.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationKnowledgeAdministrationGuidelinesDosage)(nil)
+var _ json.Unmarshaler = (*MedicationKnowledgeAdministrationGuidelinesDosage)(nil)
+
+func (mkagpc *MedicationKnowledgeAdministrationGuidelinesPatientCharacteristics) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mkagpc *MedicationKnowledgeAdministrationGuidelinesPatientCharacteristics) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		CharacteristicCodeableConcept *fhir.CodeableConcept `json:"characteristicCodeableConcept"`
+		CharacteristicQuantity        *fhir.Quantity        `json:"characteristicQuantity"`
+		Extension                     []*fhir.Extension     `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Value             []*fhir.String    `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mkagpc.Characteristic, err = validate.SelectOneOf[fhir.Element]("MedicationKnowledge.administrationGuidelines.patientCharacteristics.characteristic",
+		raw.CharacteristicCodeableConcept,
+		raw.CharacteristicQuantity)
+	if err != nil {
+		return err
+	}
+	mkagpc.Extension = raw.Extension
+	mkagpc.ID = raw.ID
+	mkagpc.ModifierExtension = raw.ModifierExtension
+	mkagpc.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationKnowledgeAdministrationGuidelinesPatientCharacteristics)(nil)
+var _ json.Unmarshaler = (*MedicationKnowledgeAdministrationGuidelinesPatientCharacteristics)(nil)
+
+func (mkc *MedicationKnowledgeCost) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mkc *MedicationKnowledgeCost) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Cost      *fhir.Money       `json:"cost"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Source            *fhir.String          `json:"source"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mkc.Cost = raw.Cost
+	mkc.Extension = raw.Extension
+	mkc.ID = raw.ID
+	mkc.ModifierExtension = raw.ModifierExtension
+	mkc.Source = raw.Source
+	mkc.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationKnowledgeCost)(nil)
+var _ json.Unmarshaler = (*MedicationKnowledgeCost)(nil)
+
+func (mkdc *MedicationKnowledgeDrugCharacteristic) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mkdc *MedicationKnowledgeDrugCharacteristic) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                   string                `json:"id"`
+		ModifierExtension    []*fhir.Extension     `json:"modifierExtension"`
+		Type                 *fhir.CodeableConcept `json:"type"`
+		ValueCodeableConcept *fhir.CodeableConcept `json:"valueCodeableConcept"`
+		ValueString          *fhir.String          `json:"valueString"`
+		ValueQuantity        *fhir.Quantity        `json:"valueQuantity"`
+		ValueBase64Binary    *fhir.Base64Binary    `json:"valueBase64Binary"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mkdc.Extension = raw.Extension
+	mkdc.ID = raw.ID
+	mkdc.ModifierExtension = raw.ModifierExtension
+	mkdc.Type = raw.Type
+	mkdc.Value, err = validate.SelectOneOf[fhir.Element]("MedicationKnowledge.drugCharacteristic.value",
+		raw.ValueCodeableConcept,
+		raw.ValueString,
+		raw.ValueQuantity,
+		raw.ValueBase64Binary)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationKnowledgeDrugCharacteristic)(nil)
+var _ json.Unmarshaler = (*MedicationKnowledgeDrugCharacteristic)(nil)
+
+func (mki *MedicationKnowledgeIngredient) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mki *MedicationKnowledgeIngredient) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                  string                `json:"id"`
+		IsActive            *fhir.Boolean         `json:"isActive"`
+		ItemCodeableConcept *fhir.CodeableConcept `json:"itemCodeableConcept"`
+		ItemReference       *fhir.Reference       `json:"itemReference"`
+		ModifierExtension   []*fhir.Extension     `json:"modifierExtension"`
+		Strength            *fhir.Ratio           `json:"strength"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mki.Extension = raw.Extension
+	mki.ID = raw.ID
+	mki.IsActive = raw.IsActive
+	mki.Item, err = validate.SelectOneOf[fhir.Element]("MedicationKnowledge.ingredient.item",
+		raw.ItemCodeableConcept,
+		raw.ItemReference)
+	if err != nil {
+		return err
+	}
+	mki.ModifierExtension = raw.ModifierExtension
+	mki.Strength = raw.Strength
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationKnowledgeIngredient)(nil)
+var _ json.Unmarshaler = (*MedicationKnowledgeIngredient)(nil)
+
+func (mkk *MedicationKnowledgeKinetics) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mkk *MedicationKnowledgeKinetics) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AreaUnderCurve []*fhir.Quantity  `json:"areaUnderCurve"`
+		Extension      []*fhir.Extension `json:"extension"`
+		HalfLifePeriod *fhir.Duration    `json:"halfLifePeriod"`
+
+		ID                string            `json:"id"`
+		LethalDose50      []*fhir.Quantity  `json:"lethalDose50"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mkk.AreaUnderCurve = raw.AreaUnderCurve
+	mkk.Extension = raw.Extension
+	mkk.HalfLifePeriod = raw.HalfLifePeriod
+	mkk.ID = raw.ID
+	mkk.LethalDose50 = raw.LethalDose50
+	mkk.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationKnowledgeKinetics)(nil)
+var _ json.Unmarshaler = (*MedicationKnowledgeKinetics)(nil)
+
+func (mkmc *MedicationKnowledgeMedicineClassification) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mkmc *MedicationKnowledgeMedicineClassification) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Classification []*fhir.CodeableConcept `json:"classification"`
+		Extension      []*fhir.Extension       `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mkmc.Classification = raw.Classification
+	mkmc.Extension = raw.Extension
+	mkmc.ID = raw.ID
+	mkmc.ModifierExtension = raw.ModifierExtension
+	mkmc.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationKnowledgeMedicineClassification)(nil)
+var _ json.Unmarshaler = (*MedicationKnowledgeMedicineClassification)(nil)
+
+func (mkmp *MedicationKnowledgeMonitoringProgram) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mkmp *MedicationKnowledgeMonitoringProgram) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Name              *fhir.String          `json:"name"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mkmp.Extension = raw.Extension
+	mkmp.ID = raw.ID
+	mkmp.ModifierExtension = raw.ModifierExtension
+	mkmp.Name = raw.Name
+	mkmp.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationKnowledgeMonitoringProgram)(nil)
+var _ json.Unmarshaler = (*MedicationKnowledgeMonitoringProgram)(nil)
+
+func (mkm *MedicationKnowledgeMonograph) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mkm *MedicationKnowledgeMonograph) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Source            *fhir.Reference       `json:"source"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mkm.Extension = raw.Extension
+	mkm.ID = raw.ID
+	mkm.ModifierExtension = raw.ModifierExtension
+	mkm.Source = raw.Source
+	mkm.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationKnowledgeMonograph)(nil)
+var _ json.Unmarshaler = (*MedicationKnowledgeMonograph)(nil)
+
+func (mkp *MedicationKnowledgePackaging) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mkp *MedicationKnowledgePackaging) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Quantity          *fhir.Quantity        `json:"quantity"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mkp.Extension = raw.Extension
+	mkp.ID = raw.ID
+	mkp.ModifierExtension = raw.ModifierExtension
+	mkp.Quantity = raw.Quantity
+	mkp.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationKnowledgePackaging)(nil)
+var _ json.Unmarshaler = (*MedicationKnowledgePackaging)(nil)
+
+func (mkr *MedicationKnowledgeRegulatory) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mkr *MedicationKnowledgeRegulatory) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                  string                                       `json:"id"`
+		MaxDispense         *MedicationKnowledgeRegulatoryMaxDispense    `json:"maxDispense"`
+		ModifierExtension   []*fhir.Extension                            `json:"modifierExtension"`
+		RegulatoryAuthority *fhir.Reference                              `json:"regulatoryAuthority"`
+		Schedule            []*MedicationKnowledgeRegulatorySchedule     `json:"schedule"`
+		Substitution        []*MedicationKnowledgeRegulatorySubstitution `json:"substitution"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mkr.Extension = raw.Extension
+	mkr.ID = raw.ID
+	mkr.MaxDispense = raw.MaxDispense
+	mkr.ModifierExtension = raw.ModifierExtension
+	mkr.RegulatoryAuthority = raw.RegulatoryAuthority
+	mkr.Schedule = raw.Schedule
+	mkr.Substitution = raw.Substitution
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationKnowledgeRegulatory)(nil)
+var _ json.Unmarshaler = (*MedicationKnowledgeRegulatory)(nil)
+
+func (mkrmd *MedicationKnowledgeRegulatoryMaxDispense) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mkrmd *MedicationKnowledgeRegulatoryMaxDispense) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Period            *fhir.Duration    `json:"period"`
+		Quantity          *fhir.Quantity    `json:"quantity"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mkrmd.Extension = raw.Extension
+	mkrmd.ID = raw.ID
+	mkrmd.ModifierExtension = raw.ModifierExtension
+	mkrmd.Period = raw.Period
+	mkrmd.Quantity = raw.Quantity
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationKnowledgeRegulatoryMaxDispense)(nil)
+var _ json.Unmarshaler = (*MedicationKnowledgeRegulatoryMaxDispense)(nil)
+
+func (mkrs *MedicationKnowledgeRegulatorySchedule) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mkrs *MedicationKnowledgeRegulatorySchedule) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Schedule          *fhir.CodeableConcept `json:"schedule"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mkrs.Extension = raw.Extension
+	mkrs.ID = raw.ID
+	mkrs.ModifierExtension = raw.ModifierExtension
+	mkrs.Schedule = raw.Schedule
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationKnowledgeRegulatorySchedule)(nil)
+var _ json.Unmarshaler = (*MedicationKnowledgeRegulatorySchedule)(nil)
+
+func (mkrs *MedicationKnowledgeRegulatorySubstitution) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mkrs *MedicationKnowledgeRegulatorySubstitution) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Allowed   *fhir.Boolean     `json:"allowed"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mkrs.Allowed = raw.Allowed
+	mkrs.Extension = raw.Extension
+	mkrs.ID = raw.ID
+	mkrs.ModifierExtension = raw.ModifierExtension
+	mkrs.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationKnowledgeRegulatorySubstitution)(nil)
+var _ json.Unmarshaler = (*MedicationKnowledgeRegulatorySubstitution)(nil)
+
+func (mkrmk *MedicationKnowledgeRelatedMedicationKnowledge) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mkrmk *MedicationKnowledgeRelatedMedicationKnowledge) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Reference         []*fhir.Reference     `json:"reference"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mkrmk.Extension = raw.Extension
+	mkrmk.ID = raw.ID
+	mkrmk.ModifierExtension = raw.ModifierExtension
+	mkrmk.Reference = raw.Reference
+	mkrmk.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationKnowledgeRelatedMedicationKnowledge)(nil)
+var _ json.Unmarshaler = (*MedicationKnowledgeRelatedMedicationKnowledge)(nil)

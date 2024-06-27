@@ -6,7 +6,10 @@
 package fhir
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for ElementDefinition Type: Captures constraints on
@@ -4045,3 +4048,797 @@ func (edt *ElementDefinitionType) GetVersioning() *Code {
 	}
 	return edt.Versioning
 }
+
+func (ed *ElementDefinition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ed *ElementDefinition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Alias                           []*String                      `json:"alias"`
+		Base                            *ElementDefinitionBase         `json:"base"`
+		Binding                         *ElementDefinitionBinding      `json:"binding"`
+		Code                            []*Coding                      `json:"code"`
+		Comment                         *Markdown                      `json:"comment"`
+		Condition                       []*ID                          `json:"condition"`
+		Constraint                      []*ElementDefinitionConstraint `json:"constraint"`
+		ContentReference                *URI                           `json:"contentReference"`
+		DefaultValueBase64Binary        *Base64Binary                  `json:"defaultValueBase64Binary"`
+		DefaultValueBoolean             *Boolean                       `json:"defaultValueBoolean"`
+		DefaultValueCanonical           *Canonical                     `json:"defaultValueCanonical"`
+		DefaultValueCode                *Code                          `json:"defaultValueCode"`
+		DefaultValueDate                *Date                          `json:"defaultValueDate"`
+		DefaultValueDateTime            *DateTime                      `json:"defaultValueDateTime"`
+		DefaultValueDecimal             *Decimal                       `json:"defaultValueDecimal"`
+		DefaultValueID                  *ID                            `json:"defaultValueID"`
+		DefaultValueInstant             *Instant                       `json:"defaultValueInstant"`
+		DefaultValueInteger             *Integer                       `json:"defaultValueInteger"`
+		DefaultValueMarkdown            *Markdown                      `json:"defaultValueMarkdown"`
+		DefaultValueOID                 *OID                           `json:"defaultValueOID"`
+		DefaultValuePositiveInt         *PositiveInt                   `json:"defaultValuePositiveInt"`
+		DefaultValueString              *String                        `json:"defaultValueString"`
+		DefaultValueTime                *Time                          `json:"defaultValueTime"`
+		DefaultValueUnsignedInt         *UnsignedInt                   `json:"defaultValueUnsignedInt"`
+		DefaultValueURI                 *URI                           `json:"defaultValueURI"`
+		DefaultValueURL                 *URL                           `json:"defaultValueURL"`
+		DefaultValueUUID                *UUID                          `json:"defaultValueUUID"`
+		DefaultValueAddress             *Address                       `json:"defaultValueAddress"`
+		DefaultValueAge                 *Age                           `json:"defaultValueAge"`
+		DefaultValueAnnotation          *Annotation                    `json:"defaultValueAnnotation"`
+		DefaultValueAttachment          *Attachment                    `json:"defaultValueAttachment"`
+		DefaultValueCodeableConcept     *CodeableConcept               `json:"defaultValueCodeableConcept"`
+		DefaultValueCoding              *Coding                        `json:"defaultValueCoding"`
+		DefaultValueContactPoint        *ContactPoint                  `json:"defaultValueContactPoint"`
+		DefaultValueCount               *Count                         `json:"defaultValueCount"`
+		DefaultValueDistance            *Distance                      `json:"defaultValueDistance"`
+		DefaultValueDuration            *Duration                      `json:"defaultValueDuration"`
+		DefaultValueHumanName           *HumanName                     `json:"defaultValueHumanName"`
+		DefaultValueIdentifier          *Identifier                    `json:"defaultValueIdentifier"`
+		DefaultValueMoney               *Money                         `json:"defaultValueMoney"`
+		DefaultValuePeriod              *Period                        `json:"defaultValuePeriod"`
+		DefaultValueQuantity            *Quantity                      `json:"defaultValueQuantity"`
+		DefaultValueRange               *Range                         `json:"defaultValueRange"`
+		DefaultValueRatio               *Ratio                         `json:"defaultValueRatio"`
+		DefaultValueReference           *Reference                     `json:"defaultValueReference"`
+		DefaultValueSampledData         *SampledData                   `json:"defaultValueSampledData"`
+		DefaultValueSignature           *Signature                     `json:"defaultValueSignature"`
+		DefaultValueTiming              *Timing                        `json:"defaultValueTiming"`
+		DefaultValueContactDetail       *ContactDetail                 `json:"defaultValueContactDetail"`
+		DefaultValueContributor         *Contributor                   `json:"defaultValueContributor"`
+		DefaultValueDataRequirement     *DataRequirement               `json:"defaultValueDataRequirement"`
+		DefaultValueExpression          *Expression                    `json:"defaultValueExpression"`
+		DefaultValueParameterDefinition *ParameterDefinition           `json:"defaultValueParameterDefinition"`
+		DefaultValueRelatedArtifact     *RelatedArtifact               `json:"defaultValueRelatedArtifact"`
+		DefaultValueTriggerDefinition   *TriggerDefinition             `json:"defaultValueTriggerDefinition"`
+		DefaultValueUsageContext        *UsageContext                  `json:"defaultValueUsageContext"`
+		DefaultValueDosage              *Dosage                        `json:"defaultValueDosage"`
+		DefaultValueMeta                *Meta                          `json:"defaultValueMeta"`
+		Definition                      *Markdown                      `json:"definition"`
+		Example                         []*ElementDefinitionExample    `json:"example"`
+		Extension                       []*Extension                   `json:"extension"`
+		FixedBase64Binary               *Base64Binary                  `json:"fixedBase64Binary"`
+		FixedBoolean                    *Boolean                       `json:"fixedBoolean"`
+		FixedCanonical                  *Canonical                     `json:"fixedCanonical"`
+		FixedCode                       *Code                          `json:"fixedCode"`
+		FixedDate                       *Date                          `json:"fixedDate"`
+		FixedDateTime                   *DateTime                      `json:"fixedDateTime"`
+		FixedDecimal                    *Decimal                       `json:"fixedDecimal"`
+		FixedID                         *ID                            `json:"fixedID"`
+		FixedInstant                    *Instant                       `json:"fixedInstant"`
+		FixedInteger                    *Integer                       `json:"fixedInteger"`
+		FixedMarkdown                   *Markdown                      `json:"fixedMarkdown"`
+		FixedOID                        *OID                           `json:"fixedOID"`
+		FixedPositiveInt                *PositiveInt                   `json:"fixedPositiveInt"`
+		FixedString                     *String                        `json:"fixedString"`
+		FixedTime                       *Time                          `json:"fixedTime"`
+		FixedUnsignedInt                *UnsignedInt                   `json:"fixedUnsignedInt"`
+		FixedURI                        *URI                           `json:"fixedURI"`
+		FixedURL                        *URL                           `json:"fixedURL"`
+		FixedUUID                       *UUID                          `json:"fixedUUID"`
+		FixedAddress                    *Address                       `json:"fixedAddress"`
+		FixedAge                        *Age                           `json:"fixedAge"`
+		FixedAnnotation                 *Annotation                    `json:"fixedAnnotation"`
+		FixedAttachment                 *Attachment                    `json:"fixedAttachment"`
+		FixedCodeableConcept            *CodeableConcept               `json:"fixedCodeableConcept"`
+		FixedCoding                     *Coding                        `json:"fixedCoding"`
+		FixedContactPoint               *ContactPoint                  `json:"fixedContactPoint"`
+		FixedCount                      *Count                         `json:"fixedCount"`
+		FixedDistance                   *Distance                      `json:"fixedDistance"`
+		FixedDuration                   *Duration                      `json:"fixedDuration"`
+		FixedHumanName                  *HumanName                     `json:"fixedHumanName"`
+		FixedIdentifier                 *Identifier                    `json:"fixedIdentifier"`
+		FixedMoney                      *Money                         `json:"fixedMoney"`
+		FixedPeriod                     *Period                        `json:"fixedPeriod"`
+		FixedQuantity                   *Quantity                      `json:"fixedQuantity"`
+		FixedRange                      *Range                         `json:"fixedRange"`
+		FixedRatio                      *Ratio                         `json:"fixedRatio"`
+		FixedReference                  *Reference                     `json:"fixedReference"`
+		FixedSampledData                *SampledData                   `json:"fixedSampledData"`
+		FixedSignature                  *Signature                     `json:"fixedSignature"`
+		FixedTiming                     *Timing                        `json:"fixedTiming"`
+		FixedContactDetail              *ContactDetail                 `json:"fixedContactDetail"`
+		FixedContributor                *Contributor                   `json:"fixedContributor"`
+		FixedDataRequirement            *DataRequirement               `json:"fixedDataRequirement"`
+		FixedExpression                 *Expression                    `json:"fixedExpression"`
+		FixedParameterDefinition        *ParameterDefinition           `json:"fixedParameterDefinition"`
+		FixedRelatedArtifact            *RelatedArtifact               `json:"fixedRelatedArtifact"`
+		FixedTriggerDefinition          *TriggerDefinition             `json:"fixedTriggerDefinition"`
+		FixedUsageContext               *UsageContext                  `json:"fixedUsageContext"`
+		FixedDosage                     *Dosage                        `json:"fixedDosage"`
+		FixedMeta                       *Meta                          `json:"fixedMeta"`
+
+		ID                         string                      `json:"id"`
+		IsModifier                 *Boolean                    `json:"isModifier"`
+		IsModifierReason           *String                     `json:"isModifierReason"`
+		IsSummary                  *Boolean                    `json:"isSummary"`
+		Label                      *String                     `json:"label"`
+		Mapping                    []*ElementDefinitionMapping `json:"mapping"`
+		Max                        *String                     `json:"max"`
+		MaxLength                  *Integer                    `json:"maxLength"`
+		MaxValueDate               *Date                       `json:"maxValueDate"`
+		MaxValueDateTime           *DateTime                   `json:"maxValueDateTime"`
+		MaxValueInstant            *Instant                    `json:"maxValueInstant"`
+		MaxValueTime               *Time                       `json:"maxValueTime"`
+		MaxValueDecimal            *Decimal                    `json:"maxValueDecimal"`
+		MaxValueInteger            *Integer                    `json:"maxValueInteger"`
+		MaxValuePositiveInt        *PositiveInt                `json:"maxValuePositiveInt"`
+		MaxValueUnsignedInt        *UnsignedInt                `json:"maxValueUnsignedInt"`
+		MaxValueQuantity           *Quantity                   `json:"maxValueQuantity"`
+		MeaningWhenMissing         *Markdown                   `json:"meaningWhenMissing"`
+		Min                        *UnsignedInt                `json:"min"`
+		MinValueDate               *Date                       `json:"minValueDate"`
+		MinValueDateTime           *DateTime                   `json:"minValueDateTime"`
+		MinValueInstant            *Instant                    `json:"minValueInstant"`
+		MinValueTime               *Time                       `json:"minValueTime"`
+		MinValueDecimal            *Decimal                    `json:"minValueDecimal"`
+		MinValueInteger            *Integer                    `json:"minValueInteger"`
+		MinValuePositiveInt        *PositiveInt                `json:"minValuePositiveInt"`
+		MinValueUnsignedInt        *UnsignedInt                `json:"minValueUnsignedInt"`
+		MinValueQuantity           *Quantity                   `json:"minValueQuantity"`
+		ModifierExtension          []*Extension                `json:"modifierExtension"`
+		MustSupport                *Boolean                    `json:"mustSupport"`
+		OrderMeaning               *String                     `json:"orderMeaning"`
+		Path                       *String                     `json:"path"`
+		PatternBase64Binary        *Base64Binary               `json:"patternBase64Binary"`
+		PatternBoolean             *Boolean                    `json:"patternBoolean"`
+		PatternCanonical           *Canonical                  `json:"patternCanonical"`
+		PatternCode                *Code                       `json:"patternCode"`
+		PatternDate                *Date                       `json:"patternDate"`
+		PatternDateTime            *DateTime                   `json:"patternDateTime"`
+		PatternDecimal             *Decimal                    `json:"patternDecimal"`
+		PatternID                  *ID                         `json:"patternID"`
+		PatternInstant             *Instant                    `json:"patternInstant"`
+		PatternInteger             *Integer                    `json:"patternInteger"`
+		PatternMarkdown            *Markdown                   `json:"patternMarkdown"`
+		PatternOID                 *OID                        `json:"patternOID"`
+		PatternPositiveInt         *PositiveInt                `json:"patternPositiveInt"`
+		PatternString              *String                     `json:"patternString"`
+		PatternTime                *Time                       `json:"patternTime"`
+		PatternUnsignedInt         *UnsignedInt                `json:"patternUnsignedInt"`
+		PatternURI                 *URI                        `json:"patternURI"`
+		PatternURL                 *URL                        `json:"patternURL"`
+		PatternUUID                *UUID                       `json:"patternUUID"`
+		PatternAddress             *Address                    `json:"patternAddress"`
+		PatternAge                 *Age                        `json:"patternAge"`
+		PatternAnnotation          *Annotation                 `json:"patternAnnotation"`
+		PatternAttachment          *Attachment                 `json:"patternAttachment"`
+		PatternCodeableConcept     *CodeableConcept            `json:"patternCodeableConcept"`
+		PatternCoding              *Coding                     `json:"patternCoding"`
+		PatternContactPoint        *ContactPoint               `json:"patternContactPoint"`
+		PatternCount               *Count                      `json:"patternCount"`
+		PatternDistance            *Distance                   `json:"patternDistance"`
+		PatternDuration            *Duration                   `json:"patternDuration"`
+		PatternHumanName           *HumanName                  `json:"patternHumanName"`
+		PatternIdentifier          *Identifier                 `json:"patternIdentifier"`
+		PatternMoney               *Money                      `json:"patternMoney"`
+		PatternPeriod              *Period                     `json:"patternPeriod"`
+		PatternQuantity            *Quantity                   `json:"patternQuantity"`
+		PatternRange               *Range                      `json:"patternRange"`
+		PatternRatio               *Ratio                      `json:"patternRatio"`
+		PatternReference           *Reference                  `json:"patternReference"`
+		PatternSampledData         *SampledData                `json:"patternSampledData"`
+		PatternSignature           *Signature                  `json:"patternSignature"`
+		PatternTiming              *Timing                     `json:"patternTiming"`
+		PatternContactDetail       *ContactDetail              `json:"patternContactDetail"`
+		PatternContributor         *Contributor                `json:"patternContributor"`
+		PatternDataRequirement     *DataRequirement            `json:"patternDataRequirement"`
+		PatternExpression          *Expression                 `json:"patternExpression"`
+		PatternParameterDefinition *ParameterDefinition        `json:"patternParameterDefinition"`
+		PatternRelatedArtifact     *RelatedArtifact            `json:"patternRelatedArtifact"`
+		PatternTriggerDefinition   *TriggerDefinition          `json:"patternTriggerDefinition"`
+		PatternUsageContext        *UsageContext               `json:"patternUsageContext"`
+		PatternDosage              *Dosage                     `json:"patternDosage"`
+		PatternMeta                *Meta                       `json:"patternMeta"`
+		Representation             []*Code                     `json:"representation"`
+		Requirements               *Markdown                   `json:"requirements"`
+		Short                      *String                     `json:"short"`
+		SliceIsConstraining        *Boolean                    `json:"sliceIsConstraining"`
+		SliceName                  *String                     `json:"sliceName"`
+		Slicing                    *ElementDefinitionSlicing   `json:"slicing"`
+		Type                       []*ElementDefinitionType    `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ed.Alias = raw.Alias
+	ed.Base = raw.Base
+	ed.Binding = raw.Binding
+	ed.Code = raw.Code
+	ed.Comment = raw.Comment
+	ed.Condition = raw.Condition
+	ed.Constraint = raw.Constraint
+	ed.ContentReference = raw.ContentReference
+	ed.DefaultValue, err = validate.SelectOneOf[Element]("ElementDefinition.defaultValue",
+		raw.DefaultValueBase64Binary,
+		raw.DefaultValueBoolean,
+		raw.DefaultValueCanonical,
+		raw.DefaultValueCode,
+		raw.DefaultValueDate,
+		raw.DefaultValueDateTime,
+		raw.DefaultValueDecimal,
+		raw.DefaultValueID,
+		raw.DefaultValueInstant,
+		raw.DefaultValueInteger,
+		raw.DefaultValueMarkdown,
+		raw.DefaultValueOID,
+		raw.DefaultValuePositiveInt,
+		raw.DefaultValueString,
+		raw.DefaultValueTime,
+		raw.DefaultValueUnsignedInt,
+		raw.DefaultValueURI,
+		raw.DefaultValueURL,
+		raw.DefaultValueUUID,
+		raw.DefaultValueAddress,
+		raw.DefaultValueAge,
+		raw.DefaultValueAnnotation,
+		raw.DefaultValueAttachment,
+		raw.DefaultValueCodeableConcept,
+		raw.DefaultValueCoding,
+		raw.DefaultValueContactPoint,
+		raw.DefaultValueCount,
+		raw.DefaultValueDistance,
+		raw.DefaultValueDuration,
+		raw.DefaultValueHumanName,
+		raw.DefaultValueIdentifier,
+		raw.DefaultValueMoney,
+		raw.DefaultValuePeriod,
+		raw.DefaultValueQuantity,
+		raw.DefaultValueRange,
+		raw.DefaultValueRatio,
+		raw.DefaultValueReference,
+		raw.DefaultValueSampledData,
+		raw.DefaultValueSignature,
+		raw.DefaultValueTiming,
+		raw.DefaultValueContactDetail,
+		raw.DefaultValueContributor,
+		raw.DefaultValueDataRequirement,
+		raw.DefaultValueExpression,
+		raw.DefaultValueParameterDefinition,
+		raw.DefaultValueRelatedArtifact,
+		raw.DefaultValueTriggerDefinition,
+		raw.DefaultValueUsageContext,
+		raw.DefaultValueDosage,
+		raw.DefaultValueMeta)
+	if err != nil {
+		return err
+	}
+	ed.Definition = raw.Definition
+	ed.Example = raw.Example
+	ed.Extension = raw.Extension
+	ed.Fixed, err = validate.SelectOneOf[Element]("ElementDefinition.fixed",
+		raw.FixedBase64Binary,
+		raw.FixedBoolean,
+		raw.FixedCanonical,
+		raw.FixedCode,
+		raw.FixedDate,
+		raw.FixedDateTime,
+		raw.FixedDecimal,
+		raw.FixedID,
+		raw.FixedInstant,
+		raw.FixedInteger,
+		raw.FixedMarkdown,
+		raw.FixedOID,
+		raw.FixedPositiveInt,
+		raw.FixedString,
+		raw.FixedTime,
+		raw.FixedUnsignedInt,
+		raw.FixedURI,
+		raw.FixedURL,
+		raw.FixedUUID,
+		raw.FixedAddress,
+		raw.FixedAge,
+		raw.FixedAnnotation,
+		raw.FixedAttachment,
+		raw.FixedCodeableConcept,
+		raw.FixedCoding,
+		raw.FixedContactPoint,
+		raw.FixedCount,
+		raw.FixedDistance,
+		raw.FixedDuration,
+		raw.FixedHumanName,
+		raw.FixedIdentifier,
+		raw.FixedMoney,
+		raw.FixedPeriod,
+		raw.FixedQuantity,
+		raw.FixedRange,
+		raw.FixedRatio,
+		raw.FixedReference,
+		raw.FixedSampledData,
+		raw.FixedSignature,
+		raw.FixedTiming,
+		raw.FixedContactDetail,
+		raw.FixedContributor,
+		raw.FixedDataRequirement,
+		raw.FixedExpression,
+		raw.FixedParameterDefinition,
+		raw.FixedRelatedArtifact,
+		raw.FixedTriggerDefinition,
+		raw.FixedUsageContext,
+		raw.FixedDosage,
+		raw.FixedMeta)
+	if err != nil {
+		return err
+	}
+	ed.ID = raw.ID
+	ed.IsModifier = raw.IsModifier
+	ed.IsModifierReason = raw.IsModifierReason
+	ed.IsSummary = raw.IsSummary
+	ed.Label = raw.Label
+	ed.Mapping = raw.Mapping
+	ed.Max = raw.Max
+	ed.MaxLength = raw.MaxLength
+	ed.MaxValue, err = validate.SelectOneOf[Element]("ElementDefinition.maxValue",
+		raw.MaxValueDate,
+		raw.MaxValueDateTime,
+		raw.MaxValueInstant,
+		raw.MaxValueTime,
+		raw.MaxValueDecimal,
+		raw.MaxValueInteger,
+		raw.MaxValuePositiveInt,
+		raw.MaxValueUnsignedInt,
+		raw.MaxValueQuantity)
+	if err != nil {
+		return err
+	}
+	ed.MeaningWhenMissing = raw.MeaningWhenMissing
+	ed.Min = raw.Min
+	ed.MinValue, err = validate.SelectOneOf[Element]("ElementDefinition.minValue",
+		raw.MinValueDate,
+		raw.MinValueDateTime,
+		raw.MinValueInstant,
+		raw.MinValueTime,
+		raw.MinValueDecimal,
+		raw.MinValueInteger,
+		raw.MinValuePositiveInt,
+		raw.MinValueUnsignedInt,
+		raw.MinValueQuantity)
+	if err != nil {
+		return err
+	}
+	ed.ModifierExtension = raw.ModifierExtension
+	ed.MustSupport = raw.MustSupport
+	ed.OrderMeaning = raw.OrderMeaning
+	ed.Path = raw.Path
+	ed.Pattern, err = validate.SelectOneOf[Element]("ElementDefinition.pattern",
+		raw.PatternBase64Binary,
+		raw.PatternBoolean,
+		raw.PatternCanonical,
+		raw.PatternCode,
+		raw.PatternDate,
+		raw.PatternDateTime,
+		raw.PatternDecimal,
+		raw.PatternID,
+		raw.PatternInstant,
+		raw.PatternInteger,
+		raw.PatternMarkdown,
+		raw.PatternOID,
+		raw.PatternPositiveInt,
+		raw.PatternString,
+		raw.PatternTime,
+		raw.PatternUnsignedInt,
+		raw.PatternURI,
+		raw.PatternURL,
+		raw.PatternUUID,
+		raw.PatternAddress,
+		raw.PatternAge,
+		raw.PatternAnnotation,
+		raw.PatternAttachment,
+		raw.PatternCodeableConcept,
+		raw.PatternCoding,
+		raw.PatternContactPoint,
+		raw.PatternCount,
+		raw.PatternDistance,
+		raw.PatternDuration,
+		raw.PatternHumanName,
+		raw.PatternIdentifier,
+		raw.PatternMoney,
+		raw.PatternPeriod,
+		raw.PatternQuantity,
+		raw.PatternRange,
+		raw.PatternRatio,
+		raw.PatternReference,
+		raw.PatternSampledData,
+		raw.PatternSignature,
+		raw.PatternTiming,
+		raw.PatternContactDetail,
+		raw.PatternContributor,
+		raw.PatternDataRequirement,
+		raw.PatternExpression,
+		raw.PatternParameterDefinition,
+		raw.PatternRelatedArtifact,
+		raw.PatternTriggerDefinition,
+		raw.PatternUsageContext,
+		raw.PatternDosage,
+		raw.PatternMeta)
+	if err != nil {
+		return err
+	}
+	ed.Representation = raw.Representation
+	ed.Requirements = raw.Requirements
+	ed.Short = raw.Short
+	ed.SliceIsConstraining = raw.SliceIsConstraining
+	ed.SliceName = raw.SliceName
+	ed.Slicing = raw.Slicing
+	ed.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ElementDefinition)(nil)
+var _ json.Unmarshaler = (*ElementDefinition)(nil)
+
+func (edb *ElementDefinitionBase) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (edb *ElementDefinitionBase) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*Extension `json:"extension"`
+
+		ID   string       `json:"id"`
+		Max  *String      `json:"max"`
+		Min  *UnsignedInt `json:"min"`
+		Path *String      `json:"path"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	edb.Extension = raw.Extension
+	edb.ID = raw.ID
+	edb.Max = raw.Max
+	edb.Min = raw.Min
+	edb.Path = raw.Path
+	return nil
+}
+
+var _ json.Marshaler = (*ElementDefinitionBase)(nil)
+var _ json.Unmarshaler = (*ElementDefinitionBase)(nil)
+
+func (edb *ElementDefinitionBinding) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (edb *ElementDefinitionBinding) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description *String      `json:"description"`
+		Extension   []*Extension `json:"extension"`
+
+		ID       string     `json:"id"`
+		Strength *Code      `json:"strength"`
+		ValueSet *Canonical `json:"valueSet"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	edb.Description = raw.Description
+	edb.Extension = raw.Extension
+	edb.ID = raw.ID
+	edb.Strength = raw.Strength
+	edb.ValueSet = raw.ValueSet
+	return nil
+}
+
+var _ json.Marshaler = (*ElementDefinitionBinding)(nil)
+var _ json.Unmarshaler = (*ElementDefinitionBinding)(nil)
+
+func (edc *ElementDefinitionConstraint) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (edc *ElementDefinitionConstraint) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Expression *String      `json:"expression"`
+		Extension  []*Extension `json:"extension"`
+		Human      *String      `json:"human"`
+
+		ID           string     `json:"id"`
+		Key          *ID        `json:"key"`
+		Requirements *String    `json:"requirements"`
+		Severity     *Code      `json:"severity"`
+		Source       *Canonical `json:"source"`
+		Xpath        *String    `json:"xpath"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	edc.Expression = raw.Expression
+	edc.Extension = raw.Extension
+	edc.Human = raw.Human
+	edc.ID = raw.ID
+	edc.Key = raw.Key
+	edc.Requirements = raw.Requirements
+	edc.Severity = raw.Severity
+	edc.Source = raw.Source
+	edc.Xpath = raw.Xpath
+	return nil
+}
+
+var _ json.Marshaler = (*ElementDefinitionConstraint)(nil)
+var _ json.Unmarshaler = (*ElementDefinitionConstraint)(nil)
+
+func (ede *ElementDefinitionExample) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ede *ElementDefinitionExample) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*Extension `json:"extension"`
+
+		ID                       string               `json:"id"`
+		Label                    *String              `json:"label"`
+		ValueBase64Binary        *Base64Binary        `json:"valueBase64Binary"`
+		ValueBoolean             *Boolean             `json:"valueBoolean"`
+		ValueCanonical           *Canonical           `json:"valueCanonical"`
+		ValueCode                *Code                `json:"valueCode"`
+		ValueDate                *Date                `json:"valueDate"`
+		ValueDateTime            *DateTime            `json:"valueDateTime"`
+		ValueDecimal             *Decimal             `json:"valueDecimal"`
+		ValueID                  *ID                  `json:"valueID"`
+		ValueInstant             *Instant             `json:"valueInstant"`
+		ValueInteger             *Integer             `json:"valueInteger"`
+		ValueMarkdown            *Markdown            `json:"valueMarkdown"`
+		ValueOID                 *OID                 `json:"valueOID"`
+		ValuePositiveInt         *PositiveInt         `json:"valuePositiveInt"`
+		ValueString              *String              `json:"valueString"`
+		ValueTime                *Time                `json:"valueTime"`
+		ValueUnsignedInt         *UnsignedInt         `json:"valueUnsignedInt"`
+		ValueURI                 *URI                 `json:"valueURI"`
+		ValueURL                 *URL                 `json:"valueURL"`
+		ValueUUID                *UUID                `json:"valueUUID"`
+		ValueAddress             *Address             `json:"valueAddress"`
+		ValueAge                 *Age                 `json:"valueAge"`
+		ValueAnnotation          *Annotation          `json:"valueAnnotation"`
+		ValueAttachment          *Attachment          `json:"valueAttachment"`
+		ValueCodeableConcept     *CodeableConcept     `json:"valueCodeableConcept"`
+		ValueCoding              *Coding              `json:"valueCoding"`
+		ValueContactPoint        *ContactPoint        `json:"valueContactPoint"`
+		ValueCount               *Count               `json:"valueCount"`
+		ValueDistance            *Distance            `json:"valueDistance"`
+		ValueDuration            *Duration            `json:"valueDuration"`
+		ValueHumanName           *HumanName           `json:"valueHumanName"`
+		ValueIdentifier          *Identifier          `json:"valueIdentifier"`
+		ValueMoney               *Money               `json:"valueMoney"`
+		ValuePeriod              *Period              `json:"valuePeriod"`
+		ValueQuantity            *Quantity            `json:"valueQuantity"`
+		ValueRange               *Range               `json:"valueRange"`
+		ValueRatio               *Ratio               `json:"valueRatio"`
+		ValueReference           *Reference           `json:"valueReference"`
+		ValueSampledData         *SampledData         `json:"valueSampledData"`
+		ValueSignature           *Signature           `json:"valueSignature"`
+		ValueTiming              *Timing              `json:"valueTiming"`
+		ValueContactDetail       *ContactDetail       `json:"valueContactDetail"`
+		ValueContributor         *Contributor         `json:"valueContributor"`
+		ValueDataRequirement     *DataRequirement     `json:"valueDataRequirement"`
+		ValueExpression          *Expression          `json:"valueExpression"`
+		ValueParameterDefinition *ParameterDefinition `json:"valueParameterDefinition"`
+		ValueRelatedArtifact     *RelatedArtifact     `json:"valueRelatedArtifact"`
+		ValueTriggerDefinition   *TriggerDefinition   `json:"valueTriggerDefinition"`
+		ValueUsageContext        *UsageContext        `json:"valueUsageContext"`
+		ValueDosage              *Dosage              `json:"valueDosage"`
+		ValueMeta                *Meta                `json:"valueMeta"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ede.Extension = raw.Extension
+	ede.ID = raw.ID
+	ede.Label = raw.Label
+	ede.Value, err = validate.SelectOneOf[Element]("ElementDefinition.example.value",
+		raw.ValueBase64Binary,
+		raw.ValueBoolean,
+		raw.ValueCanonical,
+		raw.ValueCode,
+		raw.ValueDate,
+		raw.ValueDateTime,
+		raw.ValueDecimal,
+		raw.ValueID,
+		raw.ValueInstant,
+		raw.ValueInteger,
+		raw.ValueMarkdown,
+		raw.ValueOID,
+		raw.ValuePositiveInt,
+		raw.ValueString,
+		raw.ValueTime,
+		raw.ValueUnsignedInt,
+		raw.ValueURI,
+		raw.ValueURL,
+		raw.ValueUUID,
+		raw.ValueAddress,
+		raw.ValueAge,
+		raw.ValueAnnotation,
+		raw.ValueAttachment,
+		raw.ValueCodeableConcept,
+		raw.ValueCoding,
+		raw.ValueContactPoint,
+		raw.ValueCount,
+		raw.ValueDistance,
+		raw.ValueDuration,
+		raw.ValueHumanName,
+		raw.ValueIdentifier,
+		raw.ValueMoney,
+		raw.ValuePeriod,
+		raw.ValueQuantity,
+		raw.ValueRange,
+		raw.ValueRatio,
+		raw.ValueReference,
+		raw.ValueSampledData,
+		raw.ValueSignature,
+		raw.ValueTiming,
+		raw.ValueContactDetail,
+		raw.ValueContributor,
+		raw.ValueDataRequirement,
+		raw.ValueExpression,
+		raw.ValueParameterDefinition,
+		raw.ValueRelatedArtifact,
+		raw.ValueTriggerDefinition,
+		raw.ValueUsageContext,
+		raw.ValueDosage,
+		raw.ValueMeta)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*ElementDefinitionExample)(nil)
+var _ json.Unmarshaler = (*ElementDefinitionExample)(nil)
+
+func (edm *ElementDefinitionMapping) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (edm *ElementDefinitionMapping) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Comment   *String      `json:"comment"`
+		Extension []*Extension `json:"extension"`
+
+		ID       string  `json:"id"`
+		Identity *ID     `json:"identity"`
+		Language *Code   `json:"language"`
+		Map      *String `json:"map"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	edm.Comment = raw.Comment
+	edm.Extension = raw.Extension
+	edm.ID = raw.ID
+	edm.Identity = raw.Identity
+	edm.Language = raw.Language
+	edm.Map = raw.Map
+	return nil
+}
+
+var _ json.Marshaler = (*ElementDefinitionMapping)(nil)
+var _ json.Unmarshaler = (*ElementDefinitionMapping)(nil)
+
+func (eds *ElementDefinitionSlicing) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eds *ElementDefinitionSlicing) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description   *String                                  `json:"description"`
+		Discriminator []*ElementDefinitionSlicingDiscriminator `json:"discriminator"`
+		Extension     []*Extension                             `json:"extension"`
+
+		ID      string   `json:"id"`
+		Ordered *Boolean `json:"ordered"`
+		Rules   *Code    `json:"rules"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eds.Description = raw.Description
+	eds.Discriminator = raw.Discriminator
+	eds.Extension = raw.Extension
+	eds.ID = raw.ID
+	eds.Ordered = raw.Ordered
+	eds.Rules = raw.Rules
+	return nil
+}
+
+var _ json.Marshaler = (*ElementDefinitionSlicing)(nil)
+var _ json.Unmarshaler = (*ElementDefinitionSlicing)(nil)
+
+func (edsd *ElementDefinitionSlicingDiscriminator) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (edsd *ElementDefinitionSlicingDiscriminator) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*Extension `json:"extension"`
+
+		ID   string  `json:"id"`
+		Path *String `json:"path"`
+		Type *Code   `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	edsd.Extension = raw.Extension
+	edsd.ID = raw.ID
+	edsd.Path = raw.Path
+	edsd.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ElementDefinitionSlicingDiscriminator)(nil)
+var _ json.Unmarshaler = (*ElementDefinitionSlicingDiscriminator)(nil)
+
+func (edt *ElementDefinitionType) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (edt *ElementDefinitionType) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Aggregation []*Code      `json:"aggregation"`
+		Code        *URI         `json:"code"`
+		Extension   []*Extension `json:"extension"`
+
+		ID            string       `json:"id"`
+		Profile       []*Canonical `json:"profile"`
+		TargetProfile []*Canonical `json:"targetProfile"`
+		Versioning    *Code        `json:"versioning"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	edt.Aggregation = raw.Aggregation
+	edt.Code = raw.Code
+	edt.Extension = raw.Extension
+	edt.ID = raw.ID
+	edt.Profile = raw.Profile
+	edt.TargetProfile = raw.TargetProfile
+	edt.Versioning = raw.Versioning
+	return nil
+}
+
+var _ json.Marshaler = (*ElementDefinitionType)(nil)
+var _ json.Unmarshaler = (*ElementDefinitionType)(nil)

@@ -6,8 +6,11 @@
 package detectedissue
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Indicates an actual or potential clinical issue with or between one or more
@@ -557,3 +560,131 @@ func (dim *DetectedIssueMitigation) GetModifierExtension() []*fhir.Extension {
 	}
 	return dim.ModifierExtension
 }
+
+func (di *DetectedIssue) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (di *DetectedIssue) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Author    *fhir.Reference          `json:"author"`
+		Code      *fhir.CodeableConcept    `json:"code"`
+		Contained []fhir.Resource          `json:"contained"`
+		Detail    *fhir.String             `json:"detail"`
+		Evidence  []*DetectedIssueEvidence `json:"evidence"`
+		Extension []*fhir.Extension        `json:"extension"`
+
+		ID                 string                     `json:"id"`
+		IdentifiedDateTime *fhir.DateTime             `json:"identifiedDateTime"`
+		IdentifiedPeriod   *fhir.Period               `json:"identifiedPeriod"`
+		Identifier         []*fhir.Identifier         `json:"identifier"`
+		Implicated         []*fhir.Reference          `json:"implicated"`
+		ImplicitRules      *fhir.URI                  `json:"implicitRules"`
+		Language           *fhir.Code                 `json:"language"`
+		Meta               *fhir.Meta                 `json:"meta"`
+		Mitigation         []*DetectedIssueMitigation `json:"mitigation"`
+		ModifierExtension  []*fhir.Extension          `json:"modifierExtension"`
+		Patient            *fhir.Reference            `json:"patient"`
+		Reference          *fhir.URI                  `json:"reference"`
+		Severity           *fhir.Code                 `json:"severity"`
+		Status             *fhir.Code                 `json:"status"`
+		Text               *fhir.Narrative            `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	di.Author = raw.Author
+	di.Code = raw.Code
+	di.Contained = raw.Contained
+	di.Detail = raw.Detail
+	di.Evidence = raw.Evidence
+	di.Extension = raw.Extension
+	di.ID = raw.ID
+	di.Identified, err = validate.SelectOneOf[fhir.Element]("DetectedIssue.identified",
+		raw.IdentifiedDateTime,
+		raw.IdentifiedPeriod)
+	if err != nil {
+		return err
+	}
+	di.Identifier = raw.Identifier
+	di.Implicated = raw.Implicated
+	di.ImplicitRules = raw.ImplicitRules
+	di.Language = raw.Language
+	di.Meta = raw.Meta
+	di.Mitigation = raw.Mitigation
+	di.ModifierExtension = raw.ModifierExtension
+	di.Patient = raw.Patient
+	di.Reference = raw.Reference
+	di.Severity = raw.Severity
+	di.Status = raw.Status
+	di.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*DetectedIssue)(nil)
+var _ json.Unmarshaler = (*DetectedIssue)(nil)
+
+func (die *DetectedIssueEvidence) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (die *DetectedIssueEvidence) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      []*fhir.CodeableConcept `json:"code"`
+		Detail    []*fhir.Reference       `json:"detail"`
+		Extension []*fhir.Extension       `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	die.Code = raw.Code
+	die.Detail = raw.Detail
+	die.Extension = raw.Extension
+	die.ID = raw.ID
+	die.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*DetectedIssueEvidence)(nil)
+var _ json.Unmarshaler = (*DetectedIssueEvidence)(nil)
+
+func (dim *DetectedIssueMitigation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (dim *DetectedIssueMitigation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Action    *fhir.CodeableConcept `json:"action"`
+		Author    *fhir.Reference       `json:"author"`
+		Date      *fhir.DateTime        `json:"date"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	dim.Action = raw.Action
+	dim.Author = raw.Author
+	dim.Date = raw.Date
+	dim.Extension = raw.Extension
+	dim.ID = raw.ID
+	dim.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*DetectedIssueMitigation)(nil)
+var _ json.Unmarshaler = (*DetectedIssueMitigation)(nil)

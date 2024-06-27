@@ -6,8 +6,11 @@
 package guidanceresponse
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A guidance response is the formal response to a guidance request, including
@@ -415,3 +418,77 @@ func (gr *GuidanceResponse) GetText() *fhir.Narrative {
 	}
 	return gr.Text
 }
+
+func (gr *GuidanceResponse) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (gr *GuidanceResponse) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contained         []fhir.Resource         `json:"contained"`
+		DataRequirement   []*fhir.DataRequirement `json:"dataRequirement"`
+		Encounter         *fhir.Reference         `json:"encounter"`
+		EvaluationMessage []*fhir.Reference       `json:"evaluationMessage"`
+		Extension         []*fhir.Extension       `json:"extension"`
+
+		ID                    string                  `json:"id"`
+		Identifier            []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules         *fhir.URI               `json:"implicitRules"`
+		Language              *fhir.Code              `json:"language"`
+		Meta                  *fhir.Meta              `json:"meta"`
+		ModifierExtension     []*fhir.Extension       `json:"modifierExtension"`
+		ModuleURI             *fhir.URI               `json:"moduleURI"`
+		ModuleCanonical       *fhir.Canonical         `json:"moduleCanonical"`
+		ModuleCodeableConcept *fhir.CodeableConcept   `json:"moduleCodeableConcept"`
+		Note                  []*fhir.Annotation      `json:"note"`
+		OccurrenceDateTime    *fhir.DateTime          `json:"occurrenceDateTime"`
+		OutputParameters      *fhir.Reference         `json:"outputParameters"`
+		Performer             *fhir.Reference         `json:"performer"`
+		ReasonCode            []*fhir.CodeableConcept `json:"reasonCode"`
+		ReasonReference       []*fhir.Reference       `json:"reasonReference"`
+		RequestIdentifier     *fhir.Identifier        `json:"requestIdentifier"`
+		Result                *fhir.Reference         `json:"result"`
+		Status                *fhir.Code              `json:"status"`
+		Subject               *fhir.Reference         `json:"subject"`
+		Text                  *fhir.Narrative         `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	gr.Contained = raw.Contained
+	gr.DataRequirement = raw.DataRequirement
+	gr.Encounter = raw.Encounter
+	gr.EvaluationMessage = raw.EvaluationMessage
+	gr.Extension = raw.Extension
+	gr.ID = raw.ID
+	gr.Identifier = raw.Identifier
+	gr.ImplicitRules = raw.ImplicitRules
+	gr.Language = raw.Language
+	gr.Meta = raw.Meta
+	gr.ModifierExtension = raw.ModifierExtension
+	gr.Module, err = validate.SelectOneOf[fhir.Element]("GuidanceResponse.module",
+		raw.ModuleURI,
+		raw.ModuleCanonical,
+		raw.ModuleCodeableConcept)
+	if err != nil {
+		return err
+	}
+	gr.Note = raw.Note
+	gr.OccurrenceDateTime = raw.OccurrenceDateTime
+	gr.OutputParameters = raw.OutputParameters
+	gr.Performer = raw.Performer
+	gr.ReasonCode = raw.ReasonCode
+	gr.ReasonReference = raw.ReasonReference
+	gr.RequestIdentifier = raw.RequestIdentifier
+	gr.Result = raw.Result
+	gr.Status = raw.Status
+	gr.Subject = raw.Subject
+	gr.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*GuidanceResponse)(nil)
+var _ json.Unmarshaler = (*GuidanceResponse)(nil)

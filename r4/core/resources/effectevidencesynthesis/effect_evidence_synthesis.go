@@ -8,6 +8,8 @@ package effectevidencesynthesis
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The EffectEvidenceSynthesis resource describes the difference in an outcome
@@ -1353,3 +1355,307 @@ func (eesss *EffectEvidenceSynthesisSampleSize) GetNumberOfStudies() *fhir.Integ
 	}
 	return eesss.NumberOfStudies
 }
+
+func (ees *EffectEvidenceSynthesis) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ees *EffectEvidenceSynthesis) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ApprovalDate        *fhir.Date                               `json:"approvalDate"`
+		Author              []*fhir.ContactDetail                    `json:"author"`
+		Certainty           []*EffectEvidenceSynthesisCertainty      `json:"certainty"`
+		Contact             []*fhir.ContactDetail                    `json:"contact"`
+		Contained           []fhir.Resource                          `json:"contained"`
+		Copyright           *fhir.Markdown                           `json:"copyright"`
+		Date                *fhir.DateTime                           `json:"date"`
+		Description         *fhir.Markdown                           `json:"description"`
+		Editor              []*fhir.ContactDetail                    `json:"editor"`
+		EffectEstimate      []*EffectEvidenceSynthesisEffectEstimate `json:"effectEstimate"`
+		EffectivePeriod     *fhir.Period                             `json:"effectivePeriod"`
+		Endorser            []*fhir.ContactDetail                    `json:"endorser"`
+		Exposure            *fhir.Reference                          `json:"exposure"`
+		ExposureAlternative *fhir.Reference                          `json:"exposureAlternative"`
+		Extension           []*fhir.Extension                        `json:"extension"`
+
+		ID                string                                      `json:"id"`
+		Identifier        []*fhir.Identifier                          `json:"identifier"`
+		ImplicitRules     *fhir.URI                                   `json:"implicitRules"`
+		Jurisdiction      []*fhir.CodeableConcept                     `json:"jurisdiction"`
+		Language          *fhir.Code                                  `json:"language"`
+		LastReviewDate    *fhir.Date                                  `json:"lastReviewDate"`
+		Meta              *fhir.Meta                                  `json:"meta"`
+		ModifierExtension []*fhir.Extension                           `json:"modifierExtension"`
+		Name              *fhir.String                                `json:"name"`
+		Note              []*fhir.Annotation                          `json:"note"`
+		Outcome           *fhir.Reference                             `json:"outcome"`
+		Population        *fhir.Reference                             `json:"population"`
+		Publisher         *fhir.String                                `json:"publisher"`
+		RelatedArtifact   []*fhir.RelatedArtifact                     `json:"relatedArtifact"`
+		ResultsByExposure []*EffectEvidenceSynthesisResultsByExposure `json:"resultsByExposure"`
+		Reviewer          []*fhir.ContactDetail                       `json:"reviewer"`
+		SampleSize        *EffectEvidenceSynthesisSampleSize          `json:"sampleSize"`
+		Status            *fhir.Code                                  `json:"status"`
+		StudyType         *fhir.CodeableConcept                       `json:"studyType"`
+		SynthesisType     *fhir.CodeableConcept                       `json:"synthesisType"`
+		Text              *fhir.Narrative                             `json:"text"`
+		Title             *fhir.String                                `json:"title"`
+		Topic             []*fhir.CodeableConcept                     `json:"topic"`
+		URL               *fhir.URI                                   `json:"url"`
+		UseContext        []*fhir.UsageContext                        `json:"useContext"`
+		Version           *fhir.String                                `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ees.ApprovalDate = raw.ApprovalDate
+	ees.Author = raw.Author
+	ees.Certainty = raw.Certainty
+	ees.Contact = raw.Contact
+	ees.Contained = raw.Contained
+	ees.Copyright = raw.Copyright
+	ees.Date = raw.Date
+	ees.Description = raw.Description
+	ees.Editor = raw.Editor
+	ees.EffectEstimate = raw.EffectEstimate
+	ees.EffectivePeriod = raw.EffectivePeriod
+	ees.Endorser = raw.Endorser
+	ees.Exposure = raw.Exposure
+	ees.ExposureAlternative = raw.ExposureAlternative
+	ees.Extension = raw.Extension
+	ees.ID = raw.ID
+	ees.Identifier = raw.Identifier
+	ees.ImplicitRules = raw.ImplicitRules
+	ees.Jurisdiction = raw.Jurisdiction
+	ees.Language = raw.Language
+	ees.LastReviewDate = raw.LastReviewDate
+	ees.Meta = raw.Meta
+	ees.ModifierExtension = raw.ModifierExtension
+	ees.Name = raw.Name
+	ees.Note = raw.Note
+	ees.Outcome = raw.Outcome
+	ees.Population = raw.Population
+	ees.Publisher = raw.Publisher
+	ees.RelatedArtifact = raw.RelatedArtifact
+	ees.ResultsByExposure = raw.ResultsByExposure
+	ees.Reviewer = raw.Reviewer
+	ees.SampleSize = raw.SampleSize
+	ees.Status = raw.Status
+	ees.StudyType = raw.StudyType
+	ees.SynthesisType = raw.SynthesisType
+	ees.Text = raw.Text
+	ees.Title = raw.Title
+	ees.Topic = raw.Topic
+	ees.URL = raw.URL
+	ees.UseContext = raw.UseContext
+	ees.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*EffectEvidenceSynthesis)(nil)
+var _ json.Unmarshaler = (*EffectEvidenceSynthesis)(nil)
+
+func (eesc *EffectEvidenceSynthesisCertainty) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eesc *EffectEvidenceSynthesisCertainty) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		CertaintySubcomponent []*EffectEvidenceSynthesisCertaintyCertaintySubcomponent `json:"certaintySubcomponent"`
+		Extension             []*fhir.Extension                                        `json:"extension"`
+
+		ID                string                  `json:"id"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Note              []*fhir.Annotation      `json:"note"`
+		Rating            []*fhir.CodeableConcept `json:"rating"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eesc.CertaintySubcomponent = raw.CertaintySubcomponent
+	eesc.Extension = raw.Extension
+	eesc.ID = raw.ID
+	eesc.ModifierExtension = raw.ModifierExtension
+	eesc.Note = raw.Note
+	eesc.Rating = raw.Rating
+	return nil
+}
+
+var _ json.Marshaler = (*EffectEvidenceSynthesisCertainty)(nil)
+var _ json.Unmarshaler = (*EffectEvidenceSynthesisCertainty)(nil)
+
+func (eesccs *EffectEvidenceSynthesisCertaintyCertaintySubcomponent) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eesccs *EffectEvidenceSynthesisCertaintyCertaintySubcomponent) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                  `json:"id"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Note              []*fhir.Annotation      `json:"note"`
+		Rating            []*fhir.CodeableConcept `json:"rating"`
+		Type              *fhir.CodeableConcept   `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eesccs.Extension = raw.Extension
+	eesccs.ID = raw.ID
+	eesccs.ModifierExtension = raw.ModifierExtension
+	eesccs.Note = raw.Note
+	eesccs.Rating = raw.Rating
+	eesccs.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*EffectEvidenceSynthesisCertaintyCertaintySubcomponent)(nil)
+var _ json.Unmarshaler = (*EffectEvidenceSynthesisCertaintyCertaintySubcomponent)(nil)
+
+func (eesee *EffectEvidenceSynthesisEffectEstimate) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eesee *EffectEvidenceSynthesisEffectEstimate) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description *fhir.String      `json:"description"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string                                                    `json:"id"`
+		ModifierExtension []*fhir.Extension                                         `json:"modifierExtension"`
+		PrecisionEstimate []*EffectEvidenceSynthesisEffectEstimatePrecisionEstimate `json:"precisionEstimate"`
+		Type              *fhir.CodeableConcept                                     `json:"type"`
+		UnitOfMeasure     *fhir.CodeableConcept                                     `json:"unitOfMeasure"`
+		Value             *fhir.Decimal                                             `json:"value"`
+		VariantState      *fhir.CodeableConcept                                     `json:"variantState"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eesee.Description = raw.Description
+	eesee.Extension = raw.Extension
+	eesee.ID = raw.ID
+	eesee.ModifierExtension = raw.ModifierExtension
+	eesee.PrecisionEstimate = raw.PrecisionEstimate
+	eesee.Type = raw.Type
+	eesee.UnitOfMeasure = raw.UnitOfMeasure
+	eesee.Value = raw.Value
+	eesee.VariantState = raw.VariantState
+	return nil
+}
+
+var _ json.Marshaler = (*EffectEvidenceSynthesisEffectEstimate)(nil)
+var _ json.Unmarshaler = (*EffectEvidenceSynthesisEffectEstimate)(nil)
+
+func (eeseepe *EffectEvidenceSynthesisEffectEstimatePrecisionEstimate) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eeseepe *EffectEvidenceSynthesisEffectEstimatePrecisionEstimate) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+		From      *fhir.Decimal     `json:"from"`
+
+		ID                string                `json:"id"`
+		Level             *fhir.Decimal         `json:"level"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		To                *fhir.Decimal         `json:"to"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eeseepe.Extension = raw.Extension
+	eeseepe.From = raw.From
+	eeseepe.ID = raw.ID
+	eeseepe.Level = raw.Level
+	eeseepe.ModifierExtension = raw.ModifierExtension
+	eeseepe.To = raw.To
+	eeseepe.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*EffectEvidenceSynthesisEffectEstimatePrecisionEstimate)(nil)
+var _ json.Unmarshaler = (*EffectEvidenceSynthesisEffectEstimatePrecisionEstimate)(nil)
+
+func (eesrbe *EffectEvidenceSynthesisResultsByExposure) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eesrbe *EffectEvidenceSynthesisResultsByExposure) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description   *fhir.String      `json:"description"`
+		ExposureState *fhir.Code        `json:"exposureState"`
+		Extension     []*fhir.Extension `json:"extension"`
+
+		ID                    string                `json:"id"`
+		ModifierExtension     []*fhir.Extension     `json:"modifierExtension"`
+		RiskEvidenceSynthesis *fhir.Reference       `json:"riskEvidenceSynthesis"`
+		VariantState          *fhir.CodeableConcept `json:"variantState"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eesrbe.Description = raw.Description
+	eesrbe.ExposureState = raw.ExposureState
+	eesrbe.Extension = raw.Extension
+	eesrbe.ID = raw.ID
+	eesrbe.ModifierExtension = raw.ModifierExtension
+	eesrbe.RiskEvidenceSynthesis = raw.RiskEvidenceSynthesis
+	eesrbe.VariantState = raw.VariantState
+	return nil
+}
+
+var _ json.Marshaler = (*EffectEvidenceSynthesisResultsByExposure)(nil)
+var _ json.Unmarshaler = (*EffectEvidenceSynthesisResultsByExposure)(nil)
+
+func (eesss *EffectEvidenceSynthesisSampleSize) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eesss *EffectEvidenceSynthesisSampleSize) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description *fhir.String      `json:"description"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                   string            `json:"id"`
+		ModifierExtension    []*fhir.Extension `json:"modifierExtension"`
+		NumberOfParticipants *fhir.Integer     `json:"numberOfParticipants"`
+		NumberOfStudies      *fhir.Integer     `json:"numberOfStudies"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eesss.Description = raw.Description
+	eesss.Extension = raw.Extension
+	eesss.ID = raw.ID
+	eesss.ModifierExtension = raw.ModifierExtension
+	eesss.NumberOfParticipants = raw.NumberOfParticipants
+	eesss.NumberOfStudies = raw.NumberOfStudies
+	return nil
+}
+
+var _ json.Marshaler = (*EffectEvidenceSynthesisSampleSize)(nil)
+var _ json.Unmarshaler = (*EffectEvidenceSynthesisSampleSize)(nil)

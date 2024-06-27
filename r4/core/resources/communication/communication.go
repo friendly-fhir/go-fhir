@@ -6,8 +6,11 @@
 package communication
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // An occurrence of information being transmitted; e.g. an alert that was sent
@@ -592,3 +595,121 @@ func (cp *CommunicationPayload) GetModifierExtension() []*fhir.Extension {
 	}
 	return cp.ModifierExtension
 }
+
+func (c *Communication) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (c *Communication) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		About     []*fhir.Reference       `json:"about"`
+		BasedOn   []*fhir.Reference       `json:"basedOn"`
+		Category  []*fhir.CodeableConcept `json:"category"`
+		Contained []fhir.Resource         `json:"contained"`
+		Encounter *fhir.Reference         `json:"encounter"`
+		Extension []*fhir.Extension       `json:"extension"`
+
+		ID                    string                  `json:"id"`
+		Identifier            []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules         *fhir.URI               `json:"implicitRules"`
+		InResponseTo          []*fhir.Reference       `json:"inResponseTo"`
+		InstantiatesCanonical []*fhir.Canonical       `json:"instantiatesCanonical"`
+		InstantiatesURI       []*fhir.URI             `json:"instantiatesUri"`
+		Language              *fhir.Code              `json:"language"`
+		Medium                []*fhir.CodeableConcept `json:"medium"`
+		Meta                  *fhir.Meta              `json:"meta"`
+		ModifierExtension     []*fhir.Extension       `json:"modifierExtension"`
+		Note                  []*fhir.Annotation      `json:"note"`
+		PartOf                []*fhir.Reference       `json:"partOf"`
+		Payload               []*CommunicationPayload `json:"payload"`
+		Priority              *fhir.Code              `json:"priority"`
+		ReasonCode            []*fhir.CodeableConcept `json:"reasonCode"`
+		ReasonReference       []*fhir.Reference       `json:"reasonReference"`
+		Received              *fhir.DateTime          `json:"received"`
+		Recipient             []*fhir.Reference       `json:"recipient"`
+		Sender                *fhir.Reference         `json:"sender"`
+		Sent                  *fhir.DateTime          `json:"sent"`
+		Status                *fhir.Code              `json:"status"`
+		StatusReason          *fhir.CodeableConcept   `json:"statusReason"`
+		Subject               *fhir.Reference         `json:"subject"`
+		Text                  *fhir.Narrative         `json:"text"`
+		Topic                 *fhir.CodeableConcept   `json:"topic"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	c.About = raw.About
+	c.BasedOn = raw.BasedOn
+	c.Category = raw.Category
+	c.Contained = raw.Contained
+	c.Encounter = raw.Encounter
+	c.Extension = raw.Extension
+	c.ID = raw.ID
+	c.Identifier = raw.Identifier
+	c.ImplicitRules = raw.ImplicitRules
+	c.InResponseTo = raw.InResponseTo
+	c.InstantiatesCanonical = raw.InstantiatesCanonical
+	c.InstantiatesURI = raw.InstantiatesURI
+	c.Language = raw.Language
+	c.Medium = raw.Medium
+	c.Meta = raw.Meta
+	c.ModifierExtension = raw.ModifierExtension
+	c.Note = raw.Note
+	c.PartOf = raw.PartOf
+	c.Payload = raw.Payload
+	c.Priority = raw.Priority
+	c.ReasonCode = raw.ReasonCode
+	c.ReasonReference = raw.ReasonReference
+	c.Received = raw.Received
+	c.Recipient = raw.Recipient
+	c.Sender = raw.Sender
+	c.Sent = raw.Sent
+	c.Status = raw.Status
+	c.StatusReason = raw.StatusReason
+	c.Subject = raw.Subject
+	c.Text = raw.Text
+	c.Topic = raw.Topic
+	return nil
+}
+
+var _ json.Marshaler = (*Communication)(nil)
+var _ json.Unmarshaler = (*Communication)(nil)
+
+func (cp *CommunicationPayload) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cp *CommunicationPayload) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ContentString     *fhir.String      `json:"contentString"`
+		ContentAttachment *fhir.Attachment  `json:"contentAttachment"`
+		ContentReference  *fhir.Reference   `json:"contentReference"`
+		Extension         []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cp.Content, err = validate.SelectOneOf[fhir.Element]("Communication.payload.content",
+		raw.ContentString,
+		raw.ContentAttachment,
+		raw.ContentReference)
+	if err != nil {
+		return err
+	}
+	cp.Extension = raw.Extension
+	cp.ID = raw.ID
+	cp.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*CommunicationPayload)(nil)
+var _ json.Unmarshaler = (*CommunicationPayload)(nil)

@@ -8,6 +8,8 @@ package substancepolymer
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Todo.
@@ -914,3 +916,247 @@ func (sprrusr *SubstancePolymerRepeatRepeatUnitStructuralRepresentation) GetType
 	}
 	return sprrusr.Type
 }
+
+func (sp *SubstancePolymer) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sp *SubstancePolymer) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Class                 *fhir.CodeableConcept   `json:"class"`
+		Contained             []fhir.Resource         `json:"contained"`
+		CopolymerConnectivity []*fhir.CodeableConcept `json:"copolymerConnectivity"`
+		Extension             []*fhir.Extension       `json:"extension"`
+		Geometry              *fhir.CodeableConcept   `json:"geometry"`
+
+		ID                string                        `json:"id"`
+		ImplicitRules     *fhir.URI                     `json:"implicitRules"`
+		Language          *fhir.Code                    `json:"language"`
+		Meta              *fhir.Meta                    `json:"meta"`
+		Modification      []*fhir.String                `json:"modification"`
+		ModifierExtension []*fhir.Extension             `json:"modifierExtension"`
+		MonomerSet        []*SubstancePolymerMonomerSet `json:"monomerSet"`
+		Repeat            []*SubstancePolymerRepeat     `json:"repeat"`
+		Text              *fhir.Narrative               `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sp.Class = raw.Class
+	sp.Contained = raw.Contained
+	sp.CopolymerConnectivity = raw.CopolymerConnectivity
+	sp.Extension = raw.Extension
+	sp.Geometry = raw.Geometry
+	sp.ID = raw.ID
+	sp.ImplicitRules = raw.ImplicitRules
+	sp.Language = raw.Language
+	sp.Meta = raw.Meta
+	sp.Modification = raw.Modification
+	sp.ModifierExtension = raw.ModifierExtension
+	sp.MonomerSet = raw.MonomerSet
+	sp.Repeat = raw.Repeat
+	sp.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*SubstancePolymer)(nil)
+var _ json.Unmarshaler = (*SubstancePolymer)(nil)
+
+func (spms *SubstancePolymerMonomerSet) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (spms *SubstancePolymerMonomerSet) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                                        `json:"id"`
+		ModifierExtension []*fhir.Extension                             `json:"modifierExtension"`
+		RatioType         *fhir.CodeableConcept                         `json:"ratioType"`
+		StartingMaterial  []*SubstancePolymerMonomerSetStartingMaterial `json:"startingMaterial"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	spms.Extension = raw.Extension
+	spms.ID = raw.ID
+	spms.ModifierExtension = raw.ModifierExtension
+	spms.RatioType = raw.RatioType
+	spms.StartingMaterial = raw.StartingMaterial
+	return nil
+}
+
+var _ json.Marshaler = (*SubstancePolymerMonomerSet)(nil)
+var _ json.Unmarshaler = (*SubstancePolymerMonomerSet)(nil)
+
+func (spmssm *SubstancePolymerMonomerSetStartingMaterial) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (spmssm *SubstancePolymerMonomerSetStartingMaterial) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Amount    *fhir.SubstanceAmount `json:"amount"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string                `json:"id"`
+		IsDefining        *fhir.Boolean         `json:"isDefining"`
+		Material          *fhir.CodeableConcept `json:"material"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	spmssm.Amount = raw.Amount
+	spmssm.Extension = raw.Extension
+	spmssm.ID = raw.ID
+	spmssm.IsDefining = raw.IsDefining
+	spmssm.Material = raw.Material
+	spmssm.ModifierExtension = raw.ModifierExtension
+	spmssm.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*SubstancePolymerMonomerSetStartingMaterial)(nil)
+var _ json.Unmarshaler = (*SubstancePolymerMonomerSetStartingMaterial)(nil)
+
+func (spr *SubstancePolymerRepeat) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (spr *SubstancePolymerRepeat) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AverageMolecularFormula *fhir.String      `json:"averageMolecularFormula"`
+		Extension               []*fhir.Extension `json:"extension"`
+
+		ID                   string                              `json:"id"`
+		ModifierExtension    []*fhir.Extension                   `json:"modifierExtension"`
+		NumberOfUnits        *fhir.Integer                       `json:"numberOfUnits"`
+		RepeatUnit           []*SubstancePolymerRepeatRepeatUnit `json:"repeatUnit"`
+		RepeatUnitAmountType *fhir.CodeableConcept               `json:"repeatUnitAmountType"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	spr.AverageMolecularFormula = raw.AverageMolecularFormula
+	spr.Extension = raw.Extension
+	spr.ID = raw.ID
+	spr.ModifierExtension = raw.ModifierExtension
+	spr.NumberOfUnits = raw.NumberOfUnits
+	spr.RepeatUnit = raw.RepeatUnit
+	spr.RepeatUnitAmountType = raw.RepeatUnitAmountType
+	return nil
+}
+
+var _ json.Marshaler = (*SubstancePolymerRepeat)(nil)
+var _ json.Unmarshaler = (*SubstancePolymerRepeat)(nil)
+
+func (sprru *SubstancePolymerRepeatRepeatUnit) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sprru *SubstancePolymerRepeatRepeatUnit) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Amount                 *fhir.SubstanceAmount                                     `json:"amount"`
+		DegreeOfPolymerisation []*SubstancePolymerRepeatRepeatUnitDegreeOfPolymerisation `json:"degreeOfPolymerisation"`
+		Extension              []*fhir.Extension                                         `json:"extension"`
+
+		ID                          string                                                      `json:"id"`
+		ModifierExtension           []*fhir.Extension                                           `json:"modifierExtension"`
+		OrientationOfPolymerisation *fhir.CodeableConcept                                       `json:"orientationOfPolymerisation"`
+		RepeatUnit                  *fhir.String                                                `json:"repeatUnit"`
+		StructuralRepresentation    []*SubstancePolymerRepeatRepeatUnitStructuralRepresentation `json:"structuralRepresentation"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sprru.Amount = raw.Amount
+	sprru.DegreeOfPolymerisation = raw.DegreeOfPolymerisation
+	sprru.Extension = raw.Extension
+	sprru.ID = raw.ID
+	sprru.ModifierExtension = raw.ModifierExtension
+	sprru.OrientationOfPolymerisation = raw.OrientationOfPolymerisation
+	sprru.RepeatUnit = raw.RepeatUnit
+	sprru.StructuralRepresentation = raw.StructuralRepresentation
+	return nil
+}
+
+var _ json.Marshaler = (*SubstancePolymerRepeatRepeatUnit)(nil)
+var _ json.Unmarshaler = (*SubstancePolymerRepeatRepeatUnit)(nil)
+
+func (sprrudop *SubstancePolymerRepeatRepeatUnitDegreeOfPolymerisation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sprrudop *SubstancePolymerRepeatRepeatUnitDegreeOfPolymerisation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Amount    *fhir.SubstanceAmount `json:"amount"`
+		Degree    *fhir.CodeableConcept `json:"degree"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sprrudop.Amount = raw.Amount
+	sprrudop.Degree = raw.Degree
+	sprrudop.Extension = raw.Extension
+	sprrudop.ID = raw.ID
+	sprrudop.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*SubstancePolymerRepeatRepeatUnitDegreeOfPolymerisation)(nil)
+var _ json.Unmarshaler = (*SubstancePolymerRepeatRepeatUnitDegreeOfPolymerisation)(nil)
+
+func (sprrusr *SubstancePolymerRepeatRepeatUnitStructuralRepresentation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sprrusr *SubstancePolymerRepeatRepeatUnitStructuralRepresentation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Attachment *fhir.Attachment  `json:"attachment"`
+		Extension  []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Representation    *fhir.String          `json:"representation"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sprrusr.Attachment = raw.Attachment
+	sprrusr.Extension = raw.Extension
+	sprrusr.ID = raw.ID
+	sprrusr.ModifierExtension = raw.ModifierExtension
+	sprrusr.Representation = raw.Representation
+	sprrusr.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*SubstancePolymerRepeatRepeatUnitStructuralRepresentation)(nil)
+var _ json.Unmarshaler = (*SubstancePolymerRepeatRepeatUnitStructuralRepresentation)(nil)

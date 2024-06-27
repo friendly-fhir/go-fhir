@@ -6,8 +6,11 @@
 package servicerequest
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A record of a request for service such as diagnostic investigations,
@@ -717,3 +720,127 @@ func (sr *ServiceRequest) GetText() *fhir.Narrative {
 	}
 	return sr.Text
 }
+
+func (sr *ServiceRequest) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sr *ServiceRequest) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AsNeededBoolean         *fhir.Boolean           `json:"asNeededBoolean"`
+		AsNeededCodeableConcept *fhir.CodeableConcept   `json:"asNeededCodeableConcept"`
+		AuthoredOn              *fhir.DateTime          `json:"authoredOn"`
+		BasedOn                 []*fhir.Reference       `json:"basedOn"`
+		BodySite                []*fhir.CodeableConcept `json:"bodySite"`
+		Category                []*fhir.CodeableConcept `json:"category"`
+		Code                    *fhir.CodeableConcept   `json:"code"`
+		Contained               []fhir.Resource         `json:"contained"`
+		DoNotPerform            *fhir.Boolean           `json:"doNotPerform"`
+		Encounter               *fhir.Reference         `json:"encounter"`
+		Extension               []*fhir.Extension       `json:"extension"`
+
+		ID                    string                  `json:"id"`
+		Identifier            []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules         *fhir.URI               `json:"implicitRules"`
+		InstantiatesCanonical []*fhir.Canonical       `json:"instantiatesCanonical"`
+		InstantiatesURI       []*fhir.URI             `json:"instantiatesUri"`
+		Insurance             []*fhir.Reference       `json:"insurance"`
+		Intent                *fhir.Code              `json:"intent"`
+		Language              *fhir.Code              `json:"language"`
+		LocationCode          []*fhir.CodeableConcept `json:"locationCode"`
+		LocationReference     []*fhir.Reference       `json:"locationReference"`
+		Meta                  *fhir.Meta              `json:"meta"`
+		ModifierExtension     []*fhir.Extension       `json:"modifierExtension"`
+		Note                  []*fhir.Annotation      `json:"note"`
+		OccurrenceDateTime    *fhir.DateTime          `json:"occurrenceDateTime"`
+		OccurrencePeriod      *fhir.Period            `json:"occurrencePeriod"`
+		OccurrenceTiming      *fhir.Timing            `json:"occurrenceTiming"`
+		OrderDetail           []*fhir.CodeableConcept `json:"orderDetail"`
+		PatientInstruction    *fhir.String            `json:"patientInstruction"`
+		Performer             []*fhir.Reference       `json:"performer"`
+		PerformerType         *fhir.CodeableConcept   `json:"performerType"`
+		Priority              *fhir.Code              `json:"priority"`
+		QuantityQuantity      *fhir.Quantity          `json:"quantityQuantity"`
+		QuantityRatio         *fhir.Ratio             `json:"quantityRatio"`
+		QuantityRange         *fhir.Range             `json:"quantityRange"`
+		ReasonCode            []*fhir.CodeableConcept `json:"reasonCode"`
+		ReasonReference       []*fhir.Reference       `json:"reasonReference"`
+		RelevantHistory       []*fhir.Reference       `json:"relevantHistory"`
+		Replaces              []*fhir.Reference       `json:"replaces"`
+		Requester             *fhir.Reference         `json:"requester"`
+		Requisition           *fhir.Identifier        `json:"requisition"`
+		Specimen              []*fhir.Reference       `json:"specimen"`
+		Status                *fhir.Code              `json:"status"`
+		Subject               *fhir.Reference         `json:"subject"`
+		SupportingInfo        []*fhir.Reference       `json:"supportingInfo"`
+		Text                  *fhir.Narrative         `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sr.AsNeeded, err = validate.SelectOneOf[fhir.Element]("ServiceRequest.asNeeded",
+		raw.AsNeededBoolean,
+		raw.AsNeededCodeableConcept)
+	if err != nil {
+		return err
+	}
+	sr.AuthoredOn = raw.AuthoredOn
+	sr.BasedOn = raw.BasedOn
+	sr.BodySite = raw.BodySite
+	sr.Category = raw.Category
+	sr.Code = raw.Code
+	sr.Contained = raw.Contained
+	sr.DoNotPerform = raw.DoNotPerform
+	sr.Encounter = raw.Encounter
+	sr.Extension = raw.Extension
+	sr.ID = raw.ID
+	sr.Identifier = raw.Identifier
+	sr.ImplicitRules = raw.ImplicitRules
+	sr.InstantiatesCanonical = raw.InstantiatesCanonical
+	sr.InstantiatesURI = raw.InstantiatesURI
+	sr.Insurance = raw.Insurance
+	sr.Intent = raw.Intent
+	sr.Language = raw.Language
+	sr.LocationCode = raw.LocationCode
+	sr.LocationReference = raw.LocationReference
+	sr.Meta = raw.Meta
+	sr.ModifierExtension = raw.ModifierExtension
+	sr.Note = raw.Note
+	sr.Occurrence, err = validate.SelectOneOf[fhir.Element]("ServiceRequest.occurrence",
+		raw.OccurrenceDateTime,
+		raw.OccurrencePeriod,
+		raw.OccurrenceTiming)
+	if err != nil {
+		return err
+	}
+	sr.OrderDetail = raw.OrderDetail
+	sr.PatientInstruction = raw.PatientInstruction
+	sr.Performer = raw.Performer
+	sr.PerformerType = raw.PerformerType
+	sr.Priority = raw.Priority
+	sr.Quantity, err = validate.SelectOneOf[fhir.Element]("ServiceRequest.quantity",
+		raw.QuantityQuantity,
+		raw.QuantityRatio,
+		raw.QuantityRange)
+	if err != nil {
+		return err
+	}
+	sr.ReasonCode = raw.ReasonCode
+	sr.ReasonReference = raw.ReasonReference
+	sr.RelevantHistory = raw.RelevantHistory
+	sr.Replaces = raw.Replaces
+	sr.Requester = raw.Requester
+	sr.Requisition = raw.Requisition
+	sr.Specimen = raw.Specimen
+	sr.Status = raw.Status
+	sr.Subject = raw.Subject
+	sr.SupportingInfo = raw.SupportingInfo
+	sr.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*ServiceRequest)(nil)
+var _ json.Unmarshaler = (*ServiceRequest)(nil)

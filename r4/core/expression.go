@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Expression Type: A expression that is evaluated
@@ -122,3 +124,37 @@ func (e *Expression) GetReference() *URI {
 	}
 	return e.Reference
 }
+
+func (e *Expression) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (e *Expression) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description *String      `json:"description"`
+		Expression  *String      `json:"expression"`
+		Extension   []*Extension `json:"extension"`
+
+		ID        string `json:"id"`
+		Language  *Code  `json:"language"`
+		Name      *ID    `json:"name"`
+		Reference *URI   `json:"reference"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	e.Description = raw.Description
+	e.Expression = raw.Expression
+	e.Extension = raw.Extension
+	e.ID = raw.ID
+	e.Language = raw.Language
+	e.Name = raw.Name
+	e.Reference = raw.Reference
+	return nil
+}
+
+var _ json.Marshaler = (*Expression)(nil)
+var _ json.Unmarshaler = (*Expression)(nil)

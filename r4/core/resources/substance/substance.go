@@ -6,8 +6,11 @@
 package substance
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A homogeneous material with a definite composition.
@@ -482,3 +485,121 @@ func (si *SubstanceInstance) GetQuantity() *fhir.Quantity {
 	}
 	return si.Quantity
 }
+
+func (s *Substance) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (s *Substance) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Category    []*fhir.CodeableConcept `json:"category"`
+		Code        *fhir.CodeableConcept   `json:"code"`
+		Contained   []fhir.Resource         `json:"contained"`
+		Description *fhir.String            `json:"description"`
+		Extension   []*fhir.Extension       `json:"extension"`
+
+		ID                string                 `json:"id"`
+		Identifier        []*fhir.Identifier     `json:"identifier"`
+		ImplicitRules     *fhir.URI              `json:"implicitRules"`
+		Ingredient        []*SubstanceIngredient `json:"ingredient"`
+		Instance          []*SubstanceInstance   `json:"instance"`
+		Language          *fhir.Code             `json:"language"`
+		Meta              *fhir.Meta             `json:"meta"`
+		ModifierExtension []*fhir.Extension      `json:"modifierExtension"`
+		Status            *fhir.Code             `json:"status"`
+		Text              *fhir.Narrative        `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	s.Category = raw.Category
+	s.Code = raw.Code
+	s.Contained = raw.Contained
+	s.Description = raw.Description
+	s.Extension = raw.Extension
+	s.ID = raw.ID
+	s.Identifier = raw.Identifier
+	s.ImplicitRules = raw.ImplicitRules
+	s.Ingredient = raw.Ingredient
+	s.Instance = raw.Instance
+	s.Language = raw.Language
+	s.Meta = raw.Meta
+	s.ModifierExtension = raw.ModifierExtension
+	s.Status = raw.Status
+	s.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*Substance)(nil)
+var _ json.Unmarshaler = (*Substance)(nil)
+
+func (si *SubstanceIngredient) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (si *SubstanceIngredient) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                       string                `json:"id"`
+		ModifierExtension        []*fhir.Extension     `json:"modifierExtension"`
+		Quantity                 *fhir.Ratio           `json:"quantity"`
+		SubstanceCodeableConcept *fhir.CodeableConcept `json:"substanceCodeableConcept"`
+		SubstanceReference       *fhir.Reference       `json:"substanceReference"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	si.Extension = raw.Extension
+	si.ID = raw.ID
+	si.ModifierExtension = raw.ModifierExtension
+	si.Quantity = raw.Quantity
+	si.Substance, err = validate.SelectOneOf[fhir.Element]("Substance.ingredient.substance",
+		raw.SubstanceCodeableConcept,
+		raw.SubstanceReference)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceIngredient)(nil)
+var _ json.Unmarshaler = (*SubstanceIngredient)(nil)
+
+func (si *SubstanceInstance) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (si *SubstanceInstance) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Expiry    *fhir.DateTime    `json:"expiry"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Identifier        *fhir.Identifier  `json:"identifier"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Quantity          *fhir.Quantity    `json:"quantity"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	si.Expiry = raw.Expiry
+	si.Extension = raw.Extension
+	si.ID = raw.ID
+	si.Identifier = raw.Identifier
+	si.ModifierExtension = raw.ModifierExtension
+	si.Quantity = raw.Quantity
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceInstance)(nil)
+var _ json.Unmarshaler = (*SubstanceInstance)(nil)

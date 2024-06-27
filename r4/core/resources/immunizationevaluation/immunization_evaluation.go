@@ -6,8 +6,11 @@
 package immunizationevaluation
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Describes a comparison of an immunization event against published
@@ -375,3 +378,77 @@ func (ie *ImmunizationEvaluation) GetText() *fhir.Narrative {
 	}
 	return ie.Text
 }
+
+func (ie *ImmunizationEvaluation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ie *ImmunizationEvaluation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Authority             *fhir.Reference         `json:"authority"`
+		Contained             []fhir.Resource         `json:"contained"`
+		Date                  *fhir.DateTime          `json:"date"`
+		Description           *fhir.String            `json:"description"`
+		DoseNumberPositiveInt *fhir.PositiveInt       `json:"doseNumberPositiveInt"`
+		DoseNumberString      *fhir.String            `json:"doseNumberString"`
+		DoseStatus            *fhir.CodeableConcept   `json:"doseStatus"`
+		DoseStatusReason      []*fhir.CodeableConcept `json:"doseStatusReason"`
+		Extension             []*fhir.Extension       `json:"extension"`
+
+		ID                     string                `json:"id"`
+		Identifier             []*fhir.Identifier    `json:"identifier"`
+		ImmunizationEvent      *fhir.Reference       `json:"immunizationEvent"`
+		ImplicitRules          *fhir.URI             `json:"implicitRules"`
+		Language               *fhir.Code            `json:"language"`
+		Meta                   *fhir.Meta            `json:"meta"`
+		ModifierExtension      []*fhir.Extension     `json:"modifierExtension"`
+		Patient                *fhir.Reference       `json:"patient"`
+		Series                 *fhir.String          `json:"series"`
+		SeriesDosesPositiveInt *fhir.PositiveInt     `json:"seriesDosesPositiveInt"`
+		SeriesDosesString      *fhir.String          `json:"seriesDosesString"`
+		Status                 *fhir.Code            `json:"status"`
+		TargetDisease          *fhir.CodeableConcept `json:"targetDisease"`
+		Text                   *fhir.Narrative       `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ie.Authority = raw.Authority
+	ie.Contained = raw.Contained
+	ie.Date = raw.Date
+	ie.Description = raw.Description
+	ie.DoseNumber, err = validate.SelectOneOf[fhir.Element]("ImmunizationEvaluation.doseNumber",
+		raw.DoseNumberPositiveInt,
+		raw.DoseNumberString)
+	if err != nil {
+		return err
+	}
+	ie.DoseStatus = raw.DoseStatus
+	ie.DoseStatusReason = raw.DoseStatusReason
+	ie.Extension = raw.Extension
+	ie.ID = raw.ID
+	ie.Identifier = raw.Identifier
+	ie.ImmunizationEvent = raw.ImmunizationEvent
+	ie.ImplicitRules = raw.ImplicitRules
+	ie.Language = raw.Language
+	ie.Meta = raw.Meta
+	ie.ModifierExtension = raw.ModifierExtension
+	ie.Patient = raw.Patient
+	ie.Series = raw.Series
+	ie.SeriesDoses, err = validate.SelectOneOf[fhir.Element]("ImmunizationEvaluation.seriesDoses",
+		raw.SeriesDosesPositiveInt,
+		raw.SeriesDosesString)
+	if err != nil {
+		return err
+	}
+	ie.Status = raw.Status
+	ie.TargetDisease = raw.TargetDisease
+	ie.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*ImmunizationEvaluation)(nil)
+var _ json.Unmarshaler = (*ImmunizationEvaluation)(nil)

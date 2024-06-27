@@ -8,6 +8,8 @@ package researchsubject
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A physical entity which is the primary unit of operational and/or
@@ -263,3 +265,55 @@ func (rs *ResearchSubject) GetText() *fhir.Narrative {
 	}
 	return rs.Text
 }
+
+func (rs *ResearchSubject) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (rs *ResearchSubject) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ActualArm   *fhir.String      `json:"actualArm"`
+		AssignedArm *fhir.String      `json:"assignedArm"`
+		Consent     *fhir.Reference   `json:"consent"`
+		Contained   []fhir.Resource   `json:"contained"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string             `json:"id"`
+		Identifier        []*fhir.Identifier `json:"identifier"`
+		ImplicitRules     *fhir.URI          `json:"implicitRules"`
+		Individual        *fhir.Reference    `json:"individual"`
+		Language          *fhir.Code         `json:"language"`
+		Meta              *fhir.Meta         `json:"meta"`
+		ModifierExtension []*fhir.Extension  `json:"modifierExtension"`
+		Period            *fhir.Period       `json:"period"`
+		Status            *fhir.Code         `json:"status"`
+		Study             *fhir.Reference    `json:"study"`
+		Text              *fhir.Narrative    `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	rs.ActualArm = raw.ActualArm
+	rs.AssignedArm = raw.AssignedArm
+	rs.Consent = raw.Consent
+	rs.Contained = raw.Contained
+	rs.Extension = raw.Extension
+	rs.ID = raw.ID
+	rs.Identifier = raw.Identifier
+	rs.ImplicitRules = raw.ImplicitRules
+	rs.Individual = raw.Individual
+	rs.Language = raw.Language
+	rs.Meta = raw.Meta
+	rs.ModifierExtension = raw.ModifierExtension
+	rs.Period = raw.Period
+	rs.Status = raw.Status
+	rs.Study = raw.Study
+	rs.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*ResearchSubject)(nil)
+var _ json.Unmarshaler = (*ResearchSubject)(nil)

@@ -8,6 +8,8 @@ package basic
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Basic is used for handling concepts not yet defined in FHIR, narrative-only
@@ -226,3 +228,49 @@ func (b *Basic) GetText() *fhir.Narrative {
 	}
 	return b.Text
 }
+
+func (b *Basic) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (b *Basic) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Author    *fhir.Reference       `json:"author"`
+		Code      *fhir.CodeableConcept `json:"code"`
+		Contained []fhir.Resource       `json:"contained"`
+		Created   *fhir.Date            `json:"created"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string             `json:"id"`
+		Identifier        []*fhir.Identifier `json:"identifier"`
+		ImplicitRules     *fhir.URI          `json:"implicitRules"`
+		Language          *fhir.Code         `json:"language"`
+		Meta              *fhir.Meta         `json:"meta"`
+		ModifierExtension []*fhir.Extension  `json:"modifierExtension"`
+		Subject           *fhir.Reference    `json:"subject"`
+		Text              *fhir.Narrative    `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	b.Author = raw.Author
+	b.Code = raw.Code
+	b.Contained = raw.Contained
+	b.Created = raw.Created
+	b.Extension = raw.Extension
+	b.ID = raw.ID
+	b.Identifier = raw.Identifier
+	b.ImplicitRules = raw.ImplicitRules
+	b.Language = raw.Language
+	b.Meta = raw.Meta
+	b.ModifierExtension = raw.ModifierExtension
+	b.Subject = raw.Subject
+	b.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*Basic)(nil)
+var _ json.Unmarshaler = (*Basic)(nil)

@@ -8,6 +8,8 @@ package medicinalproductundesirableeffect
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Describe the undesirable effects of the medicinal product.
@@ -221,3 +223,49 @@ func (mpue *MedicinalProductUndesirableEffect) GetText() *fhir.Narrative {
 	}
 	return mpue.Text
 }
+
+func (mpue *MedicinalProductUndesirableEffect) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpue *MedicinalProductUndesirableEffect) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Classification        *fhir.CodeableConcept `json:"classification"`
+		Contained             []fhir.Resource       `json:"contained"`
+		Extension             []*fhir.Extension     `json:"extension"`
+		FrequencyOfOccurrence *fhir.CodeableConcept `json:"frequencyOfOccurrence"`
+
+		ID                     string                `json:"id"`
+		ImplicitRules          *fhir.URI             `json:"implicitRules"`
+		Language               *fhir.Code            `json:"language"`
+		Meta                   *fhir.Meta            `json:"meta"`
+		ModifierExtension      []*fhir.Extension     `json:"modifierExtension"`
+		Population             []*fhir.Population    `json:"population"`
+		Subject                []*fhir.Reference     `json:"subject"`
+		SymptomConditionEffect *fhir.CodeableConcept `json:"symptomConditionEffect"`
+		Text                   *fhir.Narrative       `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpue.Classification = raw.Classification
+	mpue.Contained = raw.Contained
+	mpue.Extension = raw.Extension
+	mpue.FrequencyOfOccurrence = raw.FrequencyOfOccurrence
+	mpue.ID = raw.ID
+	mpue.ImplicitRules = raw.ImplicitRules
+	mpue.Language = raw.Language
+	mpue.Meta = raw.Meta
+	mpue.ModifierExtension = raw.ModifierExtension
+	mpue.Population = raw.Population
+	mpue.Subject = raw.Subject
+	mpue.SymptomConditionEffect = raw.SymptomConditionEffect
+	mpue.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductUndesirableEffect)(nil)
+var _ json.Unmarshaler = (*MedicinalProductUndesirableEffect)(nil)

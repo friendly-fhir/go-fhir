@@ -6,8 +6,11 @@
 package medicationstatement
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A record of a medication that is being consumed by a patient. A
@@ -462,3 +465,85 @@ func (ms *MedicationStatement) GetText() *fhir.Narrative {
 	}
 	return ms.Text
 }
+
+func (ms *MedicationStatement) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ms *MedicationStatement) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		BasedOn           []*fhir.Reference     `json:"basedOn"`
+		Category          *fhir.CodeableConcept `json:"category"`
+		Contained         []fhir.Resource       `json:"contained"`
+		Context           *fhir.Reference       `json:"context"`
+		DateAsserted      *fhir.DateTime        `json:"dateAsserted"`
+		DerivedFrom       []*fhir.Reference     `json:"derivedFrom"`
+		Dosage            []*fhir.Dosage        `json:"dosage"`
+		EffectiveDateTime *fhir.DateTime        `json:"effectiveDateTime"`
+		EffectivePeriod   *fhir.Period          `json:"effectivePeriod"`
+		Extension         []*fhir.Extension     `json:"extension"`
+
+		ID                        string                  `json:"id"`
+		Identifier                []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules             *fhir.URI               `json:"implicitRules"`
+		InformationSource         *fhir.Reference         `json:"informationSource"`
+		Language                  *fhir.Code              `json:"language"`
+		MedicationCodeableConcept *fhir.CodeableConcept   `json:"medicationCodeableConcept"`
+		MedicationReference       *fhir.Reference         `json:"medicationReference"`
+		Meta                      *fhir.Meta              `json:"meta"`
+		ModifierExtension         []*fhir.Extension       `json:"modifierExtension"`
+		Note                      []*fhir.Annotation      `json:"note"`
+		PartOf                    []*fhir.Reference       `json:"partOf"`
+		ReasonCode                []*fhir.CodeableConcept `json:"reasonCode"`
+		ReasonReference           []*fhir.Reference       `json:"reasonReference"`
+		Status                    *fhir.Code              `json:"status"`
+		StatusReason              []*fhir.CodeableConcept `json:"statusReason"`
+		Subject                   *fhir.Reference         `json:"subject"`
+		Text                      *fhir.Narrative         `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ms.BasedOn = raw.BasedOn
+	ms.Category = raw.Category
+	ms.Contained = raw.Contained
+	ms.Context = raw.Context
+	ms.DateAsserted = raw.DateAsserted
+	ms.DerivedFrom = raw.DerivedFrom
+	ms.Dosage = raw.Dosage
+	ms.Effective, err = validate.SelectOneOf[fhir.Element]("MedicationStatement.effective",
+		raw.EffectiveDateTime,
+		raw.EffectivePeriod)
+	if err != nil {
+		return err
+	}
+	ms.Extension = raw.Extension
+	ms.ID = raw.ID
+	ms.Identifier = raw.Identifier
+	ms.ImplicitRules = raw.ImplicitRules
+	ms.InformationSource = raw.InformationSource
+	ms.Language = raw.Language
+	ms.Medication, err = validate.SelectOneOf[fhir.Element]("MedicationStatement.medication",
+		raw.MedicationCodeableConcept,
+		raw.MedicationReference)
+	if err != nil {
+		return err
+	}
+	ms.Meta = raw.Meta
+	ms.ModifierExtension = raw.ModifierExtension
+	ms.Note = raw.Note
+	ms.PartOf = raw.PartOf
+	ms.ReasonCode = raw.ReasonCode
+	ms.ReasonReference = raw.ReasonReference
+	ms.Status = raw.Status
+	ms.StatusReason = raw.StatusReason
+	ms.Subject = raw.Subject
+	ms.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*MedicationStatement)(nil)
+var _ json.Unmarshaler = (*MedicationStatement)(nil)

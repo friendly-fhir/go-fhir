@@ -8,6 +8,8 @@ package searchparameter
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A search parameter that defines a named search item that can be used to
@@ -635,3 +637,121 @@ func (spc *SearchParameterComponent) GetModifierExtension() []*fhir.Extension {
 	}
 	return spc.ModifierExtension
 }
+
+func (sp *SearchParameter) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sp *SearchParameter) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Base         []*fhir.Code                `json:"base"`
+		Chain        []*fhir.String              `json:"chain"`
+		Code         *fhir.Code                  `json:"code"`
+		Comparator   []*fhir.Code                `json:"comparator"`
+		Component    []*SearchParameterComponent `json:"component"`
+		Contact      []*fhir.ContactDetail       `json:"contact"`
+		Contained    []fhir.Resource             `json:"contained"`
+		Date         *fhir.DateTime              `json:"date"`
+		DerivedFrom  *fhir.Canonical             `json:"derivedFrom"`
+		Description  *fhir.Markdown              `json:"description"`
+		Experimental *fhir.Boolean               `json:"experimental"`
+		Expression   *fhir.String                `json:"expression"`
+		Extension    []*fhir.Extension           `json:"extension"`
+
+		ID                string                  `json:"id"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Jurisdiction      []*fhir.CodeableConcept `json:"jurisdiction"`
+		Language          *fhir.Code              `json:"language"`
+		Meta              *fhir.Meta              `json:"meta"`
+		Modifier          []*fhir.Code            `json:"modifier"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		MultipleAnd       *fhir.Boolean           `json:"multipleAnd"`
+		MultipleOr        *fhir.Boolean           `json:"multipleOr"`
+		Name              *fhir.String            `json:"name"`
+		Publisher         *fhir.String            `json:"publisher"`
+		Purpose           *fhir.Markdown          `json:"purpose"`
+		Status            *fhir.Code              `json:"status"`
+		Target            []*fhir.Code            `json:"target"`
+		Text              *fhir.Narrative         `json:"text"`
+		Type              *fhir.Code              `json:"type"`
+		URL               *fhir.URI               `json:"url"`
+		UseContext        []*fhir.UsageContext    `json:"useContext"`
+		Version           *fhir.String            `json:"version"`
+		Xpath             *fhir.String            `json:"xpath"`
+		XpathUsage        *fhir.Code              `json:"xpathUsage"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sp.Base = raw.Base
+	sp.Chain = raw.Chain
+	sp.Code = raw.Code
+	sp.Comparator = raw.Comparator
+	sp.Component = raw.Component
+	sp.Contact = raw.Contact
+	sp.Contained = raw.Contained
+	sp.Date = raw.Date
+	sp.DerivedFrom = raw.DerivedFrom
+	sp.Description = raw.Description
+	sp.Experimental = raw.Experimental
+	sp.Expression = raw.Expression
+	sp.Extension = raw.Extension
+	sp.ID = raw.ID
+	sp.ImplicitRules = raw.ImplicitRules
+	sp.Jurisdiction = raw.Jurisdiction
+	sp.Language = raw.Language
+	sp.Meta = raw.Meta
+	sp.Modifier = raw.Modifier
+	sp.ModifierExtension = raw.ModifierExtension
+	sp.MultipleAnd = raw.MultipleAnd
+	sp.MultipleOr = raw.MultipleOr
+	sp.Name = raw.Name
+	sp.Publisher = raw.Publisher
+	sp.Purpose = raw.Purpose
+	sp.Status = raw.Status
+	sp.Target = raw.Target
+	sp.Text = raw.Text
+	sp.Type = raw.Type
+	sp.URL = raw.URL
+	sp.UseContext = raw.UseContext
+	sp.Version = raw.Version
+	sp.Xpath = raw.Xpath
+	sp.XpathUsage = raw.XpathUsage
+	return nil
+}
+
+var _ json.Marshaler = (*SearchParameter)(nil)
+var _ json.Unmarshaler = (*SearchParameter)(nil)
+
+func (spc *SearchParameterComponent) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (spc *SearchParameterComponent) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Definition *fhir.Canonical   `json:"definition"`
+		Expression *fhir.String      `json:"expression"`
+		Extension  []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	spc.Definition = raw.Definition
+	spc.Expression = raw.Expression
+	spc.Extension = raw.Extension
+	spc.ID = raw.ID
+	spc.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*SearchParameterComponent)(nil)
+var _ json.Unmarshaler = (*SearchParameterComponent)(nil)

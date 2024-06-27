@@ -8,6 +8,8 @@ package catalogentry
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Catalog entries are wrappers that contextualize items included in a catalog.
@@ -427,3 +429,95 @@ func (cere *CatalogEntryRelatedEntry) GetRelationtype() *fhir.Code {
 	}
 	return cere.Relationtype
 }
+
+func (ce *CatalogEntry) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ce *CatalogEntry) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AdditionalCharacteristic []*fhir.CodeableConcept `json:"additionalCharacteristic"`
+		AdditionalClassification []*fhir.CodeableConcept `json:"additionalClassification"`
+		AdditionalIdentifier     []*fhir.Identifier      `json:"additionalIdentifier"`
+		Classification           []*fhir.CodeableConcept `json:"classification"`
+		Contained                []fhir.Resource         `json:"contained"`
+		Extension                []*fhir.Extension       `json:"extension"`
+
+		ID                string                      `json:"id"`
+		Identifier        []*fhir.Identifier          `json:"identifier"`
+		ImplicitRules     *fhir.URI                   `json:"implicitRules"`
+		Language          *fhir.Code                  `json:"language"`
+		LastUpdated       *fhir.DateTime              `json:"lastUpdated"`
+		Meta              *fhir.Meta                  `json:"meta"`
+		ModifierExtension []*fhir.Extension           `json:"modifierExtension"`
+		Orderable         *fhir.Boolean               `json:"orderable"`
+		ReferencedItem    *fhir.Reference             `json:"referencedItem"`
+		RelatedEntry      []*CatalogEntryRelatedEntry `json:"relatedEntry"`
+		Status            *fhir.Code                  `json:"status"`
+		Text              *fhir.Narrative             `json:"text"`
+		Type              *fhir.CodeableConcept       `json:"type"`
+		ValidTo           *fhir.DateTime              `json:"validTo"`
+		ValidityPeriod    *fhir.Period                `json:"validityPeriod"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ce.AdditionalCharacteristic = raw.AdditionalCharacteristic
+	ce.AdditionalClassification = raw.AdditionalClassification
+	ce.AdditionalIdentifier = raw.AdditionalIdentifier
+	ce.Classification = raw.Classification
+	ce.Contained = raw.Contained
+	ce.Extension = raw.Extension
+	ce.ID = raw.ID
+	ce.Identifier = raw.Identifier
+	ce.ImplicitRules = raw.ImplicitRules
+	ce.Language = raw.Language
+	ce.LastUpdated = raw.LastUpdated
+	ce.Meta = raw.Meta
+	ce.ModifierExtension = raw.ModifierExtension
+	ce.Orderable = raw.Orderable
+	ce.ReferencedItem = raw.ReferencedItem
+	ce.RelatedEntry = raw.RelatedEntry
+	ce.Status = raw.Status
+	ce.Text = raw.Text
+	ce.Type = raw.Type
+	ce.ValidTo = raw.ValidTo
+	ce.ValidityPeriod = raw.ValidityPeriod
+	return nil
+}
+
+var _ json.Marshaler = (*CatalogEntry)(nil)
+var _ json.Unmarshaler = (*CatalogEntry)(nil)
+
+func (cere *CatalogEntryRelatedEntry) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cere *CatalogEntryRelatedEntry) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Item              *fhir.Reference   `json:"item"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Relationtype      *fhir.Code        `json:"relationtype"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cere.Extension = raw.Extension
+	cere.ID = raw.ID
+	cere.Item = raw.Item
+	cere.ModifierExtension = raw.ModifierExtension
+	cere.Relationtype = raw.Relationtype
+	return nil
+}
+
+var _ json.Marshaler = (*CatalogEntryRelatedEntry)(nil)
+var _ json.Unmarshaler = (*CatalogEntryRelatedEntry)(nil)

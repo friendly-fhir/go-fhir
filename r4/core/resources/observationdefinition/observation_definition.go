@@ -8,6 +8,8 @@ package observationdefinition
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Set of definitional characteristics for a kind of observation or measurement
@@ -641,3 +643,141 @@ func (odqd *ObservationDefinitionQuantitativeDetails) GetUnit() *fhir.CodeableCo
 	}
 	return odqd.Unit
 }
+
+func (od *ObservationDefinition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (od *ObservationDefinition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AbnormalCodedValueSet *fhir.Reference         `json:"abnormalCodedValueSet"`
+		Category              []*fhir.CodeableConcept `json:"category"`
+		Code                  *fhir.CodeableConcept   `json:"code"`
+		Contained             []fhir.Resource         `json:"contained"`
+		CriticalCodedValueSet *fhir.Reference         `json:"criticalCodedValueSet"`
+		Extension             []*fhir.Extension       `json:"extension"`
+
+		ID                     string                                    `json:"id"`
+		Identifier             []*fhir.Identifier                        `json:"identifier"`
+		ImplicitRules          *fhir.URI                                 `json:"implicitRules"`
+		Language               *fhir.Code                                `json:"language"`
+		Meta                   *fhir.Meta                                `json:"meta"`
+		Method                 *fhir.CodeableConcept                     `json:"method"`
+		ModifierExtension      []*fhir.Extension                         `json:"modifierExtension"`
+		MultipleResultsAllowed *fhir.Boolean                             `json:"multipleResultsAllowed"`
+		NormalCodedValueSet    *fhir.Reference                           `json:"normalCodedValueSet"`
+		PermittedDataType      []*fhir.Code                              `json:"permittedDataType"`
+		PreferredReportName    *fhir.String                              `json:"preferredReportName"`
+		QualifiedInterval      []*ObservationDefinitionQualifiedInterval `json:"qualifiedInterval"`
+		QuantitativeDetails    *ObservationDefinitionQuantitativeDetails `json:"quantitativeDetails"`
+		Text                   *fhir.Narrative                           `json:"text"`
+		ValidCodedValueSet     *fhir.Reference                           `json:"validCodedValueSet"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	od.AbnormalCodedValueSet = raw.AbnormalCodedValueSet
+	od.Category = raw.Category
+	od.Code = raw.Code
+	od.Contained = raw.Contained
+	od.CriticalCodedValueSet = raw.CriticalCodedValueSet
+	od.Extension = raw.Extension
+	od.ID = raw.ID
+	od.Identifier = raw.Identifier
+	od.ImplicitRules = raw.ImplicitRules
+	od.Language = raw.Language
+	od.Meta = raw.Meta
+	od.Method = raw.Method
+	od.ModifierExtension = raw.ModifierExtension
+	od.MultipleResultsAllowed = raw.MultipleResultsAllowed
+	od.NormalCodedValueSet = raw.NormalCodedValueSet
+	od.PermittedDataType = raw.PermittedDataType
+	od.PreferredReportName = raw.PreferredReportName
+	od.QualifiedInterval = raw.QualifiedInterval
+	od.QuantitativeDetails = raw.QuantitativeDetails
+	od.Text = raw.Text
+	od.ValidCodedValueSet = raw.ValidCodedValueSet
+	return nil
+}
+
+var _ json.Marshaler = (*ObservationDefinition)(nil)
+var _ json.Unmarshaler = (*ObservationDefinition)(nil)
+
+func (odqi *ObservationDefinitionQualifiedInterval) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (odqi *ObservationDefinitionQualifiedInterval) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Age            *fhir.Range             `json:"age"`
+		AppliesTo      []*fhir.CodeableConcept `json:"appliesTo"`
+		Category       *fhir.Code              `json:"category"`
+		Condition      *fhir.String            `json:"condition"`
+		Context        *fhir.CodeableConcept   `json:"context"`
+		Extension      []*fhir.Extension       `json:"extension"`
+		Gender         *fhir.Code              `json:"gender"`
+		GestationalAge *fhir.Range             `json:"gestationalAge"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Range             *fhir.Range       `json:"range"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	odqi.Age = raw.Age
+	odqi.AppliesTo = raw.AppliesTo
+	odqi.Category = raw.Category
+	odqi.Condition = raw.Condition
+	odqi.Context = raw.Context
+	odqi.Extension = raw.Extension
+	odqi.Gender = raw.Gender
+	odqi.GestationalAge = raw.GestationalAge
+	odqi.ID = raw.ID
+	odqi.ModifierExtension = raw.ModifierExtension
+	odqi.Range = raw.Range
+	return nil
+}
+
+var _ json.Marshaler = (*ObservationDefinitionQualifiedInterval)(nil)
+var _ json.Unmarshaler = (*ObservationDefinitionQualifiedInterval)(nil)
+
+func (odqd *ObservationDefinitionQuantitativeDetails) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (odqd *ObservationDefinitionQuantitativeDetails) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ConversionFactor *fhir.Decimal         `json:"conversionFactor"`
+		CustomaryUnit    *fhir.CodeableConcept `json:"customaryUnit"`
+		DecimalPrecision *fhir.Integer         `json:"decimalPrecision"`
+		Extension        []*fhir.Extension     `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Unit              *fhir.CodeableConcept `json:"unit"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	odqd.ConversionFactor = raw.ConversionFactor
+	odqd.CustomaryUnit = raw.CustomaryUnit
+	odqd.DecimalPrecision = raw.DecimalPrecision
+	odqd.Extension = raw.Extension
+	odqd.ID = raw.ID
+	odqd.ModifierExtension = raw.ModifierExtension
+	odqd.Unit = raw.Unit
+	return nil
+}
+
+var _ json.Marshaler = (*ObservationDefinitionQuantitativeDetails)(nil)
+var _ json.Unmarshaler = (*ObservationDefinitionQuantitativeDetails)(nil)

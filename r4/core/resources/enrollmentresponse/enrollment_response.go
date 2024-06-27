@@ -8,6 +8,8 @@ package enrollmentresponse
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // This resource provides enrollment and plan details from the processing of an
@@ -262,3 +264,55 @@ func (er *EnrollmentResponse) GetText() *fhir.Narrative {
 	}
 	return er.Text
 }
+
+func (er *EnrollmentResponse) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (er *EnrollmentResponse) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contained   []fhir.Resource   `json:"contained"`
+		Created     *fhir.DateTime    `json:"created"`
+		Disposition *fhir.String      `json:"disposition"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string             `json:"id"`
+		Identifier        []*fhir.Identifier `json:"identifier"`
+		ImplicitRules     *fhir.URI          `json:"implicitRules"`
+		Language          *fhir.Code         `json:"language"`
+		Meta              *fhir.Meta         `json:"meta"`
+		ModifierExtension []*fhir.Extension  `json:"modifierExtension"`
+		Organization      *fhir.Reference    `json:"organization"`
+		Outcome           *fhir.Code         `json:"outcome"`
+		Request           *fhir.Reference    `json:"request"`
+		RequestProvider   *fhir.Reference    `json:"requestProvider"`
+		Status            *fhir.Code         `json:"status"`
+		Text              *fhir.Narrative    `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	er.Contained = raw.Contained
+	er.Created = raw.Created
+	er.Disposition = raw.Disposition
+	er.Extension = raw.Extension
+	er.ID = raw.ID
+	er.Identifier = raw.Identifier
+	er.ImplicitRules = raw.ImplicitRules
+	er.Language = raw.Language
+	er.Meta = raw.Meta
+	er.ModifierExtension = raw.ModifierExtension
+	er.Organization = raw.Organization
+	er.Outcome = raw.Outcome
+	er.Request = raw.Request
+	er.RequestProvider = raw.RequestProvider
+	er.Status = raw.Status
+	er.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*EnrollmentResponse)(nil)
+var _ json.Unmarshaler = (*EnrollmentResponse)(nil)

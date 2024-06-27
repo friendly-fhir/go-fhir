@@ -6,8 +6,11 @@
 package task
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A task to be performed.
@@ -2084,3 +2087,397 @@ func (tr *TaskRestriction) GetRepetitions() *fhir.PositiveInt {
 	}
 	return tr.Repetitions
 }
+
+func (t *Task) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (t *Task) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AuthoredOn      *fhir.DateTime        `json:"authoredOn"`
+		BasedOn         []*fhir.Reference     `json:"basedOn"`
+		BusinessStatus  *fhir.CodeableConcept `json:"businessStatus"`
+		Code            *fhir.CodeableConcept `json:"code"`
+		Contained       []fhir.Resource       `json:"contained"`
+		Description     *fhir.String          `json:"description"`
+		Encounter       *fhir.Reference       `json:"encounter"`
+		ExecutionPeriod *fhir.Period          `json:"executionPeriod"`
+		Extension       []*fhir.Extension     `json:"extension"`
+		Focus           *fhir.Reference       `json:"focus"`
+		For             *fhir.Reference       `json:"for"`
+		GroupIdentifier *fhir.Identifier      `json:"groupIdentifier"`
+
+		ID                    string                  `json:"id"`
+		Identifier            []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules         *fhir.URI               `json:"implicitRules"`
+		Input                 []*TaskInput            `json:"input"`
+		InstantiatesCanonical *fhir.Canonical         `json:"instantiatesCanonical"`
+		InstantiatesURI       *fhir.URI               `json:"instantiatesUri"`
+		Insurance             []*fhir.Reference       `json:"insurance"`
+		Intent                *fhir.Code              `json:"intent"`
+		Language              *fhir.Code              `json:"language"`
+		LastModified          *fhir.DateTime          `json:"lastModified"`
+		Location              *fhir.Reference         `json:"location"`
+		Meta                  *fhir.Meta              `json:"meta"`
+		ModifierExtension     []*fhir.Extension       `json:"modifierExtension"`
+		Note                  []*fhir.Annotation      `json:"note"`
+		Output                []*TaskOutput           `json:"output"`
+		Owner                 *fhir.Reference         `json:"owner"`
+		PartOf                []*fhir.Reference       `json:"partOf"`
+		PerformerType         []*fhir.CodeableConcept `json:"performerType"`
+		Priority              *fhir.Code              `json:"priority"`
+		ReasonCode            *fhir.CodeableConcept   `json:"reasonCode"`
+		ReasonReference       *fhir.Reference         `json:"reasonReference"`
+		RelevantHistory       []*fhir.Reference       `json:"relevantHistory"`
+		Requester             *fhir.Reference         `json:"requester"`
+		Restriction           *TaskRestriction        `json:"restriction"`
+		Status                *fhir.Code              `json:"status"`
+		StatusReason          *fhir.CodeableConcept   `json:"statusReason"`
+		Text                  *fhir.Narrative         `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	t.AuthoredOn = raw.AuthoredOn
+	t.BasedOn = raw.BasedOn
+	t.BusinessStatus = raw.BusinessStatus
+	t.Code = raw.Code
+	t.Contained = raw.Contained
+	t.Description = raw.Description
+	t.Encounter = raw.Encounter
+	t.ExecutionPeriod = raw.ExecutionPeriod
+	t.Extension = raw.Extension
+	t.Focus = raw.Focus
+	t.For = raw.For
+	t.GroupIdentifier = raw.GroupIdentifier
+	t.ID = raw.ID
+	t.Identifier = raw.Identifier
+	t.ImplicitRules = raw.ImplicitRules
+	t.Input = raw.Input
+	t.InstantiatesCanonical = raw.InstantiatesCanonical
+	t.InstantiatesURI = raw.InstantiatesURI
+	t.Insurance = raw.Insurance
+	t.Intent = raw.Intent
+	t.Language = raw.Language
+	t.LastModified = raw.LastModified
+	t.Location = raw.Location
+	t.Meta = raw.Meta
+	t.ModifierExtension = raw.ModifierExtension
+	t.Note = raw.Note
+	t.Output = raw.Output
+	t.Owner = raw.Owner
+	t.PartOf = raw.PartOf
+	t.PerformerType = raw.PerformerType
+	t.Priority = raw.Priority
+	t.ReasonCode = raw.ReasonCode
+	t.ReasonReference = raw.ReasonReference
+	t.RelevantHistory = raw.RelevantHistory
+	t.Requester = raw.Requester
+	t.Restriction = raw.Restriction
+	t.Status = raw.Status
+	t.StatusReason = raw.StatusReason
+	t.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*Task)(nil)
+var _ json.Unmarshaler = (*Task)(nil)
+
+func (ti *TaskInput) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ti *TaskInput) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                       string                    `json:"id"`
+		ModifierExtension        []*fhir.Extension         `json:"modifierExtension"`
+		Type                     *fhir.CodeableConcept     `json:"type"`
+		ValueBase64Binary        *fhir.Base64Binary        `json:"valueBase64Binary"`
+		ValueBoolean             *fhir.Boolean             `json:"valueBoolean"`
+		ValueCanonical           *fhir.Canonical           `json:"valueCanonical"`
+		ValueCode                *fhir.Code                `json:"valueCode"`
+		ValueDate                *fhir.Date                `json:"valueDate"`
+		ValueDateTime            *fhir.DateTime            `json:"valueDateTime"`
+		ValueDecimal             *fhir.Decimal             `json:"valueDecimal"`
+		ValueID                  *fhir.ID                  `json:"valueID"`
+		ValueInstant             *fhir.Instant             `json:"valueInstant"`
+		ValueInteger             *fhir.Integer             `json:"valueInteger"`
+		ValueMarkdown            *fhir.Markdown            `json:"valueMarkdown"`
+		ValueOID                 *fhir.OID                 `json:"valueOID"`
+		ValuePositiveInt         *fhir.PositiveInt         `json:"valuePositiveInt"`
+		ValueString              *fhir.String              `json:"valueString"`
+		ValueTime                *fhir.Time                `json:"valueTime"`
+		ValueUnsignedInt         *fhir.UnsignedInt         `json:"valueUnsignedInt"`
+		ValueURI                 *fhir.URI                 `json:"valueURI"`
+		ValueURL                 *fhir.URL                 `json:"valueURL"`
+		ValueUUID                *fhir.UUID                `json:"valueUUID"`
+		ValueAddress             *fhir.Address             `json:"valueAddress"`
+		ValueAge                 *fhir.Age                 `json:"valueAge"`
+		ValueAnnotation          *fhir.Annotation          `json:"valueAnnotation"`
+		ValueAttachment          *fhir.Attachment          `json:"valueAttachment"`
+		ValueCodeableConcept     *fhir.CodeableConcept     `json:"valueCodeableConcept"`
+		ValueCoding              *fhir.Coding              `json:"valueCoding"`
+		ValueContactPoint        *fhir.ContactPoint        `json:"valueContactPoint"`
+		ValueCount               *fhir.Count               `json:"valueCount"`
+		ValueDistance            *fhir.Distance            `json:"valueDistance"`
+		ValueDuration            *fhir.Duration            `json:"valueDuration"`
+		ValueHumanName           *fhir.HumanName           `json:"valueHumanName"`
+		ValueIdentifier          *fhir.Identifier          `json:"valueIdentifier"`
+		ValueMoney               *fhir.Money               `json:"valueMoney"`
+		ValuePeriod              *fhir.Period              `json:"valuePeriod"`
+		ValueQuantity            *fhir.Quantity            `json:"valueQuantity"`
+		ValueRange               *fhir.Range               `json:"valueRange"`
+		ValueRatio               *fhir.Ratio               `json:"valueRatio"`
+		ValueReference           *fhir.Reference           `json:"valueReference"`
+		ValueSampledData         *fhir.SampledData         `json:"valueSampledData"`
+		ValueSignature           *fhir.Signature           `json:"valueSignature"`
+		ValueTiming              *fhir.Timing              `json:"valueTiming"`
+		ValueContactDetail       *fhir.ContactDetail       `json:"valueContactDetail"`
+		ValueContributor         *fhir.Contributor         `json:"valueContributor"`
+		ValueDataRequirement     *fhir.DataRequirement     `json:"valueDataRequirement"`
+		ValueExpression          *fhir.Expression          `json:"valueExpression"`
+		ValueParameterDefinition *fhir.ParameterDefinition `json:"valueParameterDefinition"`
+		ValueRelatedArtifact     *fhir.RelatedArtifact     `json:"valueRelatedArtifact"`
+		ValueTriggerDefinition   *fhir.TriggerDefinition   `json:"valueTriggerDefinition"`
+		ValueUsageContext        *fhir.UsageContext        `json:"valueUsageContext"`
+		ValueDosage              *fhir.Dosage              `json:"valueDosage"`
+		ValueMeta                *fhir.Meta                `json:"valueMeta"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ti.Extension = raw.Extension
+	ti.ID = raw.ID
+	ti.ModifierExtension = raw.ModifierExtension
+	ti.Type = raw.Type
+	ti.Value, err = validate.SelectOneOf[fhir.Element]("Task.input.value",
+		raw.ValueBase64Binary,
+		raw.ValueBoolean,
+		raw.ValueCanonical,
+		raw.ValueCode,
+		raw.ValueDate,
+		raw.ValueDateTime,
+		raw.ValueDecimal,
+		raw.ValueID,
+		raw.ValueInstant,
+		raw.ValueInteger,
+		raw.ValueMarkdown,
+		raw.ValueOID,
+		raw.ValuePositiveInt,
+		raw.ValueString,
+		raw.ValueTime,
+		raw.ValueUnsignedInt,
+		raw.ValueURI,
+		raw.ValueURL,
+		raw.ValueUUID,
+		raw.ValueAddress,
+		raw.ValueAge,
+		raw.ValueAnnotation,
+		raw.ValueAttachment,
+		raw.ValueCodeableConcept,
+		raw.ValueCoding,
+		raw.ValueContactPoint,
+		raw.ValueCount,
+		raw.ValueDistance,
+		raw.ValueDuration,
+		raw.ValueHumanName,
+		raw.ValueIdentifier,
+		raw.ValueMoney,
+		raw.ValuePeriod,
+		raw.ValueQuantity,
+		raw.ValueRange,
+		raw.ValueRatio,
+		raw.ValueReference,
+		raw.ValueSampledData,
+		raw.ValueSignature,
+		raw.ValueTiming,
+		raw.ValueContactDetail,
+		raw.ValueContributor,
+		raw.ValueDataRequirement,
+		raw.ValueExpression,
+		raw.ValueParameterDefinition,
+		raw.ValueRelatedArtifact,
+		raw.ValueTriggerDefinition,
+		raw.ValueUsageContext,
+		raw.ValueDosage,
+		raw.ValueMeta)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*TaskInput)(nil)
+var _ json.Unmarshaler = (*TaskInput)(nil)
+
+func (to *TaskOutput) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (to *TaskOutput) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                       string                    `json:"id"`
+		ModifierExtension        []*fhir.Extension         `json:"modifierExtension"`
+		Type                     *fhir.CodeableConcept     `json:"type"`
+		ValueBase64Binary        *fhir.Base64Binary        `json:"valueBase64Binary"`
+		ValueBoolean             *fhir.Boolean             `json:"valueBoolean"`
+		ValueCanonical           *fhir.Canonical           `json:"valueCanonical"`
+		ValueCode                *fhir.Code                `json:"valueCode"`
+		ValueDate                *fhir.Date                `json:"valueDate"`
+		ValueDateTime            *fhir.DateTime            `json:"valueDateTime"`
+		ValueDecimal             *fhir.Decimal             `json:"valueDecimal"`
+		ValueID                  *fhir.ID                  `json:"valueID"`
+		ValueInstant             *fhir.Instant             `json:"valueInstant"`
+		ValueInteger             *fhir.Integer             `json:"valueInteger"`
+		ValueMarkdown            *fhir.Markdown            `json:"valueMarkdown"`
+		ValueOID                 *fhir.OID                 `json:"valueOID"`
+		ValuePositiveInt         *fhir.PositiveInt         `json:"valuePositiveInt"`
+		ValueString              *fhir.String              `json:"valueString"`
+		ValueTime                *fhir.Time                `json:"valueTime"`
+		ValueUnsignedInt         *fhir.UnsignedInt         `json:"valueUnsignedInt"`
+		ValueURI                 *fhir.URI                 `json:"valueURI"`
+		ValueURL                 *fhir.URL                 `json:"valueURL"`
+		ValueUUID                *fhir.UUID                `json:"valueUUID"`
+		ValueAddress             *fhir.Address             `json:"valueAddress"`
+		ValueAge                 *fhir.Age                 `json:"valueAge"`
+		ValueAnnotation          *fhir.Annotation          `json:"valueAnnotation"`
+		ValueAttachment          *fhir.Attachment          `json:"valueAttachment"`
+		ValueCodeableConcept     *fhir.CodeableConcept     `json:"valueCodeableConcept"`
+		ValueCoding              *fhir.Coding              `json:"valueCoding"`
+		ValueContactPoint        *fhir.ContactPoint        `json:"valueContactPoint"`
+		ValueCount               *fhir.Count               `json:"valueCount"`
+		ValueDistance            *fhir.Distance            `json:"valueDistance"`
+		ValueDuration            *fhir.Duration            `json:"valueDuration"`
+		ValueHumanName           *fhir.HumanName           `json:"valueHumanName"`
+		ValueIdentifier          *fhir.Identifier          `json:"valueIdentifier"`
+		ValueMoney               *fhir.Money               `json:"valueMoney"`
+		ValuePeriod              *fhir.Period              `json:"valuePeriod"`
+		ValueQuantity            *fhir.Quantity            `json:"valueQuantity"`
+		ValueRange               *fhir.Range               `json:"valueRange"`
+		ValueRatio               *fhir.Ratio               `json:"valueRatio"`
+		ValueReference           *fhir.Reference           `json:"valueReference"`
+		ValueSampledData         *fhir.SampledData         `json:"valueSampledData"`
+		ValueSignature           *fhir.Signature           `json:"valueSignature"`
+		ValueTiming              *fhir.Timing              `json:"valueTiming"`
+		ValueContactDetail       *fhir.ContactDetail       `json:"valueContactDetail"`
+		ValueContributor         *fhir.Contributor         `json:"valueContributor"`
+		ValueDataRequirement     *fhir.DataRequirement     `json:"valueDataRequirement"`
+		ValueExpression          *fhir.Expression          `json:"valueExpression"`
+		ValueParameterDefinition *fhir.ParameterDefinition `json:"valueParameterDefinition"`
+		ValueRelatedArtifact     *fhir.RelatedArtifact     `json:"valueRelatedArtifact"`
+		ValueTriggerDefinition   *fhir.TriggerDefinition   `json:"valueTriggerDefinition"`
+		ValueUsageContext        *fhir.UsageContext        `json:"valueUsageContext"`
+		ValueDosage              *fhir.Dosage              `json:"valueDosage"`
+		ValueMeta                *fhir.Meta                `json:"valueMeta"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	to.Extension = raw.Extension
+	to.ID = raw.ID
+	to.ModifierExtension = raw.ModifierExtension
+	to.Type = raw.Type
+	to.Value, err = validate.SelectOneOf[fhir.Element]("Task.output.value",
+		raw.ValueBase64Binary,
+		raw.ValueBoolean,
+		raw.ValueCanonical,
+		raw.ValueCode,
+		raw.ValueDate,
+		raw.ValueDateTime,
+		raw.ValueDecimal,
+		raw.ValueID,
+		raw.ValueInstant,
+		raw.ValueInteger,
+		raw.ValueMarkdown,
+		raw.ValueOID,
+		raw.ValuePositiveInt,
+		raw.ValueString,
+		raw.ValueTime,
+		raw.ValueUnsignedInt,
+		raw.ValueURI,
+		raw.ValueURL,
+		raw.ValueUUID,
+		raw.ValueAddress,
+		raw.ValueAge,
+		raw.ValueAnnotation,
+		raw.ValueAttachment,
+		raw.ValueCodeableConcept,
+		raw.ValueCoding,
+		raw.ValueContactPoint,
+		raw.ValueCount,
+		raw.ValueDistance,
+		raw.ValueDuration,
+		raw.ValueHumanName,
+		raw.ValueIdentifier,
+		raw.ValueMoney,
+		raw.ValuePeriod,
+		raw.ValueQuantity,
+		raw.ValueRange,
+		raw.ValueRatio,
+		raw.ValueReference,
+		raw.ValueSampledData,
+		raw.ValueSignature,
+		raw.ValueTiming,
+		raw.ValueContactDetail,
+		raw.ValueContributor,
+		raw.ValueDataRequirement,
+		raw.ValueExpression,
+		raw.ValueParameterDefinition,
+		raw.ValueRelatedArtifact,
+		raw.ValueTriggerDefinition,
+		raw.ValueUsageContext,
+		raw.ValueDosage,
+		raw.ValueMeta)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*TaskOutput)(nil)
+var _ json.Unmarshaler = (*TaskOutput)(nil)
+
+func (tr *TaskRestriction) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tr *TaskRestriction) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Period            *fhir.Period      `json:"period"`
+		Recipient         []*fhir.Reference `json:"recipient"`
+		Repetitions       *fhir.PositiveInt `json:"repetitions"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tr.Extension = raw.Extension
+	tr.ID = raw.ID
+	tr.ModifierExtension = raw.ModifierExtension
+	tr.Period = raw.Period
+	tr.Recipient = raw.Recipient
+	tr.Repetitions = raw.Repetitions
+	return nil
+}
+
+var _ json.Marshaler = (*TaskRestriction)(nil)
+var _ json.Unmarshaler = (*TaskRestriction)(nil)

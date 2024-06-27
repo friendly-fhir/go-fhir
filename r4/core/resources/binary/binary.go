@@ -8,6 +8,8 @@ package binary
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A resource that represents the data of a single raw artifact as digital
@@ -129,3 +131,37 @@ func (b *Binary) GetSecurityContext() *fhir.Reference {
 	}
 	return b.SecurityContext
 }
+
+func (b *Binary) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (b *Binary) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ContentType *fhir.Code         `json:"contentType"`
+		Data        *fhir.Base64Binary `json:"data"`
+
+		ID              string          `json:"id"`
+		ImplicitRules   *fhir.URI       `json:"implicitRules"`
+		Language        *fhir.Code      `json:"language"`
+		Meta            *fhir.Meta      `json:"meta"`
+		SecurityContext *fhir.Reference `json:"securityContext"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	b.ContentType = raw.ContentType
+	b.Data = raw.Data
+	b.ID = raw.ID
+	b.ImplicitRules = raw.ImplicitRules
+	b.Language = raw.Language
+	b.Meta = raw.Meta
+	b.SecurityContext = raw.SecurityContext
+	return nil
+}
+
+var _ json.Marshaler = (*Binary)(nil)
+var _ json.Unmarshaler = (*Binary)(nil)

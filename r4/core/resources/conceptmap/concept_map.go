@@ -6,8 +6,11 @@
 package conceptmap
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A statement of relationships from one set of concepts to one or more other
@@ -1144,3 +1147,261 @@ func (cmgu *ConceptMapGroupUnmapped) GetURL() *fhir.Canonical {
 	}
 	return cmgu.URL
 }
+
+func (cm *ConceptMap) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cm *ConceptMap) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contact      []*fhir.ContactDetail `json:"contact"`
+		Contained    []fhir.Resource       `json:"contained"`
+		Copyright    *fhir.Markdown        `json:"copyright"`
+		Date         *fhir.DateTime        `json:"date"`
+		Description  *fhir.Markdown        `json:"description"`
+		Experimental *fhir.Boolean         `json:"experimental"`
+		Extension    []*fhir.Extension     `json:"extension"`
+		Group        []*ConceptMapGroup    `json:"group"`
+
+		ID                string                  `json:"id"`
+		Identifier        *fhir.Identifier        `json:"identifier"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Jurisdiction      []*fhir.CodeableConcept `json:"jurisdiction"`
+		Language          *fhir.Code              `json:"language"`
+		Meta              *fhir.Meta              `json:"meta"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Name              *fhir.String            `json:"name"`
+		Publisher         *fhir.String            `json:"publisher"`
+		Purpose           *fhir.Markdown          `json:"purpose"`
+		SourceURI         *fhir.URI               `json:"sourceURI"`
+		SourceCanonical   *fhir.Canonical         `json:"sourceCanonical"`
+		Status            *fhir.Code              `json:"status"`
+		TargetURI         *fhir.URI               `json:"targetURI"`
+		TargetCanonical   *fhir.Canonical         `json:"targetCanonical"`
+		Text              *fhir.Narrative         `json:"text"`
+		Title             *fhir.String            `json:"title"`
+		URL               *fhir.URI               `json:"url"`
+		UseContext        []*fhir.UsageContext    `json:"useContext"`
+		Version           *fhir.String            `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cm.Contact = raw.Contact
+	cm.Contained = raw.Contained
+	cm.Copyright = raw.Copyright
+	cm.Date = raw.Date
+	cm.Description = raw.Description
+	cm.Experimental = raw.Experimental
+	cm.Extension = raw.Extension
+	cm.Group = raw.Group
+	cm.ID = raw.ID
+	cm.Identifier = raw.Identifier
+	cm.ImplicitRules = raw.ImplicitRules
+	cm.Jurisdiction = raw.Jurisdiction
+	cm.Language = raw.Language
+	cm.Meta = raw.Meta
+	cm.ModifierExtension = raw.ModifierExtension
+	cm.Name = raw.Name
+	cm.Publisher = raw.Publisher
+	cm.Purpose = raw.Purpose
+	cm.Source, err = validate.SelectOneOf[fhir.Element]("ConceptMap.source",
+		raw.SourceURI,
+		raw.SourceCanonical)
+	if err != nil {
+		return err
+	}
+	cm.Status = raw.Status
+	cm.Target, err = validate.SelectOneOf[fhir.Element]("ConceptMap.target",
+		raw.TargetURI,
+		raw.TargetCanonical)
+	if err != nil {
+		return err
+	}
+	cm.Text = raw.Text
+	cm.Title = raw.Title
+	cm.URL = raw.URL
+	cm.UseContext = raw.UseContext
+	cm.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*ConceptMap)(nil)
+var _ json.Unmarshaler = (*ConceptMap)(nil)
+
+func (cmg *ConceptMapGroup) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cmg *ConceptMapGroup) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Element   []*ConceptMapGroupElement `json:"element"`
+		Extension []*fhir.Extension         `json:"extension"`
+
+		ID                string                   `json:"id"`
+		ModifierExtension []*fhir.Extension        `json:"modifierExtension"`
+		Source            *fhir.URI                `json:"source"`
+		SourceVersion     *fhir.String             `json:"sourceVersion"`
+		Target            *fhir.URI                `json:"target"`
+		TargetVersion     *fhir.String             `json:"targetVersion"`
+		Unmapped          *ConceptMapGroupUnmapped `json:"unmapped"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cmg.Element = raw.Element
+	cmg.Extension = raw.Extension
+	cmg.ID = raw.ID
+	cmg.ModifierExtension = raw.ModifierExtension
+	cmg.Source = raw.Source
+	cmg.SourceVersion = raw.SourceVersion
+	cmg.Target = raw.Target
+	cmg.TargetVersion = raw.TargetVersion
+	cmg.Unmapped = raw.Unmapped
+	return nil
+}
+
+var _ json.Marshaler = (*ConceptMapGroup)(nil)
+var _ json.Unmarshaler = (*ConceptMapGroup)(nil)
+
+func (cmge *ConceptMapGroupElement) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cmge *ConceptMapGroupElement) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.Code        `json:"code"`
+		Display   *fhir.String      `json:"display"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                          `json:"id"`
+		ModifierExtension []*fhir.Extension               `json:"modifierExtension"`
+		Target            []*ConceptMapGroupElementTarget `json:"target"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cmge.Code = raw.Code
+	cmge.Display = raw.Display
+	cmge.Extension = raw.Extension
+	cmge.ID = raw.ID
+	cmge.ModifierExtension = raw.ModifierExtension
+	cmge.Target = raw.Target
+	return nil
+}
+
+var _ json.Marshaler = (*ConceptMapGroupElement)(nil)
+var _ json.Unmarshaler = (*ConceptMapGroupElement)(nil)
+
+func (cmget *ConceptMapGroupElementTarget) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cmget *ConceptMapGroupElementTarget) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code        *fhir.Code                               `json:"code"`
+		Comment     *fhir.String                             `json:"comment"`
+		DependsOn   []*ConceptMapGroupElementTargetDependsOn `json:"dependsOn"`
+		Display     *fhir.String                             `json:"display"`
+		Equivalence *fhir.Code                               `json:"equivalence"`
+		Extension   []*fhir.Extension                        `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cmget.Code = raw.Code
+	cmget.Comment = raw.Comment
+	cmget.DependsOn = raw.DependsOn
+	cmget.Display = raw.Display
+	cmget.Equivalence = raw.Equivalence
+	cmget.Extension = raw.Extension
+	cmget.ID = raw.ID
+	cmget.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*ConceptMapGroupElementTarget)(nil)
+var _ json.Unmarshaler = (*ConceptMapGroupElementTarget)(nil)
+
+func (cmgetdo *ConceptMapGroupElementTargetDependsOn) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cmgetdo *ConceptMapGroupElementTargetDependsOn) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Display   *fhir.String      `json:"display"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Property          *fhir.URI         `json:"property"`
+		System            *fhir.Canonical   `json:"system"`
+		Value             *fhir.String      `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cmgetdo.Display = raw.Display
+	cmgetdo.Extension = raw.Extension
+	cmgetdo.ID = raw.ID
+	cmgetdo.ModifierExtension = raw.ModifierExtension
+	cmgetdo.Property = raw.Property
+	cmgetdo.System = raw.System
+	cmgetdo.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*ConceptMapGroupElementTargetDependsOn)(nil)
+var _ json.Unmarshaler = (*ConceptMapGroupElementTargetDependsOn)(nil)
+
+func (cmgu *ConceptMapGroupUnmapped) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cmgu *ConceptMapGroupUnmapped) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.Code        `json:"code"`
+		Display   *fhir.String      `json:"display"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Mode              *fhir.Code        `json:"mode"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		URL               *fhir.Canonical   `json:"url"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cmgu.Code = raw.Code
+	cmgu.Display = raw.Display
+	cmgu.Extension = raw.Extension
+	cmgu.ID = raw.ID
+	cmgu.Mode = raw.Mode
+	cmgu.ModifierExtension = raw.ModifierExtension
+	cmgu.URL = raw.URL
+	return nil
+}
+
+var _ json.Marshaler = (*ConceptMapGroupUnmapped)(nil)
+var _ json.Unmarshaler = (*ConceptMapGroupUnmapped)(nil)

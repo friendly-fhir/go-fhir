@@ -8,6 +8,8 @@ package bundle
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A container for a collection of resources.
@@ -830,3 +832,215 @@ func (bl *BundleLink) GetURL() *fhir.URI {
 	}
 	return bl.URL
 }
+
+func (b *Bundle) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (b *Bundle) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Entry []*BundleEntry `json:"entry"`
+
+		ID            string            `json:"id"`
+		Identifier    *fhir.Identifier  `json:"identifier"`
+		ImplicitRules *fhir.URI         `json:"implicitRules"`
+		Language      *fhir.Code        `json:"language"`
+		Link          []*BundleLink     `json:"link"`
+		Meta          *fhir.Meta        `json:"meta"`
+		Signature     *fhir.Signature   `json:"signature"`
+		Timestamp     *fhir.Instant     `json:"timestamp"`
+		Total         *fhir.UnsignedInt `json:"total"`
+		Type          *fhir.Code        `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	b.Entry = raw.Entry
+	b.ID = raw.ID
+	b.Identifier = raw.Identifier
+	b.ImplicitRules = raw.ImplicitRules
+	b.Language = raw.Language
+	b.Link = raw.Link
+	b.Meta = raw.Meta
+	b.Signature = raw.Signature
+	b.Timestamp = raw.Timestamp
+	b.Total = raw.Total
+	b.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*Bundle)(nil)
+var _ json.Unmarshaler = (*Bundle)(nil)
+
+func (be *BundleEntry) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (be *BundleEntry) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+		FullURL   *fhir.URI         `json:"fullUrl"`
+
+		ID                string               `json:"id"`
+		ModifierExtension []*fhir.Extension    `json:"modifierExtension"`
+		Request           *BundleEntryRequest  `json:"request"`
+		Resource          fhir.Resource        `json:"resource"`
+		Response          *BundleEntryResponse `json:"response"`
+		Search            *BundleEntrySearch   `json:"search"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	be.Extension = raw.Extension
+	be.FullURL = raw.FullURL
+	be.ID = raw.ID
+	be.ModifierExtension = raw.ModifierExtension
+	be.Request = raw.Request
+	be.Resource = raw.Resource
+	be.Response = raw.Response
+	be.Search = raw.Search
+	return nil
+}
+
+var _ json.Marshaler = (*BundleEntry)(nil)
+var _ json.Unmarshaler = (*BundleEntry)(nil)
+
+func (ber *BundleEntryRequest) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ber *BundleEntryRequest) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		IfMatch           *fhir.String      `json:"ifMatch"`
+		IfModifiedSince   *fhir.Instant     `json:"ifModifiedSince"`
+		IfNoneExist       *fhir.String      `json:"ifNoneExist"`
+		IfNoneMatch       *fhir.String      `json:"ifNoneMatch"`
+		Method            *fhir.Code        `json:"method"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		URL               *fhir.URI         `json:"url"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ber.Extension = raw.Extension
+	ber.ID = raw.ID
+	ber.IfMatch = raw.IfMatch
+	ber.IfModifiedSince = raw.IfModifiedSince
+	ber.IfNoneExist = raw.IfNoneExist
+	ber.IfNoneMatch = raw.IfNoneMatch
+	ber.Method = raw.Method
+	ber.ModifierExtension = raw.ModifierExtension
+	ber.URL = raw.URL
+	return nil
+}
+
+var _ json.Marshaler = (*BundleEntryRequest)(nil)
+var _ json.Unmarshaler = (*BundleEntryRequest)(nil)
+
+func (ber *BundleEntryResponse) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ber *BundleEntryResponse) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Etag      *fhir.String      `json:"etag"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		LastModified      *fhir.Instant     `json:"lastModified"`
+		Location          *fhir.URI         `json:"location"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Outcome           fhir.Resource     `json:"outcome"`
+		Status            *fhir.String      `json:"status"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ber.Etag = raw.Etag
+	ber.Extension = raw.Extension
+	ber.ID = raw.ID
+	ber.LastModified = raw.LastModified
+	ber.Location = raw.Location
+	ber.ModifierExtension = raw.ModifierExtension
+	ber.Outcome = raw.Outcome
+	ber.Status = raw.Status
+	return nil
+}
+
+var _ json.Marshaler = (*BundleEntryResponse)(nil)
+var _ json.Unmarshaler = (*BundleEntryResponse)(nil)
+
+func (bes *BundleEntrySearch) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (bes *BundleEntrySearch) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Mode              *fhir.Code        `json:"mode"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Score             *fhir.Decimal     `json:"score"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	bes.Extension = raw.Extension
+	bes.ID = raw.ID
+	bes.Mode = raw.Mode
+	bes.ModifierExtension = raw.ModifierExtension
+	bes.Score = raw.Score
+	return nil
+}
+
+var _ json.Marshaler = (*BundleEntrySearch)(nil)
+var _ json.Unmarshaler = (*BundleEntrySearch)(nil)
+
+func (bl *BundleLink) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (bl *BundleLink) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Relation          *fhir.String      `json:"relation"`
+		URL               *fhir.URI         `json:"url"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	bl.Extension = raw.Extension
+	bl.ID = raw.ID
+	bl.ModifierExtension = raw.ModifierExtension
+	bl.Relation = raw.Relation
+	bl.URL = raw.URL
+	return nil
+}
+
+var _ json.Marshaler = (*BundleLink)(nil)
+var _ json.Unmarshaler = (*BundleLink)(nil)

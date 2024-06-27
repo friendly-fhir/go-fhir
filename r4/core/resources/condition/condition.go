@@ -6,8 +6,11 @@
 package condition
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A clinical condition, problem, diagnosis, or other event, situation, issue,
@@ -718,3 +721,159 @@ func (cs *ConditionStage) GetType() *fhir.CodeableConcept {
 	}
 	return cs.Type
 }
+
+func (c *Condition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (c *Condition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AbatementDateTime *fhir.DateTime          `json:"abatementDateTime"`
+		AbatementAge      *fhir.Age               `json:"abatementAge"`
+		AbatementPeriod   *fhir.Period            `json:"abatementPeriod"`
+		AbatementRange    *fhir.Range             `json:"abatementRange"`
+		AbatementString   *fhir.String            `json:"abatementString"`
+		Asserter          *fhir.Reference         `json:"asserter"`
+		BodySite          []*fhir.CodeableConcept `json:"bodySite"`
+		Category          []*fhir.CodeableConcept `json:"category"`
+		ClinicalStatus    *fhir.CodeableConcept   `json:"clinicalStatus"`
+		Code              *fhir.CodeableConcept   `json:"code"`
+		Contained         []fhir.Resource         `json:"contained"`
+		Encounter         *fhir.Reference         `json:"encounter"`
+		Evidence          []*ConditionEvidence    `json:"evidence"`
+		Extension         []*fhir.Extension       `json:"extension"`
+
+		ID                 string                `json:"id"`
+		Identifier         []*fhir.Identifier    `json:"identifier"`
+		ImplicitRules      *fhir.URI             `json:"implicitRules"`
+		Language           *fhir.Code            `json:"language"`
+		Meta               *fhir.Meta            `json:"meta"`
+		ModifierExtension  []*fhir.Extension     `json:"modifierExtension"`
+		Note               []*fhir.Annotation    `json:"note"`
+		OnsetDateTime      *fhir.DateTime        `json:"onsetDateTime"`
+		OnsetAge           *fhir.Age             `json:"onsetAge"`
+		OnsetPeriod        *fhir.Period          `json:"onsetPeriod"`
+		OnsetRange         *fhir.Range           `json:"onsetRange"`
+		OnsetString        *fhir.String          `json:"onsetString"`
+		RecordedDate       *fhir.DateTime        `json:"recordedDate"`
+		Recorder           *fhir.Reference       `json:"recorder"`
+		Severity           *fhir.CodeableConcept `json:"severity"`
+		Stage              []*ConditionStage     `json:"stage"`
+		Subject            *fhir.Reference       `json:"subject"`
+		Text               *fhir.Narrative       `json:"text"`
+		VerificationStatus *fhir.CodeableConcept `json:"verificationStatus"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	c.Abatement, err = validate.SelectOneOf[fhir.Element]("Condition.abatement",
+		raw.AbatementDateTime,
+		raw.AbatementAge,
+		raw.AbatementPeriod,
+		raw.AbatementRange,
+		raw.AbatementString)
+	if err != nil {
+		return err
+	}
+	c.Asserter = raw.Asserter
+	c.BodySite = raw.BodySite
+	c.Category = raw.Category
+	c.ClinicalStatus = raw.ClinicalStatus
+	c.Code = raw.Code
+	c.Contained = raw.Contained
+	c.Encounter = raw.Encounter
+	c.Evidence = raw.Evidence
+	c.Extension = raw.Extension
+	c.ID = raw.ID
+	c.Identifier = raw.Identifier
+	c.ImplicitRules = raw.ImplicitRules
+	c.Language = raw.Language
+	c.Meta = raw.Meta
+	c.ModifierExtension = raw.ModifierExtension
+	c.Note = raw.Note
+	c.Onset, err = validate.SelectOneOf[fhir.Element]("Condition.onset",
+		raw.OnsetDateTime,
+		raw.OnsetAge,
+		raw.OnsetPeriod,
+		raw.OnsetRange,
+		raw.OnsetString)
+	if err != nil {
+		return err
+	}
+	c.RecordedDate = raw.RecordedDate
+	c.Recorder = raw.Recorder
+	c.Severity = raw.Severity
+	c.Stage = raw.Stage
+	c.Subject = raw.Subject
+	c.Text = raw.Text
+	c.VerificationStatus = raw.VerificationStatus
+	return nil
+}
+
+var _ json.Marshaler = (*Condition)(nil)
+var _ json.Unmarshaler = (*Condition)(nil)
+
+func (ce *ConditionEvidence) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ce *ConditionEvidence) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      []*fhir.CodeableConcept `json:"code"`
+		Detail    []*fhir.Reference       `json:"detail"`
+		Extension []*fhir.Extension       `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ce.Code = raw.Code
+	ce.Detail = raw.Detail
+	ce.Extension = raw.Extension
+	ce.ID = raw.ID
+	ce.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*ConditionEvidence)(nil)
+var _ json.Unmarshaler = (*ConditionEvidence)(nil)
+
+func (cs *ConditionStage) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cs *ConditionStage) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Assessment []*fhir.Reference `json:"assessment"`
+		Extension  []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Summary           *fhir.CodeableConcept `json:"summary"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cs.Assessment = raw.Assessment
+	cs.Extension = raw.Extension
+	cs.ID = raw.ID
+	cs.ModifierExtension = raw.ModifierExtension
+	cs.Summary = raw.Summary
+	cs.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ConditionStage)(nil)
+var _ json.Unmarshaler = (*ConditionStage)(nil)

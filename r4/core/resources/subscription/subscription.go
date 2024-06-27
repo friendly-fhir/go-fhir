@@ -8,6 +8,8 @@ package subscription
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The subscription resource is used to define a push-based subscription from a
@@ -382,3 +384,87 @@ func (sc *SubscriptionChannel) GetType() *fhir.Code {
 	}
 	return sc.Type
 }
+
+func (s *Subscription) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (s *Subscription) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Channel   *SubscriptionChannel `json:"channel"`
+		Contact   []*fhir.ContactPoint `json:"contact"`
+		Contained []fhir.Resource      `json:"contained"`
+		Criteria  *fhir.String         `json:"criteria"`
+		End       *fhir.Instant        `json:"end"`
+		Error     *fhir.String         `json:"error"`
+		Extension []*fhir.Extension    `json:"extension"`
+
+		ID                string            `json:"id"`
+		ImplicitRules     *fhir.URI         `json:"implicitRules"`
+		Language          *fhir.Code        `json:"language"`
+		Meta              *fhir.Meta        `json:"meta"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Reason            *fhir.String      `json:"reason"`
+		Status            *fhir.Code        `json:"status"`
+		Text              *fhir.Narrative   `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	s.Channel = raw.Channel
+	s.Contact = raw.Contact
+	s.Contained = raw.Contained
+	s.Criteria = raw.Criteria
+	s.End = raw.End
+	s.Error = raw.Error
+	s.Extension = raw.Extension
+	s.ID = raw.ID
+	s.ImplicitRules = raw.ImplicitRules
+	s.Language = raw.Language
+	s.Meta = raw.Meta
+	s.ModifierExtension = raw.ModifierExtension
+	s.Reason = raw.Reason
+	s.Status = raw.Status
+	s.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*Subscription)(nil)
+var _ json.Unmarshaler = (*Subscription)(nil)
+
+func (sc *SubscriptionChannel) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sc *SubscriptionChannel) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Endpoint  *fhir.URL         `json:"endpoint"`
+		Extension []*fhir.Extension `json:"extension"`
+		Header    []*fhir.String    `json:"header"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Payload           *fhir.Code        `json:"payload"`
+		Type              *fhir.Code        `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sc.Endpoint = raw.Endpoint
+	sc.Extension = raw.Extension
+	sc.Header = raw.Header
+	sc.ID = raw.ID
+	sc.ModifierExtension = raw.ModifierExtension
+	sc.Payload = raw.Payload
+	sc.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*SubscriptionChannel)(nil)
+var _ json.Unmarshaler = (*SubscriptionChannel)(nil)

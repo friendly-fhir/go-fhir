@@ -6,8 +6,11 @@
 package clinicalimpression
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A record of a clinical assessment performed to determine what problem(s) may
@@ -674,3 +677,147 @@ func (cii *ClinicalImpressionInvestigation) GetModifierExtension() []*fhir.Exten
 	}
 	return cii.ModifierExtension
 }
+
+func (ci *ClinicalImpression) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ci *ClinicalImpression) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Assessor          *fhir.Reference              `json:"assessor"`
+		Code              *fhir.CodeableConcept        `json:"code"`
+		Contained         []fhir.Resource              `json:"contained"`
+		Date              *fhir.DateTime               `json:"date"`
+		Description       *fhir.String                 `json:"description"`
+		EffectiveDateTime *fhir.DateTime               `json:"effectiveDateTime"`
+		EffectivePeriod   *fhir.Period                 `json:"effectivePeriod"`
+		Encounter         *fhir.Reference              `json:"encounter"`
+		Extension         []*fhir.Extension            `json:"extension"`
+		Finding           []*ClinicalImpressionFinding `json:"finding"`
+
+		ID                       string                             `json:"id"`
+		Identifier               []*fhir.Identifier                 `json:"identifier"`
+		ImplicitRules            *fhir.URI                          `json:"implicitRules"`
+		Investigation            []*ClinicalImpressionInvestigation `json:"investigation"`
+		Language                 *fhir.Code                         `json:"language"`
+		Meta                     *fhir.Meta                         `json:"meta"`
+		ModifierExtension        []*fhir.Extension                  `json:"modifierExtension"`
+		Note                     []*fhir.Annotation                 `json:"note"`
+		Previous                 *fhir.Reference                    `json:"previous"`
+		Problem                  []*fhir.Reference                  `json:"problem"`
+		PrognosisCodeableConcept []*fhir.CodeableConcept            `json:"prognosisCodeableConcept"`
+		PrognosisReference       []*fhir.Reference                  `json:"prognosisReference"`
+		Protocol                 []*fhir.URI                        `json:"protocol"`
+		Status                   *fhir.Code                         `json:"status"`
+		StatusReason             *fhir.CodeableConcept              `json:"statusReason"`
+		Subject                  *fhir.Reference                    `json:"subject"`
+		Summary                  *fhir.String                       `json:"summary"`
+		SupportingInfo           []*fhir.Reference                  `json:"supportingInfo"`
+		Text                     *fhir.Narrative                    `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ci.Assessor = raw.Assessor
+	ci.Code = raw.Code
+	ci.Contained = raw.Contained
+	ci.Date = raw.Date
+	ci.Description = raw.Description
+	ci.Effective, err = validate.SelectOneOf[fhir.Element]("ClinicalImpression.effective",
+		raw.EffectiveDateTime,
+		raw.EffectivePeriod)
+	if err != nil {
+		return err
+	}
+	ci.Encounter = raw.Encounter
+	ci.Extension = raw.Extension
+	ci.Finding = raw.Finding
+	ci.ID = raw.ID
+	ci.Identifier = raw.Identifier
+	ci.ImplicitRules = raw.ImplicitRules
+	ci.Investigation = raw.Investigation
+	ci.Language = raw.Language
+	ci.Meta = raw.Meta
+	ci.ModifierExtension = raw.ModifierExtension
+	ci.Note = raw.Note
+	ci.Previous = raw.Previous
+	ci.Problem = raw.Problem
+	ci.PrognosisCodeableConcept = raw.PrognosisCodeableConcept
+	ci.PrognosisReference = raw.PrognosisReference
+	ci.Protocol = raw.Protocol
+	ci.Status = raw.Status
+	ci.StatusReason = raw.StatusReason
+	ci.Subject = raw.Subject
+	ci.Summary = raw.Summary
+	ci.SupportingInfo = raw.SupportingInfo
+	ci.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*ClinicalImpression)(nil)
+var _ json.Unmarshaler = (*ClinicalImpression)(nil)
+
+func (cif *ClinicalImpressionFinding) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cif *ClinicalImpressionFinding) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Basis     *fhir.String      `json:"basis"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                  string                `json:"id"`
+		ItemCodeableConcept *fhir.CodeableConcept `json:"itemCodeableConcept"`
+		ItemReference       *fhir.Reference       `json:"itemReference"`
+		ModifierExtension   []*fhir.Extension     `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cif.Basis = raw.Basis
+	cif.Extension = raw.Extension
+	cif.ID = raw.ID
+	cif.ItemCodeableConcept = raw.ItemCodeableConcept
+	cif.ItemReference = raw.ItemReference
+	cif.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*ClinicalImpressionFinding)(nil)
+var _ json.Unmarshaler = (*ClinicalImpressionFinding)(nil)
+
+func (cii *ClinicalImpressionInvestigation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cii *ClinicalImpressionInvestigation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.CodeableConcept `json:"code"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string            `json:"id"`
+		Item              []*fhir.Reference `json:"item"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cii.Code = raw.Code
+	cii.Extension = raw.Extension
+	cii.ID = raw.ID
+	cii.Item = raw.Item
+	cii.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*ClinicalImpressionInvestigation)(nil)
+var _ json.Unmarshaler = (*ClinicalImpressionInvestigation)(nil)

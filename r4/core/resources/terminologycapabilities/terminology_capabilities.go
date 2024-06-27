@@ -8,6 +8,8 @@ package terminologycapabilities
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A TerminologyCapabilities resource documents a set of capabilities
@@ -1557,3 +1559,397 @@ func (tcvc *TerminologyCapabilitiesValidateCode) GetTranslations() *fhir.Boolean
 	}
 	return tcvc.Translations
 }
+
+func (tc *TerminologyCapabilities) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tc *TerminologyCapabilities) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Closure      *TerminologyCapabilitiesClosure      `json:"closure"`
+		CodeSearch   *fhir.Code                           `json:"codeSearch"`
+		CodeSystem   []*TerminologyCapabilitiesCodeSystem `json:"codeSystem"`
+		Contact      []*fhir.ContactDetail                `json:"contact"`
+		Contained    []fhir.Resource                      `json:"contained"`
+		Copyright    *fhir.Markdown                       `json:"copyright"`
+		Date         *fhir.DateTime                       `json:"date"`
+		Description  *fhir.Markdown                       `json:"description"`
+		Expansion    *TerminologyCapabilitiesExpansion    `json:"expansion"`
+		Experimental *fhir.Boolean                        `json:"experimental"`
+		Extension    []*fhir.Extension                    `json:"extension"`
+
+		ID                string                                 `json:"id"`
+		Implementation    *TerminologyCapabilitiesImplementation `json:"implementation"`
+		ImplicitRules     *fhir.URI                              `json:"implicitRules"`
+		Jurisdiction      []*fhir.CodeableConcept                `json:"jurisdiction"`
+		Kind              *fhir.Code                             `json:"kind"`
+		Language          *fhir.Code                             `json:"language"`
+		LockedDate        *fhir.Boolean                          `json:"lockedDate"`
+		Meta              *fhir.Meta                             `json:"meta"`
+		ModifierExtension []*fhir.Extension                      `json:"modifierExtension"`
+		Name              *fhir.String                           `json:"name"`
+		Publisher         *fhir.String                           `json:"publisher"`
+		Purpose           *fhir.Markdown                         `json:"purpose"`
+		Software          *TerminologyCapabilitiesSoftware       `json:"software"`
+		Status            *fhir.Code                             `json:"status"`
+		Text              *fhir.Narrative                        `json:"text"`
+		Title             *fhir.String                           `json:"title"`
+		Translation       *TerminologyCapabilitiesTranslation    `json:"translation"`
+		URL               *fhir.URI                              `json:"url"`
+		UseContext        []*fhir.UsageContext                   `json:"useContext"`
+		ValidateCode      *TerminologyCapabilitiesValidateCode   `json:"validateCode"`
+		Version           *fhir.String                           `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tc.Closure = raw.Closure
+	tc.CodeSearch = raw.CodeSearch
+	tc.CodeSystem = raw.CodeSystem
+	tc.Contact = raw.Contact
+	tc.Contained = raw.Contained
+	tc.Copyright = raw.Copyright
+	tc.Date = raw.Date
+	tc.Description = raw.Description
+	tc.Expansion = raw.Expansion
+	tc.Experimental = raw.Experimental
+	tc.Extension = raw.Extension
+	tc.ID = raw.ID
+	tc.Implementation = raw.Implementation
+	tc.ImplicitRules = raw.ImplicitRules
+	tc.Jurisdiction = raw.Jurisdiction
+	tc.Kind = raw.Kind
+	tc.Language = raw.Language
+	tc.LockedDate = raw.LockedDate
+	tc.Meta = raw.Meta
+	tc.ModifierExtension = raw.ModifierExtension
+	tc.Name = raw.Name
+	tc.Publisher = raw.Publisher
+	tc.Purpose = raw.Purpose
+	tc.Software = raw.Software
+	tc.Status = raw.Status
+	tc.Text = raw.Text
+	tc.Title = raw.Title
+	tc.Translation = raw.Translation
+	tc.URL = raw.URL
+	tc.UseContext = raw.UseContext
+	tc.ValidateCode = raw.ValidateCode
+	tc.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*TerminologyCapabilities)(nil)
+var _ json.Unmarshaler = (*TerminologyCapabilities)(nil)
+
+func (tcc *TerminologyCapabilitiesClosure) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tcc *TerminologyCapabilitiesClosure) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Translation       *fhir.Boolean     `json:"translation"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tcc.Extension = raw.Extension
+	tcc.ID = raw.ID
+	tcc.ModifierExtension = raw.ModifierExtension
+	tcc.Translation = raw.Translation
+	return nil
+}
+
+var _ json.Marshaler = (*TerminologyCapabilitiesClosure)(nil)
+var _ json.Unmarshaler = (*TerminologyCapabilitiesClosure)(nil)
+
+func (tccs *TerminologyCapabilitiesCodeSystem) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tccs *TerminologyCapabilitiesCodeSystem) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                                      `json:"id"`
+		ModifierExtension []*fhir.Extension                           `json:"modifierExtension"`
+		Subsumption       *fhir.Boolean                               `json:"subsumption"`
+		URI               *fhir.Canonical                             `json:"uri"`
+		Version           []*TerminologyCapabilitiesCodeSystemVersion `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tccs.Extension = raw.Extension
+	tccs.ID = raw.ID
+	tccs.ModifierExtension = raw.ModifierExtension
+	tccs.Subsumption = raw.Subsumption
+	tccs.URI = raw.URI
+	tccs.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*TerminologyCapabilitiesCodeSystem)(nil)
+var _ json.Unmarshaler = (*TerminologyCapabilitiesCodeSystem)(nil)
+
+func (tccsv *TerminologyCapabilitiesCodeSystemVersion) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tccsv *TerminologyCapabilitiesCodeSystemVersion) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code          *fhir.String                                      `json:"code"`
+		Compositional *fhir.Boolean                                     `json:"compositional"`
+		Extension     []*fhir.Extension                                 `json:"extension"`
+		Filter        []*TerminologyCapabilitiesCodeSystemVersionFilter `json:"filter"`
+
+		ID                string            `json:"id"`
+		IsDefault         *fhir.Boolean     `json:"isDefault"`
+		Language          []*fhir.Code      `json:"language"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Property          []*fhir.Code      `json:"property"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tccsv.Code = raw.Code
+	tccsv.Compositional = raw.Compositional
+	tccsv.Extension = raw.Extension
+	tccsv.Filter = raw.Filter
+	tccsv.ID = raw.ID
+	tccsv.IsDefault = raw.IsDefault
+	tccsv.Language = raw.Language
+	tccsv.ModifierExtension = raw.ModifierExtension
+	tccsv.Property = raw.Property
+	return nil
+}
+
+var _ json.Marshaler = (*TerminologyCapabilitiesCodeSystemVersion)(nil)
+var _ json.Unmarshaler = (*TerminologyCapabilitiesCodeSystemVersion)(nil)
+
+func (tccsvf *TerminologyCapabilitiesCodeSystemVersionFilter) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tccsvf *TerminologyCapabilitiesCodeSystemVersionFilter) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.Code        `json:"code"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Op                []*fhir.Code      `json:"op"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tccsvf.Code = raw.Code
+	tccsvf.Extension = raw.Extension
+	tccsvf.ID = raw.ID
+	tccsvf.ModifierExtension = raw.ModifierExtension
+	tccsvf.Op = raw.Op
+	return nil
+}
+
+var _ json.Marshaler = (*TerminologyCapabilitiesCodeSystemVersionFilter)(nil)
+var _ json.Unmarshaler = (*TerminologyCapabilitiesCodeSystemVersionFilter)(nil)
+
+func (tce *TerminologyCapabilitiesExpansion) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tce *TerminologyCapabilitiesExpansion) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension    []*fhir.Extension `json:"extension"`
+		Hierarchical *fhir.Boolean     `json:"hierarchical"`
+
+		ID                string                                       `json:"id"`
+		Incomplete        *fhir.Boolean                                `json:"incomplete"`
+		ModifierExtension []*fhir.Extension                            `json:"modifierExtension"`
+		Paging            *fhir.Boolean                                `json:"paging"`
+		Parameter         []*TerminologyCapabilitiesExpansionParameter `json:"parameter"`
+		TextFilter        *fhir.Markdown                               `json:"textFilter"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tce.Extension = raw.Extension
+	tce.Hierarchical = raw.Hierarchical
+	tce.ID = raw.ID
+	tce.Incomplete = raw.Incomplete
+	tce.ModifierExtension = raw.ModifierExtension
+	tce.Paging = raw.Paging
+	tce.Parameter = raw.Parameter
+	tce.TextFilter = raw.TextFilter
+	return nil
+}
+
+var _ json.Marshaler = (*TerminologyCapabilitiesExpansion)(nil)
+var _ json.Unmarshaler = (*TerminologyCapabilitiesExpansion)(nil)
+
+func (tcep *TerminologyCapabilitiesExpansionParameter) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tcep *TerminologyCapabilitiesExpansionParameter) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Documentation *fhir.String      `json:"documentation"`
+		Extension     []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.Code        `json:"name"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tcep.Documentation = raw.Documentation
+	tcep.Extension = raw.Extension
+	tcep.ID = raw.ID
+	tcep.ModifierExtension = raw.ModifierExtension
+	tcep.Name = raw.Name
+	return nil
+}
+
+var _ json.Marshaler = (*TerminologyCapabilitiesExpansionParameter)(nil)
+var _ json.Unmarshaler = (*TerminologyCapabilitiesExpansionParameter)(nil)
+
+func (tci *TerminologyCapabilitiesImplementation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tci *TerminologyCapabilitiesImplementation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description *fhir.String      `json:"description"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		URL               *fhir.URL         `json:"url"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tci.Description = raw.Description
+	tci.Extension = raw.Extension
+	tci.ID = raw.ID
+	tci.ModifierExtension = raw.ModifierExtension
+	tci.URL = raw.URL
+	return nil
+}
+
+var _ json.Marshaler = (*TerminologyCapabilitiesImplementation)(nil)
+var _ json.Unmarshaler = (*TerminologyCapabilitiesImplementation)(nil)
+
+func (tcs *TerminologyCapabilitiesSoftware) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tcs *TerminologyCapabilitiesSoftware) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.String      `json:"name"`
+		Version           *fhir.String      `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tcs.Extension = raw.Extension
+	tcs.ID = raw.ID
+	tcs.ModifierExtension = raw.ModifierExtension
+	tcs.Name = raw.Name
+	tcs.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*TerminologyCapabilitiesSoftware)(nil)
+var _ json.Unmarshaler = (*TerminologyCapabilitiesSoftware)(nil)
+
+func (tct *TerminologyCapabilitiesTranslation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tct *TerminologyCapabilitiesTranslation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		NeedsMap          *fhir.Boolean     `json:"needsMap"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tct.Extension = raw.Extension
+	tct.ID = raw.ID
+	tct.ModifierExtension = raw.ModifierExtension
+	tct.NeedsMap = raw.NeedsMap
+	return nil
+}
+
+var _ json.Marshaler = (*TerminologyCapabilitiesTranslation)(nil)
+var _ json.Unmarshaler = (*TerminologyCapabilitiesTranslation)(nil)
+
+func (tcvc *TerminologyCapabilitiesValidateCode) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tcvc *TerminologyCapabilitiesValidateCode) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Translations      *fhir.Boolean     `json:"translations"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tcvc.Extension = raw.Extension
+	tcvc.ID = raw.ID
+	tcvc.ModifierExtension = raw.ModifierExtension
+	tcvc.Translations = raw.Translations
+	return nil
+}
+
+var _ json.Marshaler = (*TerminologyCapabilitiesValidateCode)(nil)
+var _ json.Unmarshaler = (*TerminologyCapabilitiesValidateCode)(nil)

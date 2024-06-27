@@ -6,8 +6,11 @@
 package composition
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A set of healthcare-related information that is assembled together into a
@@ -930,3 +933,213 @@ func (cs *CompositionSection) GetTitle() *fhir.String {
 	}
 	return cs.Title
 }
+
+func (c *Composition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (c *Composition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Attester        []*CompositionAttester  `json:"attester"`
+		Author          []*fhir.Reference       `json:"author"`
+		Category        []*fhir.CodeableConcept `json:"category"`
+		Confidentiality *fhir.Code              `json:"confidentiality"`
+		Contained       []fhir.Resource         `json:"contained"`
+		Custodian       *fhir.Reference         `json:"custodian"`
+		Date            *fhir.DateTime          `json:"date"`
+		Encounter       *fhir.Reference         `json:"encounter"`
+		Event           []*CompositionEvent     `json:"event"`
+		Extension       []*fhir.Extension       `json:"extension"`
+
+		ID                string                  `json:"id"`
+		Identifier        *fhir.Identifier        `json:"identifier"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Language          *fhir.Code              `json:"language"`
+		Meta              *fhir.Meta              `json:"meta"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		RelatesTo         []*CompositionRelatesTo `json:"relatesTo"`
+		Section           []*CompositionSection   `json:"section"`
+		Status            *fhir.Code              `json:"status"`
+		Subject           *fhir.Reference         `json:"subject"`
+		Text              *fhir.Narrative         `json:"text"`
+		Title             *fhir.String            `json:"title"`
+		Type              *fhir.CodeableConcept   `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	c.Attester = raw.Attester
+	c.Author = raw.Author
+	c.Category = raw.Category
+	c.Confidentiality = raw.Confidentiality
+	c.Contained = raw.Contained
+	c.Custodian = raw.Custodian
+	c.Date = raw.Date
+	c.Encounter = raw.Encounter
+	c.Event = raw.Event
+	c.Extension = raw.Extension
+	c.ID = raw.ID
+	c.Identifier = raw.Identifier
+	c.ImplicitRules = raw.ImplicitRules
+	c.Language = raw.Language
+	c.Meta = raw.Meta
+	c.ModifierExtension = raw.ModifierExtension
+	c.RelatesTo = raw.RelatesTo
+	c.Section = raw.Section
+	c.Status = raw.Status
+	c.Subject = raw.Subject
+	c.Text = raw.Text
+	c.Title = raw.Title
+	c.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*Composition)(nil)
+var _ json.Unmarshaler = (*Composition)(nil)
+
+func (ca *CompositionAttester) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ca *CompositionAttester) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Mode              *fhir.Code        `json:"mode"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Party             *fhir.Reference   `json:"party"`
+		Time              *fhir.DateTime    `json:"time"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ca.Extension = raw.Extension
+	ca.ID = raw.ID
+	ca.Mode = raw.Mode
+	ca.ModifierExtension = raw.ModifierExtension
+	ca.Party = raw.Party
+	ca.Time = raw.Time
+	return nil
+}
+
+var _ json.Marshaler = (*CompositionAttester)(nil)
+var _ json.Unmarshaler = (*CompositionAttester)(nil)
+
+func (ce *CompositionEvent) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ce *CompositionEvent) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      []*fhir.CodeableConcept `json:"code"`
+		Detail    []*fhir.Reference       `json:"detail"`
+		Extension []*fhir.Extension       `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Period            *fhir.Period      `json:"period"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ce.Code = raw.Code
+	ce.Detail = raw.Detail
+	ce.Extension = raw.Extension
+	ce.ID = raw.ID
+	ce.ModifierExtension = raw.ModifierExtension
+	ce.Period = raw.Period
+	return nil
+}
+
+var _ json.Marshaler = (*CompositionEvent)(nil)
+var _ json.Unmarshaler = (*CompositionEvent)(nil)
+
+func (crt *CompositionRelatesTo) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (crt *CompositionRelatesTo) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.Code        `json:"code"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		TargetIdentifier  *fhir.Identifier  `json:"targetIdentifier"`
+		TargetReference   *fhir.Reference   `json:"targetReference"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	crt.Code = raw.Code
+	crt.Extension = raw.Extension
+	crt.ID = raw.ID
+	crt.ModifierExtension = raw.ModifierExtension
+	crt.Target, err = validate.SelectOneOf[fhir.Element]("Composition.relatesTo.target",
+		raw.TargetIdentifier,
+		raw.TargetReference)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*CompositionRelatesTo)(nil)
+var _ json.Unmarshaler = (*CompositionRelatesTo)(nil)
+
+func (cs *CompositionSection) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cs *CompositionSection) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Author      []*fhir.Reference     `json:"author"`
+		Code        *fhir.CodeableConcept `json:"code"`
+		EmptyReason *fhir.CodeableConcept `json:"emptyReason"`
+		Entry       []*fhir.Reference     `json:"entry"`
+		Extension   []*fhir.Extension     `json:"extension"`
+		Focus       *fhir.Reference       `json:"focus"`
+
+		ID                string                `json:"id"`
+		Mode              *fhir.Code            `json:"mode"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		OrderedBy         *fhir.CodeableConcept `json:"orderedBy"`
+		Text              *fhir.Narrative       `json:"text"`
+		Title             *fhir.String          `json:"title"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cs.Author = raw.Author
+	cs.Code = raw.Code
+	cs.EmptyReason = raw.EmptyReason
+	cs.Entry = raw.Entry
+	cs.Extension = raw.Extension
+	cs.Focus = raw.Focus
+	cs.ID = raw.ID
+	cs.Mode = raw.Mode
+	cs.ModifierExtension = raw.ModifierExtension
+	cs.OrderedBy = raw.OrderedBy
+	cs.Text = raw.Text
+	cs.Title = raw.Title
+	return nil
+}
+
+var _ json.Marshaler = (*CompositionSection)(nil)
+var _ json.Unmarshaler = (*CompositionSection)(nil)

@@ -6,7 +6,10 @@
 package fhir
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Population Type: A populatioof people with some
@@ -156,3 +159,43 @@ func (p *Population) GetRace() *CodeableConcept {
 	}
 	return p.Race
 }
+
+func (p *Population) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (p *Population) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AgeRange           *Range           `json:"ageRange"`
+		AgeCodeableConcept *CodeableConcept `json:"ageCodeableConcept"`
+		Extension          []*Extension     `json:"extension"`
+		Gender             *CodeableConcept `json:"gender"`
+
+		ID                     string           `json:"id"`
+		ModifierExtension      []*Extension     `json:"modifierExtension"`
+		PhysiologicalCondition *CodeableConcept `json:"physiologicalCondition"`
+		Race                   *CodeableConcept `json:"race"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	p.Age, err = validate.SelectOneOf[Element]("Population.age",
+		raw.AgeRange,
+		raw.AgeCodeableConcept)
+	if err != nil {
+		return err
+	}
+	p.Extension = raw.Extension
+	p.Gender = raw.Gender
+	p.ID = raw.ID
+	p.ModifierExtension = raw.ModifierExtension
+	p.PhysiologicalCondition = raw.PhysiologicalCondition
+	p.Race = raw.Race
+	return nil
+}
+
+var _ json.Marshaler = (*Population)(nil)
+var _ json.Unmarshaler = (*Population)(nil)

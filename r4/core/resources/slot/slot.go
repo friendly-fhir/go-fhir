@@ -8,6 +8,8 @@ package slot
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A slot of time on a schedule that may be available for booking appointments.
@@ -308,3 +310,61 @@ func (s *Slot) GetText() *fhir.Narrative {
 	}
 	return s.Text
 }
+
+func (s *Slot) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (s *Slot) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AppointmentType *fhir.CodeableConcept `json:"appointmentType"`
+		Comment         *fhir.String          `json:"comment"`
+		Contained       []fhir.Resource       `json:"contained"`
+		End             *fhir.Instant         `json:"end"`
+		Extension       []*fhir.Extension     `json:"extension"`
+
+		ID                string                  `json:"id"`
+		Identifier        []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Language          *fhir.Code              `json:"language"`
+		Meta              *fhir.Meta              `json:"meta"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Overbooked        *fhir.Boolean           `json:"overbooked"`
+		Schedule          *fhir.Reference         `json:"schedule"`
+		ServiceCategory   []*fhir.CodeableConcept `json:"serviceCategory"`
+		ServiceType       []*fhir.CodeableConcept `json:"serviceType"`
+		Specialty         []*fhir.CodeableConcept `json:"specialty"`
+		Start             *fhir.Instant           `json:"start"`
+		Status            *fhir.Code              `json:"status"`
+		Text              *fhir.Narrative         `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	s.AppointmentType = raw.AppointmentType
+	s.Comment = raw.Comment
+	s.Contained = raw.Contained
+	s.End = raw.End
+	s.Extension = raw.Extension
+	s.ID = raw.ID
+	s.Identifier = raw.Identifier
+	s.ImplicitRules = raw.ImplicitRules
+	s.Language = raw.Language
+	s.Meta = raw.Meta
+	s.ModifierExtension = raw.ModifierExtension
+	s.Overbooked = raw.Overbooked
+	s.Schedule = raw.Schedule
+	s.ServiceCategory = raw.ServiceCategory
+	s.ServiceType = raw.ServiceType
+	s.Specialty = raw.Specialty
+	s.Start = raw.Start
+	s.Status = raw.Status
+	s.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*Slot)(nil)
+var _ json.Unmarshaler = (*Slot)(nil)

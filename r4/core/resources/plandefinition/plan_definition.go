@@ -6,8 +6,11 @@
 package plandefinition
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // This resource allows for the definition of various types of plans as a
@@ -1948,3 +1951,419 @@ func (pdgt *PlanDefinitionGoalTarget) GetModifierExtension() []*fhir.Extension {
 	}
 	return pdgt.ModifierExtension
 }
+
+func (pd *PlanDefinition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pd *PlanDefinition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Action          []*PlanDefinitionAction `json:"action"`
+		ApprovalDate    *fhir.Date              `json:"approvalDate"`
+		Author          []*fhir.ContactDetail   `json:"author"`
+		Contact         []*fhir.ContactDetail   `json:"contact"`
+		Contained       []fhir.Resource         `json:"contained"`
+		Copyright       *fhir.Markdown          `json:"copyright"`
+		Date            *fhir.DateTime          `json:"date"`
+		Description     *fhir.Markdown          `json:"description"`
+		Editor          []*fhir.ContactDetail   `json:"editor"`
+		EffectivePeriod *fhir.Period            `json:"effectivePeriod"`
+		Endorser        []*fhir.ContactDetail   `json:"endorser"`
+		Experimental    *fhir.Boolean           `json:"experimental"`
+		Extension       []*fhir.Extension       `json:"extension"`
+		Goal            []*PlanDefinitionGoal   `json:"goal"`
+
+		ID                     string                  `json:"id"`
+		Identifier             []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules          *fhir.URI               `json:"implicitRules"`
+		Jurisdiction           []*fhir.CodeableConcept `json:"jurisdiction"`
+		Language               *fhir.Code              `json:"language"`
+		LastReviewDate         *fhir.Date              `json:"lastReviewDate"`
+		Library                []*fhir.Canonical       `json:"library"`
+		Meta                   *fhir.Meta              `json:"meta"`
+		ModifierExtension      []*fhir.Extension       `json:"modifierExtension"`
+		Name                   *fhir.String            `json:"name"`
+		Publisher              *fhir.String            `json:"publisher"`
+		Purpose                *fhir.Markdown          `json:"purpose"`
+		RelatedArtifact        []*fhir.RelatedArtifact `json:"relatedArtifact"`
+		Reviewer               []*fhir.ContactDetail   `json:"reviewer"`
+		Status                 *fhir.Code              `json:"status"`
+		SubjectCodeableConcept *fhir.CodeableConcept   `json:"subjectCodeableConcept"`
+		SubjectReference       *fhir.Reference         `json:"subjectReference"`
+		Subtitle               *fhir.String            `json:"subtitle"`
+		Text                   *fhir.Narrative         `json:"text"`
+		Title                  *fhir.String            `json:"title"`
+		Topic                  []*fhir.CodeableConcept `json:"topic"`
+		Type                   *fhir.CodeableConcept   `json:"type"`
+		URL                    *fhir.URI               `json:"url"`
+		Usage                  *fhir.String            `json:"usage"`
+		UseContext             []*fhir.UsageContext    `json:"useContext"`
+		Version                *fhir.String            `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pd.Action = raw.Action
+	pd.ApprovalDate = raw.ApprovalDate
+	pd.Author = raw.Author
+	pd.Contact = raw.Contact
+	pd.Contained = raw.Contained
+	pd.Copyright = raw.Copyright
+	pd.Date = raw.Date
+	pd.Description = raw.Description
+	pd.Editor = raw.Editor
+	pd.EffectivePeriod = raw.EffectivePeriod
+	pd.Endorser = raw.Endorser
+	pd.Experimental = raw.Experimental
+	pd.Extension = raw.Extension
+	pd.Goal = raw.Goal
+	pd.ID = raw.ID
+	pd.Identifier = raw.Identifier
+	pd.ImplicitRules = raw.ImplicitRules
+	pd.Jurisdiction = raw.Jurisdiction
+	pd.Language = raw.Language
+	pd.LastReviewDate = raw.LastReviewDate
+	pd.Library = raw.Library
+	pd.Meta = raw.Meta
+	pd.ModifierExtension = raw.ModifierExtension
+	pd.Name = raw.Name
+	pd.Publisher = raw.Publisher
+	pd.Purpose = raw.Purpose
+	pd.RelatedArtifact = raw.RelatedArtifact
+	pd.Reviewer = raw.Reviewer
+	pd.Status = raw.Status
+	pd.Subject, err = validate.SelectOneOf[fhir.Element]("PlanDefinition.subject",
+		raw.SubjectCodeableConcept,
+		raw.SubjectReference)
+	if err != nil {
+		return err
+	}
+	pd.Subtitle = raw.Subtitle
+	pd.Text = raw.Text
+	pd.Title = raw.Title
+	pd.Topic = raw.Topic
+	pd.Type = raw.Type
+	pd.URL = raw.URL
+	pd.Usage = raw.Usage
+	pd.UseContext = raw.UseContext
+	pd.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*PlanDefinition)(nil)
+var _ json.Unmarshaler = (*PlanDefinition)(nil)
+
+func (pda *PlanDefinitionAction) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pda *PlanDefinitionAction) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		CardinalityBehavior *fhir.Code                          `json:"cardinalityBehavior"`
+		Code                []*fhir.CodeableConcept             `json:"code"`
+		Condition           []*PlanDefinitionActionCondition    `json:"condition"`
+		DefinitionCanonical *fhir.Canonical                     `json:"definitionCanonical"`
+		DefinitionURI       *fhir.URI                           `json:"definitionURI"`
+		Description         *fhir.String                        `json:"description"`
+		Documentation       []*fhir.RelatedArtifact             `json:"documentation"`
+		DynamicValue        []*PlanDefinitionActionDynamicValue `json:"dynamicValue"`
+		Extension           []*fhir.Extension                   `json:"extension"`
+		GoalID              []*fhir.ID                          `json:"goalId"`
+		GroupingBehavior    *fhir.Code                          `json:"groupingBehavior"`
+
+		ID                     string                               `json:"id"`
+		Input                  []*fhir.DataRequirement              `json:"input"`
+		ModifierExtension      []*fhir.Extension                    `json:"modifierExtension"`
+		Output                 []*fhir.DataRequirement              `json:"output"`
+		Participant            []*PlanDefinitionActionParticipant   `json:"participant"`
+		PrecheckBehavior       *fhir.Code                           `json:"precheckBehavior"`
+		Prefix                 *fhir.String                         `json:"prefix"`
+		Priority               *fhir.Code                           `json:"priority"`
+		Reason                 []*fhir.CodeableConcept              `json:"reason"`
+		RelatedAction          []*PlanDefinitionActionRelatedAction `json:"relatedAction"`
+		RequiredBehavior       *fhir.Code                           `json:"requiredBehavior"`
+		SelectionBehavior      *fhir.Code                           `json:"selectionBehavior"`
+		SubjectCodeableConcept *fhir.CodeableConcept                `json:"subjectCodeableConcept"`
+		SubjectReference       *fhir.Reference                      `json:"subjectReference"`
+		TextEquivalent         *fhir.String                         `json:"textEquivalent"`
+		TimingDateTime         *fhir.DateTime                       `json:"timingDateTime"`
+		TimingAge              *fhir.Age                            `json:"timingAge"`
+		TimingPeriod           *fhir.Period                         `json:"timingPeriod"`
+		TimingDuration         *fhir.Duration                       `json:"timingDuration"`
+		TimingRange            *fhir.Range                          `json:"timingRange"`
+		TimingTiming           *fhir.Timing                         `json:"timingTiming"`
+		Title                  *fhir.String                         `json:"title"`
+		Transform              *fhir.Canonical                      `json:"transform"`
+		Trigger                []*fhir.TriggerDefinition            `json:"trigger"`
+		Type                   *fhir.CodeableConcept                `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pda.CardinalityBehavior = raw.CardinalityBehavior
+	pda.Code = raw.Code
+	pda.Condition = raw.Condition
+	pda.Definition, err = validate.SelectOneOf[fhir.Element]("PlanDefinition.action.definition",
+		raw.DefinitionCanonical,
+		raw.DefinitionURI)
+	if err != nil {
+		return err
+	}
+	pda.Description = raw.Description
+	pda.Documentation = raw.Documentation
+	pda.DynamicValue = raw.DynamicValue
+	pda.Extension = raw.Extension
+	pda.GoalID = raw.GoalID
+	pda.GroupingBehavior = raw.GroupingBehavior
+	pda.ID = raw.ID
+	pda.Input = raw.Input
+	pda.ModifierExtension = raw.ModifierExtension
+	pda.Output = raw.Output
+	pda.Participant = raw.Participant
+	pda.PrecheckBehavior = raw.PrecheckBehavior
+	pda.Prefix = raw.Prefix
+	pda.Priority = raw.Priority
+	pda.Reason = raw.Reason
+	pda.RelatedAction = raw.RelatedAction
+	pda.RequiredBehavior = raw.RequiredBehavior
+	pda.SelectionBehavior = raw.SelectionBehavior
+	pda.Subject, err = validate.SelectOneOf[fhir.Element]("PlanDefinition.action.subject",
+		raw.SubjectCodeableConcept,
+		raw.SubjectReference)
+	if err != nil {
+		return err
+	}
+	pda.TextEquivalent = raw.TextEquivalent
+	pda.Timing, err = validate.SelectOneOf[fhir.Element]("PlanDefinition.action.timing",
+		raw.TimingDateTime,
+		raw.TimingAge,
+		raw.TimingPeriod,
+		raw.TimingDuration,
+		raw.TimingRange,
+		raw.TimingTiming)
+	if err != nil {
+		return err
+	}
+	pda.Title = raw.Title
+	pda.Transform = raw.Transform
+	pda.Trigger = raw.Trigger
+	pda.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*PlanDefinitionAction)(nil)
+var _ json.Unmarshaler = (*PlanDefinitionAction)(nil)
+
+func (pdac *PlanDefinitionActionCondition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pdac *PlanDefinitionActionCondition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Expression *fhir.Expression  `json:"expression"`
+		Extension  []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Kind              *fhir.Code        `json:"kind"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pdac.Expression = raw.Expression
+	pdac.Extension = raw.Extension
+	pdac.ID = raw.ID
+	pdac.Kind = raw.Kind
+	pdac.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*PlanDefinitionActionCondition)(nil)
+var _ json.Unmarshaler = (*PlanDefinitionActionCondition)(nil)
+
+func (pdadv *PlanDefinitionActionDynamicValue) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pdadv *PlanDefinitionActionDynamicValue) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Expression *fhir.Expression  `json:"expression"`
+		Extension  []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Path              *fhir.String      `json:"path"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pdadv.Expression = raw.Expression
+	pdadv.Extension = raw.Extension
+	pdadv.ID = raw.ID
+	pdadv.ModifierExtension = raw.ModifierExtension
+	pdadv.Path = raw.Path
+	return nil
+}
+
+var _ json.Marshaler = (*PlanDefinitionActionDynamicValue)(nil)
+var _ json.Unmarshaler = (*PlanDefinitionActionDynamicValue)(nil)
+
+func (pdap *PlanDefinitionActionParticipant) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pdap *PlanDefinitionActionParticipant) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Role              *fhir.CodeableConcept `json:"role"`
+		Type              *fhir.Code            `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pdap.Extension = raw.Extension
+	pdap.ID = raw.ID
+	pdap.ModifierExtension = raw.ModifierExtension
+	pdap.Role = raw.Role
+	pdap.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*PlanDefinitionActionParticipant)(nil)
+var _ json.Unmarshaler = (*PlanDefinitionActionParticipant)(nil)
+
+func (pdara *PlanDefinitionActionRelatedAction) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pdara *PlanDefinitionActionRelatedAction) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ActionID  *fhir.ID          `json:"actionId"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		OffsetDuration    *fhir.Duration    `json:"offsetDuration"`
+		OffsetRange       *fhir.Range       `json:"offsetRange"`
+		Relationship      *fhir.Code        `json:"relationship"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pdara.ActionID = raw.ActionID
+	pdara.Extension = raw.Extension
+	pdara.ID = raw.ID
+	pdara.ModifierExtension = raw.ModifierExtension
+	pdara.Offset, err = validate.SelectOneOf[fhir.Element]("PlanDefinition.action.relatedAction.offset",
+		raw.OffsetDuration,
+		raw.OffsetRange)
+	if err != nil {
+		return err
+	}
+	pdara.Relationship = raw.Relationship
+	return nil
+}
+
+var _ json.Marshaler = (*PlanDefinitionActionRelatedAction)(nil)
+var _ json.Unmarshaler = (*PlanDefinitionActionRelatedAction)(nil)
+
+func (pdg *PlanDefinitionGoal) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pdg *PlanDefinitionGoal) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Addresses     []*fhir.CodeableConcept `json:"addresses"`
+		Category      *fhir.CodeableConcept   `json:"category"`
+		Description   *fhir.CodeableConcept   `json:"description"`
+		Documentation []*fhir.RelatedArtifact `json:"documentation"`
+		Extension     []*fhir.Extension       `json:"extension"`
+
+		ID                string                      `json:"id"`
+		ModifierExtension []*fhir.Extension           `json:"modifierExtension"`
+		Priority          *fhir.CodeableConcept       `json:"priority"`
+		Start             *fhir.CodeableConcept       `json:"start"`
+		Target            []*PlanDefinitionGoalTarget `json:"target"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pdg.Addresses = raw.Addresses
+	pdg.Category = raw.Category
+	pdg.Description = raw.Description
+	pdg.Documentation = raw.Documentation
+	pdg.Extension = raw.Extension
+	pdg.ID = raw.ID
+	pdg.ModifierExtension = raw.ModifierExtension
+	pdg.Priority = raw.Priority
+	pdg.Start = raw.Start
+	pdg.Target = raw.Target
+	return nil
+}
+
+var _ json.Marshaler = (*PlanDefinitionGoal)(nil)
+var _ json.Unmarshaler = (*PlanDefinitionGoal)(nil)
+
+func (pdgt *PlanDefinitionGoalTarget) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pdgt *PlanDefinitionGoalTarget) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		DetailQuantity        *fhir.Quantity        `json:"detailQuantity"`
+		DetailRange           *fhir.Range           `json:"detailRange"`
+		DetailCodeableConcept *fhir.CodeableConcept `json:"detailCodeableConcept"`
+		Due                   *fhir.Duration        `json:"due"`
+		Extension             []*fhir.Extension     `json:"extension"`
+
+		ID                string                `json:"id"`
+		Measure           *fhir.CodeableConcept `json:"measure"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pdgt.Detail, err = validate.SelectOneOf[fhir.Element]("PlanDefinition.goal.target.detail",
+		raw.DetailQuantity,
+		raw.DetailRange,
+		raw.DetailCodeableConcept)
+	if err != nil {
+		return err
+	}
+	pdgt.Due = raw.Due
+	pdgt.Extension = raw.Extension
+	pdgt.ID = raw.ID
+	pdgt.Measure = raw.Measure
+	pdgt.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*PlanDefinitionGoalTarget)(nil)
+var _ json.Unmarshaler = (*PlanDefinitionGoalTarget)(nil)

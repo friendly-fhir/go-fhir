@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Age Type: A duration of time during which an
@@ -122,3 +124,37 @@ func (a *Age) GetValue() *Decimal {
 	}
 	return a.Value
 }
+
+func (a *Age) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (a *Age) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code       *Code        `json:"code"`
+		Comparator *Code        `json:"comparator"`
+		Extension  []*Extension `json:"extension"`
+
+		ID     string   `json:"id"`
+		System *URI     `json:"system"`
+		Unit   *String  `json:"unit"`
+		Value  *Decimal `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	a.Code = raw.Code
+	a.Comparator = raw.Comparator
+	a.Extension = raw.Extension
+	a.ID = raw.ID
+	a.System = raw.System
+	a.Unit = raw.Unit
+	a.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*Age)(nil)
+var _ json.Unmarshaler = (*Age)(nil)

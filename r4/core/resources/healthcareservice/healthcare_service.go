@@ -8,6 +8,8 @@ package healthcareservice
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The details of a healthcare service available at a location.
@@ -810,3 +812,181 @@ func (hsna *HealthcareServiceNotAvailable) GetModifierExtension() []*fhir.Extens
 	}
 	return hsna.ModifierExtension
 }
+
+func (hs *HealthcareService) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (hs *HealthcareService) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Active                 *fhir.Boolean                     `json:"active"`
+		AppointmentRequired    *fhir.Boolean                     `json:"appointmentRequired"`
+		AvailabilityExceptions *fhir.String                      `json:"availabilityExceptions"`
+		AvailableTime          []*HealthcareServiceAvailableTime `json:"availableTime"`
+		Category               []*fhir.CodeableConcept           `json:"category"`
+		Characteristic         []*fhir.CodeableConcept           `json:"characteristic"`
+		Comment                *fhir.String                      `json:"comment"`
+		Communication          []*fhir.CodeableConcept           `json:"communication"`
+		Contained              []fhir.Resource                   `json:"contained"`
+		CoverageArea           []*fhir.Reference                 `json:"coverageArea"`
+		Eligibility            []*HealthcareServiceEligibility   `json:"eligibility"`
+		Endpoint               []*fhir.Reference                 `json:"endpoint"`
+		Extension              []*fhir.Extension                 `json:"extension"`
+		ExtraDetails           *fhir.Markdown                    `json:"extraDetails"`
+
+		ID                   string                           `json:"id"`
+		Identifier           []*fhir.Identifier               `json:"identifier"`
+		ImplicitRules        *fhir.URI                        `json:"implicitRules"`
+		Language             *fhir.Code                       `json:"language"`
+		Location             []*fhir.Reference                `json:"location"`
+		Meta                 *fhir.Meta                       `json:"meta"`
+		ModifierExtension    []*fhir.Extension                `json:"modifierExtension"`
+		Name                 *fhir.String                     `json:"name"`
+		NotAvailable         []*HealthcareServiceNotAvailable `json:"notAvailable"`
+		Photo                *fhir.Attachment                 `json:"photo"`
+		Program              []*fhir.CodeableConcept          `json:"program"`
+		ProvidedBy           *fhir.Reference                  `json:"providedBy"`
+		ReferralMethod       []*fhir.CodeableConcept          `json:"referralMethod"`
+		ServiceProvisionCode []*fhir.CodeableConcept          `json:"serviceProvisionCode"`
+		Specialty            []*fhir.CodeableConcept          `json:"specialty"`
+		Telecom              []*fhir.ContactPoint             `json:"telecom"`
+		Text                 *fhir.Narrative                  `json:"text"`
+		Type                 []*fhir.CodeableConcept          `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	hs.Active = raw.Active
+	hs.AppointmentRequired = raw.AppointmentRequired
+	hs.AvailabilityExceptions = raw.AvailabilityExceptions
+	hs.AvailableTime = raw.AvailableTime
+	hs.Category = raw.Category
+	hs.Characteristic = raw.Characteristic
+	hs.Comment = raw.Comment
+	hs.Communication = raw.Communication
+	hs.Contained = raw.Contained
+	hs.CoverageArea = raw.CoverageArea
+	hs.Eligibility = raw.Eligibility
+	hs.Endpoint = raw.Endpoint
+	hs.Extension = raw.Extension
+	hs.ExtraDetails = raw.ExtraDetails
+	hs.ID = raw.ID
+	hs.Identifier = raw.Identifier
+	hs.ImplicitRules = raw.ImplicitRules
+	hs.Language = raw.Language
+	hs.Location = raw.Location
+	hs.Meta = raw.Meta
+	hs.ModifierExtension = raw.ModifierExtension
+	hs.Name = raw.Name
+	hs.NotAvailable = raw.NotAvailable
+	hs.Photo = raw.Photo
+	hs.Program = raw.Program
+	hs.ProvidedBy = raw.ProvidedBy
+	hs.ReferralMethod = raw.ReferralMethod
+	hs.ServiceProvisionCode = raw.ServiceProvisionCode
+	hs.Specialty = raw.Specialty
+	hs.Telecom = raw.Telecom
+	hs.Text = raw.Text
+	hs.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*HealthcareService)(nil)
+var _ json.Unmarshaler = (*HealthcareService)(nil)
+
+func (hsat *HealthcareServiceAvailableTime) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (hsat *HealthcareServiceAvailableTime) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AllDay             *fhir.Boolean     `json:"allDay"`
+		AvailableEndTime   *fhir.Time        `json:"availableEndTime"`
+		AvailableStartTime *fhir.Time        `json:"availableStartTime"`
+		DaysOfWeek         []*fhir.Code      `json:"daysOfWeek"`
+		Extension          []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	hsat.AllDay = raw.AllDay
+	hsat.AvailableEndTime = raw.AvailableEndTime
+	hsat.AvailableStartTime = raw.AvailableStartTime
+	hsat.DaysOfWeek = raw.DaysOfWeek
+	hsat.Extension = raw.Extension
+	hsat.ID = raw.ID
+	hsat.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*HealthcareServiceAvailableTime)(nil)
+var _ json.Unmarshaler = (*HealthcareServiceAvailableTime)(nil)
+
+func (hse *HealthcareServiceEligibility) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (hse *HealthcareServiceEligibility) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.CodeableConcept `json:"code"`
+		Comment   *fhir.Markdown        `json:"comment"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	hse.Code = raw.Code
+	hse.Comment = raw.Comment
+	hse.Extension = raw.Extension
+	hse.ID = raw.ID
+	hse.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*HealthcareServiceEligibility)(nil)
+var _ json.Unmarshaler = (*HealthcareServiceEligibility)(nil)
+
+func (hsna *HealthcareServiceNotAvailable) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (hsna *HealthcareServiceNotAvailable) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description *fhir.String      `json:"description"`
+		During      *fhir.Period      `json:"during"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	hsna.Description = raw.Description
+	hsna.During = raw.During
+	hsna.Extension = raw.Extension
+	hsna.ID = raw.ID
+	hsna.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*HealthcareServiceNotAvailable)(nil)
+var _ json.Unmarshaler = (*HealthcareServiceNotAvailable)(nil)

@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Ratio Type: A relationship of two Quantity
@@ -79,3 +81,31 @@ func (r *Ratio) GetNumerator() *Quantity {
 	}
 	return r.Numerator
 }
+
+func (r *Ratio) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (r *Ratio) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Denominator *Quantity    `json:"denominator"`
+		Extension   []*Extension `json:"extension"`
+
+		ID        string    `json:"id"`
+		Numerator *Quantity `json:"numerator"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	r.Denominator = raw.Denominator
+	r.Extension = raw.Extension
+	r.ID = raw.ID
+	r.Numerator = raw.Numerator
+	return nil
+}
+
+var _ json.Marshaler = (*Ratio)(nil)
+var _ json.Unmarshaler = (*Ratio)(nil)

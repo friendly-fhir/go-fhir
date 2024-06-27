@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Coding Type: A reference to a code defined by a
@@ -127,3 +129,37 @@ func (c *Coding) GetVersion() *String {
 	}
 	return c.Version
 }
+
+func (c *Coding) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (c *Coding) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *Code        `json:"code"`
+		Display   *String      `json:"display"`
+		Extension []*Extension `json:"extension"`
+
+		ID           string   `json:"id"`
+		System       *URI     `json:"system"`
+		UserSelected *Boolean `json:"userSelected"`
+		Version      *String  `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	c.Code = raw.Code
+	c.Display = raw.Display
+	c.Extension = raw.Extension
+	c.ID = raw.ID
+	c.System = raw.System
+	c.UserSelected = raw.UserSelected
+	c.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*Coding)(nil)
+var _ json.Unmarshaler = (*Coding)(nil)

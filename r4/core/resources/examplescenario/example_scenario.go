@@ -8,6 +8,8 @@ package examplescenario
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Example of workflow instance.
@@ -1392,3 +1394,345 @@ func (espso *ExampleScenarioProcessStepOperation) GetType() *fhir.String {
 	}
 	return espso.Type
 }
+
+func (es *ExampleScenario) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (es *ExampleScenario) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Actor        []*ExampleScenarioActor `json:"actor"`
+		Contact      []*fhir.ContactDetail   `json:"contact"`
+		Contained    []fhir.Resource         `json:"contained"`
+		Copyright    *fhir.Markdown          `json:"copyright"`
+		Date         *fhir.DateTime          `json:"date"`
+		Experimental *fhir.Boolean           `json:"experimental"`
+		Extension    []*fhir.Extension       `json:"extension"`
+
+		ID                string                     `json:"id"`
+		Identifier        []*fhir.Identifier         `json:"identifier"`
+		ImplicitRules     *fhir.URI                  `json:"implicitRules"`
+		Instance          []*ExampleScenarioInstance `json:"instance"`
+		Jurisdiction      []*fhir.CodeableConcept    `json:"jurisdiction"`
+		Language          *fhir.Code                 `json:"language"`
+		Meta              *fhir.Meta                 `json:"meta"`
+		ModifierExtension []*fhir.Extension          `json:"modifierExtension"`
+		Name              *fhir.String               `json:"name"`
+		Process           []*ExampleScenarioProcess  `json:"process"`
+		Publisher         *fhir.String               `json:"publisher"`
+		Purpose           *fhir.Markdown             `json:"purpose"`
+		Status            *fhir.Code                 `json:"status"`
+		Text              *fhir.Narrative            `json:"text"`
+		URL               *fhir.URI                  `json:"url"`
+		UseContext        []*fhir.UsageContext       `json:"useContext"`
+		Version           *fhir.String               `json:"version"`
+		Workflow          []*fhir.Canonical          `json:"workflow"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	es.Actor = raw.Actor
+	es.Contact = raw.Contact
+	es.Contained = raw.Contained
+	es.Copyright = raw.Copyright
+	es.Date = raw.Date
+	es.Experimental = raw.Experimental
+	es.Extension = raw.Extension
+	es.ID = raw.ID
+	es.Identifier = raw.Identifier
+	es.ImplicitRules = raw.ImplicitRules
+	es.Instance = raw.Instance
+	es.Jurisdiction = raw.Jurisdiction
+	es.Language = raw.Language
+	es.Meta = raw.Meta
+	es.ModifierExtension = raw.ModifierExtension
+	es.Name = raw.Name
+	es.Process = raw.Process
+	es.Publisher = raw.Publisher
+	es.Purpose = raw.Purpose
+	es.Status = raw.Status
+	es.Text = raw.Text
+	es.URL = raw.URL
+	es.UseContext = raw.UseContext
+	es.Version = raw.Version
+	es.Workflow = raw.Workflow
+	return nil
+}
+
+var _ json.Marshaler = (*ExampleScenario)(nil)
+var _ json.Unmarshaler = (*ExampleScenario)(nil)
+
+func (esa *ExampleScenarioActor) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (esa *ExampleScenarioActor) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ActorID     *fhir.String      `json:"actorId"`
+		Description *fhir.Markdown    `json:"description"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.String      `json:"name"`
+		Type              *fhir.Code        `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	esa.ActorID = raw.ActorID
+	esa.Description = raw.Description
+	esa.Extension = raw.Extension
+	esa.ID = raw.ID
+	esa.ModifierExtension = raw.ModifierExtension
+	esa.Name = raw.Name
+	esa.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ExampleScenarioActor)(nil)
+var _ json.Unmarshaler = (*ExampleScenarioActor)(nil)
+
+func (esi *ExampleScenarioInstance) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (esi *ExampleScenarioInstance) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ContainedInstance []*ExampleScenarioInstanceContainedInstance `json:"containedInstance"`
+		Description       *fhir.Markdown                              `json:"description"`
+		Extension         []*fhir.Extension                           `json:"extension"`
+
+		ID                string                            `json:"id"`
+		ModifierExtension []*fhir.Extension                 `json:"modifierExtension"`
+		Name              *fhir.String                      `json:"name"`
+		ResourceID        *fhir.String                      `json:"resourceId"`
+		ResourceType      *fhir.Code                        `json:"resourceType"`
+		Version           []*ExampleScenarioInstanceVersion `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	esi.ContainedInstance = raw.ContainedInstance
+	esi.Description = raw.Description
+	esi.Extension = raw.Extension
+	esi.ID = raw.ID
+	esi.ModifierExtension = raw.ModifierExtension
+	esi.Name = raw.Name
+	esi.ResourceID = raw.ResourceID
+	esi.ResourceType = raw.ResourceType
+	esi.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*ExampleScenarioInstance)(nil)
+var _ json.Unmarshaler = (*ExampleScenarioInstance)(nil)
+
+func (esici *ExampleScenarioInstanceContainedInstance) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (esici *ExampleScenarioInstanceContainedInstance) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		ResourceID        *fhir.String      `json:"resourceId"`
+		VersionID         *fhir.String      `json:"versionId"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	esici.Extension = raw.Extension
+	esici.ID = raw.ID
+	esici.ModifierExtension = raw.ModifierExtension
+	esici.ResourceID = raw.ResourceID
+	esici.VersionID = raw.VersionID
+	return nil
+}
+
+var _ json.Marshaler = (*ExampleScenarioInstanceContainedInstance)(nil)
+var _ json.Unmarshaler = (*ExampleScenarioInstanceContainedInstance)(nil)
+
+func (esiv *ExampleScenarioInstanceVersion) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (esiv *ExampleScenarioInstanceVersion) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description *fhir.Markdown    `json:"description"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		VersionID         *fhir.String      `json:"versionId"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	esiv.Description = raw.Description
+	esiv.Extension = raw.Extension
+	esiv.ID = raw.ID
+	esiv.ModifierExtension = raw.ModifierExtension
+	esiv.VersionID = raw.VersionID
+	return nil
+}
+
+var _ json.Marshaler = (*ExampleScenarioInstanceVersion)(nil)
+var _ json.Unmarshaler = (*ExampleScenarioInstanceVersion)(nil)
+
+func (esp *ExampleScenarioProcess) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (esp *ExampleScenarioProcess) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description *fhir.Markdown    `json:"description"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string                        `json:"id"`
+		ModifierExtension []*fhir.Extension             `json:"modifierExtension"`
+		PostConditions    *fhir.Markdown                `json:"postConditions"`
+		PreConditions     *fhir.Markdown                `json:"preConditions"`
+		Step              []*ExampleScenarioProcessStep `json:"step"`
+		Title             *fhir.String                  `json:"title"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	esp.Description = raw.Description
+	esp.Extension = raw.Extension
+	esp.ID = raw.ID
+	esp.ModifierExtension = raw.ModifierExtension
+	esp.PostConditions = raw.PostConditions
+	esp.PreConditions = raw.PreConditions
+	esp.Step = raw.Step
+	esp.Title = raw.Title
+	return nil
+}
+
+var _ json.Marshaler = (*ExampleScenarioProcess)(nil)
+var _ json.Unmarshaler = (*ExampleScenarioProcess)(nil)
+
+func (esps *ExampleScenarioProcessStep) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (esps *ExampleScenarioProcessStep) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Alternative []*ExampleScenarioProcessStepAlternative `json:"alternative"`
+		Extension   []*fhir.Extension                        `json:"extension"`
+
+		ID                string                               `json:"id"`
+		ModifierExtension []*fhir.Extension                    `json:"modifierExtension"`
+		Operation         *ExampleScenarioProcessStepOperation `json:"operation"`
+		Pause             *fhir.Boolean                        `json:"pause"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	esps.Alternative = raw.Alternative
+	esps.Extension = raw.Extension
+	esps.ID = raw.ID
+	esps.ModifierExtension = raw.ModifierExtension
+	esps.Operation = raw.Operation
+	esps.Pause = raw.Pause
+	return nil
+}
+
+var _ json.Marshaler = (*ExampleScenarioProcessStep)(nil)
+var _ json.Unmarshaler = (*ExampleScenarioProcessStep)(nil)
+
+func (espsa *ExampleScenarioProcessStepAlternative) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (espsa *ExampleScenarioProcessStepAlternative) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description *fhir.Markdown    `json:"description"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Title             *fhir.String      `json:"title"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	espsa.Description = raw.Description
+	espsa.Extension = raw.Extension
+	espsa.ID = raw.ID
+	espsa.ModifierExtension = raw.ModifierExtension
+	espsa.Title = raw.Title
+	return nil
+}
+
+var _ json.Marshaler = (*ExampleScenarioProcessStepAlternative)(nil)
+var _ json.Unmarshaler = (*ExampleScenarioProcessStepAlternative)(nil)
+
+func (espso *ExampleScenarioProcessStepOperation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (espso *ExampleScenarioProcessStepOperation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description *fhir.Markdown    `json:"description"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Initiator         *fhir.String      `json:"initiator"`
+		InitiatorActive   *fhir.Boolean     `json:"initiatorActive"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.String      `json:"name"`
+		Number            *fhir.String      `json:"number"`
+		Receiver          *fhir.String      `json:"receiver"`
+		ReceiverActive    *fhir.Boolean     `json:"receiverActive"`
+		Type              *fhir.String      `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	espso.Description = raw.Description
+	espso.Extension = raw.Extension
+	espso.ID = raw.ID
+	espso.Initiator = raw.Initiator
+	espso.InitiatorActive = raw.InitiatorActive
+	espso.ModifierExtension = raw.ModifierExtension
+	espso.Name = raw.Name
+	espso.Number = raw.Number
+	espso.Receiver = raw.Receiver
+	espso.ReceiverActive = raw.ReceiverActive
+	espso.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ExampleScenarioProcessStepOperation)(nil)
+var _ json.Unmarshaler = (*ExampleScenarioProcessStepOperation)(nil)

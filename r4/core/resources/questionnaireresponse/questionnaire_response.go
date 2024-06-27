@@ -6,8 +6,11 @@
 package questionnaireresponse
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A structured set of questions and their answers. The questions are ordered
@@ -671,3 +674,149 @@ func (qria *QuestionnaireResponseItemAnswer) GetValueReference() *fhir.Reference
 	}
 	return val
 }
+
+func (qr *QuestionnaireResponse) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (qr *QuestionnaireResponse) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Author    *fhir.Reference   `json:"author"`
+		Authored  *fhir.DateTime    `json:"authored"`
+		BasedOn   []*fhir.Reference `json:"basedOn"`
+		Contained []fhir.Resource   `json:"contained"`
+		Encounter *fhir.Reference   `json:"encounter"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                       `json:"id"`
+		Identifier        *fhir.Identifier             `json:"identifier"`
+		ImplicitRules     *fhir.URI                    `json:"implicitRules"`
+		Item              []*QuestionnaireResponseItem `json:"item"`
+		Language          *fhir.Code                   `json:"language"`
+		Meta              *fhir.Meta                   `json:"meta"`
+		ModifierExtension []*fhir.Extension            `json:"modifierExtension"`
+		PartOf            []*fhir.Reference            `json:"partOf"`
+		Questionnaire     *fhir.Canonical              `json:"questionnaire"`
+		Source            *fhir.Reference              `json:"source"`
+		Status            *fhir.Code                   `json:"status"`
+		Subject           *fhir.Reference              `json:"subject"`
+		Text              *fhir.Narrative              `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	qr.Author = raw.Author
+	qr.Authored = raw.Authored
+	qr.BasedOn = raw.BasedOn
+	qr.Contained = raw.Contained
+	qr.Encounter = raw.Encounter
+	qr.Extension = raw.Extension
+	qr.ID = raw.ID
+	qr.Identifier = raw.Identifier
+	qr.ImplicitRules = raw.ImplicitRules
+	qr.Item = raw.Item
+	qr.Language = raw.Language
+	qr.Meta = raw.Meta
+	qr.ModifierExtension = raw.ModifierExtension
+	qr.PartOf = raw.PartOf
+	qr.Questionnaire = raw.Questionnaire
+	qr.Source = raw.Source
+	qr.Status = raw.Status
+	qr.Subject = raw.Subject
+	qr.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*QuestionnaireResponse)(nil)
+var _ json.Unmarshaler = (*QuestionnaireResponse)(nil)
+
+func (qri *QuestionnaireResponseItem) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (qri *QuestionnaireResponseItem) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Answer     []*QuestionnaireResponseItemAnswer `json:"answer"`
+		Definition *fhir.URI                          `json:"definition"`
+		Extension  []*fhir.Extension                  `json:"extension"`
+
+		ID                string            `json:"id"`
+		LinkID            *fhir.String      `json:"linkId"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Text              *fhir.String      `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	qri.Answer = raw.Answer
+	qri.Definition = raw.Definition
+	qri.Extension = raw.Extension
+	qri.ID = raw.ID
+	qri.LinkID = raw.LinkID
+	qri.ModifierExtension = raw.ModifierExtension
+	qri.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*QuestionnaireResponseItem)(nil)
+var _ json.Unmarshaler = (*QuestionnaireResponseItem)(nil)
+
+func (qria *QuestionnaireResponseItemAnswer) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (qria *QuestionnaireResponseItemAnswer) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		ValueBoolean      *fhir.Boolean     `json:"valueBoolean"`
+		ValueDecimal      *fhir.Decimal     `json:"valueDecimal"`
+		ValueInteger      *fhir.Integer     `json:"valueInteger"`
+		ValueDate         *fhir.Date        `json:"valueDate"`
+		ValueDateTime     *fhir.DateTime    `json:"valueDateTime"`
+		ValueTime         *fhir.Time        `json:"valueTime"`
+		ValueString       *fhir.String      `json:"valueString"`
+		ValueURI          *fhir.URI         `json:"valueURI"`
+		ValueAttachment   *fhir.Attachment  `json:"valueAttachment"`
+		ValueCoding       *fhir.Coding      `json:"valueCoding"`
+		ValueQuantity     *fhir.Quantity    `json:"valueQuantity"`
+		ValueReference    *fhir.Reference   `json:"valueReference"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	qria.Extension = raw.Extension
+	qria.ID = raw.ID
+	qria.ModifierExtension = raw.ModifierExtension
+	qria.Value, err = validate.SelectOneOf[fhir.Element]("QuestionnaireResponse.item.answer.value",
+		raw.ValueBoolean,
+		raw.ValueDecimal,
+		raw.ValueInteger,
+		raw.ValueDate,
+		raw.ValueDateTime,
+		raw.ValueTime,
+		raw.ValueString,
+		raw.ValueURI,
+		raw.ValueAttachment,
+		raw.ValueCoding,
+		raw.ValueQuantity,
+		raw.ValueReference)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*QuestionnaireResponseItemAnswer)(nil)
+var _ json.Unmarshaler = (*QuestionnaireResponseItemAnswer)(nil)

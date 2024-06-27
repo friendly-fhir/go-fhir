@@ -6,7 +6,10 @@
 package fhir
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Annotation Type: A text note which also
@@ -116,3 +119,39 @@ func (a *Annotation) GetTime() *DateTime {
 	}
 	return a.Time
 }
+
+func (a *Annotation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (a *Annotation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AuthorReference *Reference   `json:"authorReference"`
+		AuthorString    *String      `json:"authorString"`
+		Extension       []*Extension `json:"extension"`
+
+		ID   string    `json:"id"`
+		Text *Markdown `json:"text"`
+		Time *DateTime `json:"time"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	a.Author, err = validate.SelectOneOf[Element]("Annotation.author",
+		raw.AuthorReference,
+		raw.AuthorString)
+	if err != nil {
+		return err
+	}
+	a.Extension = raw.Extension
+	a.ID = raw.ID
+	a.Text = raw.Text
+	a.Time = raw.Time
+	return nil
+}
+
+var _ json.Marshaler = (*Annotation)(nil)
+var _ json.Unmarshaler = (*Annotation)(nil)

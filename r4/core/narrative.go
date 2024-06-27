@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Narrative Type: A human-readable summary of the
@@ -82,3 +84,31 @@ func (n *Narrative) GetStatus() *Code {
 	}
 	return n.Status
 }
+
+func (n *Narrative) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (n *Narrative) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Div       *XHTML       `json:"div"`
+		Extension []*Extension `json:"extension"`
+
+		ID     string `json:"id"`
+		Status *Code  `json:"status"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	n.Div = raw.Div
+	n.Extension = raw.Extension
+	n.ID = raw.ID
+	n.Status = raw.Status
+	return nil
+}
+
+var _ json.Marshaler = (*Narrative)(nil)
+var _ json.Unmarshaler = (*Narrative)(nil)

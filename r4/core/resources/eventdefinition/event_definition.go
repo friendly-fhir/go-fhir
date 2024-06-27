@@ -6,8 +6,11 @@
 package eventdefinition
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The EventDefinition resource provides a reusable description of when a
@@ -589,3 +592,101 @@ func (ed *EventDefinition) GetVersion() *fhir.String {
 	}
 	return ed.Version
 }
+
+func (ed *EventDefinition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ed *EventDefinition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ApprovalDate    *fhir.Date            `json:"approvalDate"`
+		Author          []*fhir.ContactDetail `json:"author"`
+		Contact         []*fhir.ContactDetail `json:"contact"`
+		Contained       []fhir.Resource       `json:"contained"`
+		Copyright       *fhir.Markdown        `json:"copyright"`
+		Date            *fhir.DateTime        `json:"date"`
+		Description     *fhir.Markdown        `json:"description"`
+		Editor          []*fhir.ContactDetail `json:"editor"`
+		EffectivePeriod *fhir.Period          `json:"effectivePeriod"`
+		Endorser        []*fhir.ContactDetail `json:"endorser"`
+		Experimental    *fhir.Boolean         `json:"experimental"`
+		Extension       []*fhir.Extension     `json:"extension"`
+
+		ID                     string                    `json:"id"`
+		Identifier             []*fhir.Identifier        `json:"identifier"`
+		ImplicitRules          *fhir.URI                 `json:"implicitRules"`
+		Jurisdiction           []*fhir.CodeableConcept   `json:"jurisdiction"`
+		Language               *fhir.Code                `json:"language"`
+		LastReviewDate         *fhir.Date                `json:"lastReviewDate"`
+		Meta                   *fhir.Meta                `json:"meta"`
+		ModifierExtension      []*fhir.Extension         `json:"modifierExtension"`
+		Name                   *fhir.String              `json:"name"`
+		Publisher              *fhir.String              `json:"publisher"`
+		Purpose                *fhir.Markdown            `json:"purpose"`
+		RelatedArtifact        []*fhir.RelatedArtifact   `json:"relatedArtifact"`
+		Reviewer               []*fhir.ContactDetail     `json:"reviewer"`
+		Status                 *fhir.Code                `json:"status"`
+		SubjectCodeableConcept *fhir.CodeableConcept     `json:"subjectCodeableConcept"`
+		SubjectReference       *fhir.Reference           `json:"subjectReference"`
+		Subtitle               *fhir.String              `json:"subtitle"`
+		Text                   *fhir.Narrative           `json:"text"`
+		Title                  *fhir.String              `json:"title"`
+		Topic                  []*fhir.CodeableConcept   `json:"topic"`
+		Trigger                []*fhir.TriggerDefinition `json:"trigger"`
+		URL                    *fhir.URI                 `json:"url"`
+		Usage                  *fhir.String              `json:"usage"`
+		UseContext             []*fhir.UsageContext      `json:"useContext"`
+		Version                *fhir.String              `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ed.ApprovalDate = raw.ApprovalDate
+	ed.Author = raw.Author
+	ed.Contact = raw.Contact
+	ed.Contained = raw.Contained
+	ed.Copyright = raw.Copyright
+	ed.Date = raw.Date
+	ed.Description = raw.Description
+	ed.Editor = raw.Editor
+	ed.EffectivePeriod = raw.EffectivePeriod
+	ed.Endorser = raw.Endorser
+	ed.Experimental = raw.Experimental
+	ed.Extension = raw.Extension
+	ed.ID = raw.ID
+	ed.Identifier = raw.Identifier
+	ed.ImplicitRules = raw.ImplicitRules
+	ed.Jurisdiction = raw.Jurisdiction
+	ed.Language = raw.Language
+	ed.LastReviewDate = raw.LastReviewDate
+	ed.Meta = raw.Meta
+	ed.ModifierExtension = raw.ModifierExtension
+	ed.Name = raw.Name
+	ed.Publisher = raw.Publisher
+	ed.Purpose = raw.Purpose
+	ed.RelatedArtifact = raw.RelatedArtifact
+	ed.Reviewer = raw.Reviewer
+	ed.Status = raw.Status
+	ed.Subject, err = validate.SelectOneOf[fhir.Element]("EventDefinition.subject",
+		raw.SubjectCodeableConcept,
+		raw.SubjectReference)
+	if err != nil {
+		return err
+	}
+	ed.Subtitle = raw.Subtitle
+	ed.Text = raw.Text
+	ed.Title = raw.Title
+	ed.Topic = raw.Topic
+	ed.Trigger = raw.Trigger
+	ed.URL = raw.URL
+	ed.Usage = raw.Usage
+	ed.UseContext = raw.UseContext
+	ed.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*EventDefinition)(nil)
+var _ json.Unmarshaler = (*EventDefinition)(nil)

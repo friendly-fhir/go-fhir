@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Reference Type: A reference from one resource
@@ -128,3 +130,35 @@ func (r *Reference) GetType() *URI {
 	}
 	return r.Type
 }
+
+func (r *Reference) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (r *Reference) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Display   *String      `json:"display"`
+		Extension []*Extension `json:"extension"`
+
+		ID         string      `json:"id"`
+		Identifier *Identifier `json:"identifier"`
+		Reference  *String     `json:"reference"`
+		Type       *URI        `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	r.Display = raw.Display
+	r.Extension = raw.Extension
+	r.ID = raw.ID
+	r.Identifier = raw.Identifier
+	r.Reference = raw.Reference
+	r.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*Reference)(nil)
+var _ json.Unmarshaler = (*Reference)(nil)

@@ -6,8 +6,11 @@
 package messageheader
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The header for a message exchange that is either requesting or responding to
@@ -711,3 +714,169 @@ func (mhs *MessageHeaderSource) GetVersion() *fhir.String {
 	}
 	return mhs.Version
 }
+
+func (mh *MessageHeader) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mh *MessageHeader) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Author      *fhir.Reference             `json:"author"`
+		Contained   []fhir.Resource             `json:"contained"`
+		Definition  *fhir.Canonical             `json:"definition"`
+		Destination []*MessageHeaderDestination `json:"destination"`
+		Enterer     *fhir.Reference             `json:"enterer"`
+		EventCoding *fhir.Coding                `json:"eventCoding"`
+		EventURI    *fhir.URI                   `json:"eventURI"`
+		Extension   []*fhir.Extension           `json:"extension"`
+		Focus       []*fhir.Reference           `json:"focus"`
+
+		ID                string                 `json:"id"`
+		ImplicitRules     *fhir.URI              `json:"implicitRules"`
+		Language          *fhir.Code             `json:"language"`
+		Meta              *fhir.Meta             `json:"meta"`
+		ModifierExtension []*fhir.Extension      `json:"modifierExtension"`
+		Reason            *fhir.CodeableConcept  `json:"reason"`
+		Response          *MessageHeaderResponse `json:"response"`
+		Responsible       *fhir.Reference        `json:"responsible"`
+		Sender            *fhir.Reference        `json:"sender"`
+		Source            *MessageHeaderSource   `json:"source"`
+		Text              *fhir.Narrative        `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mh.Author = raw.Author
+	mh.Contained = raw.Contained
+	mh.Definition = raw.Definition
+	mh.Destination = raw.Destination
+	mh.Enterer = raw.Enterer
+	mh.Event, err = validate.SelectOneOf[fhir.Element]("MessageHeader.event",
+		raw.EventCoding,
+		raw.EventURI)
+	if err != nil {
+		return err
+	}
+	mh.Extension = raw.Extension
+	mh.Focus = raw.Focus
+	mh.ID = raw.ID
+	mh.ImplicitRules = raw.ImplicitRules
+	mh.Language = raw.Language
+	mh.Meta = raw.Meta
+	mh.ModifierExtension = raw.ModifierExtension
+	mh.Reason = raw.Reason
+	mh.Response = raw.Response
+	mh.Responsible = raw.Responsible
+	mh.Sender = raw.Sender
+	mh.Source = raw.Source
+	mh.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*MessageHeader)(nil)
+var _ json.Unmarshaler = (*MessageHeader)(nil)
+
+func (mhd *MessageHeaderDestination) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mhd *MessageHeaderDestination) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Endpoint  *fhir.URL         `json:"endpoint"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.String      `json:"name"`
+		Receiver          *fhir.Reference   `json:"receiver"`
+		Target            *fhir.Reference   `json:"target"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mhd.Endpoint = raw.Endpoint
+	mhd.Extension = raw.Extension
+	mhd.ID = raw.ID
+	mhd.ModifierExtension = raw.ModifierExtension
+	mhd.Name = raw.Name
+	mhd.Receiver = raw.Receiver
+	mhd.Target = raw.Target
+	return nil
+}
+
+var _ json.Marshaler = (*MessageHeaderDestination)(nil)
+var _ json.Unmarshaler = (*MessageHeaderDestination)(nil)
+
+func (mhr *MessageHeaderResponse) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mhr *MessageHeaderResponse) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.Code        `json:"code"`
+		Details   *fhir.Reference   `json:"details"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Identifier        *fhir.ID          `json:"identifier"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mhr.Code = raw.Code
+	mhr.Details = raw.Details
+	mhr.Extension = raw.Extension
+	mhr.ID = raw.ID
+	mhr.Identifier = raw.Identifier
+	mhr.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*MessageHeaderResponse)(nil)
+var _ json.Unmarshaler = (*MessageHeaderResponse)(nil)
+
+func (mhs *MessageHeaderSource) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mhs *MessageHeaderSource) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contact   *fhir.ContactPoint `json:"contact"`
+		Endpoint  *fhir.URL          `json:"endpoint"`
+		Extension []*fhir.Extension  `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.String      `json:"name"`
+		Software          *fhir.String      `json:"software"`
+		Version           *fhir.String      `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mhs.Contact = raw.Contact
+	mhs.Endpoint = raw.Endpoint
+	mhs.Extension = raw.Extension
+	mhs.ID = raw.ID
+	mhs.ModifierExtension = raw.ModifierExtension
+	mhs.Name = raw.Name
+	mhs.Software = raw.Software
+	mhs.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*MessageHeaderSource)(nil)
+var _ json.Unmarshaler = (*MessageHeaderSource)(nil)

@@ -8,6 +8,8 @@ package location
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Details and position information for a physical place where services are
@@ -633,3 +635,139 @@ func (lp *LocationPosition) GetModifierExtension() []*fhir.Extension {
 	}
 	return lp.ModifierExtension
 }
+
+func (l *Location) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (l *Location) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Address                *fhir.Address               `json:"address"`
+		Alias                  []*fhir.String              `json:"alias"`
+		AvailabilityExceptions *fhir.String                `json:"availabilityExceptions"`
+		Contained              []fhir.Resource             `json:"contained"`
+		Description            *fhir.String                `json:"description"`
+		Endpoint               []*fhir.Reference           `json:"endpoint"`
+		Extension              []*fhir.Extension           `json:"extension"`
+		HoursOfOperation       []*LocationHoursOfOperation `json:"hoursOfOperation"`
+
+		ID                   string                  `json:"id"`
+		Identifier           []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules        *fhir.URI               `json:"implicitRules"`
+		Language             *fhir.Code              `json:"language"`
+		ManagingOrganization *fhir.Reference         `json:"managingOrganization"`
+		Meta                 *fhir.Meta              `json:"meta"`
+		Mode                 *fhir.Code              `json:"mode"`
+		ModifierExtension    []*fhir.Extension       `json:"modifierExtension"`
+		Name                 *fhir.String            `json:"name"`
+		OperationalStatus    *fhir.Coding            `json:"operationalStatus"`
+		PartOf               *fhir.Reference         `json:"partOf"`
+		PhysicalType         *fhir.CodeableConcept   `json:"physicalType"`
+		Position             *LocationPosition       `json:"position"`
+		Status               *fhir.Code              `json:"status"`
+		Telecom              []*fhir.ContactPoint    `json:"telecom"`
+		Text                 *fhir.Narrative         `json:"text"`
+		Type                 []*fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	l.Address = raw.Address
+	l.Alias = raw.Alias
+	l.AvailabilityExceptions = raw.AvailabilityExceptions
+	l.Contained = raw.Contained
+	l.Description = raw.Description
+	l.Endpoint = raw.Endpoint
+	l.Extension = raw.Extension
+	l.HoursOfOperation = raw.HoursOfOperation
+	l.ID = raw.ID
+	l.Identifier = raw.Identifier
+	l.ImplicitRules = raw.ImplicitRules
+	l.Language = raw.Language
+	l.ManagingOrganization = raw.ManagingOrganization
+	l.Meta = raw.Meta
+	l.Mode = raw.Mode
+	l.ModifierExtension = raw.ModifierExtension
+	l.Name = raw.Name
+	l.OperationalStatus = raw.OperationalStatus
+	l.PartOf = raw.PartOf
+	l.PhysicalType = raw.PhysicalType
+	l.Position = raw.Position
+	l.Status = raw.Status
+	l.Telecom = raw.Telecom
+	l.Text = raw.Text
+	l.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*Location)(nil)
+var _ json.Unmarshaler = (*Location)(nil)
+
+func (lhoo *LocationHoursOfOperation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (lhoo *LocationHoursOfOperation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AllDay      *fhir.Boolean     `json:"allDay"`
+		ClosingTime *fhir.Time        `json:"closingTime"`
+		DaysOfWeek  []*fhir.Code      `json:"daysOfWeek"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		OpeningTime       *fhir.Time        `json:"openingTime"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	lhoo.AllDay = raw.AllDay
+	lhoo.ClosingTime = raw.ClosingTime
+	lhoo.DaysOfWeek = raw.DaysOfWeek
+	lhoo.Extension = raw.Extension
+	lhoo.ID = raw.ID
+	lhoo.ModifierExtension = raw.ModifierExtension
+	lhoo.OpeningTime = raw.OpeningTime
+	return nil
+}
+
+var _ json.Marshaler = (*LocationHoursOfOperation)(nil)
+var _ json.Unmarshaler = (*LocationHoursOfOperation)(nil)
+
+func (lp *LocationPosition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (lp *LocationPosition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Altitude  *fhir.Decimal     `json:"altitude"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Latitude          *fhir.Decimal     `json:"latitude"`
+		Longitude         *fhir.Decimal     `json:"longitude"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	lp.Altitude = raw.Altitude
+	lp.Extension = raw.Extension
+	lp.ID = raw.ID
+	lp.Latitude = raw.Latitude
+	lp.Longitude = raw.Longitude
+	lp.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*LocationPosition)(nil)
+var _ json.Unmarshaler = (*LocationPosition)(nil)

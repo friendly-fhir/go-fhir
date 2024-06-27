@@ -6,7 +6,10 @@
 package fhir
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Extension Type: Optional Extension Element -
@@ -681,3 +684,134 @@ func (e *Extension) GetValueMeta() *Meta {
 	}
 	return val
 }
+
+func (e *Extension) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (e *Extension) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*Extension `json:"extension"`
+
+		ID string `json:"id"`
+
+		URL                      string               `json:"url"`
+		ValueBase64Binary        *Base64Binary        `json:"valueBase64Binary"`
+		ValueBoolean             *Boolean             `json:"valueBoolean"`
+		ValueCanonical           *Canonical           `json:"valueCanonical"`
+		ValueCode                *Code                `json:"valueCode"`
+		ValueDate                *Date                `json:"valueDate"`
+		ValueDateTime            *DateTime            `json:"valueDateTime"`
+		ValueDecimal             *Decimal             `json:"valueDecimal"`
+		ValueID                  *ID                  `json:"valueID"`
+		ValueInstant             *Instant             `json:"valueInstant"`
+		ValueInteger             *Integer             `json:"valueInteger"`
+		ValueMarkdown            *Markdown            `json:"valueMarkdown"`
+		ValueOID                 *OID                 `json:"valueOID"`
+		ValuePositiveInt         *PositiveInt         `json:"valuePositiveInt"`
+		ValueString              *String              `json:"valueString"`
+		ValueTime                *Time                `json:"valueTime"`
+		ValueUnsignedInt         *UnsignedInt         `json:"valueUnsignedInt"`
+		ValueURI                 *URI                 `json:"valueURI"`
+		ValueURL                 *URL                 `json:"valueURL"`
+		ValueUUID                *UUID                `json:"valueUUID"`
+		ValueAddress             *Address             `json:"valueAddress"`
+		ValueAge                 *Age                 `json:"valueAge"`
+		ValueAnnotation          *Annotation          `json:"valueAnnotation"`
+		ValueAttachment          *Attachment          `json:"valueAttachment"`
+		ValueCodeableConcept     *CodeableConcept     `json:"valueCodeableConcept"`
+		ValueCoding              *Coding              `json:"valueCoding"`
+		ValueContactPoint        *ContactPoint        `json:"valueContactPoint"`
+		ValueCount               *Count               `json:"valueCount"`
+		ValueDistance            *Distance            `json:"valueDistance"`
+		ValueDuration            *Duration            `json:"valueDuration"`
+		ValueHumanName           *HumanName           `json:"valueHumanName"`
+		ValueIdentifier          *Identifier          `json:"valueIdentifier"`
+		ValueMoney               *Money               `json:"valueMoney"`
+		ValuePeriod              *Period              `json:"valuePeriod"`
+		ValueQuantity            *Quantity            `json:"valueQuantity"`
+		ValueRange               *Range               `json:"valueRange"`
+		ValueRatio               *Ratio               `json:"valueRatio"`
+		ValueReference           *Reference           `json:"valueReference"`
+		ValueSampledData         *SampledData         `json:"valueSampledData"`
+		ValueSignature           *Signature           `json:"valueSignature"`
+		ValueTiming              *Timing              `json:"valueTiming"`
+		ValueContactDetail       *ContactDetail       `json:"valueContactDetail"`
+		ValueContributor         *Contributor         `json:"valueContributor"`
+		ValueDataRequirement     *DataRequirement     `json:"valueDataRequirement"`
+		ValueExpression          *Expression          `json:"valueExpression"`
+		ValueParameterDefinition *ParameterDefinition `json:"valueParameterDefinition"`
+		ValueRelatedArtifact     *RelatedArtifact     `json:"valueRelatedArtifact"`
+		ValueTriggerDefinition   *TriggerDefinition   `json:"valueTriggerDefinition"`
+		ValueUsageContext        *UsageContext        `json:"valueUsageContext"`
+		ValueDosage              *Dosage              `json:"valueDosage"`
+		ValueMeta                *Meta                `json:"valueMeta"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	e.Extension = raw.Extension
+	e.ID = raw.ID
+	e.URL = raw.URL
+	e.Value, err = validate.SelectOneOf[Element]("Extension.value",
+		raw.ValueBase64Binary,
+		raw.ValueBoolean,
+		raw.ValueCanonical,
+		raw.ValueCode,
+		raw.ValueDate,
+		raw.ValueDateTime,
+		raw.ValueDecimal,
+		raw.ValueID,
+		raw.ValueInstant,
+		raw.ValueInteger,
+		raw.ValueMarkdown,
+		raw.ValueOID,
+		raw.ValuePositiveInt,
+		raw.ValueString,
+		raw.ValueTime,
+		raw.ValueUnsignedInt,
+		raw.ValueURI,
+		raw.ValueURL,
+		raw.ValueUUID,
+		raw.ValueAddress,
+		raw.ValueAge,
+		raw.ValueAnnotation,
+		raw.ValueAttachment,
+		raw.ValueCodeableConcept,
+		raw.ValueCoding,
+		raw.ValueContactPoint,
+		raw.ValueCount,
+		raw.ValueDistance,
+		raw.ValueDuration,
+		raw.ValueHumanName,
+		raw.ValueIdentifier,
+		raw.ValueMoney,
+		raw.ValuePeriod,
+		raw.ValueQuantity,
+		raw.ValueRange,
+		raw.ValueRatio,
+		raw.ValueReference,
+		raw.ValueSampledData,
+		raw.ValueSignature,
+		raw.ValueTiming,
+		raw.ValueContactDetail,
+		raw.ValueContributor,
+		raw.ValueDataRequirement,
+		raw.ValueExpression,
+		raw.ValueParameterDefinition,
+		raw.ValueRelatedArtifact,
+		raw.ValueTriggerDefinition,
+		raw.ValueUsageContext,
+		raw.ValueDosage,
+		raw.ValueMeta)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*Extension)(nil)
+var _ json.Unmarshaler = (*Extension)(nil)

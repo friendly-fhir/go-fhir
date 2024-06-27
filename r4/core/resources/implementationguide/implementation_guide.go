@@ -6,8 +6,11 @@
 package implementationguide
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A set of rules of how a particular interoperability or standards problem is
@@ -1818,3 +1821,457 @@ func (igmr *ImplementationGuideManifestResource) GetRelativePath() *fhir.URL {
 	}
 	return igmr.RelativePath
 }
+
+func (ig *ImplementationGuide) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ig *ImplementationGuide) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contact      []*fhir.ContactDetail           `json:"contact"`
+		Contained    []fhir.Resource                 `json:"contained"`
+		Copyright    *fhir.Markdown                  `json:"copyright"`
+		Date         *fhir.DateTime                  `json:"date"`
+		Definition   *ImplementationGuideDefinition  `json:"definition"`
+		DependsOn    []*ImplementationGuideDependsOn `json:"dependsOn"`
+		Description  *fhir.Markdown                  `json:"description"`
+		Experimental *fhir.Boolean                   `json:"experimental"`
+		Extension    []*fhir.Extension               `json:"extension"`
+		FhirVersion  []*fhir.Code                    `json:"fhirVersion"`
+		Global       []*ImplementationGuideGlobal    `json:"global"`
+
+		ID                string                       `json:"id"`
+		ImplicitRules     *fhir.URI                    `json:"implicitRules"`
+		Jurisdiction      []*fhir.CodeableConcept      `json:"jurisdiction"`
+		Language          *fhir.Code                   `json:"language"`
+		License           *fhir.Code                   `json:"license"`
+		Manifest          *ImplementationGuideManifest `json:"manifest"`
+		Meta              *fhir.Meta                   `json:"meta"`
+		ModifierExtension []*fhir.Extension            `json:"modifierExtension"`
+		Name              *fhir.String                 `json:"name"`
+		PackageID         *fhir.ID                     `json:"packageId"`
+		Publisher         *fhir.String                 `json:"publisher"`
+		Status            *fhir.Code                   `json:"status"`
+		Text              *fhir.Narrative              `json:"text"`
+		Title             *fhir.String                 `json:"title"`
+		URL               *fhir.URI                    `json:"url"`
+		UseContext        []*fhir.UsageContext         `json:"useContext"`
+		Version           *fhir.String                 `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ig.Contact = raw.Contact
+	ig.Contained = raw.Contained
+	ig.Copyright = raw.Copyright
+	ig.Date = raw.Date
+	ig.Definition = raw.Definition
+	ig.DependsOn = raw.DependsOn
+	ig.Description = raw.Description
+	ig.Experimental = raw.Experimental
+	ig.Extension = raw.Extension
+	ig.FhirVersion = raw.FhirVersion
+	ig.Global = raw.Global
+	ig.ID = raw.ID
+	ig.ImplicitRules = raw.ImplicitRules
+	ig.Jurisdiction = raw.Jurisdiction
+	ig.Language = raw.Language
+	ig.License = raw.License
+	ig.Manifest = raw.Manifest
+	ig.Meta = raw.Meta
+	ig.ModifierExtension = raw.ModifierExtension
+	ig.Name = raw.Name
+	ig.PackageID = raw.PackageID
+	ig.Publisher = raw.Publisher
+	ig.Status = raw.Status
+	ig.Text = raw.Text
+	ig.Title = raw.Title
+	ig.URL = raw.URL
+	ig.UseContext = raw.UseContext
+	ig.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*ImplementationGuide)(nil)
+var _ json.Unmarshaler = (*ImplementationGuide)(nil)
+
+func (igd *ImplementationGuideDefinition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (igd *ImplementationGuideDefinition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension                        `json:"extension"`
+		Grouping  []*ImplementationGuideDefinitionGrouping `json:"grouping"`
+
+		ID                string                                    `json:"id"`
+		ModifierExtension []*fhir.Extension                         `json:"modifierExtension"`
+		Page              *ImplementationGuideDefinitionPage        `json:"page"`
+		Parameter         []*ImplementationGuideDefinitionParameter `json:"parameter"`
+		Resource          []*ImplementationGuideDefinitionResource  `json:"resource"`
+		Template          []*ImplementationGuideDefinitionTemplate  `json:"template"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	igd.Extension = raw.Extension
+	igd.Grouping = raw.Grouping
+	igd.ID = raw.ID
+	igd.ModifierExtension = raw.ModifierExtension
+	igd.Page = raw.Page
+	igd.Parameter = raw.Parameter
+	igd.Resource = raw.Resource
+	igd.Template = raw.Template
+	return nil
+}
+
+var _ json.Marshaler = (*ImplementationGuideDefinition)(nil)
+var _ json.Unmarshaler = (*ImplementationGuideDefinition)(nil)
+
+func (igdg *ImplementationGuideDefinitionGrouping) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (igdg *ImplementationGuideDefinitionGrouping) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description *fhir.String      `json:"description"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.String      `json:"name"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	igdg.Description = raw.Description
+	igdg.Extension = raw.Extension
+	igdg.ID = raw.ID
+	igdg.ModifierExtension = raw.ModifierExtension
+	igdg.Name = raw.Name
+	return nil
+}
+
+var _ json.Marshaler = (*ImplementationGuideDefinitionGrouping)(nil)
+var _ json.Unmarshaler = (*ImplementationGuideDefinitionGrouping)(nil)
+
+func (igdp *ImplementationGuideDefinitionPage) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (igdp *ImplementationGuideDefinitionPage) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension  []*fhir.Extension `json:"extension"`
+		Generation *fhir.Code        `json:"generation"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		NameURL           *fhir.URL         `json:"nameURL"`
+		NameReference     *fhir.Reference   `json:"nameReference"`
+		Title             *fhir.String      `json:"title"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	igdp.Extension = raw.Extension
+	igdp.Generation = raw.Generation
+	igdp.ID = raw.ID
+	igdp.ModifierExtension = raw.ModifierExtension
+	igdp.Name, err = validate.SelectOneOf[fhir.Element]("ImplementationGuide.definition.page.name",
+		raw.NameURL,
+		raw.NameReference)
+	if err != nil {
+		return err
+	}
+	igdp.Title = raw.Title
+	return nil
+}
+
+var _ json.Marshaler = (*ImplementationGuideDefinitionPage)(nil)
+var _ json.Unmarshaler = (*ImplementationGuideDefinitionPage)(nil)
+
+func (igdp *ImplementationGuideDefinitionParameter) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (igdp *ImplementationGuideDefinitionParameter) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.Code        `json:"code"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Value             *fhir.String      `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	igdp.Code = raw.Code
+	igdp.Extension = raw.Extension
+	igdp.ID = raw.ID
+	igdp.ModifierExtension = raw.ModifierExtension
+	igdp.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*ImplementationGuideDefinitionParameter)(nil)
+var _ json.Unmarshaler = (*ImplementationGuideDefinitionParameter)(nil)
+
+func (igdr *ImplementationGuideDefinitionResource) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (igdr *ImplementationGuideDefinitionResource) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description      *fhir.String      `json:"description"`
+		ExampleBoolean   *fhir.Boolean     `json:"exampleBoolean"`
+		ExampleCanonical *fhir.Canonical   `json:"exampleCanonical"`
+		Extension        []*fhir.Extension `json:"extension"`
+		FhirVersion      []*fhir.Code      `json:"fhirVersion"`
+		GroupingID       *fhir.ID          `json:"groupingId"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.String      `json:"name"`
+		Reference         *fhir.Reference   `json:"reference"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	igdr.Description = raw.Description
+	igdr.Example, err = validate.SelectOneOf[fhir.Element]("ImplementationGuide.definition.resource.example",
+		raw.ExampleBoolean,
+		raw.ExampleCanonical)
+	if err != nil {
+		return err
+	}
+	igdr.Extension = raw.Extension
+	igdr.FhirVersion = raw.FhirVersion
+	igdr.GroupingID = raw.GroupingID
+	igdr.ID = raw.ID
+	igdr.ModifierExtension = raw.ModifierExtension
+	igdr.Name = raw.Name
+	igdr.Reference = raw.Reference
+	return nil
+}
+
+var _ json.Marshaler = (*ImplementationGuideDefinitionResource)(nil)
+var _ json.Unmarshaler = (*ImplementationGuideDefinitionResource)(nil)
+
+func (igdt *ImplementationGuideDefinitionTemplate) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (igdt *ImplementationGuideDefinitionTemplate) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.Code        `json:"code"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Scope             *fhir.String      `json:"scope"`
+		Source            *fhir.String      `json:"source"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	igdt.Code = raw.Code
+	igdt.Extension = raw.Extension
+	igdt.ID = raw.ID
+	igdt.ModifierExtension = raw.ModifierExtension
+	igdt.Scope = raw.Scope
+	igdt.Source = raw.Source
+	return nil
+}
+
+var _ json.Marshaler = (*ImplementationGuideDefinitionTemplate)(nil)
+var _ json.Unmarshaler = (*ImplementationGuideDefinitionTemplate)(nil)
+
+func (igdo *ImplementationGuideDependsOn) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (igdo *ImplementationGuideDependsOn) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		PackageID         *fhir.ID          `json:"packageId"`
+		URI               *fhir.Canonical   `json:"uri"`
+		Version           *fhir.String      `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	igdo.Extension = raw.Extension
+	igdo.ID = raw.ID
+	igdo.ModifierExtension = raw.ModifierExtension
+	igdo.PackageID = raw.PackageID
+	igdo.URI = raw.URI
+	igdo.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*ImplementationGuideDependsOn)(nil)
+var _ json.Unmarshaler = (*ImplementationGuideDependsOn)(nil)
+
+func (igg *ImplementationGuideGlobal) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (igg *ImplementationGuideGlobal) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Profile           *fhir.Canonical   `json:"profile"`
+		Type              *fhir.Code        `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	igg.Extension = raw.Extension
+	igg.ID = raw.ID
+	igg.ModifierExtension = raw.ModifierExtension
+	igg.Profile = raw.Profile
+	igg.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ImplementationGuideGlobal)(nil)
+var _ json.Unmarshaler = (*ImplementationGuideGlobal)(nil)
+
+func (igm *ImplementationGuideManifest) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (igm *ImplementationGuideManifest) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                                 `json:"id"`
+		Image             []*fhir.String                         `json:"image"`
+		ModifierExtension []*fhir.Extension                      `json:"modifierExtension"`
+		Other             []*fhir.String                         `json:"other"`
+		Page              []*ImplementationGuideManifestPage     `json:"page"`
+		Rendering         *fhir.URL                              `json:"rendering"`
+		Resource          []*ImplementationGuideManifestResource `json:"resource"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	igm.Extension = raw.Extension
+	igm.ID = raw.ID
+	igm.Image = raw.Image
+	igm.ModifierExtension = raw.ModifierExtension
+	igm.Other = raw.Other
+	igm.Page = raw.Page
+	igm.Rendering = raw.Rendering
+	igm.Resource = raw.Resource
+	return nil
+}
+
+var _ json.Marshaler = (*ImplementationGuideManifest)(nil)
+var _ json.Unmarshaler = (*ImplementationGuideManifest)(nil)
+
+func (igmp *ImplementationGuideManifestPage) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (igmp *ImplementationGuideManifestPage) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Anchor    []*fhir.String    `json:"anchor"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.String      `json:"name"`
+		Title             *fhir.String      `json:"title"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	igmp.Anchor = raw.Anchor
+	igmp.Extension = raw.Extension
+	igmp.ID = raw.ID
+	igmp.ModifierExtension = raw.ModifierExtension
+	igmp.Name = raw.Name
+	igmp.Title = raw.Title
+	return nil
+}
+
+var _ json.Marshaler = (*ImplementationGuideManifestPage)(nil)
+var _ json.Unmarshaler = (*ImplementationGuideManifestPage)(nil)
+
+func (igmr *ImplementationGuideManifestResource) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (igmr *ImplementationGuideManifestResource) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ExampleBoolean   *fhir.Boolean     `json:"exampleBoolean"`
+		ExampleCanonical *fhir.Canonical   `json:"exampleCanonical"`
+		Extension        []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Reference         *fhir.Reference   `json:"reference"`
+		RelativePath      *fhir.URL         `json:"relativePath"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	igmr.Example, err = validate.SelectOneOf[fhir.Element]("ImplementationGuide.manifest.resource.example",
+		raw.ExampleBoolean,
+		raw.ExampleCanonical)
+	if err != nil {
+		return err
+	}
+	igmr.Extension = raw.Extension
+	igmr.ID = raw.ID
+	igmr.ModifierExtension = raw.ModifierExtension
+	igmr.Reference = raw.Reference
+	igmr.RelativePath = raw.RelativePath
+	return nil
+}
+
+var _ json.Marshaler = (*ImplementationGuideManifestResource)(nil)
+var _ json.Unmarshaler = (*ImplementationGuideManifestResource)(nil)

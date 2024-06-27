@@ -6,8 +6,11 @@
 package codesystem
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The CodeSystem resource is used to declare the existence of and describe a
@@ -1233,3 +1236,273 @@ func (csp *CodeSystemProperty) GetURI() *fhir.URI {
 	}
 	return csp.URI
 }
+
+func (cs *CodeSystem) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cs *CodeSystem) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		CaseSensitive    *fhir.Boolean         `json:"caseSensitive"`
+		Compositional    *fhir.Boolean         `json:"compositional"`
+		Concept          []*CodeSystemConcept  `json:"concept"`
+		Contact          []*fhir.ContactDetail `json:"contact"`
+		Contained        []fhir.Resource       `json:"contained"`
+		Content          *fhir.Code            `json:"content"`
+		Copyright        *fhir.Markdown        `json:"copyright"`
+		Count            *fhir.UnsignedInt     `json:"count"`
+		Date             *fhir.DateTime        `json:"date"`
+		Description      *fhir.Markdown        `json:"description"`
+		Experimental     *fhir.Boolean         `json:"experimental"`
+		Extension        []*fhir.Extension     `json:"extension"`
+		Filter           []*CodeSystemFilter   `json:"filter"`
+		HierarchyMeaning *fhir.Code            `json:"hierarchyMeaning"`
+
+		ID                string                  `json:"id"`
+		Identifier        []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Jurisdiction      []*fhir.CodeableConcept `json:"jurisdiction"`
+		Language          *fhir.Code              `json:"language"`
+		Meta              *fhir.Meta              `json:"meta"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Name              *fhir.String            `json:"name"`
+		Property          []*CodeSystemProperty   `json:"property"`
+		Publisher         *fhir.String            `json:"publisher"`
+		Purpose           *fhir.Markdown          `json:"purpose"`
+		Status            *fhir.Code              `json:"status"`
+		Supplements       *fhir.Canonical         `json:"supplements"`
+		Text              *fhir.Narrative         `json:"text"`
+		Title             *fhir.String            `json:"title"`
+		URL               *fhir.URI               `json:"url"`
+		UseContext        []*fhir.UsageContext    `json:"useContext"`
+		ValueSet          *fhir.Canonical         `json:"valueSet"`
+		Version           *fhir.String            `json:"version"`
+		VersionNeeded     *fhir.Boolean           `json:"versionNeeded"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cs.CaseSensitive = raw.CaseSensitive
+	cs.Compositional = raw.Compositional
+	cs.Concept = raw.Concept
+	cs.Contact = raw.Contact
+	cs.Contained = raw.Contained
+	cs.Content = raw.Content
+	cs.Copyright = raw.Copyright
+	cs.Count = raw.Count
+	cs.Date = raw.Date
+	cs.Description = raw.Description
+	cs.Experimental = raw.Experimental
+	cs.Extension = raw.Extension
+	cs.Filter = raw.Filter
+	cs.HierarchyMeaning = raw.HierarchyMeaning
+	cs.ID = raw.ID
+	cs.Identifier = raw.Identifier
+	cs.ImplicitRules = raw.ImplicitRules
+	cs.Jurisdiction = raw.Jurisdiction
+	cs.Language = raw.Language
+	cs.Meta = raw.Meta
+	cs.ModifierExtension = raw.ModifierExtension
+	cs.Name = raw.Name
+	cs.Property = raw.Property
+	cs.Publisher = raw.Publisher
+	cs.Purpose = raw.Purpose
+	cs.Status = raw.Status
+	cs.Supplements = raw.Supplements
+	cs.Text = raw.Text
+	cs.Title = raw.Title
+	cs.URL = raw.URL
+	cs.UseContext = raw.UseContext
+	cs.ValueSet = raw.ValueSet
+	cs.Version = raw.Version
+	cs.VersionNeeded = raw.VersionNeeded
+	return nil
+}
+
+var _ json.Marshaler = (*CodeSystem)(nil)
+var _ json.Unmarshaler = (*CodeSystem)(nil)
+
+func (csc *CodeSystemConcept) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (csc *CodeSystemConcept) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code        *fhir.Code                      `json:"code"`
+		Definition  *fhir.String                    `json:"definition"`
+		Designation []*CodeSystemConceptDesignation `json:"designation"`
+		Display     *fhir.String                    `json:"display"`
+		Extension   []*fhir.Extension               `json:"extension"`
+
+		ID                string                       `json:"id"`
+		ModifierExtension []*fhir.Extension            `json:"modifierExtension"`
+		Property          []*CodeSystemConceptProperty `json:"property"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	csc.Code = raw.Code
+	csc.Definition = raw.Definition
+	csc.Designation = raw.Designation
+	csc.Display = raw.Display
+	csc.Extension = raw.Extension
+	csc.ID = raw.ID
+	csc.ModifierExtension = raw.ModifierExtension
+	csc.Property = raw.Property
+	return nil
+}
+
+var _ json.Marshaler = (*CodeSystemConcept)(nil)
+var _ json.Unmarshaler = (*CodeSystemConcept)(nil)
+
+func (cscd *CodeSystemConceptDesignation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cscd *CodeSystemConceptDesignation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Language          *fhir.Code        `json:"language"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Use               *fhir.Coding      `json:"use"`
+		Value             *fhir.String      `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cscd.Extension = raw.Extension
+	cscd.ID = raw.ID
+	cscd.Language = raw.Language
+	cscd.ModifierExtension = raw.ModifierExtension
+	cscd.Use = raw.Use
+	cscd.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*CodeSystemConceptDesignation)(nil)
+var _ json.Unmarshaler = (*CodeSystemConceptDesignation)(nil)
+
+func (cscp *CodeSystemConceptProperty) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cscp *CodeSystemConceptProperty) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.Code        `json:"code"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		ValueCode         *fhir.Code        `json:"valueCode"`
+		ValueCoding       *fhir.Coding      `json:"valueCoding"`
+		ValueString       *fhir.String      `json:"valueString"`
+		ValueInteger      *fhir.Integer     `json:"valueInteger"`
+		ValueBoolean      *fhir.Boolean     `json:"valueBoolean"`
+		ValueDateTime     *fhir.DateTime    `json:"valueDateTime"`
+		ValueDecimal      *fhir.Decimal     `json:"valueDecimal"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cscp.Code = raw.Code
+	cscp.Extension = raw.Extension
+	cscp.ID = raw.ID
+	cscp.ModifierExtension = raw.ModifierExtension
+	cscp.Value, err = validate.SelectOneOf[fhir.Element]("CodeSystem.concept.property.value",
+		raw.ValueCode,
+		raw.ValueCoding,
+		raw.ValueString,
+		raw.ValueInteger,
+		raw.ValueBoolean,
+		raw.ValueDateTime,
+		raw.ValueDecimal)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*CodeSystemConceptProperty)(nil)
+var _ json.Unmarshaler = (*CodeSystemConceptProperty)(nil)
+
+func (csf *CodeSystemFilter) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (csf *CodeSystemFilter) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code        *fhir.Code        `json:"code"`
+		Description *fhir.String      `json:"description"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Operator          []*fhir.Code      `json:"operator"`
+		Value             *fhir.String      `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	csf.Code = raw.Code
+	csf.Description = raw.Description
+	csf.Extension = raw.Extension
+	csf.ID = raw.ID
+	csf.ModifierExtension = raw.ModifierExtension
+	csf.Operator = raw.Operator
+	csf.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*CodeSystemFilter)(nil)
+var _ json.Unmarshaler = (*CodeSystemFilter)(nil)
+
+func (csp *CodeSystemProperty) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (csp *CodeSystemProperty) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code        *fhir.Code        `json:"code"`
+		Description *fhir.String      `json:"description"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Type              *fhir.Code        `json:"type"`
+		URI               *fhir.URI         `json:"uri"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	csp.Code = raw.Code
+	csp.Description = raw.Description
+	csp.Extension = raw.Extension
+	csp.ID = raw.ID
+	csp.ModifierExtension = raw.ModifierExtension
+	csp.Type = raw.Type
+	csp.URI = raw.URI
+	return nil
+}
+
+var _ json.Marshaler = (*CodeSystemProperty)(nil)
+var _ json.Unmarshaler = (*CodeSystemProperty)(nil)

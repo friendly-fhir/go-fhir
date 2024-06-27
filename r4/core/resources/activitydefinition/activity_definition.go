@@ -6,8 +6,11 @@
 package activitydefinition
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // This resource allows for the definition of some activity to be performed,
@@ -1151,3 +1154,217 @@ func (adp *ActivityDefinitionParticipant) GetType() *fhir.Code {
 	}
 	return adp.Type
 }
+
+func (ad *ActivityDefinition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ad *ActivityDefinition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ApprovalDate    *fhir.Date                        `json:"approvalDate"`
+		Author          []*fhir.ContactDetail             `json:"author"`
+		BodySite        []*fhir.CodeableConcept           `json:"bodySite"`
+		Code            *fhir.CodeableConcept             `json:"code"`
+		Contact         []*fhir.ContactDetail             `json:"contact"`
+		Contained       []fhir.Resource                   `json:"contained"`
+		Copyright       *fhir.Markdown                    `json:"copyright"`
+		Date            *fhir.DateTime                    `json:"date"`
+		Description     *fhir.Markdown                    `json:"description"`
+		DoNotPerform    *fhir.Boolean                     `json:"doNotPerform"`
+		Dosage          []*fhir.Dosage                    `json:"dosage"`
+		DynamicValue    []*ActivityDefinitionDynamicValue `json:"dynamicValue"`
+		Editor          []*fhir.ContactDetail             `json:"editor"`
+		EffectivePeriod *fhir.Period                      `json:"effectivePeriod"`
+		Endorser        []*fhir.ContactDetail             `json:"endorser"`
+		Experimental    *fhir.Boolean                     `json:"experimental"`
+		Extension       []*fhir.Extension                 `json:"extension"`
+
+		ID                           string                           `json:"id"`
+		Identifier                   []*fhir.Identifier               `json:"identifier"`
+		ImplicitRules                *fhir.URI                        `json:"implicitRules"`
+		Intent                       *fhir.Code                       `json:"intent"`
+		Jurisdiction                 []*fhir.CodeableConcept          `json:"jurisdiction"`
+		Kind                         *fhir.Code                       `json:"kind"`
+		Language                     *fhir.Code                       `json:"language"`
+		LastReviewDate               *fhir.Date                       `json:"lastReviewDate"`
+		Library                      []*fhir.Canonical                `json:"library"`
+		Location                     *fhir.Reference                  `json:"location"`
+		Meta                         *fhir.Meta                       `json:"meta"`
+		ModifierExtension            []*fhir.Extension                `json:"modifierExtension"`
+		Name                         *fhir.String                     `json:"name"`
+		ObservationRequirement       []*fhir.Reference                `json:"observationRequirement"`
+		ObservationResultRequirement []*fhir.Reference                `json:"observationResultRequirement"`
+		Participant                  []*ActivityDefinitionParticipant `json:"participant"`
+		Priority                     *fhir.Code                       `json:"priority"`
+		ProductReference             *fhir.Reference                  `json:"productReference"`
+		ProductCodeableConcept       *fhir.CodeableConcept            `json:"productCodeableConcept"`
+		Profile                      *fhir.Canonical                  `json:"profile"`
+		Publisher                    *fhir.String                     `json:"publisher"`
+		Purpose                      *fhir.Markdown                   `json:"purpose"`
+		Quantity                     *fhir.Quantity                   `json:"quantity"`
+		RelatedArtifact              []*fhir.RelatedArtifact          `json:"relatedArtifact"`
+		Reviewer                     []*fhir.ContactDetail            `json:"reviewer"`
+		SpecimenRequirement          []*fhir.Reference                `json:"specimenRequirement"`
+		Status                       *fhir.Code                       `json:"status"`
+		SubjectCodeableConcept       *fhir.CodeableConcept            `json:"subjectCodeableConcept"`
+		SubjectReference             *fhir.Reference                  `json:"subjectReference"`
+		Subtitle                     *fhir.String                     `json:"subtitle"`
+		Text                         *fhir.Narrative                  `json:"text"`
+		TimingTiming                 *fhir.Timing                     `json:"timingTiming"`
+		TimingDateTime               *fhir.DateTime                   `json:"timingDateTime"`
+		TimingAge                    *fhir.Age                        `json:"timingAge"`
+		TimingPeriod                 *fhir.Period                     `json:"timingPeriod"`
+		TimingRange                  *fhir.Range                      `json:"timingRange"`
+		TimingDuration               *fhir.Duration                   `json:"timingDuration"`
+		Title                        *fhir.String                     `json:"title"`
+		Topic                        []*fhir.CodeableConcept          `json:"topic"`
+		Transform                    *fhir.Canonical                  `json:"transform"`
+		URL                          *fhir.URI                        `json:"url"`
+		Usage                        *fhir.String                     `json:"usage"`
+		UseContext                   []*fhir.UsageContext             `json:"useContext"`
+		Version                      *fhir.String                     `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ad.ApprovalDate = raw.ApprovalDate
+	ad.Author = raw.Author
+	ad.BodySite = raw.BodySite
+	ad.Code = raw.Code
+	ad.Contact = raw.Contact
+	ad.Contained = raw.Contained
+	ad.Copyright = raw.Copyright
+	ad.Date = raw.Date
+	ad.Description = raw.Description
+	ad.DoNotPerform = raw.DoNotPerform
+	ad.Dosage = raw.Dosage
+	ad.DynamicValue = raw.DynamicValue
+	ad.Editor = raw.Editor
+	ad.EffectivePeriod = raw.EffectivePeriod
+	ad.Endorser = raw.Endorser
+	ad.Experimental = raw.Experimental
+	ad.Extension = raw.Extension
+	ad.ID = raw.ID
+	ad.Identifier = raw.Identifier
+	ad.ImplicitRules = raw.ImplicitRules
+	ad.Intent = raw.Intent
+	ad.Jurisdiction = raw.Jurisdiction
+	ad.Kind = raw.Kind
+	ad.Language = raw.Language
+	ad.LastReviewDate = raw.LastReviewDate
+	ad.Library = raw.Library
+	ad.Location = raw.Location
+	ad.Meta = raw.Meta
+	ad.ModifierExtension = raw.ModifierExtension
+	ad.Name = raw.Name
+	ad.ObservationRequirement = raw.ObservationRequirement
+	ad.ObservationResultRequirement = raw.ObservationResultRequirement
+	ad.Participant = raw.Participant
+	ad.Priority = raw.Priority
+	ad.Product, err = validate.SelectOneOf[fhir.Element]("ActivityDefinition.product",
+		raw.ProductReference,
+		raw.ProductCodeableConcept)
+	if err != nil {
+		return err
+	}
+	ad.Profile = raw.Profile
+	ad.Publisher = raw.Publisher
+	ad.Purpose = raw.Purpose
+	ad.Quantity = raw.Quantity
+	ad.RelatedArtifact = raw.RelatedArtifact
+	ad.Reviewer = raw.Reviewer
+	ad.SpecimenRequirement = raw.SpecimenRequirement
+	ad.Status = raw.Status
+	ad.Subject, err = validate.SelectOneOf[fhir.Element]("ActivityDefinition.subject",
+		raw.SubjectCodeableConcept,
+		raw.SubjectReference)
+	if err != nil {
+		return err
+	}
+	ad.Subtitle = raw.Subtitle
+	ad.Text = raw.Text
+	ad.Timing, err = validate.SelectOneOf[fhir.Element]("ActivityDefinition.timing",
+		raw.TimingTiming,
+		raw.TimingDateTime,
+		raw.TimingAge,
+		raw.TimingPeriod,
+		raw.TimingRange,
+		raw.TimingDuration)
+	if err != nil {
+		return err
+	}
+	ad.Title = raw.Title
+	ad.Topic = raw.Topic
+	ad.Transform = raw.Transform
+	ad.URL = raw.URL
+	ad.Usage = raw.Usage
+	ad.UseContext = raw.UseContext
+	ad.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*ActivityDefinition)(nil)
+var _ json.Unmarshaler = (*ActivityDefinition)(nil)
+
+func (addv *ActivityDefinitionDynamicValue) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (addv *ActivityDefinitionDynamicValue) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Expression *fhir.Expression  `json:"expression"`
+		Extension  []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Path              *fhir.String      `json:"path"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	addv.Expression = raw.Expression
+	addv.Extension = raw.Extension
+	addv.ID = raw.ID
+	addv.ModifierExtension = raw.ModifierExtension
+	addv.Path = raw.Path
+	return nil
+}
+
+var _ json.Marshaler = (*ActivityDefinitionDynamicValue)(nil)
+var _ json.Unmarshaler = (*ActivityDefinitionDynamicValue)(nil)
+
+func (adp *ActivityDefinitionParticipant) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (adp *ActivityDefinitionParticipant) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Role              *fhir.CodeableConcept `json:"role"`
+		Type              *fhir.Code            `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	adp.Extension = raw.Extension
+	adp.ID = raw.ID
+	adp.ModifierExtension = raw.ModifierExtension
+	adp.Role = raw.Role
+	adp.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ActivityDefinitionParticipant)(nil)
+var _ json.Unmarshaler = (*ActivityDefinitionParticipant)(nil)

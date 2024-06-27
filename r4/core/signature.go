@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Signature Type: A signature along with
@@ -156,3 +158,41 @@ func (s *Signature) GetWho() *Reference {
 	}
 	return s.Who
 }
+
+func (s *Signature) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (s *Signature) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Data      *Base64Binary `json:"data"`
+		Extension []*Extension  `json:"extension"`
+
+		ID           string     `json:"id"`
+		OnBehalfOf   *Reference `json:"onBehalfOf"`
+		SigFormat    *Code      `json:"sigFormat"`
+		TargetFormat *Code      `json:"targetFormat"`
+		Type         []*Coding  `json:"type"`
+		When         *Instant   `json:"when"`
+		Who          *Reference `json:"who"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	s.Data = raw.Data
+	s.Extension = raw.Extension
+	s.ID = raw.ID
+	s.OnBehalfOf = raw.OnBehalfOf
+	s.SigFormat = raw.SigFormat
+	s.TargetFormat = raw.TargetFormat
+	s.Type = raw.Type
+	s.When = raw.When
+	s.Who = raw.Who
+	return nil
+}
+
+var _ json.Marshaler = (*Signature)(nil)
+var _ json.Unmarshaler = (*Signature)(nil)

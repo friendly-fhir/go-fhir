@@ -6,8 +6,11 @@
 package medicinalproductcontraindication
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The clinical particulars - indications, contraindications etc. of a
@@ -372,3 +375,89 @@ func (mpcot *MedicinalProductContraindicationOtherTherapy) GetTherapyRelationshi
 	}
 	return mpcot.TherapyRelationshipType
 }
+
+func (mpc *MedicinalProductContraindication) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpc *MedicinalProductContraindication) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Comorbidity   []*fhir.CodeableConcept `json:"comorbidity"`
+		Contained     []fhir.Resource         `json:"contained"`
+		Disease       *fhir.CodeableConcept   `json:"disease"`
+		DiseaseStatus *fhir.CodeableConcept   `json:"diseaseStatus"`
+		Extension     []*fhir.Extension       `json:"extension"`
+
+		ID                    string                                          `json:"id"`
+		ImplicitRules         *fhir.URI                                       `json:"implicitRules"`
+		Language              *fhir.Code                                      `json:"language"`
+		Meta                  *fhir.Meta                                      `json:"meta"`
+		ModifierExtension     []*fhir.Extension                               `json:"modifierExtension"`
+		OtherTherapy          []*MedicinalProductContraindicationOtherTherapy `json:"otherTherapy"`
+		Population            []*fhir.Population                              `json:"population"`
+		Subject               []*fhir.Reference                               `json:"subject"`
+		Text                  *fhir.Narrative                                 `json:"text"`
+		TherapeuticIndication []*fhir.Reference                               `json:"therapeuticIndication"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpc.Comorbidity = raw.Comorbidity
+	mpc.Contained = raw.Contained
+	mpc.Disease = raw.Disease
+	mpc.DiseaseStatus = raw.DiseaseStatus
+	mpc.Extension = raw.Extension
+	mpc.ID = raw.ID
+	mpc.ImplicitRules = raw.ImplicitRules
+	mpc.Language = raw.Language
+	mpc.Meta = raw.Meta
+	mpc.ModifierExtension = raw.ModifierExtension
+	mpc.OtherTherapy = raw.OtherTherapy
+	mpc.Population = raw.Population
+	mpc.Subject = raw.Subject
+	mpc.Text = raw.Text
+	mpc.TherapeuticIndication = raw.TherapeuticIndication
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductContraindication)(nil)
+var _ json.Unmarshaler = (*MedicinalProductContraindication)(nil)
+
+func (mpcot *MedicinalProductContraindicationOtherTherapy) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpcot *MedicinalProductContraindicationOtherTherapy) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                        string                `json:"id"`
+		MedicationCodeableConcept *fhir.CodeableConcept `json:"medicationCodeableConcept"`
+		MedicationReference       *fhir.Reference       `json:"medicationReference"`
+		ModifierExtension         []*fhir.Extension     `json:"modifierExtension"`
+		TherapyRelationshipType   *fhir.CodeableConcept `json:"therapyRelationshipType"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpcot.Extension = raw.Extension
+	mpcot.ID = raw.ID
+	mpcot.Medication, err = validate.SelectOneOf[fhir.Element]("MedicinalProductContraindication.otherTherapy.medication",
+		raw.MedicationCodeableConcept,
+		raw.MedicationReference)
+	if err != nil {
+		return err
+	}
+	mpcot.ModifierExtension = raw.ModifierExtension
+	mpcot.TherapyRelationshipType = raw.TherapyRelationshipType
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductContraindicationOtherTherapy)(nil)
+var _ json.Unmarshaler = (*MedicinalProductContraindicationOtherTherapy)(nil)

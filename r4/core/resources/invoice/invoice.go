@@ -6,8 +6,11 @@
 package invoice
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Invoice containing collected ChargeItems from an Account with calculated
@@ -728,3 +731,171 @@ func (ip *InvoiceParticipant) GetRole() *fhir.CodeableConcept {
 	}
 	return ip.Role
 }
+
+func (i *Invoice) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (i *Invoice) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Account         *fhir.Reference   `json:"account"`
+		CancelledReason *fhir.String      `json:"cancelledReason"`
+		Contained       []fhir.Resource   `json:"contained"`
+		Date            *fhir.DateTime    `json:"date"`
+		Extension       []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		Identifier        []*fhir.Identifier    `json:"identifier"`
+		ImplicitRules     *fhir.URI             `json:"implicitRules"`
+		Issuer            *fhir.Reference       `json:"issuer"`
+		Language          *fhir.Code            `json:"language"`
+		LineItem          []*InvoiceLineItem    `json:"lineItem"`
+		Meta              *fhir.Meta            `json:"meta"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Note              []*fhir.Annotation    `json:"note"`
+		Participant       []*InvoiceParticipant `json:"participant"`
+		PaymentTerms      *fhir.Markdown        `json:"paymentTerms"`
+		Recipient         *fhir.Reference       `json:"recipient"`
+		Status            *fhir.Code            `json:"status"`
+		Subject           *fhir.Reference       `json:"subject"`
+		Text              *fhir.Narrative       `json:"text"`
+		TotalGross        *fhir.Money           `json:"totalGross"`
+		TotalNet          *fhir.Money           `json:"totalNet"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	i.Account = raw.Account
+	i.CancelledReason = raw.CancelledReason
+	i.Contained = raw.Contained
+	i.Date = raw.Date
+	i.Extension = raw.Extension
+	i.ID = raw.ID
+	i.Identifier = raw.Identifier
+	i.ImplicitRules = raw.ImplicitRules
+	i.Issuer = raw.Issuer
+	i.Language = raw.Language
+	i.LineItem = raw.LineItem
+	i.Meta = raw.Meta
+	i.ModifierExtension = raw.ModifierExtension
+	i.Note = raw.Note
+	i.Participant = raw.Participant
+	i.PaymentTerms = raw.PaymentTerms
+	i.Recipient = raw.Recipient
+	i.Status = raw.Status
+	i.Subject = raw.Subject
+	i.Text = raw.Text
+	i.TotalGross = raw.TotalGross
+	i.TotalNet = raw.TotalNet
+	i.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*Invoice)(nil)
+var _ json.Unmarshaler = (*Invoice)(nil)
+
+func (ili *InvoiceLineItem) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ili *InvoiceLineItem) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ChargeItemReference       *fhir.Reference       `json:"chargeItemReference"`
+		ChargeItemCodeableConcept *fhir.CodeableConcept `json:"chargeItemCodeableConcept"`
+		Extension                 []*fhir.Extension     `json:"extension"`
+
+		ID                string                           `json:"id"`
+		ModifierExtension []*fhir.Extension                `json:"modifierExtension"`
+		PriceComponent    []*InvoiceLineItemPriceComponent `json:"priceComponent"`
+		Sequence          *fhir.PositiveInt                `json:"sequence"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ili.ChargeItem, err = validate.SelectOneOf[fhir.Element]("Invoice.lineItem.chargeItem",
+		raw.ChargeItemReference,
+		raw.ChargeItemCodeableConcept)
+	if err != nil {
+		return err
+	}
+	ili.Extension = raw.Extension
+	ili.ID = raw.ID
+	ili.ModifierExtension = raw.ModifierExtension
+	ili.PriceComponent = raw.PriceComponent
+	ili.Sequence = raw.Sequence
+	return nil
+}
+
+var _ json.Marshaler = (*InvoiceLineItem)(nil)
+var _ json.Unmarshaler = (*InvoiceLineItem)(nil)
+
+func (ilipc *InvoiceLineItemPriceComponent) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ilipc *InvoiceLineItemPriceComponent) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Amount    *fhir.Money           `json:"amount"`
+		Code      *fhir.CodeableConcept `json:"code"`
+		Extension []*fhir.Extension     `json:"extension"`
+		Factor    *fhir.Decimal         `json:"factor"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Type              *fhir.Code        `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ilipc.Amount = raw.Amount
+	ilipc.Code = raw.Code
+	ilipc.Extension = raw.Extension
+	ilipc.Factor = raw.Factor
+	ilipc.ID = raw.ID
+	ilipc.ModifierExtension = raw.ModifierExtension
+	ilipc.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*InvoiceLineItemPriceComponent)(nil)
+var _ json.Unmarshaler = (*InvoiceLineItemPriceComponent)(nil)
+
+func (ip *InvoiceParticipant) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ip *InvoiceParticipant) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Actor     *fhir.Reference   `json:"actor"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Role              *fhir.CodeableConcept `json:"role"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ip.Actor = raw.Actor
+	ip.Extension = raw.Extension
+	ip.ID = raw.ID
+	ip.ModifierExtension = raw.ModifierExtension
+	ip.Role = raw.Role
+	return nil
+}
+
+var _ json.Marshaler = (*InvoiceParticipant)(nil)
+var _ json.Unmarshaler = (*InvoiceParticipant)(nil)

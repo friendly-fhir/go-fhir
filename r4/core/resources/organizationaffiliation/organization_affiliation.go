@@ -8,6 +8,8 @@ package organizationaffiliation
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Defines an affiliation/assotiation/relationship between 2 distinct
@@ -321,3 +323,63 @@ func (oa *OrganizationAffiliation) GetText() *fhir.Narrative {
 	}
 	return oa.Text
 }
+
+func (oa *OrganizationAffiliation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (oa *OrganizationAffiliation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Active            *fhir.Boolean           `json:"active"`
+		Code              []*fhir.CodeableConcept `json:"code"`
+		Contained         []fhir.Resource         `json:"contained"`
+		Endpoint          []*fhir.Reference       `json:"endpoint"`
+		Extension         []*fhir.Extension       `json:"extension"`
+		HealthcareService []*fhir.Reference       `json:"healthcareService"`
+
+		ID                        string                  `json:"id"`
+		Identifier                []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules             *fhir.URI               `json:"implicitRules"`
+		Language                  *fhir.Code              `json:"language"`
+		Location                  []*fhir.Reference       `json:"location"`
+		Meta                      *fhir.Meta              `json:"meta"`
+		ModifierExtension         []*fhir.Extension       `json:"modifierExtension"`
+		Network                   []*fhir.Reference       `json:"network"`
+		Organization              *fhir.Reference         `json:"organization"`
+		ParticipatingOrganization *fhir.Reference         `json:"participatingOrganization"`
+		Period                    *fhir.Period            `json:"period"`
+		Specialty                 []*fhir.CodeableConcept `json:"specialty"`
+		Telecom                   []*fhir.ContactPoint    `json:"telecom"`
+		Text                      *fhir.Narrative         `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	oa.Active = raw.Active
+	oa.Code = raw.Code
+	oa.Contained = raw.Contained
+	oa.Endpoint = raw.Endpoint
+	oa.Extension = raw.Extension
+	oa.HealthcareService = raw.HealthcareService
+	oa.ID = raw.ID
+	oa.Identifier = raw.Identifier
+	oa.ImplicitRules = raw.ImplicitRules
+	oa.Language = raw.Language
+	oa.Location = raw.Location
+	oa.Meta = raw.Meta
+	oa.ModifierExtension = raw.ModifierExtension
+	oa.Network = raw.Network
+	oa.Organization = raw.Organization
+	oa.ParticipatingOrganization = raw.ParticipatingOrganization
+	oa.Period = raw.Period
+	oa.Specialty = raw.Specialty
+	oa.Telecom = raw.Telecom
+	oa.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*OrganizationAffiliation)(nil)
+var _ json.Unmarshaler = (*OrganizationAffiliation)(nil)

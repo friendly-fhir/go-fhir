@@ -6,8 +6,11 @@
 package medicinalproductinteraction
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The interactions of the medicinal product with other medicinal products, or
@@ -355,3 +358,87 @@ func (mpii *MedicinalProductInteractionInteractant) GetModifierExtension() []*fh
 	}
 	return mpii.ModifierExtension
 }
+
+func (mpi *MedicinalProductInteraction) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpi *MedicinalProductInteraction) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contained   []fhir.Resource       `json:"contained"`
+		Description *fhir.String          `json:"description"`
+		Effect      *fhir.CodeableConcept `json:"effect"`
+		Extension   []*fhir.Extension     `json:"extension"`
+
+		ID                string                                    `json:"id"`
+		ImplicitRules     *fhir.URI                                 `json:"implicitRules"`
+		Incidence         *fhir.CodeableConcept                     `json:"incidence"`
+		Interactant       []*MedicinalProductInteractionInteractant `json:"interactant"`
+		Language          *fhir.Code                                `json:"language"`
+		Management        *fhir.CodeableConcept                     `json:"management"`
+		Meta              *fhir.Meta                                `json:"meta"`
+		ModifierExtension []*fhir.Extension                         `json:"modifierExtension"`
+		Subject           []*fhir.Reference                         `json:"subject"`
+		Text              *fhir.Narrative                           `json:"text"`
+		Type              *fhir.CodeableConcept                     `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpi.Contained = raw.Contained
+	mpi.Description = raw.Description
+	mpi.Effect = raw.Effect
+	mpi.Extension = raw.Extension
+	mpi.ID = raw.ID
+	mpi.ImplicitRules = raw.ImplicitRules
+	mpi.Incidence = raw.Incidence
+	mpi.Interactant = raw.Interactant
+	mpi.Language = raw.Language
+	mpi.Management = raw.Management
+	mpi.Meta = raw.Meta
+	mpi.ModifierExtension = raw.ModifierExtension
+	mpi.Subject = raw.Subject
+	mpi.Text = raw.Text
+	mpi.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductInteraction)(nil)
+var _ json.Unmarshaler = (*MedicinalProductInteraction)(nil)
+
+func (mpii *MedicinalProductInteractionInteractant) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpii *MedicinalProductInteractionInteractant) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                  string                `json:"id"`
+		ItemReference       *fhir.Reference       `json:"itemReference"`
+		ItemCodeableConcept *fhir.CodeableConcept `json:"itemCodeableConcept"`
+		ModifierExtension   []*fhir.Extension     `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpii.Extension = raw.Extension
+	mpii.ID = raw.ID
+	mpii.Item, err = validate.SelectOneOf[fhir.Element]("MedicinalProductInteraction.interactant.item",
+		raw.ItemReference,
+		raw.ItemCodeableConcept)
+	if err != nil {
+		return err
+	}
+	mpii.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductInteractionInteractant)(nil)
+var _ json.Unmarshaler = (*MedicinalProductInteractionInteractant)(nil)

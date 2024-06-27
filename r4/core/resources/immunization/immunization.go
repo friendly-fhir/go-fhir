@@ -6,8 +6,11 @@
 package immunization
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Describes the event of a patient being administered a vaccine or a record of
@@ -1073,3 +1076,245 @@ func (ir *ImmunizationReaction) GetReported() *fhir.Boolean {
 	}
 	return ir.Reported
 }
+
+func (i *Immunization) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (i *Immunization) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contained      []fhir.Resource          `json:"contained"`
+		DoseQuantity   *fhir.Quantity           `json:"doseQuantity"`
+		Education      []*ImmunizationEducation `json:"education"`
+		Encounter      *fhir.Reference          `json:"encounter"`
+		ExpirationDate *fhir.Date               `json:"expirationDate"`
+		Extension      []*fhir.Extension        `json:"extension"`
+		FundingSource  *fhir.CodeableConcept    `json:"fundingSource"`
+
+		ID                 string                         `json:"id"`
+		Identifier         []*fhir.Identifier             `json:"identifier"`
+		ImplicitRules      *fhir.URI                      `json:"implicitRules"`
+		IsSubpotent        *fhir.Boolean                  `json:"isSubpotent"`
+		Language           *fhir.Code                     `json:"language"`
+		Location           *fhir.Reference                `json:"location"`
+		LotNumber          *fhir.String                   `json:"lotNumber"`
+		Manufacturer       *fhir.Reference                `json:"manufacturer"`
+		Meta               *fhir.Meta                     `json:"meta"`
+		ModifierExtension  []*fhir.Extension              `json:"modifierExtension"`
+		Note               []*fhir.Annotation             `json:"note"`
+		OccurrenceDateTime *fhir.DateTime                 `json:"occurrenceDateTime"`
+		OccurrenceString   *fhir.String                   `json:"occurrenceString"`
+		Patient            *fhir.Reference                `json:"patient"`
+		Performer          []*ImmunizationPerformer       `json:"performer"`
+		PrimarySource      *fhir.Boolean                  `json:"primarySource"`
+		ProgramEligibility []*fhir.CodeableConcept        `json:"programEligibility"`
+		ProtocolApplied    []*ImmunizationProtocolApplied `json:"protocolApplied"`
+		Reaction           []*ImmunizationReaction        `json:"reaction"`
+		ReasonCode         []*fhir.CodeableConcept        `json:"reasonCode"`
+		ReasonReference    []*fhir.Reference              `json:"reasonReference"`
+		Recorded           *fhir.DateTime                 `json:"recorded"`
+		ReportOrigin       *fhir.CodeableConcept          `json:"reportOrigin"`
+		Route              *fhir.CodeableConcept          `json:"route"`
+		Site               *fhir.CodeableConcept          `json:"site"`
+		Status             *fhir.Code                     `json:"status"`
+		StatusReason       *fhir.CodeableConcept          `json:"statusReason"`
+		SubpotentReason    []*fhir.CodeableConcept        `json:"subpotentReason"`
+		Text               *fhir.Narrative                `json:"text"`
+		VaccineCode        *fhir.CodeableConcept          `json:"vaccineCode"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	i.Contained = raw.Contained
+	i.DoseQuantity = raw.DoseQuantity
+	i.Education = raw.Education
+	i.Encounter = raw.Encounter
+	i.ExpirationDate = raw.ExpirationDate
+	i.Extension = raw.Extension
+	i.FundingSource = raw.FundingSource
+	i.ID = raw.ID
+	i.Identifier = raw.Identifier
+	i.ImplicitRules = raw.ImplicitRules
+	i.IsSubpotent = raw.IsSubpotent
+	i.Language = raw.Language
+	i.Location = raw.Location
+	i.LotNumber = raw.LotNumber
+	i.Manufacturer = raw.Manufacturer
+	i.Meta = raw.Meta
+	i.ModifierExtension = raw.ModifierExtension
+	i.Note = raw.Note
+	i.Occurrence, err = validate.SelectOneOf[fhir.Element]("Immunization.occurrence",
+		raw.OccurrenceDateTime,
+		raw.OccurrenceString)
+	if err != nil {
+		return err
+	}
+	i.Patient = raw.Patient
+	i.Performer = raw.Performer
+	i.PrimarySource = raw.PrimarySource
+	i.ProgramEligibility = raw.ProgramEligibility
+	i.ProtocolApplied = raw.ProtocolApplied
+	i.Reaction = raw.Reaction
+	i.ReasonCode = raw.ReasonCode
+	i.ReasonReference = raw.ReasonReference
+	i.Recorded = raw.Recorded
+	i.ReportOrigin = raw.ReportOrigin
+	i.Route = raw.Route
+	i.Site = raw.Site
+	i.Status = raw.Status
+	i.StatusReason = raw.StatusReason
+	i.SubpotentReason = raw.SubpotentReason
+	i.Text = raw.Text
+	i.VaccineCode = raw.VaccineCode
+	return nil
+}
+
+var _ json.Marshaler = (*Immunization)(nil)
+var _ json.Unmarshaler = (*Immunization)(nil)
+
+func (ie *ImmunizationEducation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ie *ImmunizationEducation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		DocumentType *fhir.String      `json:"documentType"`
+		Extension    []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		PresentationDate  *fhir.DateTime    `json:"presentationDate"`
+		PublicationDate   *fhir.DateTime    `json:"publicationDate"`
+		Reference         *fhir.URI         `json:"reference"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ie.DocumentType = raw.DocumentType
+	ie.Extension = raw.Extension
+	ie.ID = raw.ID
+	ie.ModifierExtension = raw.ModifierExtension
+	ie.PresentationDate = raw.PresentationDate
+	ie.PublicationDate = raw.PublicationDate
+	ie.Reference = raw.Reference
+	return nil
+}
+
+var _ json.Marshaler = (*ImmunizationEducation)(nil)
+var _ json.Unmarshaler = (*ImmunizationEducation)(nil)
+
+func (ip *ImmunizationPerformer) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ip *ImmunizationPerformer) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Actor     *fhir.Reference       `json:"actor"`
+		Extension []*fhir.Extension     `json:"extension"`
+		Function  *fhir.CodeableConcept `json:"function"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ip.Actor = raw.Actor
+	ip.Extension = raw.Extension
+	ip.Function = raw.Function
+	ip.ID = raw.ID
+	ip.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*ImmunizationPerformer)(nil)
+var _ json.Unmarshaler = (*ImmunizationPerformer)(nil)
+
+func (ipa *ImmunizationProtocolApplied) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ipa *ImmunizationProtocolApplied) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Authority             *fhir.Reference   `json:"authority"`
+		DoseNumberPositiveInt *fhir.PositiveInt `json:"doseNumberPositiveInt"`
+		DoseNumberString      *fhir.String      `json:"doseNumberString"`
+		Extension             []*fhir.Extension `json:"extension"`
+
+		ID                     string                  `json:"id"`
+		ModifierExtension      []*fhir.Extension       `json:"modifierExtension"`
+		Series                 *fhir.String            `json:"series"`
+		SeriesDosesPositiveInt *fhir.PositiveInt       `json:"seriesDosesPositiveInt"`
+		SeriesDosesString      *fhir.String            `json:"seriesDosesString"`
+		TargetDisease          []*fhir.CodeableConcept `json:"targetDisease"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ipa.Authority = raw.Authority
+	ipa.DoseNumber, err = validate.SelectOneOf[fhir.Element]("Immunization.protocolApplied.doseNumber",
+		raw.DoseNumberPositiveInt,
+		raw.DoseNumberString)
+	if err != nil {
+		return err
+	}
+	ipa.Extension = raw.Extension
+	ipa.ID = raw.ID
+	ipa.ModifierExtension = raw.ModifierExtension
+	ipa.Series = raw.Series
+	ipa.SeriesDoses, err = validate.SelectOneOf[fhir.Element]("Immunization.protocolApplied.seriesDoses",
+		raw.SeriesDosesPositiveInt,
+		raw.SeriesDosesString)
+	if err != nil {
+		return err
+	}
+	ipa.TargetDisease = raw.TargetDisease
+	return nil
+}
+
+var _ json.Marshaler = (*ImmunizationProtocolApplied)(nil)
+var _ json.Unmarshaler = (*ImmunizationProtocolApplied)(nil)
+
+func (ir *ImmunizationReaction) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ir *ImmunizationReaction) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Date      *fhir.DateTime    `json:"date"`
+		Detail    *fhir.Reference   `json:"detail"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Reported          *fhir.Boolean     `json:"reported"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ir.Date = raw.Date
+	ir.Detail = raw.Detail
+	ir.Extension = raw.Extension
+	ir.ID = raw.ID
+	ir.ModifierExtension = raw.ModifierExtension
+	ir.Reported = raw.Reported
+	return nil
+}
+
+var _ json.Marshaler = (*ImmunizationReaction)(nil)
+var _ json.Unmarshaler = (*ImmunizationReaction)(nil)

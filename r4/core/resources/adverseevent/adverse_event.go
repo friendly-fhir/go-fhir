@@ -8,6 +8,8 @@ package adverseevent
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Actual or potential/avoided event causing unintended physical injury
@@ -655,3 +657,143 @@ func (aesec *AdverseEventSuspectEntityCausality) GetProductRelatedness() *fhir.S
 	}
 	return aesec.ProductRelatedness
 }
+
+func (ae *AdverseEvent) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ae *AdverseEvent) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Actuality   *fhir.Code              `json:"actuality"`
+		Category    []*fhir.CodeableConcept `json:"category"`
+		Contained   []fhir.Resource         `json:"contained"`
+		Contributor []*fhir.Reference       `json:"contributor"`
+		Date        *fhir.DateTime          `json:"date"`
+		Detected    *fhir.DateTime          `json:"detected"`
+		Encounter   *fhir.Reference         `json:"encounter"`
+		Event       *fhir.CodeableConcept   `json:"event"`
+		Extension   []*fhir.Extension       `json:"extension"`
+
+		ID                    string                       `json:"id"`
+		Identifier            *fhir.Identifier             `json:"identifier"`
+		ImplicitRules         *fhir.URI                    `json:"implicitRules"`
+		Language              *fhir.Code                   `json:"language"`
+		Location              *fhir.Reference              `json:"location"`
+		Meta                  *fhir.Meta                   `json:"meta"`
+		ModifierExtension     []*fhir.Extension            `json:"modifierExtension"`
+		Outcome               *fhir.CodeableConcept        `json:"outcome"`
+		RecordedDate          *fhir.DateTime               `json:"recordedDate"`
+		Recorder              *fhir.Reference              `json:"recorder"`
+		ReferenceDocument     []*fhir.Reference            `json:"referenceDocument"`
+		ResultingCondition    []*fhir.Reference            `json:"resultingCondition"`
+		Seriousness           *fhir.CodeableConcept        `json:"seriousness"`
+		Severity              *fhir.CodeableConcept        `json:"severity"`
+		Study                 []*fhir.Reference            `json:"study"`
+		Subject               *fhir.Reference              `json:"subject"`
+		SubjectMedicalHistory []*fhir.Reference            `json:"subjectMedicalHistory"`
+		SuspectEntity         []*AdverseEventSuspectEntity `json:"suspectEntity"`
+		Text                  *fhir.Narrative              `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ae.Actuality = raw.Actuality
+	ae.Category = raw.Category
+	ae.Contained = raw.Contained
+	ae.Contributor = raw.Contributor
+	ae.Date = raw.Date
+	ae.Detected = raw.Detected
+	ae.Encounter = raw.Encounter
+	ae.Event = raw.Event
+	ae.Extension = raw.Extension
+	ae.ID = raw.ID
+	ae.Identifier = raw.Identifier
+	ae.ImplicitRules = raw.ImplicitRules
+	ae.Language = raw.Language
+	ae.Location = raw.Location
+	ae.Meta = raw.Meta
+	ae.ModifierExtension = raw.ModifierExtension
+	ae.Outcome = raw.Outcome
+	ae.RecordedDate = raw.RecordedDate
+	ae.Recorder = raw.Recorder
+	ae.ReferenceDocument = raw.ReferenceDocument
+	ae.ResultingCondition = raw.ResultingCondition
+	ae.Seriousness = raw.Seriousness
+	ae.Severity = raw.Severity
+	ae.Study = raw.Study
+	ae.Subject = raw.Subject
+	ae.SubjectMedicalHistory = raw.SubjectMedicalHistory
+	ae.SuspectEntity = raw.SuspectEntity
+	ae.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*AdverseEvent)(nil)
+var _ json.Unmarshaler = (*AdverseEvent)(nil)
+
+func (aese *AdverseEventSuspectEntity) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (aese *AdverseEventSuspectEntity) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Causality []*AdverseEventSuspectEntityCausality `json:"causality"`
+		Extension []*fhir.Extension                     `json:"extension"`
+
+		ID                string            `json:"id"`
+		Instance          *fhir.Reference   `json:"instance"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	aese.Causality = raw.Causality
+	aese.Extension = raw.Extension
+	aese.ID = raw.ID
+	aese.Instance = raw.Instance
+	aese.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*AdverseEventSuspectEntity)(nil)
+var _ json.Unmarshaler = (*AdverseEventSuspectEntity)(nil)
+
+func (aesec *AdverseEventSuspectEntityCausality) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (aesec *AdverseEventSuspectEntityCausality) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Assessment *fhir.CodeableConcept `json:"assessment"`
+		Author     *fhir.Reference       `json:"author"`
+		Extension  []*fhir.Extension     `json:"extension"`
+
+		ID                 string                `json:"id"`
+		Method             *fhir.CodeableConcept `json:"method"`
+		ModifierExtension  []*fhir.Extension     `json:"modifierExtension"`
+		ProductRelatedness *fhir.String          `json:"productRelatedness"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	aesec.Assessment = raw.Assessment
+	aesec.Author = raw.Author
+	aesec.Extension = raw.Extension
+	aesec.ID = raw.ID
+	aesec.Method = raw.Method
+	aesec.ModifierExtension = raw.ModifierExtension
+	aesec.ProductRelatedness = raw.ProductRelatedness
+	return nil
+}
+
+var _ json.Marshaler = (*AdverseEventSuspectEntityCausality)(nil)
+var _ json.Unmarshaler = (*AdverseEventSuspectEntityCausality)(nil)

@@ -8,6 +8,8 @@ package substancenucleicacid
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Nucleic acids are defined by three distinct elements: the base, sugar and
@@ -663,3 +665,157 @@ func (snass *SubstanceNucleicAcidSubunitSugar) GetResidueSite() *fhir.String {
 	}
 	return snass.ResidueSite
 }
+
+func (sna *SubstanceNucleicAcid) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sna *SubstanceNucleicAcid) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AreaOfHybridisation *fhir.String      `json:"areaOfHybridisation"`
+		Contained           []fhir.Resource   `json:"contained"`
+		Extension           []*fhir.Extension `json:"extension"`
+
+		ID                  string                         `json:"id"`
+		ImplicitRules       *fhir.URI                      `json:"implicitRules"`
+		Language            *fhir.Code                     `json:"language"`
+		Meta                *fhir.Meta                     `json:"meta"`
+		ModifierExtension   []*fhir.Extension              `json:"modifierExtension"`
+		NumberOfSubunits    *fhir.Integer                  `json:"numberOfSubunits"`
+		OligoNucleotideType *fhir.CodeableConcept          `json:"oligoNucleotideType"`
+		SequenceType        *fhir.CodeableConcept          `json:"sequenceType"`
+		Subunit             []*SubstanceNucleicAcidSubunit `json:"subunit"`
+		Text                *fhir.Narrative                `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sna.AreaOfHybridisation = raw.AreaOfHybridisation
+	sna.Contained = raw.Contained
+	sna.Extension = raw.Extension
+	sna.ID = raw.ID
+	sna.ImplicitRules = raw.ImplicitRules
+	sna.Language = raw.Language
+	sna.Meta = raw.Meta
+	sna.ModifierExtension = raw.ModifierExtension
+	sna.NumberOfSubunits = raw.NumberOfSubunits
+	sna.OligoNucleotideType = raw.OligoNucleotideType
+	sna.SequenceType = raw.SequenceType
+	sna.Subunit = raw.Subunit
+	sna.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceNucleicAcid)(nil)
+var _ json.Unmarshaler = (*SubstanceNucleicAcid)(nil)
+
+func (snas *SubstanceNucleicAcidSubunit) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (snas *SubstanceNucleicAcidSubunit) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension     `json:"extension"`
+		FivePrime *fhir.CodeableConcept `json:"fivePrime"`
+
+		ID                 string                                `json:"id"`
+		Length             *fhir.Integer                         `json:"length"`
+		Linkage            []*SubstanceNucleicAcidSubunitLinkage `json:"linkage"`
+		ModifierExtension  []*fhir.Extension                     `json:"modifierExtension"`
+		Sequence           *fhir.String                          `json:"sequence"`
+		SequenceAttachment *fhir.Attachment                      `json:"sequenceAttachment"`
+		Subunit            *fhir.Integer                         `json:"subunit"`
+		Sugar              []*SubstanceNucleicAcidSubunitSugar   `json:"sugar"`
+		ThreePrime         *fhir.CodeableConcept                 `json:"threePrime"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	snas.Extension = raw.Extension
+	snas.FivePrime = raw.FivePrime
+	snas.ID = raw.ID
+	snas.Length = raw.Length
+	snas.Linkage = raw.Linkage
+	snas.ModifierExtension = raw.ModifierExtension
+	snas.Sequence = raw.Sequence
+	snas.SequenceAttachment = raw.SequenceAttachment
+	snas.Subunit = raw.Subunit
+	snas.Sugar = raw.Sugar
+	snas.ThreePrime = raw.ThreePrime
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceNucleicAcidSubunit)(nil)
+var _ json.Unmarshaler = (*SubstanceNucleicAcidSubunit)(nil)
+
+func (snasl *SubstanceNucleicAcidSubunitLinkage) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (snasl *SubstanceNucleicAcidSubunitLinkage) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Connectivity *fhir.String      `json:"connectivity"`
+		Extension    []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Identifier        *fhir.Identifier  `json:"identifier"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.String      `json:"name"`
+		ResidueSite       *fhir.String      `json:"residueSite"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	snasl.Connectivity = raw.Connectivity
+	snasl.Extension = raw.Extension
+	snasl.ID = raw.ID
+	snasl.Identifier = raw.Identifier
+	snasl.ModifierExtension = raw.ModifierExtension
+	snasl.Name = raw.Name
+	snasl.ResidueSite = raw.ResidueSite
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceNucleicAcidSubunitLinkage)(nil)
+var _ json.Unmarshaler = (*SubstanceNucleicAcidSubunitLinkage)(nil)
+
+func (snass *SubstanceNucleicAcidSubunitSugar) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (snass *SubstanceNucleicAcidSubunitSugar) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Identifier        *fhir.Identifier  `json:"identifier"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.String      `json:"name"`
+		ResidueSite       *fhir.String      `json:"residueSite"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	snass.Extension = raw.Extension
+	snass.ID = raw.ID
+	snass.Identifier = raw.Identifier
+	snass.ModifierExtension = raw.ModifierExtension
+	snass.Name = raw.Name
+	snass.ResidueSite = raw.ResidueSite
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceNucleicAcidSubunitSugar)(nil)
+var _ json.Unmarshaler = (*SubstanceNucleicAcidSubunitSugar)(nil)

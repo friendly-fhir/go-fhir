@@ -6,8 +6,11 @@
 package measure
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The Measure resource provides the definition of a quality measure.
@@ -1394,3 +1397,293 @@ func (msd *MeasureSupplementalData) GetUsage() []*fhir.CodeableConcept {
 	}
 	return msd.Usage
 }
+
+func (m *Measure) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (m *Measure) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ApprovalDate                    *fhir.Date            `json:"approvalDate"`
+		Author                          []*fhir.ContactDetail `json:"author"`
+		ClinicalRecommendationStatement *fhir.Markdown        `json:"clinicalRecommendationStatement"`
+		CompositeScoring                *fhir.CodeableConcept `json:"compositeScoring"`
+		Contact                         []*fhir.ContactDetail `json:"contact"`
+		Contained                       []fhir.Resource       `json:"contained"`
+		Copyright                       *fhir.Markdown        `json:"copyright"`
+		Date                            *fhir.DateTime        `json:"date"`
+		Definition                      []*fhir.Markdown      `json:"definition"`
+		Description                     *fhir.Markdown        `json:"description"`
+		Disclaimer                      *fhir.Markdown        `json:"disclaimer"`
+		Editor                          []*fhir.ContactDetail `json:"editor"`
+		EffectivePeriod                 *fhir.Period          `json:"effectivePeriod"`
+		Endorser                        []*fhir.ContactDetail `json:"endorser"`
+		Experimental                    *fhir.Boolean         `json:"experimental"`
+		Extension                       []*fhir.Extension     `json:"extension"`
+		Group                           []*MeasureGroup       `json:"group"`
+		Guidance                        *fhir.Markdown        `json:"guidance"`
+
+		ID                     string                     `json:"id"`
+		Identifier             []*fhir.Identifier         `json:"identifier"`
+		ImplicitRules          *fhir.URI                  `json:"implicitRules"`
+		ImprovementNotation    *fhir.CodeableConcept      `json:"improvementNotation"`
+		Jurisdiction           []*fhir.CodeableConcept    `json:"jurisdiction"`
+		Language               *fhir.Code                 `json:"language"`
+		LastReviewDate         *fhir.Date                 `json:"lastReviewDate"`
+		Library                []*fhir.Canonical          `json:"library"`
+		Meta                   *fhir.Meta                 `json:"meta"`
+		ModifierExtension      []*fhir.Extension          `json:"modifierExtension"`
+		Name                   *fhir.String               `json:"name"`
+		Publisher              *fhir.String               `json:"publisher"`
+		Purpose                *fhir.Markdown             `json:"purpose"`
+		RateAggregation        *fhir.String               `json:"rateAggregation"`
+		Rationale              *fhir.Markdown             `json:"rationale"`
+		RelatedArtifact        []*fhir.RelatedArtifact    `json:"relatedArtifact"`
+		Reviewer               []*fhir.ContactDetail      `json:"reviewer"`
+		RiskAdjustment         *fhir.String               `json:"riskAdjustment"`
+		Scoring                *fhir.CodeableConcept      `json:"scoring"`
+		Status                 *fhir.Code                 `json:"status"`
+		SubjectCodeableConcept *fhir.CodeableConcept      `json:"subjectCodeableConcept"`
+		SubjectReference       *fhir.Reference            `json:"subjectReference"`
+		Subtitle               *fhir.String               `json:"subtitle"`
+		SupplementalData       []*MeasureSupplementalData `json:"supplementalData"`
+		Text                   *fhir.Narrative            `json:"text"`
+		Title                  *fhir.String               `json:"title"`
+		Topic                  []*fhir.CodeableConcept    `json:"topic"`
+		Type                   []*fhir.CodeableConcept    `json:"type"`
+		URL                    *fhir.URI                  `json:"url"`
+		Usage                  *fhir.String               `json:"usage"`
+		UseContext             []*fhir.UsageContext       `json:"useContext"`
+		Version                *fhir.String               `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	m.ApprovalDate = raw.ApprovalDate
+	m.Author = raw.Author
+	m.ClinicalRecommendationStatement = raw.ClinicalRecommendationStatement
+	m.CompositeScoring = raw.CompositeScoring
+	m.Contact = raw.Contact
+	m.Contained = raw.Contained
+	m.Copyright = raw.Copyright
+	m.Date = raw.Date
+	m.Definition = raw.Definition
+	m.Description = raw.Description
+	m.Disclaimer = raw.Disclaimer
+	m.Editor = raw.Editor
+	m.EffectivePeriod = raw.EffectivePeriod
+	m.Endorser = raw.Endorser
+	m.Experimental = raw.Experimental
+	m.Extension = raw.Extension
+	m.Group = raw.Group
+	m.Guidance = raw.Guidance
+	m.ID = raw.ID
+	m.Identifier = raw.Identifier
+	m.ImplicitRules = raw.ImplicitRules
+	m.ImprovementNotation = raw.ImprovementNotation
+	m.Jurisdiction = raw.Jurisdiction
+	m.Language = raw.Language
+	m.LastReviewDate = raw.LastReviewDate
+	m.Library = raw.Library
+	m.Meta = raw.Meta
+	m.ModifierExtension = raw.ModifierExtension
+	m.Name = raw.Name
+	m.Publisher = raw.Publisher
+	m.Purpose = raw.Purpose
+	m.RateAggregation = raw.RateAggregation
+	m.Rationale = raw.Rationale
+	m.RelatedArtifact = raw.RelatedArtifact
+	m.Reviewer = raw.Reviewer
+	m.RiskAdjustment = raw.RiskAdjustment
+	m.Scoring = raw.Scoring
+	m.Status = raw.Status
+	m.Subject, err = validate.SelectOneOf[fhir.Element]("Measure.subject",
+		raw.SubjectCodeableConcept,
+		raw.SubjectReference)
+	if err != nil {
+		return err
+	}
+	m.Subtitle = raw.Subtitle
+	m.SupplementalData = raw.SupplementalData
+	m.Text = raw.Text
+	m.Title = raw.Title
+	m.Topic = raw.Topic
+	m.Type = raw.Type
+	m.URL = raw.URL
+	m.Usage = raw.Usage
+	m.UseContext = raw.UseContext
+	m.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*Measure)(nil)
+var _ json.Unmarshaler = (*Measure)(nil)
+
+func (mg *MeasureGroup) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mg *MeasureGroup) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code        *fhir.CodeableConcept `json:"code"`
+		Description *fhir.String          `json:"description"`
+		Extension   []*fhir.Extension     `json:"extension"`
+
+		ID                string                    `json:"id"`
+		ModifierExtension []*fhir.Extension         `json:"modifierExtension"`
+		Population        []*MeasureGroupPopulation `json:"population"`
+		Stratifier        []*MeasureGroupStratifier `json:"stratifier"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mg.Code = raw.Code
+	mg.Description = raw.Description
+	mg.Extension = raw.Extension
+	mg.ID = raw.ID
+	mg.ModifierExtension = raw.ModifierExtension
+	mg.Population = raw.Population
+	mg.Stratifier = raw.Stratifier
+	return nil
+}
+
+var _ json.Marshaler = (*MeasureGroup)(nil)
+var _ json.Unmarshaler = (*MeasureGroup)(nil)
+
+func (mgp *MeasureGroupPopulation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mgp *MeasureGroupPopulation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code        *fhir.CodeableConcept `json:"code"`
+		Criteria    *fhir.Expression      `json:"criteria"`
+		Description *fhir.String          `json:"description"`
+		Extension   []*fhir.Extension     `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mgp.Code = raw.Code
+	mgp.Criteria = raw.Criteria
+	mgp.Description = raw.Description
+	mgp.Extension = raw.Extension
+	mgp.ID = raw.ID
+	mgp.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*MeasureGroupPopulation)(nil)
+var _ json.Unmarshaler = (*MeasureGroupPopulation)(nil)
+
+func (mgs *MeasureGroupStratifier) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mgs *MeasureGroupStratifier) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code        *fhir.CodeableConcept              `json:"code"`
+		Component   []*MeasureGroupStratifierComponent `json:"component"`
+		Criteria    *fhir.Expression                   `json:"criteria"`
+		Description *fhir.String                       `json:"description"`
+		Extension   []*fhir.Extension                  `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mgs.Code = raw.Code
+	mgs.Component = raw.Component
+	mgs.Criteria = raw.Criteria
+	mgs.Description = raw.Description
+	mgs.Extension = raw.Extension
+	mgs.ID = raw.ID
+	mgs.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*MeasureGroupStratifier)(nil)
+var _ json.Unmarshaler = (*MeasureGroupStratifier)(nil)
+
+func (mgsc *MeasureGroupStratifierComponent) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mgsc *MeasureGroupStratifierComponent) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code        *fhir.CodeableConcept `json:"code"`
+		Criteria    *fhir.Expression      `json:"criteria"`
+		Description *fhir.String          `json:"description"`
+		Extension   []*fhir.Extension     `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mgsc.Code = raw.Code
+	mgsc.Criteria = raw.Criteria
+	mgsc.Description = raw.Description
+	mgsc.Extension = raw.Extension
+	mgsc.ID = raw.ID
+	mgsc.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*MeasureGroupStratifierComponent)(nil)
+var _ json.Unmarshaler = (*MeasureGroupStratifierComponent)(nil)
+
+func (msd *MeasureSupplementalData) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (msd *MeasureSupplementalData) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code        *fhir.CodeableConcept `json:"code"`
+		Criteria    *fhir.Expression      `json:"criteria"`
+		Description *fhir.String          `json:"description"`
+		Extension   []*fhir.Extension     `json:"extension"`
+
+		ID                string                  `json:"id"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Usage             []*fhir.CodeableConcept `json:"usage"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	msd.Code = raw.Code
+	msd.Criteria = raw.Criteria
+	msd.Description = raw.Description
+	msd.Extension = raw.Extension
+	msd.ID = raw.ID
+	msd.ModifierExtension = raw.ModifierExtension
+	msd.Usage = raw.Usage
+	return nil
+}
+
+var _ json.Marshaler = (*MeasureSupplementalData)(nil)
+var _ json.Unmarshaler = (*MeasureSupplementalData)(nil)

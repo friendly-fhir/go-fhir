@@ -6,8 +6,11 @@
 package valueset
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A ValueSet resource instance specifies a set of codes drawn from one or more
@@ -1559,3 +1562,361 @@ func (vsep *ValueSetExpansionParameter) GetValueDateTime() *fhir.DateTime {
 	}
 	return val
 }
+
+func (vs *ValueSet) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (vs *ValueSet) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Compose      *ValueSetCompose      `json:"compose"`
+		Contact      []*fhir.ContactDetail `json:"contact"`
+		Contained    []fhir.Resource       `json:"contained"`
+		Copyright    *fhir.Markdown        `json:"copyright"`
+		Date         *fhir.DateTime        `json:"date"`
+		Description  *fhir.Markdown        `json:"description"`
+		Expansion    *ValueSetExpansion    `json:"expansion"`
+		Experimental *fhir.Boolean         `json:"experimental"`
+		Extension    []*fhir.Extension     `json:"extension"`
+
+		ID                string                  `json:"id"`
+		Identifier        []*fhir.Identifier      `json:"identifier"`
+		Immutable         *fhir.Boolean           `json:"immutable"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Jurisdiction      []*fhir.CodeableConcept `json:"jurisdiction"`
+		Language          *fhir.Code              `json:"language"`
+		Meta              *fhir.Meta              `json:"meta"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Name              *fhir.String            `json:"name"`
+		Publisher         *fhir.String            `json:"publisher"`
+		Purpose           *fhir.Markdown          `json:"purpose"`
+		Status            *fhir.Code              `json:"status"`
+		Text              *fhir.Narrative         `json:"text"`
+		Title             *fhir.String            `json:"title"`
+		URL               *fhir.URI               `json:"url"`
+		UseContext        []*fhir.UsageContext    `json:"useContext"`
+		Version           *fhir.String            `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	vs.Compose = raw.Compose
+	vs.Contact = raw.Contact
+	vs.Contained = raw.Contained
+	vs.Copyright = raw.Copyright
+	vs.Date = raw.Date
+	vs.Description = raw.Description
+	vs.Expansion = raw.Expansion
+	vs.Experimental = raw.Experimental
+	vs.Extension = raw.Extension
+	vs.ID = raw.ID
+	vs.Identifier = raw.Identifier
+	vs.Immutable = raw.Immutable
+	vs.ImplicitRules = raw.ImplicitRules
+	vs.Jurisdiction = raw.Jurisdiction
+	vs.Language = raw.Language
+	vs.Meta = raw.Meta
+	vs.ModifierExtension = raw.ModifierExtension
+	vs.Name = raw.Name
+	vs.Publisher = raw.Publisher
+	vs.Purpose = raw.Purpose
+	vs.Status = raw.Status
+	vs.Text = raw.Text
+	vs.Title = raw.Title
+	vs.URL = raw.URL
+	vs.UseContext = raw.UseContext
+	vs.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*ValueSet)(nil)
+var _ json.Unmarshaler = (*ValueSet)(nil)
+
+func (vsc *ValueSetCompose) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (vsc *ValueSetCompose) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                    `json:"id"`
+		Inactive          *fhir.Boolean             `json:"inactive"`
+		Include           []*ValueSetComposeInclude `json:"include"`
+		LockedDate        *fhir.Date                `json:"lockedDate"`
+		ModifierExtension []*fhir.Extension         `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	vsc.Extension = raw.Extension
+	vsc.ID = raw.ID
+	vsc.Inactive = raw.Inactive
+	vsc.Include = raw.Include
+	vsc.LockedDate = raw.LockedDate
+	vsc.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*ValueSetCompose)(nil)
+var _ json.Unmarshaler = (*ValueSetCompose)(nil)
+
+func (vsci *ValueSetComposeInclude) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (vsci *ValueSetComposeInclude) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Concept   []*ValueSetComposeIncludeConcept `json:"concept"`
+		Extension []*fhir.Extension                `json:"extension"`
+		Filter    []*ValueSetComposeIncludeFilter  `json:"filter"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		System            *fhir.URI         `json:"system"`
+		ValueSet          []*fhir.Canonical `json:"valueSet"`
+		Version           *fhir.String      `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	vsci.Concept = raw.Concept
+	vsci.Extension = raw.Extension
+	vsci.Filter = raw.Filter
+	vsci.ID = raw.ID
+	vsci.ModifierExtension = raw.ModifierExtension
+	vsci.System = raw.System
+	vsci.ValueSet = raw.ValueSet
+	vsci.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*ValueSetComposeInclude)(nil)
+var _ json.Unmarshaler = (*ValueSetComposeInclude)(nil)
+
+func (vscic *ValueSetComposeIncludeConcept) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (vscic *ValueSetComposeIncludeConcept) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code        *fhir.Code                                  `json:"code"`
+		Designation []*ValueSetComposeIncludeConceptDesignation `json:"designation"`
+		Display     *fhir.String                                `json:"display"`
+		Extension   []*fhir.Extension                           `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	vscic.Code = raw.Code
+	vscic.Designation = raw.Designation
+	vscic.Display = raw.Display
+	vscic.Extension = raw.Extension
+	vscic.ID = raw.ID
+	vscic.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*ValueSetComposeIncludeConcept)(nil)
+var _ json.Unmarshaler = (*ValueSetComposeIncludeConcept)(nil)
+
+func (vscicd *ValueSetComposeIncludeConceptDesignation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (vscicd *ValueSetComposeIncludeConceptDesignation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Language          *fhir.Code        `json:"language"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Use               *fhir.Coding      `json:"use"`
+		Value             *fhir.String      `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	vscicd.Extension = raw.Extension
+	vscicd.ID = raw.ID
+	vscicd.Language = raw.Language
+	vscicd.ModifierExtension = raw.ModifierExtension
+	vscicd.Use = raw.Use
+	vscicd.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*ValueSetComposeIncludeConceptDesignation)(nil)
+var _ json.Unmarshaler = (*ValueSetComposeIncludeConceptDesignation)(nil)
+
+func (vscif *ValueSetComposeIncludeFilter) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (vscif *ValueSetComposeIncludeFilter) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Op                *fhir.Code        `json:"op"`
+		Property          *fhir.Code        `json:"property"`
+		Value             *fhir.String      `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	vscif.Extension = raw.Extension
+	vscif.ID = raw.ID
+	vscif.ModifierExtension = raw.ModifierExtension
+	vscif.Op = raw.Op
+	vscif.Property = raw.Property
+	vscif.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*ValueSetComposeIncludeFilter)(nil)
+var _ json.Unmarshaler = (*ValueSetComposeIncludeFilter)(nil)
+
+func (vse *ValueSetExpansion) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (vse *ValueSetExpansion) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contains  []*ValueSetExpansionContains `json:"contains"`
+		Extension []*fhir.Extension            `json:"extension"`
+
+		ID                string                        `json:"id"`
+		Identifier        *fhir.URI                     `json:"identifier"`
+		ModifierExtension []*fhir.Extension             `json:"modifierExtension"`
+		Offset            *fhir.Integer                 `json:"offset"`
+		Parameter         []*ValueSetExpansionParameter `json:"parameter"`
+		Timestamp         *fhir.DateTime                `json:"timestamp"`
+		Total             *fhir.Integer                 `json:"total"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	vse.Contains = raw.Contains
+	vse.Extension = raw.Extension
+	vse.ID = raw.ID
+	vse.Identifier = raw.Identifier
+	vse.ModifierExtension = raw.ModifierExtension
+	vse.Offset = raw.Offset
+	vse.Parameter = raw.Parameter
+	vse.Timestamp = raw.Timestamp
+	vse.Total = raw.Total
+	return nil
+}
+
+var _ json.Marshaler = (*ValueSetExpansion)(nil)
+var _ json.Unmarshaler = (*ValueSetExpansion)(nil)
+
+func (vsec *ValueSetExpansionContains) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (vsec *ValueSetExpansionContains) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Abstract  *fhir.Boolean     `json:"abstract"`
+		Code      *fhir.Code        `json:"code"`
+		Display   *fhir.String      `json:"display"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Inactive          *fhir.Boolean     `json:"inactive"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		System            *fhir.URI         `json:"system"`
+		Version           *fhir.String      `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	vsec.Abstract = raw.Abstract
+	vsec.Code = raw.Code
+	vsec.Display = raw.Display
+	vsec.Extension = raw.Extension
+	vsec.ID = raw.ID
+	vsec.Inactive = raw.Inactive
+	vsec.ModifierExtension = raw.ModifierExtension
+	vsec.System = raw.System
+	vsec.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*ValueSetExpansionContains)(nil)
+var _ json.Unmarshaler = (*ValueSetExpansionContains)(nil)
+
+func (vsep *ValueSetExpansionParameter) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (vsep *ValueSetExpansionParameter) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.String      `json:"name"`
+		ValueString       *fhir.String      `json:"valueString"`
+		ValueBoolean      *fhir.Boolean     `json:"valueBoolean"`
+		ValueInteger      *fhir.Integer     `json:"valueInteger"`
+		ValueDecimal      *fhir.Decimal     `json:"valueDecimal"`
+		ValueURI          *fhir.URI         `json:"valueURI"`
+		ValueCode         *fhir.Code        `json:"valueCode"`
+		ValueDateTime     *fhir.DateTime    `json:"valueDateTime"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	vsep.Extension = raw.Extension
+	vsep.ID = raw.ID
+	vsep.ModifierExtension = raw.ModifierExtension
+	vsep.Name = raw.Name
+	vsep.Value, err = validate.SelectOneOf[fhir.Element]("ValueSet.expansion.parameter.value",
+		raw.ValueString,
+		raw.ValueBoolean,
+		raw.ValueInteger,
+		raw.ValueDecimal,
+		raw.ValueURI,
+		raw.ValueCode,
+		raw.ValueDateTime)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*ValueSetExpansionParameter)(nil)
+var _ json.Unmarshaler = (*ValueSetExpansionParameter)(nil)

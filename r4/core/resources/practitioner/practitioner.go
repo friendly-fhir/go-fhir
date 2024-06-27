@@ -8,6 +8,8 @@ package practitioner
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A person who is directly or indirectly involved in the provisioning of
@@ -419,3 +421,93 @@ func (pq *PractitionerQualification) GetPeriod() *fhir.Period {
 	}
 	return pq.Period
 }
+
+func (p *Practitioner) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (p *Practitioner) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Active        *fhir.Boolean           `json:"active"`
+		Address       []*fhir.Address         `json:"address"`
+		BirthDate     *fhir.Date              `json:"birthDate"`
+		Communication []*fhir.CodeableConcept `json:"communication"`
+		Contained     []fhir.Resource         `json:"contained"`
+		Extension     []*fhir.Extension       `json:"extension"`
+		Gender        *fhir.Code              `json:"gender"`
+
+		ID                string                       `json:"id"`
+		Identifier        []*fhir.Identifier           `json:"identifier"`
+		ImplicitRules     *fhir.URI                    `json:"implicitRules"`
+		Language          *fhir.Code                   `json:"language"`
+		Meta              *fhir.Meta                   `json:"meta"`
+		ModifierExtension []*fhir.Extension            `json:"modifierExtension"`
+		Name              []*fhir.HumanName            `json:"name"`
+		Photo             []*fhir.Attachment           `json:"photo"`
+		Qualification     []*PractitionerQualification `json:"qualification"`
+		Telecom           []*fhir.ContactPoint         `json:"telecom"`
+		Text              *fhir.Narrative              `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	p.Active = raw.Active
+	p.Address = raw.Address
+	p.BirthDate = raw.BirthDate
+	p.Communication = raw.Communication
+	p.Contained = raw.Contained
+	p.Extension = raw.Extension
+	p.Gender = raw.Gender
+	p.ID = raw.ID
+	p.Identifier = raw.Identifier
+	p.ImplicitRules = raw.ImplicitRules
+	p.Language = raw.Language
+	p.Meta = raw.Meta
+	p.ModifierExtension = raw.ModifierExtension
+	p.Name = raw.Name
+	p.Photo = raw.Photo
+	p.Qualification = raw.Qualification
+	p.Telecom = raw.Telecom
+	p.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*Practitioner)(nil)
+var _ json.Unmarshaler = (*Practitioner)(nil)
+
+func (pq *PractitionerQualification) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pq *PractitionerQualification) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.CodeableConcept `json:"code"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string             `json:"id"`
+		Identifier        []*fhir.Identifier `json:"identifier"`
+		Issuer            *fhir.Reference    `json:"issuer"`
+		ModifierExtension []*fhir.Extension  `json:"modifierExtension"`
+		Period            *fhir.Period       `json:"period"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pq.Code = raw.Code
+	pq.Extension = raw.Extension
+	pq.ID = raw.ID
+	pq.Identifier = raw.Identifier
+	pq.Issuer = raw.Issuer
+	pq.ModifierExtension = raw.ModifierExtension
+	pq.Period = raw.Period
+	return nil
+}
+
+var _ json.Marshaler = (*PractitionerQualification)(nil)
+var _ json.Unmarshaler = (*PractitionerQualification)(nil)

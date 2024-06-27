@@ -8,6 +8,8 @@ package organization
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A formally or informally recognized grouping of people or organizations
@@ -417,3 +419,93 @@ func (oc *OrganizationContact) GetTelecom() []*fhir.ContactPoint {
 	}
 	return oc.Telecom
 }
+
+func (o *Organization) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (o *Organization) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Active    *fhir.Boolean          `json:"active"`
+		Address   []*fhir.Address        `json:"address"`
+		Alias     []*fhir.String         `json:"alias"`
+		Contact   []*OrganizationContact `json:"contact"`
+		Contained []fhir.Resource        `json:"contained"`
+		Endpoint  []*fhir.Reference      `json:"endpoint"`
+		Extension []*fhir.Extension      `json:"extension"`
+
+		ID                string                  `json:"id"`
+		Identifier        []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Language          *fhir.Code              `json:"language"`
+		Meta              *fhir.Meta              `json:"meta"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Name              *fhir.String            `json:"name"`
+		PartOf            *fhir.Reference         `json:"partOf"`
+		Telecom           []*fhir.ContactPoint    `json:"telecom"`
+		Text              *fhir.Narrative         `json:"text"`
+		Type              []*fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	o.Active = raw.Active
+	o.Address = raw.Address
+	o.Alias = raw.Alias
+	o.Contact = raw.Contact
+	o.Contained = raw.Contained
+	o.Endpoint = raw.Endpoint
+	o.Extension = raw.Extension
+	o.ID = raw.ID
+	o.Identifier = raw.Identifier
+	o.ImplicitRules = raw.ImplicitRules
+	o.Language = raw.Language
+	o.Meta = raw.Meta
+	o.ModifierExtension = raw.ModifierExtension
+	o.Name = raw.Name
+	o.PartOf = raw.PartOf
+	o.Telecom = raw.Telecom
+	o.Text = raw.Text
+	o.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*Organization)(nil)
+var _ json.Unmarshaler = (*Organization)(nil)
+
+func (oc *OrganizationContact) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (oc *OrganizationContact) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Address   *fhir.Address     `json:"address"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Name              *fhir.HumanName       `json:"name"`
+		Purpose           *fhir.CodeableConcept `json:"purpose"`
+		Telecom           []*fhir.ContactPoint  `json:"telecom"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	oc.Address = raw.Address
+	oc.Extension = raw.Extension
+	oc.ID = raw.ID
+	oc.ModifierExtension = raw.ModifierExtension
+	oc.Name = raw.Name
+	oc.Purpose = raw.Purpose
+	oc.Telecom = raw.Telecom
+	return nil
+}
+
+var _ json.Marshaler = (*OrganizationContact)(nil)
+var _ json.Unmarshaler = (*OrganizationContact)(nil)

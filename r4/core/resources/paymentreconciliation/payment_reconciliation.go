@@ -8,6 +8,8 @@ package paymentreconciliation
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // This resource provides the details including amount of a payment and
@@ -652,3 +654,145 @@ func (prpn *PaymentReconciliationProcessNote) GetType() *fhir.Code {
 	}
 	return prpn.Type
 }
+
+func (pr *PaymentReconciliation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pr *PaymentReconciliation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contained   []fhir.Resource                `json:"contained"`
+		Created     *fhir.DateTime                 `json:"created"`
+		Detail      []*PaymentReconciliationDetail `json:"detail"`
+		Disposition *fhir.String                   `json:"disposition"`
+		Extension   []*fhir.Extension              `json:"extension"`
+		FormCode    *fhir.CodeableConcept          `json:"formCode"`
+
+		ID                string                              `json:"id"`
+		Identifier        []*fhir.Identifier                  `json:"identifier"`
+		ImplicitRules     *fhir.URI                           `json:"implicitRules"`
+		Language          *fhir.Code                          `json:"language"`
+		Meta              *fhir.Meta                          `json:"meta"`
+		ModifierExtension []*fhir.Extension                   `json:"modifierExtension"`
+		Outcome           *fhir.Code                          `json:"outcome"`
+		PaymentAmount     *fhir.Money                         `json:"paymentAmount"`
+		PaymentDate       *fhir.Date                          `json:"paymentDate"`
+		PaymentIdentifier *fhir.Identifier                    `json:"paymentIdentifier"`
+		PaymentIssuer     *fhir.Reference                     `json:"paymentIssuer"`
+		Period            *fhir.Period                        `json:"period"`
+		ProcessNote       []*PaymentReconciliationProcessNote `json:"processNote"`
+		Request           *fhir.Reference                     `json:"request"`
+		Requestor         *fhir.Reference                     `json:"requestor"`
+		Status            *fhir.Code                          `json:"status"`
+		Text              *fhir.Narrative                     `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pr.Contained = raw.Contained
+	pr.Created = raw.Created
+	pr.Detail = raw.Detail
+	pr.Disposition = raw.Disposition
+	pr.Extension = raw.Extension
+	pr.FormCode = raw.FormCode
+	pr.ID = raw.ID
+	pr.Identifier = raw.Identifier
+	pr.ImplicitRules = raw.ImplicitRules
+	pr.Language = raw.Language
+	pr.Meta = raw.Meta
+	pr.ModifierExtension = raw.ModifierExtension
+	pr.Outcome = raw.Outcome
+	pr.PaymentAmount = raw.PaymentAmount
+	pr.PaymentDate = raw.PaymentDate
+	pr.PaymentIdentifier = raw.PaymentIdentifier
+	pr.PaymentIssuer = raw.PaymentIssuer
+	pr.Period = raw.Period
+	pr.ProcessNote = raw.ProcessNote
+	pr.Request = raw.Request
+	pr.Requestor = raw.Requestor
+	pr.Status = raw.Status
+	pr.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*PaymentReconciliation)(nil)
+var _ json.Unmarshaler = (*PaymentReconciliation)(nil)
+
+func (prd *PaymentReconciliationDetail) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (prd *PaymentReconciliationDetail) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Amount    *fhir.Money       `json:"amount"`
+		Date      *fhir.Date        `json:"date"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		Identifier        *fhir.Identifier      `json:"identifier"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Payee             *fhir.Reference       `json:"payee"`
+		Predecessor       *fhir.Identifier      `json:"predecessor"`
+		Request           *fhir.Reference       `json:"request"`
+		Response          *fhir.Reference       `json:"response"`
+		Responsible       *fhir.Reference       `json:"responsible"`
+		Submitter         *fhir.Reference       `json:"submitter"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	prd.Amount = raw.Amount
+	prd.Date = raw.Date
+	prd.Extension = raw.Extension
+	prd.ID = raw.ID
+	prd.Identifier = raw.Identifier
+	prd.ModifierExtension = raw.ModifierExtension
+	prd.Payee = raw.Payee
+	prd.Predecessor = raw.Predecessor
+	prd.Request = raw.Request
+	prd.Response = raw.Response
+	prd.Responsible = raw.Responsible
+	prd.Submitter = raw.Submitter
+	prd.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*PaymentReconciliationDetail)(nil)
+var _ json.Unmarshaler = (*PaymentReconciliationDetail)(nil)
+
+func (prpn *PaymentReconciliationProcessNote) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (prpn *PaymentReconciliationProcessNote) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Text              *fhir.String      `json:"text"`
+		Type              *fhir.Code        `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	prpn.Extension = raw.Extension
+	prpn.ID = raw.ID
+	prpn.ModifierExtension = raw.ModifierExtension
+	prpn.Text = raw.Text
+	prpn.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*PaymentReconciliationProcessNote)(nil)
+var _ json.Unmarshaler = (*PaymentReconciliationProcessNote)(nil)

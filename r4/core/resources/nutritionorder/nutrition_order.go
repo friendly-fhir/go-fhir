@@ -6,8 +6,11 @@
 package nutritionorder
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A request to supply a diet, formula feeding (enteral) or oral nutritional
@@ -1236,3 +1239,289 @@ func (nos *NutritionOrderSupplement) GetType() *fhir.CodeableConcept {
 	}
 	return nos.Type
 }
+
+func (no *NutritionOrder) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (no *NutritionOrder) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AllergyIntolerance     []*fhir.Reference             `json:"allergyIntolerance"`
+		Contained              []fhir.Resource               `json:"contained"`
+		DateTime               *fhir.DateTime                `json:"dateTime"`
+		Encounter              *fhir.Reference               `json:"encounter"`
+		EnteralFormula         *NutritionOrderEnteralFormula `json:"enteralFormula"`
+		ExcludeFoodModifier    []*fhir.CodeableConcept       `json:"excludeFoodModifier"`
+		Extension              []*fhir.Extension             `json:"extension"`
+		FoodPreferenceModifier []*fhir.CodeableConcept       `json:"foodPreferenceModifier"`
+
+		ID                    string                      `json:"id"`
+		Identifier            []*fhir.Identifier          `json:"identifier"`
+		ImplicitRules         *fhir.URI                   `json:"implicitRules"`
+		Instantiates          []*fhir.URI                 `json:"instantiates"`
+		InstantiatesCanonical []*fhir.Canonical           `json:"instantiatesCanonical"`
+		InstantiatesURI       []*fhir.URI                 `json:"instantiatesUri"`
+		Intent                *fhir.Code                  `json:"intent"`
+		Language              *fhir.Code                  `json:"language"`
+		Meta                  *fhir.Meta                  `json:"meta"`
+		ModifierExtension     []*fhir.Extension           `json:"modifierExtension"`
+		Note                  []*fhir.Annotation          `json:"note"`
+		OralDiet              *NutritionOrderOralDiet     `json:"oralDiet"`
+		Orderer               *fhir.Reference             `json:"orderer"`
+		Patient               *fhir.Reference             `json:"patient"`
+		Status                *fhir.Code                  `json:"status"`
+		Supplement            []*NutritionOrderSupplement `json:"supplement"`
+		Text                  *fhir.Narrative             `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	no.AllergyIntolerance = raw.AllergyIntolerance
+	no.Contained = raw.Contained
+	no.DateTime = raw.DateTime
+	no.Encounter = raw.Encounter
+	no.EnteralFormula = raw.EnteralFormula
+	no.ExcludeFoodModifier = raw.ExcludeFoodModifier
+	no.Extension = raw.Extension
+	no.FoodPreferenceModifier = raw.FoodPreferenceModifier
+	no.ID = raw.ID
+	no.Identifier = raw.Identifier
+	no.ImplicitRules = raw.ImplicitRules
+	no.Instantiates = raw.Instantiates
+	no.InstantiatesCanonical = raw.InstantiatesCanonical
+	no.InstantiatesURI = raw.InstantiatesURI
+	no.Intent = raw.Intent
+	no.Language = raw.Language
+	no.Meta = raw.Meta
+	no.ModifierExtension = raw.ModifierExtension
+	no.Note = raw.Note
+	no.OralDiet = raw.OralDiet
+	no.Orderer = raw.Orderer
+	no.Patient = raw.Patient
+	no.Status = raw.Status
+	no.Supplement = raw.Supplement
+	no.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*NutritionOrder)(nil)
+var _ json.Unmarshaler = (*NutritionOrder)(nil)
+
+func (noef *NutritionOrderEnteralFormula) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (noef *NutritionOrderEnteralFormula) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AdditiveProductName       *fhir.String                                  `json:"additiveProductName"`
+		AdditiveType              *fhir.CodeableConcept                         `json:"additiveType"`
+		Administration            []*NutritionOrderEnteralFormulaAdministration `json:"administration"`
+		AdministrationInstruction *fhir.String                                  `json:"administrationInstruction"`
+		BaseFormulaProductName    *fhir.String                                  `json:"baseFormulaProductName"`
+		BaseFormulaType           *fhir.CodeableConcept                         `json:"baseFormulaType"`
+		CaloricDensity            *fhir.Quantity                                `json:"caloricDensity"`
+		Extension                 []*fhir.Extension                             `json:"extension"`
+
+		ID                    string                `json:"id"`
+		MaxVolumeToDeliver    *fhir.Quantity        `json:"maxVolumeToDeliver"`
+		ModifierExtension     []*fhir.Extension     `json:"modifierExtension"`
+		RouteofAdministration *fhir.CodeableConcept `json:"routeofAdministration"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	noef.AdditiveProductName = raw.AdditiveProductName
+	noef.AdditiveType = raw.AdditiveType
+	noef.Administration = raw.Administration
+	noef.AdministrationInstruction = raw.AdministrationInstruction
+	noef.BaseFormulaProductName = raw.BaseFormulaProductName
+	noef.BaseFormulaType = raw.BaseFormulaType
+	noef.CaloricDensity = raw.CaloricDensity
+	noef.Extension = raw.Extension
+	noef.ID = raw.ID
+	noef.MaxVolumeToDeliver = raw.MaxVolumeToDeliver
+	noef.ModifierExtension = raw.ModifierExtension
+	noef.RouteofAdministration = raw.RouteofAdministration
+	return nil
+}
+
+var _ json.Marshaler = (*NutritionOrderEnteralFormula)(nil)
+var _ json.Unmarshaler = (*NutritionOrderEnteralFormula)(nil)
+
+func (noefa *NutritionOrderEnteralFormulaAdministration) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (noefa *NutritionOrderEnteralFormulaAdministration) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Quantity          *fhir.Quantity    `json:"quantity"`
+		RateQuantity      *fhir.Quantity    `json:"rateQuantity"`
+		RateRatio         *fhir.Ratio       `json:"rateRatio"`
+		Schedule          *fhir.Timing      `json:"schedule"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	noefa.Extension = raw.Extension
+	noefa.ID = raw.ID
+	noefa.ModifierExtension = raw.ModifierExtension
+	noefa.Quantity = raw.Quantity
+	noefa.Rate, err = validate.SelectOneOf[fhir.Element]("NutritionOrder.enteralFormula.administration.rate",
+		raw.RateQuantity,
+		raw.RateRatio)
+	if err != nil {
+		return err
+	}
+	noefa.Schedule = raw.Schedule
+	return nil
+}
+
+var _ json.Marshaler = (*NutritionOrderEnteralFormulaAdministration)(nil)
+var _ json.Unmarshaler = (*NutritionOrderEnteralFormulaAdministration)(nil)
+
+func (nood *NutritionOrderOralDiet) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (nood *NutritionOrderOralDiet) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension            []*fhir.Extension       `json:"extension"`
+		FluidConsistencyType []*fhir.CodeableConcept `json:"fluidConsistencyType"`
+
+		ID                string                            `json:"id"`
+		Instruction       *fhir.String                      `json:"instruction"`
+		ModifierExtension []*fhir.Extension                 `json:"modifierExtension"`
+		Nutrient          []*NutritionOrderOralDietNutrient `json:"nutrient"`
+		Schedule          []*fhir.Timing                    `json:"schedule"`
+		Texture           []*NutritionOrderOralDietTexture  `json:"texture"`
+		Type              []*fhir.CodeableConcept           `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	nood.Extension = raw.Extension
+	nood.FluidConsistencyType = raw.FluidConsistencyType
+	nood.ID = raw.ID
+	nood.Instruction = raw.Instruction
+	nood.ModifierExtension = raw.ModifierExtension
+	nood.Nutrient = raw.Nutrient
+	nood.Schedule = raw.Schedule
+	nood.Texture = raw.Texture
+	nood.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*NutritionOrderOralDiet)(nil)
+var _ json.Unmarshaler = (*NutritionOrderOralDiet)(nil)
+
+func (noodn *NutritionOrderOralDietNutrient) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (noodn *NutritionOrderOralDietNutrient) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Amount    *fhir.Quantity    `json:"amount"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		Modifier          *fhir.CodeableConcept `json:"modifier"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	noodn.Amount = raw.Amount
+	noodn.Extension = raw.Extension
+	noodn.ID = raw.ID
+	noodn.Modifier = raw.Modifier
+	noodn.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*NutritionOrderOralDietNutrient)(nil)
+var _ json.Unmarshaler = (*NutritionOrderOralDietNutrient)(nil)
+
+func (noodt *NutritionOrderOralDietTexture) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (noodt *NutritionOrderOralDietTexture) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension     `json:"extension"`
+		FoodType  *fhir.CodeableConcept `json:"foodType"`
+
+		ID                string                `json:"id"`
+		Modifier          *fhir.CodeableConcept `json:"modifier"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	noodt.Extension = raw.Extension
+	noodt.FoodType = raw.FoodType
+	noodt.ID = raw.ID
+	noodt.Modifier = raw.Modifier
+	noodt.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*NutritionOrderOralDietTexture)(nil)
+var _ json.Unmarshaler = (*NutritionOrderOralDietTexture)(nil)
+
+func (nos *NutritionOrderSupplement) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (nos *NutritionOrderSupplement) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		Instruction       *fhir.String          `json:"instruction"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		ProductName       *fhir.String          `json:"productName"`
+		Quantity          *fhir.Quantity        `json:"quantity"`
+		Schedule          []*fhir.Timing        `json:"schedule"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	nos.Extension = raw.Extension
+	nos.ID = raw.ID
+	nos.Instruction = raw.Instruction
+	nos.ModifierExtension = raw.ModifierExtension
+	nos.ProductName = raw.ProductName
+	nos.Quantity = raw.Quantity
+	nos.Schedule = raw.Schedule
+	nos.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*NutritionOrderSupplement)(nil)
+var _ json.Unmarshaler = (*NutritionOrderSupplement)(nil)

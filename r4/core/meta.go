@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Meta Type: The metadata about a resource. This
@@ -144,3 +146,39 @@ func (m *Meta) GetVersionID() *ID {
 	}
 	return m.VersionID
 }
+
+func (m *Meta) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (m *Meta) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*Extension `json:"extension"`
+
+		ID          string       `json:"id"`
+		LastUpdated *Instant     `json:"lastUpdated"`
+		Profile     []*Canonical `json:"profile"`
+		Security    []*Coding    `json:"security"`
+		Source      *URI         `json:"source"`
+		Tag         []*Coding    `json:"tag"`
+		VersionID   *ID          `json:"versionId"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	m.Extension = raw.Extension
+	m.ID = raw.ID
+	m.LastUpdated = raw.LastUpdated
+	m.Profile = raw.Profile
+	m.Security = raw.Security
+	m.Source = raw.Source
+	m.Tag = raw.Tag
+	m.VersionID = raw.VersionID
+	return nil
+}
+
+var _ json.Marshaler = (*Meta)(nil)
+var _ json.Unmarshaler = (*Meta)(nil)

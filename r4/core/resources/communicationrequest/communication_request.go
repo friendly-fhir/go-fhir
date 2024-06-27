@@ -6,8 +6,11 @@
 package communicationrequest
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A request to convey information; e.g. the CDS system proposes that an alert
@@ -599,3 +602,125 @@ func (crp *CommunicationRequestPayload) GetModifierExtension() []*fhir.Extension
 	}
 	return crp.ModifierExtension
 }
+
+func (cr *CommunicationRequest) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cr *CommunicationRequest) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		About           []*fhir.Reference       `json:"about"`
+		AuthoredOn      *fhir.DateTime          `json:"authoredOn"`
+		BasedOn         []*fhir.Reference       `json:"basedOn"`
+		Category        []*fhir.CodeableConcept `json:"category"`
+		Contained       []fhir.Resource         `json:"contained"`
+		DoNotPerform    *fhir.Boolean           `json:"doNotPerform"`
+		Encounter       *fhir.Reference         `json:"encounter"`
+		Extension       []*fhir.Extension       `json:"extension"`
+		GroupIdentifier *fhir.Identifier        `json:"groupIdentifier"`
+
+		ID                 string                         `json:"id"`
+		Identifier         []*fhir.Identifier             `json:"identifier"`
+		ImplicitRules      *fhir.URI                      `json:"implicitRules"`
+		Language           *fhir.Code                     `json:"language"`
+		Medium             []*fhir.CodeableConcept        `json:"medium"`
+		Meta               *fhir.Meta                     `json:"meta"`
+		ModifierExtension  []*fhir.Extension              `json:"modifierExtension"`
+		Note               []*fhir.Annotation             `json:"note"`
+		OccurrenceDateTime *fhir.DateTime                 `json:"occurrenceDateTime"`
+		OccurrencePeriod   *fhir.Period                   `json:"occurrencePeriod"`
+		Payload            []*CommunicationRequestPayload `json:"payload"`
+		Priority           *fhir.Code                     `json:"priority"`
+		ReasonCode         []*fhir.CodeableConcept        `json:"reasonCode"`
+		ReasonReference    []*fhir.Reference              `json:"reasonReference"`
+		Recipient          []*fhir.Reference              `json:"recipient"`
+		Replaces           []*fhir.Reference              `json:"replaces"`
+		Requester          *fhir.Reference                `json:"requester"`
+		Sender             *fhir.Reference                `json:"sender"`
+		Status             *fhir.Code                     `json:"status"`
+		StatusReason       *fhir.CodeableConcept          `json:"statusReason"`
+		Subject            *fhir.Reference                `json:"subject"`
+		Text               *fhir.Narrative                `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cr.About = raw.About
+	cr.AuthoredOn = raw.AuthoredOn
+	cr.BasedOn = raw.BasedOn
+	cr.Category = raw.Category
+	cr.Contained = raw.Contained
+	cr.DoNotPerform = raw.DoNotPerform
+	cr.Encounter = raw.Encounter
+	cr.Extension = raw.Extension
+	cr.GroupIdentifier = raw.GroupIdentifier
+	cr.ID = raw.ID
+	cr.Identifier = raw.Identifier
+	cr.ImplicitRules = raw.ImplicitRules
+	cr.Language = raw.Language
+	cr.Medium = raw.Medium
+	cr.Meta = raw.Meta
+	cr.ModifierExtension = raw.ModifierExtension
+	cr.Note = raw.Note
+	cr.Occurrence, err = validate.SelectOneOf[fhir.Element]("CommunicationRequest.occurrence",
+		raw.OccurrenceDateTime,
+		raw.OccurrencePeriod)
+	if err != nil {
+		return err
+	}
+	cr.Payload = raw.Payload
+	cr.Priority = raw.Priority
+	cr.ReasonCode = raw.ReasonCode
+	cr.ReasonReference = raw.ReasonReference
+	cr.Recipient = raw.Recipient
+	cr.Replaces = raw.Replaces
+	cr.Requester = raw.Requester
+	cr.Sender = raw.Sender
+	cr.Status = raw.Status
+	cr.StatusReason = raw.StatusReason
+	cr.Subject = raw.Subject
+	cr.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*CommunicationRequest)(nil)
+var _ json.Unmarshaler = (*CommunicationRequest)(nil)
+
+func (crp *CommunicationRequestPayload) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (crp *CommunicationRequestPayload) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ContentString     *fhir.String      `json:"contentString"`
+		ContentAttachment *fhir.Attachment  `json:"contentAttachment"`
+		ContentReference  *fhir.Reference   `json:"contentReference"`
+		Extension         []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	crp.Content, err = validate.SelectOneOf[fhir.Element]("CommunicationRequest.payload.content",
+		raw.ContentString,
+		raw.ContentAttachment,
+		raw.ContentReference)
+	if err != nil {
+		return err
+	}
+	crp.Extension = raw.Extension
+	crp.ID = raw.ID
+	crp.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*CommunicationRequestPayload)(nil)
+var _ json.Unmarshaler = (*CommunicationRequestPayload)(nil)

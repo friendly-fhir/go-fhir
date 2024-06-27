@@ -8,6 +8,8 @@ package appointment
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A booking of a healthcare event among patient(s), practitioner(s), related
@@ -620,3 +622,119 @@ func (ap *AppointmentParticipant) GetType() []*fhir.CodeableConcept {
 	}
 	return ap.Type
 }
+
+func (a *Appointment) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (a *Appointment) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AppointmentType   *fhir.CodeableConcept `json:"appointmentType"`
+		BasedOn           []*fhir.Reference     `json:"basedOn"`
+		CancelationReason *fhir.CodeableConcept `json:"cancelationReason"`
+		Comment           *fhir.String          `json:"comment"`
+		Contained         []fhir.Resource       `json:"contained"`
+		Created           *fhir.DateTime        `json:"created"`
+		Description       *fhir.String          `json:"description"`
+		End               *fhir.Instant         `json:"end"`
+		Extension         []*fhir.Extension     `json:"extension"`
+
+		ID                    string                    `json:"id"`
+		Identifier            []*fhir.Identifier        `json:"identifier"`
+		ImplicitRules         *fhir.URI                 `json:"implicitRules"`
+		Language              *fhir.Code                `json:"language"`
+		Meta                  *fhir.Meta                `json:"meta"`
+		MinutesDuration       *fhir.PositiveInt         `json:"minutesDuration"`
+		ModifierExtension     []*fhir.Extension         `json:"modifierExtension"`
+		Participant           []*AppointmentParticipant `json:"participant"`
+		PatientInstruction    *fhir.String              `json:"patientInstruction"`
+		Priority              *fhir.UnsignedInt         `json:"priority"`
+		ReasonCode            []*fhir.CodeableConcept   `json:"reasonCode"`
+		ReasonReference       []*fhir.Reference         `json:"reasonReference"`
+		RequestedPeriod       []*fhir.Period            `json:"requestedPeriod"`
+		ServiceCategory       []*fhir.CodeableConcept   `json:"serviceCategory"`
+		ServiceType           []*fhir.CodeableConcept   `json:"serviceType"`
+		Slot                  []*fhir.Reference         `json:"slot"`
+		Specialty             []*fhir.CodeableConcept   `json:"specialty"`
+		Start                 *fhir.Instant             `json:"start"`
+		Status                *fhir.Code                `json:"status"`
+		SupportingInformation []*fhir.Reference         `json:"supportingInformation"`
+		Text                  *fhir.Narrative           `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	a.AppointmentType = raw.AppointmentType
+	a.BasedOn = raw.BasedOn
+	a.CancelationReason = raw.CancelationReason
+	a.Comment = raw.Comment
+	a.Contained = raw.Contained
+	a.Created = raw.Created
+	a.Description = raw.Description
+	a.End = raw.End
+	a.Extension = raw.Extension
+	a.ID = raw.ID
+	a.Identifier = raw.Identifier
+	a.ImplicitRules = raw.ImplicitRules
+	a.Language = raw.Language
+	a.Meta = raw.Meta
+	a.MinutesDuration = raw.MinutesDuration
+	a.ModifierExtension = raw.ModifierExtension
+	a.Participant = raw.Participant
+	a.PatientInstruction = raw.PatientInstruction
+	a.Priority = raw.Priority
+	a.ReasonCode = raw.ReasonCode
+	a.ReasonReference = raw.ReasonReference
+	a.RequestedPeriod = raw.RequestedPeriod
+	a.ServiceCategory = raw.ServiceCategory
+	a.ServiceType = raw.ServiceType
+	a.Slot = raw.Slot
+	a.Specialty = raw.Specialty
+	a.Start = raw.Start
+	a.Status = raw.Status
+	a.SupportingInformation = raw.SupportingInformation
+	a.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*Appointment)(nil)
+var _ json.Unmarshaler = (*Appointment)(nil)
+
+func (ap *AppointmentParticipant) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ap *AppointmentParticipant) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Actor     *fhir.Reference   `json:"actor"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                  `json:"id"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Period            *fhir.Period            `json:"period"`
+		Required          *fhir.Code              `json:"required"`
+		Status            *fhir.Code              `json:"status"`
+		Type              []*fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ap.Actor = raw.Actor
+	ap.Extension = raw.Extension
+	ap.ID = raw.ID
+	ap.ModifierExtension = raw.ModifierExtension
+	ap.Period = raw.Period
+	ap.Required = raw.Required
+	ap.Status = raw.Status
+	ap.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*AppointmentParticipant)(nil)
+var _ json.Unmarshaler = (*AppointmentParticipant)(nil)

@@ -8,6 +8,8 @@ package relatedperson
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Information about a person that is involved in the care for a patient, but
@@ -421,3 +423,93 @@ func (rpc *RelatedPersonCommunication) GetPreferred() *fhir.Boolean {
 	}
 	return rpc.Preferred
 }
+
+func (rp *RelatedPerson) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (rp *RelatedPerson) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Active        *fhir.Boolean                 `json:"active"`
+		Address       []*fhir.Address               `json:"address"`
+		BirthDate     *fhir.Date                    `json:"birthDate"`
+		Communication []*RelatedPersonCommunication `json:"communication"`
+		Contained     []fhir.Resource               `json:"contained"`
+		Extension     []*fhir.Extension             `json:"extension"`
+		Gender        *fhir.Code                    `json:"gender"`
+
+		ID                string                  `json:"id"`
+		Identifier        []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Language          *fhir.Code              `json:"language"`
+		Meta              *fhir.Meta              `json:"meta"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Name              []*fhir.HumanName       `json:"name"`
+		Patient           *fhir.Reference         `json:"patient"`
+		Period            *fhir.Period            `json:"period"`
+		Photo             []*fhir.Attachment      `json:"photo"`
+		Relationship      []*fhir.CodeableConcept `json:"relationship"`
+		Telecom           []*fhir.ContactPoint    `json:"telecom"`
+		Text              *fhir.Narrative         `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	rp.Active = raw.Active
+	rp.Address = raw.Address
+	rp.BirthDate = raw.BirthDate
+	rp.Communication = raw.Communication
+	rp.Contained = raw.Contained
+	rp.Extension = raw.Extension
+	rp.Gender = raw.Gender
+	rp.ID = raw.ID
+	rp.Identifier = raw.Identifier
+	rp.ImplicitRules = raw.ImplicitRules
+	rp.Language = raw.Language
+	rp.Meta = raw.Meta
+	rp.ModifierExtension = raw.ModifierExtension
+	rp.Name = raw.Name
+	rp.Patient = raw.Patient
+	rp.Period = raw.Period
+	rp.Photo = raw.Photo
+	rp.Relationship = raw.Relationship
+	rp.Telecom = raw.Telecom
+	rp.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*RelatedPerson)(nil)
+var _ json.Unmarshaler = (*RelatedPerson)(nil)
+
+func (rpc *RelatedPersonCommunication) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (rpc *RelatedPersonCommunication) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		Language          *fhir.CodeableConcept `json:"language"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Preferred         *fhir.Boolean         `json:"preferred"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	rpc.Extension = raw.Extension
+	rpc.ID = raw.ID
+	rpc.Language = raw.Language
+	rpc.ModifierExtension = raw.ModifierExtension
+	rpc.Preferred = raw.Preferred
+	return nil
+}
+
+var _ json.Marshaler = (*RelatedPersonCommunication)(nil)
+var _ json.Unmarshaler = (*RelatedPersonCommunication)(nil)

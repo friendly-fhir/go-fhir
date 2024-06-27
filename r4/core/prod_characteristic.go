@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for ProdCharacteristic Type: The marketing status
@@ -245,3 +247,51 @@ func (pc *ProdCharacteristic) GetWidth() *Quantity {
 	}
 	return pc.Width
 }
+
+func (pc *ProdCharacteristic) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pc *ProdCharacteristic) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Color            []*String    `json:"color"`
+		Depth            *Quantity    `json:"depth"`
+		Extension        []*Extension `json:"extension"`
+		ExternalDiameter *Quantity    `json:"externalDiameter"`
+		Height           *Quantity    `json:"height"`
+
+		ID                string           `json:"id"`
+		Image             []*Attachment    `json:"image"`
+		Imprint           []*String        `json:"imprint"`
+		ModifierExtension []*Extension     `json:"modifierExtension"`
+		NominalVolume     *Quantity        `json:"nominalVolume"`
+		Scoring           *CodeableConcept `json:"scoring"`
+		Shape             *String          `json:"shape"`
+		Weight            *Quantity        `json:"weight"`
+		Width             *Quantity        `json:"width"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pc.Color = raw.Color
+	pc.Depth = raw.Depth
+	pc.Extension = raw.Extension
+	pc.ExternalDiameter = raw.ExternalDiameter
+	pc.Height = raw.Height
+	pc.ID = raw.ID
+	pc.Image = raw.Image
+	pc.Imprint = raw.Imprint
+	pc.ModifierExtension = raw.ModifierExtension
+	pc.NominalVolume = raw.NominalVolume
+	pc.Scoring = raw.Scoring
+	pc.Shape = raw.Shape
+	pc.Weight = raw.Weight
+	pc.Width = raw.Width
+	return nil
+}
+
+var _ json.Marshaler = (*ProdCharacteristic)(nil)
+var _ json.Unmarshaler = (*ProdCharacteristic)(nil)

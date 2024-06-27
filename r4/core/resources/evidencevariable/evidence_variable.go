@@ -6,8 +6,11 @@
 package evidencevariable
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The EvidenceVariable resource describes a "PICO" element that knowledge
@@ -841,3 +844,157 @@ func (evc *EvidenceVariableCharacteristic) GetUsageContext() []*fhir.UsageContex
 	}
 	return evc.UsageContext
 }
+
+func (ev *EvidenceVariable) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ev *EvidenceVariable) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ApprovalDate    *fhir.Date                        `json:"approvalDate"`
+		Author          []*fhir.ContactDetail             `json:"author"`
+		Characteristic  []*EvidenceVariableCharacteristic `json:"characteristic"`
+		Contact         []*fhir.ContactDetail             `json:"contact"`
+		Contained       []fhir.Resource                   `json:"contained"`
+		Copyright       *fhir.Markdown                    `json:"copyright"`
+		Date            *fhir.DateTime                    `json:"date"`
+		Description     *fhir.Markdown                    `json:"description"`
+		Editor          []*fhir.ContactDetail             `json:"editor"`
+		EffectivePeriod *fhir.Period                      `json:"effectivePeriod"`
+		Endorser        []*fhir.ContactDetail             `json:"endorser"`
+		Extension       []*fhir.Extension                 `json:"extension"`
+
+		ID                string                  `json:"id"`
+		Identifier        []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Jurisdiction      []*fhir.CodeableConcept `json:"jurisdiction"`
+		Language          *fhir.Code              `json:"language"`
+		LastReviewDate    *fhir.Date              `json:"lastReviewDate"`
+		Meta              *fhir.Meta              `json:"meta"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Name              *fhir.String            `json:"name"`
+		Note              []*fhir.Annotation      `json:"note"`
+		Publisher         *fhir.String            `json:"publisher"`
+		RelatedArtifact   []*fhir.RelatedArtifact `json:"relatedArtifact"`
+		Reviewer          []*fhir.ContactDetail   `json:"reviewer"`
+		ShortTitle        *fhir.String            `json:"shortTitle"`
+		Status            *fhir.Code              `json:"status"`
+		Subtitle          *fhir.String            `json:"subtitle"`
+		Text              *fhir.Narrative         `json:"text"`
+		Title             *fhir.String            `json:"title"`
+		Topic             []*fhir.CodeableConcept `json:"topic"`
+		Type              *fhir.Code              `json:"type"`
+		URL               *fhir.URI               `json:"url"`
+		UseContext        []*fhir.UsageContext    `json:"useContext"`
+		Version           *fhir.String            `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ev.ApprovalDate = raw.ApprovalDate
+	ev.Author = raw.Author
+	ev.Characteristic = raw.Characteristic
+	ev.Contact = raw.Contact
+	ev.Contained = raw.Contained
+	ev.Copyright = raw.Copyright
+	ev.Date = raw.Date
+	ev.Description = raw.Description
+	ev.Editor = raw.Editor
+	ev.EffectivePeriod = raw.EffectivePeriod
+	ev.Endorser = raw.Endorser
+	ev.Extension = raw.Extension
+	ev.ID = raw.ID
+	ev.Identifier = raw.Identifier
+	ev.ImplicitRules = raw.ImplicitRules
+	ev.Jurisdiction = raw.Jurisdiction
+	ev.Language = raw.Language
+	ev.LastReviewDate = raw.LastReviewDate
+	ev.Meta = raw.Meta
+	ev.ModifierExtension = raw.ModifierExtension
+	ev.Name = raw.Name
+	ev.Note = raw.Note
+	ev.Publisher = raw.Publisher
+	ev.RelatedArtifact = raw.RelatedArtifact
+	ev.Reviewer = raw.Reviewer
+	ev.ShortTitle = raw.ShortTitle
+	ev.Status = raw.Status
+	ev.Subtitle = raw.Subtitle
+	ev.Text = raw.Text
+	ev.Title = raw.Title
+	ev.Topic = raw.Topic
+	ev.Type = raw.Type
+	ev.URL = raw.URL
+	ev.UseContext = raw.UseContext
+	ev.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*EvidenceVariable)(nil)
+var _ json.Unmarshaler = (*EvidenceVariable)(nil)
+
+func (evc *EvidenceVariableCharacteristic) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (evc *EvidenceVariableCharacteristic) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		DefinitionReference         *fhir.Reference         `json:"definitionReference"`
+		DefinitionCanonical         *fhir.Canonical         `json:"definitionCanonical"`
+		DefinitionCodeableConcept   *fhir.CodeableConcept   `json:"definitionCodeableConcept"`
+		DefinitionExpression        *fhir.Expression        `json:"definitionExpression"`
+		DefinitionDataRequirement   *fhir.DataRequirement   `json:"definitionDataRequirement"`
+		DefinitionTriggerDefinition *fhir.TriggerDefinition `json:"definitionTriggerDefinition"`
+		Description                 *fhir.String            `json:"description"`
+		Exclude                     *fhir.Boolean           `json:"exclude"`
+		Extension                   []*fhir.Extension       `json:"extension"`
+		GroupMeasure                *fhir.Code              `json:"groupMeasure"`
+
+		ID                           string               `json:"id"`
+		ModifierExtension            []*fhir.Extension    `json:"modifierExtension"`
+		ParticipantEffectiveDateTime *fhir.DateTime       `json:"participantEffectiveDateTime"`
+		ParticipantEffectivePeriod   *fhir.Period         `json:"participantEffectivePeriod"`
+		ParticipantEffectiveDuration *fhir.Duration       `json:"participantEffectiveDuration"`
+		ParticipantEffectiveTiming   *fhir.Timing         `json:"participantEffectiveTiming"`
+		TimeFromStart                *fhir.Duration       `json:"timeFromStart"`
+		UsageContext                 []*fhir.UsageContext `json:"usageContext"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	evc.Definition, err = validate.SelectOneOf[fhir.Element]("EvidenceVariable.characteristic.definition",
+		raw.DefinitionReference,
+		raw.DefinitionCanonical,
+		raw.DefinitionCodeableConcept,
+		raw.DefinitionExpression,
+		raw.DefinitionDataRequirement,
+		raw.DefinitionTriggerDefinition)
+	if err != nil {
+		return err
+	}
+	evc.Description = raw.Description
+	evc.Exclude = raw.Exclude
+	evc.Extension = raw.Extension
+	evc.GroupMeasure = raw.GroupMeasure
+	evc.ID = raw.ID
+	evc.ModifierExtension = raw.ModifierExtension
+	evc.ParticipantEffective, err = validate.SelectOneOf[fhir.Element]("EvidenceVariable.characteristic.participantEffective",
+		raw.ParticipantEffectiveDateTime,
+		raw.ParticipantEffectivePeriod,
+		raw.ParticipantEffectiveDuration,
+		raw.ParticipantEffectiveTiming)
+	if err != nil {
+		return err
+	}
+	evc.TimeFromStart = raw.TimeFromStart
+	evc.UsageContext = raw.UsageContext
+	return nil
+}
+
+var _ json.Marshaler = (*EvidenceVariableCharacteristic)(nil)
+var _ json.Unmarshaler = (*EvidenceVariableCharacteristic)(nil)

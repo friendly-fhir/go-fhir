@@ -8,6 +8,8 @@ package substanceprotein
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A SubstanceProtein is defined as a single unit of a linear amino acid
@@ -439,3 +441,89 @@ func (sps *SubstanceProteinSubunit) GetSubunit() *fhir.Integer {
 	}
 	return sps.Subunit
 }
+
+func (sp *SubstanceProtein) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sp *SubstanceProtein) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contained        []fhir.Resource   `json:"contained"`
+		DisulfideLinkage []*fhir.String    `json:"disulfideLinkage"`
+		Extension        []*fhir.Extension `json:"extension"`
+
+		ID                string                     `json:"id"`
+		ImplicitRules     *fhir.URI                  `json:"implicitRules"`
+		Language          *fhir.Code                 `json:"language"`
+		Meta              *fhir.Meta                 `json:"meta"`
+		ModifierExtension []*fhir.Extension          `json:"modifierExtension"`
+		NumberOfSubunits  *fhir.Integer              `json:"numberOfSubunits"`
+		SequenceType      *fhir.CodeableConcept      `json:"sequenceType"`
+		Subunit           []*SubstanceProteinSubunit `json:"subunit"`
+		Text              *fhir.Narrative            `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sp.Contained = raw.Contained
+	sp.DisulfideLinkage = raw.DisulfideLinkage
+	sp.Extension = raw.Extension
+	sp.ID = raw.ID
+	sp.ImplicitRules = raw.ImplicitRules
+	sp.Language = raw.Language
+	sp.Meta = raw.Meta
+	sp.ModifierExtension = raw.ModifierExtension
+	sp.NumberOfSubunits = raw.NumberOfSubunits
+	sp.SequenceType = raw.SequenceType
+	sp.Subunit = raw.Subunit
+	sp.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceProtein)(nil)
+var _ json.Unmarshaler = (*SubstanceProtein)(nil)
+
+func (sps *SubstanceProteinSubunit) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sps *SubstanceProteinSubunit) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		CTerminalModification   *fhir.String      `json:"cTerminalModification"`
+		CTerminalModificationID *fhir.Identifier  `json:"cTerminalModificationId"`
+		Extension               []*fhir.Extension `json:"extension"`
+
+		ID                      string            `json:"id"`
+		Length                  *fhir.Integer     `json:"length"`
+		ModifierExtension       []*fhir.Extension `json:"modifierExtension"`
+		NTerminalModification   *fhir.String      `json:"nTerminalModification"`
+		NTerminalModificationID *fhir.Identifier  `json:"nTerminalModificationId"`
+		Sequence                *fhir.String      `json:"sequence"`
+		SequenceAttachment      *fhir.Attachment  `json:"sequenceAttachment"`
+		Subunit                 *fhir.Integer     `json:"subunit"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sps.CTerminalModification = raw.CTerminalModification
+	sps.CTerminalModificationID = raw.CTerminalModificationID
+	sps.Extension = raw.Extension
+	sps.ID = raw.ID
+	sps.Length = raw.Length
+	sps.ModifierExtension = raw.ModifierExtension
+	sps.NTerminalModification = raw.NTerminalModification
+	sps.NTerminalModificationID = raw.NTerminalModificationID
+	sps.Sequence = raw.Sequence
+	sps.SequenceAttachment = raw.SequenceAttachment
+	sps.Subunit = raw.Subunit
+	return nil
+}
+
+var _ json.Marshaler = (*SubstanceProteinSubunit)(nil)
+var _ json.Unmarshaler = (*SubstanceProteinSubunit)(nil)

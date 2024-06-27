@@ -8,6 +8,8 @@ package practitionerrole
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A specific set of Roles/Locations/specialties/services that a practitioner
@@ -573,3 +575,131 @@ func (prna *PractitionerRoleNotAvailable) GetModifierExtension() []*fhir.Extensi
 	}
 	return prna.ModifierExtension
 }
+
+func (pr *PractitionerRole) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (pr *PractitionerRole) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Active                 *fhir.Boolean                    `json:"active"`
+		AvailabilityExceptions *fhir.String                     `json:"availabilityExceptions"`
+		AvailableTime          []*PractitionerRoleAvailableTime `json:"availableTime"`
+		Code                   []*fhir.CodeableConcept          `json:"code"`
+		Contained              []fhir.Resource                  `json:"contained"`
+		Endpoint               []*fhir.Reference                `json:"endpoint"`
+		Extension              []*fhir.Extension                `json:"extension"`
+		HealthcareService      []*fhir.Reference                `json:"healthcareService"`
+
+		ID                string                          `json:"id"`
+		Identifier        []*fhir.Identifier              `json:"identifier"`
+		ImplicitRules     *fhir.URI                       `json:"implicitRules"`
+		Language          *fhir.Code                      `json:"language"`
+		Location          []*fhir.Reference               `json:"location"`
+		Meta              *fhir.Meta                      `json:"meta"`
+		ModifierExtension []*fhir.Extension               `json:"modifierExtension"`
+		NotAvailable      []*PractitionerRoleNotAvailable `json:"notAvailable"`
+		Organization      *fhir.Reference                 `json:"organization"`
+		Period            *fhir.Period                    `json:"period"`
+		Practitioner      *fhir.Reference                 `json:"practitioner"`
+		Specialty         []*fhir.CodeableConcept         `json:"specialty"`
+		Telecom           []*fhir.ContactPoint            `json:"telecom"`
+		Text              *fhir.Narrative                 `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	pr.Active = raw.Active
+	pr.AvailabilityExceptions = raw.AvailabilityExceptions
+	pr.AvailableTime = raw.AvailableTime
+	pr.Code = raw.Code
+	pr.Contained = raw.Contained
+	pr.Endpoint = raw.Endpoint
+	pr.Extension = raw.Extension
+	pr.HealthcareService = raw.HealthcareService
+	pr.ID = raw.ID
+	pr.Identifier = raw.Identifier
+	pr.ImplicitRules = raw.ImplicitRules
+	pr.Language = raw.Language
+	pr.Location = raw.Location
+	pr.Meta = raw.Meta
+	pr.ModifierExtension = raw.ModifierExtension
+	pr.NotAvailable = raw.NotAvailable
+	pr.Organization = raw.Organization
+	pr.Period = raw.Period
+	pr.Practitioner = raw.Practitioner
+	pr.Specialty = raw.Specialty
+	pr.Telecom = raw.Telecom
+	pr.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*PractitionerRole)(nil)
+var _ json.Unmarshaler = (*PractitionerRole)(nil)
+
+func (prat *PractitionerRoleAvailableTime) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (prat *PractitionerRoleAvailableTime) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AllDay             *fhir.Boolean     `json:"allDay"`
+		AvailableEndTime   *fhir.Time        `json:"availableEndTime"`
+		AvailableStartTime *fhir.Time        `json:"availableStartTime"`
+		DaysOfWeek         []*fhir.Code      `json:"daysOfWeek"`
+		Extension          []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	prat.AllDay = raw.AllDay
+	prat.AvailableEndTime = raw.AvailableEndTime
+	prat.AvailableStartTime = raw.AvailableStartTime
+	prat.DaysOfWeek = raw.DaysOfWeek
+	prat.Extension = raw.Extension
+	prat.ID = raw.ID
+	prat.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*PractitionerRoleAvailableTime)(nil)
+var _ json.Unmarshaler = (*PractitionerRoleAvailableTime)(nil)
+
+func (prna *PractitionerRoleNotAvailable) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (prna *PractitionerRoleNotAvailable) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description *fhir.String      `json:"description"`
+		During      *fhir.Period      `json:"during"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	prna.Description = raw.Description
+	prna.During = raw.During
+	prna.Extension = raw.Extension
+	prna.ID = raw.ID
+	prna.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*PractitionerRoleNotAvailable)(nil)
+var _ json.Unmarshaler = (*PractitionerRoleNotAvailable)(nil)

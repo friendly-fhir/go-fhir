@@ -8,6 +8,8 @@ package testreport
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A summary of information based on the results of executing a TestScript.
@@ -1166,3 +1168,329 @@ func (trta *TestReportTestAction) GetModifierExtension() []*fhir.Extension {
 	}
 	return trta.ModifierExtension
 }
+
+func (tr *TestReport) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (tr *TestReport) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contained []fhir.Resource   `json:"contained"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                   `json:"id"`
+		Identifier        *fhir.Identifier         `json:"identifier"`
+		ImplicitRules     *fhir.URI                `json:"implicitRules"`
+		Issued            *fhir.DateTime           `json:"issued"`
+		Language          *fhir.Code               `json:"language"`
+		Meta              *fhir.Meta               `json:"meta"`
+		ModifierExtension []*fhir.Extension        `json:"modifierExtension"`
+		Name              *fhir.String             `json:"name"`
+		Participant       []*TestReportParticipant `json:"participant"`
+		Result            *fhir.Code               `json:"result"`
+		Score             *fhir.Decimal            `json:"score"`
+		Setup             *TestReportSetup         `json:"setup"`
+		Status            *fhir.Code               `json:"status"`
+		Teardown          *TestReportTeardown      `json:"teardown"`
+		Test              []*TestReportTest        `json:"test"`
+		TestScript        *fhir.Reference          `json:"testScript"`
+		Tester            *fhir.String             `json:"tester"`
+		Text              *fhir.Narrative          `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	tr.Contained = raw.Contained
+	tr.Extension = raw.Extension
+	tr.ID = raw.ID
+	tr.Identifier = raw.Identifier
+	tr.ImplicitRules = raw.ImplicitRules
+	tr.Issued = raw.Issued
+	tr.Language = raw.Language
+	tr.Meta = raw.Meta
+	tr.ModifierExtension = raw.ModifierExtension
+	tr.Name = raw.Name
+	tr.Participant = raw.Participant
+	tr.Result = raw.Result
+	tr.Score = raw.Score
+	tr.Setup = raw.Setup
+	tr.Status = raw.Status
+	tr.Teardown = raw.Teardown
+	tr.Test = raw.Test
+	tr.TestScript = raw.TestScript
+	tr.Tester = raw.Tester
+	tr.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*TestReport)(nil)
+var _ json.Unmarshaler = (*TestReport)(nil)
+
+func (trp *TestReportParticipant) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (trp *TestReportParticipant) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Display   *fhir.String      `json:"display"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Type              *fhir.Code        `json:"type"`
+		URI               *fhir.URI         `json:"uri"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	trp.Display = raw.Display
+	trp.Extension = raw.Extension
+	trp.ID = raw.ID
+	trp.ModifierExtension = raw.ModifierExtension
+	trp.Type = raw.Type
+	trp.URI = raw.URI
+	return nil
+}
+
+var _ json.Marshaler = (*TestReportParticipant)(nil)
+var _ json.Unmarshaler = (*TestReportParticipant)(nil)
+
+func (trs *TestReportSetup) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (trs *TestReportSetup) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Action    []*TestReportSetupAction `json:"action"`
+		Extension []*fhir.Extension        `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	trs.Action = raw.Action
+	trs.Extension = raw.Extension
+	trs.ID = raw.ID
+	trs.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*TestReportSetup)(nil)
+var _ json.Unmarshaler = (*TestReportSetup)(nil)
+
+func (trsa *TestReportSetupAction) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (trsa *TestReportSetupAction) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Assert    *TestReportSetupActionAssert `json:"assert"`
+		Extension []*fhir.Extension            `json:"extension"`
+
+		ID                string                          `json:"id"`
+		ModifierExtension []*fhir.Extension               `json:"modifierExtension"`
+		Operation         *TestReportSetupActionOperation `json:"operation"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	trsa.Assert = raw.Assert
+	trsa.Extension = raw.Extension
+	trsa.ID = raw.ID
+	trsa.ModifierExtension = raw.ModifierExtension
+	trsa.Operation = raw.Operation
+	return nil
+}
+
+var _ json.Marshaler = (*TestReportSetupAction)(nil)
+var _ json.Unmarshaler = (*TestReportSetupAction)(nil)
+
+func (trsaa *TestReportSetupActionAssert) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (trsaa *TestReportSetupActionAssert) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Detail    *fhir.String      `json:"detail"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Message           *fhir.Markdown    `json:"message"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Result            *fhir.Code        `json:"result"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	trsaa.Detail = raw.Detail
+	trsaa.Extension = raw.Extension
+	trsaa.ID = raw.ID
+	trsaa.Message = raw.Message
+	trsaa.ModifierExtension = raw.ModifierExtension
+	trsaa.Result = raw.Result
+	return nil
+}
+
+var _ json.Marshaler = (*TestReportSetupActionAssert)(nil)
+var _ json.Unmarshaler = (*TestReportSetupActionAssert)(nil)
+
+func (trsao *TestReportSetupActionOperation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (trsao *TestReportSetupActionOperation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Detail    *fhir.URI         `json:"detail"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Message           *fhir.Markdown    `json:"message"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Result            *fhir.Code        `json:"result"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	trsao.Detail = raw.Detail
+	trsao.Extension = raw.Extension
+	trsao.ID = raw.ID
+	trsao.Message = raw.Message
+	trsao.ModifierExtension = raw.ModifierExtension
+	trsao.Result = raw.Result
+	return nil
+}
+
+var _ json.Marshaler = (*TestReportSetupActionOperation)(nil)
+var _ json.Unmarshaler = (*TestReportSetupActionOperation)(nil)
+
+func (trt *TestReportTeardown) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (trt *TestReportTeardown) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Action    []*TestReportTeardownAction `json:"action"`
+		Extension []*fhir.Extension           `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	trt.Action = raw.Action
+	trt.Extension = raw.Extension
+	trt.ID = raw.ID
+	trt.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*TestReportTeardown)(nil)
+var _ json.Unmarshaler = (*TestReportTeardown)(nil)
+
+func (trta *TestReportTeardownAction) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (trta *TestReportTeardownAction) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	trta.Extension = raw.Extension
+	trta.ID = raw.ID
+	trta.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*TestReportTeardownAction)(nil)
+var _ json.Unmarshaler = (*TestReportTeardownAction)(nil)
+
+func (trt *TestReportTest) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (trt *TestReportTest) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Action      []*TestReportTestAction `json:"action"`
+		Description *fhir.String            `json:"description"`
+		Extension   []*fhir.Extension       `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Name              *fhir.String      `json:"name"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	trt.Action = raw.Action
+	trt.Description = raw.Description
+	trt.Extension = raw.Extension
+	trt.ID = raw.ID
+	trt.ModifierExtension = raw.ModifierExtension
+	trt.Name = raw.Name
+	return nil
+}
+
+var _ json.Marshaler = (*TestReportTest)(nil)
+var _ json.Unmarshaler = (*TestReportTest)(nil)
+
+func (trta *TestReportTestAction) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (trta *TestReportTestAction) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	trta.Extension = raw.Extension
+	trta.ID = raw.ID
+	trta.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*TestReportTestAction)(nil)
+var _ json.Unmarshaler = (*TestReportTestAction)(nil)

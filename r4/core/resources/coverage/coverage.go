@@ -6,8 +6,11 @@
 package coverage
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Financial instrument which may be used to reimburse or pay for health care
@@ -740,3 +743,173 @@ func (cctbe *CoverageCostToBeneficiaryException) GetType() *fhir.CodeableConcept
 	}
 	return cctbe.Type
 }
+
+func (c *Coverage) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (c *Coverage) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Beneficiary       *fhir.Reference              `json:"beneficiary"`
+		Class             []*CoverageClass             `json:"class"`
+		Contained         []fhir.Resource              `json:"contained"`
+		Contract          []*fhir.Reference            `json:"contract"`
+		CostToBeneficiary []*CoverageCostToBeneficiary `json:"costToBeneficiary"`
+		Dependent         *fhir.String                 `json:"dependent"`
+		Extension         []*fhir.Extension            `json:"extension"`
+
+		ID                string                `json:"id"`
+		Identifier        []*fhir.Identifier    `json:"identifier"`
+		ImplicitRules     *fhir.URI             `json:"implicitRules"`
+		Language          *fhir.Code            `json:"language"`
+		Meta              *fhir.Meta            `json:"meta"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Network           *fhir.String          `json:"network"`
+		Order             *fhir.PositiveInt     `json:"order"`
+		Payor             []*fhir.Reference     `json:"payor"`
+		Period            *fhir.Period          `json:"period"`
+		PolicyHolder      *fhir.Reference       `json:"policyHolder"`
+		Relationship      *fhir.CodeableConcept `json:"relationship"`
+		Status            *fhir.Code            `json:"status"`
+		Subrogation       *fhir.Boolean         `json:"subrogation"`
+		Subscriber        *fhir.Reference       `json:"subscriber"`
+		SubscriberID      *fhir.String          `json:"subscriberId"`
+		Text              *fhir.Narrative       `json:"text"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	c.Beneficiary = raw.Beneficiary
+	c.Class = raw.Class
+	c.Contained = raw.Contained
+	c.Contract = raw.Contract
+	c.CostToBeneficiary = raw.CostToBeneficiary
+	c.Dependent = raw.Dependent
+	c.Extension = raw.Extension
+	c.ID = raw.ID
+	c.Identifier = raw.Identifier
+	c.ImplicitRules = raw.ImplicitRules
+	c.Language = raw.Language
+	c.Meta = raw.Meta
+	c.ModifierExtension = raw.ModifierExtension
+	c.Network = raw.Network
+	c.Order = raw.Order
+	c.Payor = raw.Payor
+	c.Period = raw.Period
+	c.PolicyHolder = raw.PolicyHolder
+	c.Relationship = raw.Relationship
+	c.Status = raw.Status
+	c.Subrogation = raw.Subrogation
+	c.Subscriber = raw.Subscriber
+	c.SubscriberID = raw.SubscriberID
+	c.Text = raw.Text
+	c.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*Coverage)(nil)
+var _ json.Unmarshaler = (*Coverage)(nil)
+
+func (cc *CoverageClass) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cc *CoverageClass) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Name              *fhir.String          `json:"name"`
+		Type              *fhir.CodeableConcept `json:"type"`
+		Value             *fhir.String          `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cc.Extension = raw.Extension
+	cc.ID = raw.ID
+	cc.ModifierExtension = raw.ModifierExtension
+	cc.Name = raw.Name
+	cc.Type = raw.Type
+	cc.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*CoverageClass)(nil)
+var _ json.Unmarshaler = (*CoverageClass)(nil)
+
+func (cctb *CoverageCostToBeneficiary) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cctb *CoverageCostToBeneficiary) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Exception []*CoverageCostToBeneficiaryException `json:"exception"`
+		Extension []*fhir.Extension                     `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Type              *fhir.CodeableConcept `json:"type"`
+		ValueQuantity     *fhir.Quantity        `json:"valueQuantity"`
+		ValueMoney        *fhir.Money           `json:"valueMoney"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cctb.Exception = raw.Exception
+	cctb.Extension = raw.Extension
+	cctb.ID = raw.ID
+	cctb.ModifierExtension = raw.ModifierExtension
+	cctb.Type = raw.Type
+	cctb.Value, err = validate.SelectOneOf[fhir.Element]("Coverage.costToBeneficiary.value",
+		raw.ValueQuantity,
+		raw.ValueMoney)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*CoverageCostToBeneficiary)(nil)
+var _ json.Unmarshaler = (*CoverageCostToBeneficiary)(nil)
+
+func (cctbe *CoverageCostToBeneficiaryException) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cctbe *CoverageCostToBeneficiaryException) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Period            *fhir.Period          `json:"period"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cctbe.Extension = raw.Extension
+	cctbe.ID = raw.ID
+	cctbe.ModifierExtension = raw.ModifierExtension
+	cctbe.Period = raw.Period
+	cctbe.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*CoverageCostToBeneficiaryException)(nil)
+var _ json.Unmarshaler = (*CoverageCostToBeneficiaryException)(nil)

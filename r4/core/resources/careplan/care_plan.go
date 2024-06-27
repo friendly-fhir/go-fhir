@@ -6,8 +6,11 @@
 package careplan
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Describes the intention of how one or more practitioners intend to deliver
@@ -996,3 +999,195 @@ func (cpad *CarePlanActivityDetail) GetStatusReason() *fhir.CodeableConcept {
 	}
 	return cpad.StatusReason
 }
+
+func (cp *CarePlan) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cp *CarePlan) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Activity    []*CarePlanActivity     `json:"activity"`
+		Addresses   []*fhir.Reference       `json:"addresses"`
+		Author      *fhir.Reference         `json:"author"`
+		BasedOn     []*fhir.Reference       `json:"basedOn"`
+		CareTeam    []*fhir.Reference       `json:"careTeam"`
+		Category    []*fhir.CodeableConcept `json:"category"`
+		Contained   []fhir.Resource         `json:"contained"`
+		Contributor []*fhir.Reference       `json:"contributor"`
+		Created     *fhir.DateTime          `json:"created"`
+		Description *fhir.String            `json:"description"`
+		Encounter   *fhir.Reference         `json:"encounter"`
+		Extension   []*fhir.Extension       `json:"extension"`
+		Goal        []*fhir.Reference       `json:"goal"`
+
+		ID                    string             `json:"id"`
+		Identifier            []*fhir.Identifier `json:"identifier"`
+		ImplicitRules         *fhir.URI          `json:"implicitRules"`
+		InstantiatesCanonical []*fhir.Canonical  `json:"instantiatesCanonical"`
+		InstantiatesURI       []*fhir.URI        `json:"instantiatesUri"`
+		Intent                *fhir.Code         `json:"intent"`
+		Language              *fhir.Code         `json:"language"`
+		Meta                  *fhir.Meta         `json:"meta"`
+		ModifierExtension     []*fhir.Extension  `json:"modifierExtension"`
+		Note                  []*fhir.Annotation `json:"note"`
+		PartOf                []*fhir.Reference  `json:"partOf"`
+		Period                *fhir.Period       `json:"period"`
+		Replaces              []*fhir.Reference  `json:"replaces"`
+		Status                *fhir.Code         `json:"status"`
+		Subject               *fhir.Reference    `json:"subject"`
+		SupportingInfo        []*fhir.Reference  `json:"supportingInfo"`
+		Text                  *fhir.Narrative    `json:"text"`
+		Title                 *fhir.String       `json:"title"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cp.Activity = raw.Activity
+	cp.Addresses = raw.Addresses
+	cp.Author = raw.Author
+	cp.BasedOn = raw.BasedOn
+	cp.CareTeam = raw.CareTeam
+	cp.Category = raw.Category
+	cp.Contained = raw.Contained
+	cp.Contributor = raw.Contributor
+	cp.Created = raw.Created
+	cp.Description = raw.Description
+	cp.Encounter = raw.Encounter
+	cp.Extension = raw.Extension
+	cp.Goal = raw.Goal
+	cp.ID = raw.ID
+	cp.Identifier = raw.Identifier
+	cp.ImplicitRules = raw.ImplicitRules
+	cp.InstantiatesCanonical = raw.InstantiatesCanonical
+	cp.InstantiatesURI = raw.InstantiatesURI
+	cp.Intent = raw.Intent
+	cp.Language = raw.Language
+	cp.Meta = raw.Meta
+	cp.ModifierExtension = raw.ModifierExtension
+	cp.Note = raw.Note
+	cp.PartOf = raw.PartOf
+	cp.Period = raw.Period
+	cp.Replaces = raw.Replaces
+	cp.Status = raw.Status
+	cp.Subject = raw.Subject
+	cp.SupportingInfo = raw.SupportingInfo
+	cp.Text = raw.Text
+	cp.Title = raw.Title
+	return nil
+}
+
+var _ json.Marshaler = (*CarePlan)(nil)
+var _ json.Unmarshaler = (*CarePlan)(nil)
+
+func (cpa *CarePlanActivity) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cpa *CarePlanActivity) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Detail    *CarePlanActivityDetail `json:"detail"`
+		Extension []*fhir.Extension       `json:"extension"`
+
+		ID                     string                  `json:"id"`
+		ModifierExtension      []*fhir.Extension       `json:"modifierExtension"`
+		OutcomeCodeableConcept []*fhir.CodeableConcept `json:"outcomeCodeableConcept"`
+		OutcomeReference       []*fhir.Reference       `json:"outcomeReference"`
+		Progress               []*fhir.Annotation      `json:"progress"`
+		Reference              *fhir.Reference         `json:"reference"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cpa.Detail = raw.Detail
+	cpa.Extension = raw.Extension
+	cpa.ID = raw.ID
+	cpa.ModifierExtension = raw.ModifierExtension
+	cpa.OutcomeCodeableConcept = raw.OutcomeCodeableConcept
+	cpa.OutcomeReference = raw.OutcomeReference
+	cpa.Progress = raw.Progress
+	cpa.Reference = raw.Reference
+	return nil
+}
+
+var _ json.Marshaler = (*CarePlanActivity)(nil)
+var _ json.Unmarshaler = (*CarePlanActivity)(nil)
+
+func (cpad *CarePlanActivityDetail) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cpad *CarePlanActivityDetail) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code         *fhir.CodeableConcept `json:"code"`
+		DailyAmount  *fhir.Quantity        `json:"dailyAmount"`
+		Description  *fhir.String          `json:"description"`
+		DoNotPerform *fhir.Boolean         `json:"doNotPerform"`
+		Extension    []*fhir.Extension     `json:"extension"`
+		Goal         []*fhir.Reference     `json:"goal"`
+
+		ID                     string                  `json:"id"`
+		InstantiatesCanonical  []*fhir.Canonical       `json:"instantiatesCanonical"`
+		InstantiatesURI        []*fhir.URI             `json:"instantiatesUri"`
+		Kind                   *fhir.Code              `json:"kind"`
+		Location               *fhir.Reference         `json:"location"`
+		ModifierExtension      []*fhir.Extension       `json:"modifierExtension"`
+		Performer              []*fhir.Reference       `json:"performer"`
+		ProductCodeableConcept *fhir.CodeableConcept   `json:"productCodeableConcept"`
+		ProductReference       *fhir.Reference         `json:"productReference"`
+		Quantity               *fhir.Quantity          `json:"quantity"`
+		ReasonCode             []*fhir.CodeableConcept `json:"reasonCode"`
+		ReasonReference        []*fhir.Reference       `json:"reasonReference"`
+		ScheduledTiming        *fhir.Timing            `json:"scheduledTiming"`
+		ScheduledPeriod        *fhir.Period            `json:"scheduledPeriod"`
+		ScheduledString        *fhir.String            `json:"scheduledString"`
+		Status                 *fhir.Code              `json:"status"`
+		StatusReason           *fhir.CodeableConcept   `json:"statusReason"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cpad.Code = raw.Code
+	cpad.DailyAmount = raw.DailyAmount
+	cpad.Description = raw.Description
+	cpad.DoNotPerform = raw.DoNotPerform
+	cpad.Extension = raw.Extension
+	cpad.Goal = raw.Goal
+	cpad.ID = raw.ID
+	cpad.InstantiatesCanonical = raw.InstantiatesCanonical
+	cpad.InstantiatesURI = raw.InstantiatesURI
+	cpad.Kind = raw.Kind
+	cpad.Location = raw.Location
+	cpad.ModifierExtension = raw.ModifierExtension
+	cpad.Performer = raw.Performer
+	cpad.Product, err = validate.SelectOneOf[fhir.Element]("CarePlan.activity.detail.product",
+		raw.ProductCodeableConcept,
+		raw.ProductReference)
+	if err != nil {
+		return err
+	}
+	cpad.Quantity = raw.Quantity
+	cpad.ReasonCode = raw.ReasonCode
+	cpad.ReasonReference = raw.ReasonReference
+	cpad.Scheduled, err = validate.SelectOneOf[fhir.Element]("CarePlan.activity.detail.scheduled",
+		raw.ScheduledTiming,
+		raw.ScheduledPeriod,
+		raw.ScheduledString)
+	if err != nil {
+		return err
+	}
+	cpad.Status = raw.Status
+	cpad.StatusReason = raw.StatusReason
+	return nil
+}
+
+var _ json.Marshaler = (*CarePlanActivityDetail)(nil)
+var _ json.Unmarshaler = (*CarePlanActivityDetail)(nil)

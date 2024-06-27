@@ -8,6 +8,8 @@ package endpoint
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The technical details of an endpoint that can be used for electronic
@@ -311,3 +313,61 @@ func (e *Endpoint) GetText() *fhir.Narrative {
 	}
 	return e.Text
 }
+
+func (e *Endpoint) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (e *Endpoint) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Address        *fhir.URL            `json:"address"`
+		ConnectionType *fhir.Coding         `json:"connectionType"`
+		Contact        []*fhir.ContactPoint `json:"contact"`
+		Contained      []fhir.Resource      `json:"contained"`
+		Extension      []*fhir.Extension    `json:"extension"`
+		Header         []*fhir.String       `json:"header"`
+
+		ID                   string                  `json:"id"`
+		Identifier           []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules        *fhir.URI               `json:"implicitRules"`
+		Language             *fhir.Code              `json:"language"`
+		ManagingOrganization *fhir.Reference         `json:"managingOrganization"`
+		Meta                 *fhir.Meta              `json:"meta"`
+		ModifierExtension    []*fhir.Extension       `json:"modifierExtension"`
+		Name                 *fhir.String            `json:"name"`
+		PayloadMimeType      []*fhir.Code            `json:"payloadMimeType"`
+		PayloadType          []*fhir.CodeableConcept `json:"payloadType"`
+		Period               *fhir.Period            `json:"period"`
+		Status               *fhir.Code              `json:"status"`
+		Text                 *fhir.Narrative         `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	e.Address = raw.Address
+	e.ConnectionType = raw.ConnectionType
+	e.Contact = raw.Contact
+	e.Contained = raw.Contained
+	e.Extension = raw.Extension
+	e.Header = raw.Header
+	e.ID = raw.ID
+	e.Identifier = raw.Identifier
+	e.ImplicitRules = raw.ImplicitRules
+	e.Language = raw.Language
+	e.ManagingOrganization = raw.ManagingOrganization
+	e.Meta = raw.Meta
+	e.ModifierExtension = raw.ModifierExtension
+	e.Name = raw.Name
+	e.PayloadMimeType = raw.PayloadMimeType
+	e.PayloadType = raw.PayloadType
+	e.Period = raw.Period
+	e.Status = raw.Status
+	e.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*Endpoint)(nil)
+var _ json.Unmarshaler = (*Endpoint)(nil)

@@ -8,6 +8,8 @@ package measurereport
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The MeasureReport resource contains the results of the calculation of a
@@ -988,3 +990,253 @@ func (mrgssp *MeasureReportGroupStratifierStratumPopulation) GetSubjectResults()
 	}
 	return mrgssp.SubjectResults
 }
+
+func (mr *MeasureReport) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mr *MeasureReport) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Contained         []fhir.Resource       `json:"contained"`
+		Date              *fhir.DateTime        `json:"date"`
+		EvaluatedResource []*fhir.Reference     `json:"evaluatedResource"`
+		Extension         []*fhir.Extension     `json:"extension"`
+		Group             []*MeasureReportGroup `json:"group"`
+
+		ID                  string                `json:"id"`
+		Identifier          []*fhir.Identifier    `json:"identifier"`
+		ImplicitRules       *fhir.URI             `json:"implicitRules"`
+		ImprovementNotation *fhir.CodeableConcept `json:"improvementNotation"`
+		Language            *fhir.Code            `json:"language"`
+		Measure             *fhir.Canonical       `json:"measure"`
+		Meta                *fhir.Meta            `json:"meta"`
+		ModifierExtension   []*fhir.Extension     `json:"modifierExtension"`
+		Period              *fhir.Period          `json:"period"`
+		Reporter            *fhir.Reference       `json:"reporter"`
+		Status              *fhir.Code            `json:"status"`
+		Subject             *fhir.Reference       `json:"subject"`
+		Text                *fhir.Narrative       `json:"text"`
+		Type                *fhir.Code            `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mr.Contained = raw.Contained
+	mr.Date = raw.Date
+	mr.EvaluatedResource = raw.EvaluatedResource
+	mr.Extension = raw.Extension
+	mr.Group = raw.Group
+	mr.ID = raw.ID
+	mr.Identifier = raw.Identifier
+	mr.ImplicitRules = raw.ImplicitRules
+	mr.ImprovementNotation = raw.ImprovementNotation
+	mr.Language = raw.Language
+	mr.Measure = raw.Measure
+	mr.Meta = raw.Meta
+	mr.ModifierExtension = raw.ModifierExtension
+	mr.Period = raw.Period
+	mr.Reporter = raw.Reporter
+	mr.Status = raw.Status
+	mr.Subject = raw.Subject
+	mr.Text = raw.Text
+	mr.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*MeasureReport)(nil)
+var _ json.Unmarshaler = (*MeasureReport)(nil)
+
+func (mrg *MeasureReportGroup) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mrg *MeasureReportGroup) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.CodeableConcept `json:"code"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string                          `json:"id"`
+		MeasureScore      *fhir.Quantity                  `json:"measureScore"`
+		ModifierExtension []*fhir.Extension               `json:"modifierExtension"`
+		Population        []*MeasureReportGroupPopulation `json:"population"`
+		Stratifier        []*MeasureReportGroupStratifier `json:"stratifier"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mrg.Code = raw.Code
+	mrg.Extension = raw.Extension
+	mrg.ID = raw.ID
+	mrg.MeasureScore = raw.MeasureScore
+	mrg.ModifierExtension = raw.ModifierExtension
+	mrg.Population = raw.Population
+	mrg.Stratifier = raw.Stratifier
+	return nil
+}
+
+var _ json.Marshaler = (*MeasureReportGroup)(nil)
+var _ json.Unmarshaler = (*MeasureReportGroup)(nil)
+
+func (mrgp *MeasureReportGroupPopulation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mrgp *MeasureReportGroupPopulation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.CodeableConcept `json:"code"`
+		Count     *fhir.Integer         `json:"count"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		SubjectResults    *fhir.Reference   `json:"subjectResults"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mrgp.Code = raw.Code
+	mrgp.Count = raw.Count
+	mrgp.Extension = raw.Extension
+	mrgp.ID = raw.ID
+	mrgp.ModifierExtension = raw.ModifierExtension
+	mrgp.SubjectResults = raw.SubjectResults
+	return nil
+}
+
+var _ json.Marshaler = (*MeasureReportGroupPopulation)(nil)
+var _ json.Unmarshaler = (*MeasureReportGroupPopulation)(nil)
+
+func (mrgs *MeasureReportGroupStratifier) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mrgs *MeasureReportGroupStratifier) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      []*fhir.CodeableConcept `json:"code"`
+		Extension []*fhir.Extension       `json:"extension"`
+
+		ID                string                                 `json:"id"`
+		ModifierExtension []*fhir.Extension                      `json:"modifierExtension"`
+		Stratum           []*MeasureReportGroupStratifierStratum `json:"stratum"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mrgs.Code = raw.Code
+	mrgs.Extension = raw.Extension
+	mrgs.ID = raw.ID
+	mrgs.ModifierExtension = raw.ModifierExtension
+	mrgs.Stratum = raw.Stratum
+	return nil
+}
+
+var _ json.Marshaler = (*MeasureReportGroupStratifier)(nil)
+var _ json.Unmarshaler = (*MeasureReportGroupStratifier)(nil)
+
+func (mrgss *MeasureReportGroupStratifierStratum) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mrgss *MeasureReportGroupStratifierStratum) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Component []*MeasureReportGroupStratifierStratumComponent `json:"component"`
+		Extension []*fhir.Extension                               `json:"extension"`
+
+		ID                string                                           `json:"id"`
+		MeasureScore      *fhir.Quantity                                   `json:"measureScore"`
+		ModifierExtension []*fhir.Extension                                `json:"modifierExtension"`
+		Population        []*MeasureReportGroupStratifierStratumPopulation `json:"population"`
+		Value             *fhir.CodeableConcept                            `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mrgss.Component = raw.Component
+	mrgss.Extension = raw.Extension
+	mrgss.ID = raw.ID
+	mrgss.MeasureScore = raw.MeasureScore
+	mrgss.ModifierExtension = raw.ModifierExtension
+	mrgss.Population = raw.Population
+	mrgss.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*MeasureReportGroupStratifierStratum)(nil)
+var _ json.Unmarshaler = (*MeasureReportGroupStratifierStratum)(nil)
+
+func (mrgssc *MeasureReportGroupStratifierStratumComponent) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mrgssc *MeasureReportGroupStratifierStratumComponent) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.CodeableConcept `json:"code"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Value             *fhir.CodeableConcept `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mrgssc.Code = raw.Code
+	mrgssc.Extension = raw.Extension
+	mrgssc.ID = raw.ID
+	mrgssc.ModifierExtension = raw.ModifierExtension
+	mrgssc.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*MeasureReportGroupStratifierStratumComponent)(nil)
+var _ json.Unmarshaler = (*MeasureReportGroupStratifierStratumComponent)(nil)
+
+func (mrgssp *MeasureReportGroupStratifierStratumPopulation) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mrgssp *MeasureReportGroupStratifierStratumPopulation) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.CodeableConcept `json:"code"`
+		Count     *fhir.Integer         `json:"count"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		SubjectResults    *fhir.Reference   `json:"subjectResults"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mrgssp.Code = raw.Code
+	mrgssp.Count = raw.Count
+	mrgssp.Extension = raw.Extension
+	mrgssp.ID = raw.ID
+	mrgssp.ModifierExtension = raw.ModifierExtension
+	mrgssp.SubjectResults = raw.SubjectResults
+	return nil
+}
+
+var _ json.Marshaler = (*MeasureReportGroupStratifierStratumPopulation)(nil)
+var _ json.Unmarshaler = (*MeasureReportGroupStratifierStratumPopulation)(nil)

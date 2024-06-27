@@ -8,6 +8,8 @@ package medicinalproductpackaged
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A medicinal product in a container or package.
@@ -587,3 +589,135 @@ func (mpppi *MedicinalProductPackagedPackageItem) GetType() *fhir.CodeableConcep
 	}
 	return mpppi.Type
 }
+
+func (mpp *MedicinalProductPackaged) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpp *MedicinalProductPackaged) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		BatchIdentifier []*MedicinalProductPackagedBatchIdentifier `json:"batchIdentifier"`
+		Contained       []fhir.Resource                            `json:"contained"`
+		Description     *fhir.String                               `json:"description"`
+		Extension       []*fhir.Extension                          `json:"extension"`
+
+		ID                     string                                 `json:"id"`
+		Identifier             []*fhir.Identifier                     `json:"identifier"`
+		ImplicitRules          *fhir.URI                              `json:"implicitRules"`
+		Language               *fhir.Code                             `json:"language"`
+		LegalStatusOfSupply    *fhir.CodeableConcept                  `json:"legalStatusOfSupply"`
+		Manufacturer           []*fhir.Reference                      `json:"manufacturer"`
+		MarketingAuthorization *fhir.Reference                        `json:"marketingAuthorization"`
+		MarketingStatus        []*fhir.MarketingStatus                `json:"marketingStatus"`
+		Meta                   *fhir.Meta                             `json:"meta"`
+		ModifierExtension      []*fhir.Extension                      `json:"modifierExtension"`
+		PackageItem            []*MedicinalProductPackagedPackageItem `json:"packageItem"`
+		Subject                []*fhir.Reference                      `json:"subject"`
+		Text                   *fhir.Narrative                        `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpp.BatchIdentifier = raw.BatchIdentifier
+	mpp.Contained = raw.Contained
+	mpp.Description = raw.Description
+	mpp.Extension = raw.Extension
+	mpp.ID = raw.ID
+	mpp.Identifier = raw.Identifier
+	mpp.ImplicitRules = raw.ImplicitRules
+	mpp.Language = raw.Language
+	mpp.LegalStatusOfSupply = raw.LegalStatusOfSupply
+	mpp.Manufacturer = raw.Manufacturer
+	mpp.MarketingAuthorization = raw.MarketingAuthorization
+	mpp.MarketingStatus = raw.MarketingStatus
+	mpp.Meta = raw.Meta
+	mpp.ModifierExtension = raw.ModifierExtension
+	mpp.PackageItem = raw.PackageItem
+	mpp.Subject = raw.Subject
+	mpp.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductPackaged)(nil)
+var _ json.Unmarshaler = (*MedicinalProductPackaged)(nil)
+
+func (mppbi *MedicinalProductPackagedBatchIdentifier) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mppbi *MedicinalProductPackagedBatchIdentifier) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                 string            `json:"id"`
+		ImmediatePackaging *fhir.Identifier  `json:"immediatePackaging"`
+		ModifierExtension  []*fhir.Extension `json:"modifierExtension"`
+		OuterPackaging     *fhir.Identifier  `json:"outerPackaging"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mppbi.Extension = raw.Extension
+	mppbi.ID = raw.ID
+	mppbi.ImmediatePackaging = raw.ImmediatePackaging
+	mppbi.ModifierExtension = raw.ModifierExtension
+	mppbi.OuterPackaging = raw.OuterPackaging
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductPackagedBatchIdentifier)(nil)
+var _ json.Unmarshaler = (*MedicinalProductPackagedBatchIdentifier)(nil)
+
+func (mpppi *MedicinalProductPackagedPackageItem) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (mpppi *MedicinalProductPackagedPackageItem) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AlternateMaterial []*fhir.CodeableConcept `json:"alternateMaterial"`
+		Device            []*fhir.Reference       `json:"device"`
+		Extension         []*fhir.Extension       `json:"extension"`
+
+		ID                      string                   `json:"id"`
+		Identifier              []*fhir.Identifier       `json:"identifier"`
+		ManufacturedItem        []*fhir.Reference        `json:"manufacturedItem"`
+		Manufacturer            []*fhir.Reference        `json:"manufacturer"`
+		Material                []*fhir.CodeableConcept  `json:"material"`
+		ModifierExtension       []*fhir.Extension        `json:"modifierExtension"`
+		OtherCharacteristics    []*fhir.CodeableConcept  `json:"otherCharacteristics"`
+		PhysicalCharacteristics *fhir.ProdCharacteristic `json:"physicalCharacteristics"`
+		Quantity                *fhir.Quantity           `json:"quantity"`
+		ShelfLifeStorage        []*fhir.ProductShelfLife `json:"shelfLifeStorage"`
+		Type                    *fhir.CodeableConcept    `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	mpppi.AlternateMaterial = raw.AlternateMaterial
+	mpppi.Device = raw.Device
+	mpppi.Extension = raw.Extension
+	mpppi.ID = raw.ID
+	mpppi.Identifier = raw.Identifier
+	mpppi.ManufacturedItem = raw.ManufacturedItem
+	mpppi.Manufacturer = raw.Manufacturer
+	mpppi.Material = raw.Material
+	mpppi.ModifierExtension = raw.ModifierExtension
+	mpppi.OtherCharacteristics = raw.OtherCharacteristics
+	mpppi.PhysicalCharacteristics = raw.PhysicalCharacteristics
+	mpppi.Quantity = raw.Quantity
+	mpppi.ShelfLifeStorage = raw.ShelfLifeStorage
+	mpppi.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*MedicinalProductPackagedPackageItem)(nil)
+var _ json.Unmarshaler = (*MedicinalProductPackagedPackageItem)(nil)

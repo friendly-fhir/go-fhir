@@ -8,6 +8,8 @@ package operationdefinition
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A formal computable definition of an operation (on the RESTful interface) or
@@ -1048,3 +1050,227 @@ func (odprf *OperationDefinitionParameterReferencedFrom) GetSourceID() *fhir.Str
 	}
 	return odprf.SourceID
 }
+
+func (od *OperationDefinition) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (od *OperationDefinition) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AffectsState *fhir.Boolean         `json:"affectsState"`
+		Base         *fhir.Canonical       `json:"base"`
+		Code         *fhir.Code            `json:"code"`
+		Comment      *fhir.Markdown        `json:"comment"`
+		Contact      []*fhir.ContactDetail `json:"contact"`
+		Contained    []fhir.Resource       `json:"contained"`
+		Date         *fhir.DateTime        `json:"date"`
+		Description  *fhir.Markdown        `json:"description"`
+		Experimental *fhir.Boolean         `json:"experimental"`
+		Extension    []*fhir.Extension     `json:"extension"`
+
+		ID                string                          `json:"id"`
+		ImplicitRules     *fhir.URI                       `json:"implicitRules"`
+		InputProfile      *fhir.Canonical                 `json:"inputProfile"`
+		Instance          *fhir.Boolean                   `json:"instance"`
+		Jurisdiction      []*fhir.CodeableConcept         `json:"jurisdiction"`
+		Kind              *fhir.Code                      `json:"kind"`
+		Language          *fhir.Code                      `json:"language"`
+		Meta              *fhir.Meta                      `json:"meta"`
+		ModifierExtension []*fhir.Extension               `json:"modifierExtension"`
+		Name              *fhir.String                    `json:"name"`
+		OutputProfile     *fhir.Canonical                 `json:"outputProfile"`
+		Overload          []*OperationDefinitionOverload  `json:"overload"`
+		Parameter         []*OperationDefinitionParameter `json:"parameter"`
+		Publisher         *fhir.String                    `json:"publisher"`
+		Purpose           *fhir.Markdown                  `json:"purpose"`
+		Resource          []*fhir.Code                    `json:"resource"`
+		Status            *fhir.Code                      `json:"status"`
+		System            *fhir.Boolean                   `json:"system"`
+		Text              *fhir.Narrative                 `json:"text"`
+		Title             *fhir.String                    `json:"title"`
+		Type              *fhir.Boolean                   `json:"type"`
+		URL               *fhir.URI                       `json:"url"`
+		UseContext        []*fhir.UsageContext            `json:"useContext"`
+		Version           *fhir.String                    `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	od.AffectsState = raw.AffectsState
+	od.Base = raw.Base
+	od.Code = raw.Code
+	od.Comment = raw.Comment
+	od.Contact = raw.Contact
+	od.Contained = raw.Contained
+	od.Date = raw.Date
+	od.Description = raw.Description
+	od.Experimental = raw.Experimental
+	od.Extension = raw.Extension
+	od.ID = raw.ID
+	od.ImplicitRules = raw.ImplicitRules
+	od.InputProfile = raw.InputProfile
+	od.Instance = raw.Instance
+	od.Jurisdiction = raw.Jurisdiction
+	od.Kind = raw.Kind
+	od.Language = raw.Language
+	od.Meta = raw.Meta
+	od.ModifierExtension = raw.ModifierExtension
+	od.Name = raw.Name
+	od.OutputProfile = raw.OutputProfile
+	od.Overload = raw.Overload
+	od.Parameter = raw.Parameter
+	od.Publisher = raw.Publisher
+	od.Purpose = raw.Purpose
+	od.Resource = raw.Resource
+	od.Status = raw.Status
+	od.System = raw.System
+	od.Text = raw.Text
+	od.Title = raw.Title
+	od.Type = raw.Type
+	od.URL = raw.URL
+	od.UseContext = raw.UseContext
+	od.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*OperationDefinition)(nil)
+var _ json.Unmarshaler = (*OperationDefinition)(nil)
+
+func (odo *OperationDefinitionOverload) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (odo *OperationDefinitionOverload) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Comment   *fhir.String      `json:"comment"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		ParameterName     []*fhir.String    `json:"parameterName"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	odo.Comment = raw.Comment
+	odo.Extension = raw.Extension
+	odo.ID = raw.ID
+	odo.ModifierExtension = raw.ModifierExtension
+	odo.ParameterName = raw.ParameterName
+	return nil
+}
+
+var _ json.Marshaler = (*OperationDefinitionOverload)(nil)
+var _ json.Unmarshaler = (*OperationDefinitionOverload)(nil)
+
+func (odp *OperationDefinitionParameter) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (odp *OperationDefinitionParameter) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Binding       *OperationDefinitionParameterBinding `json:"binding"`
+		Documentation *fhir.String                         `json:"documentation"`
+		Extension     []*fhir.Extension                    `json:"extension"`
+
+		ID                string                                        `json:"id"`
+		Max               *fhir.String                                  `json:"max"`
+		Min               *fhir.Integer                                 `json:"min"`
+		ModifierExtension []*fhir.Extension                             `json:"modifierExtension"`
+		Name              *fhir.Code                                    `json:"name"`
+		ReferencedFrom    []*OperationDefinitionParameterReferencedFrom `json:"referencedFrom"`
+		SearchType        *fhir.Code                                    `json:"searchType"`
+		TargetProfile     []*fhir.Canonical                             `json:"targetProfile"`
+		Type              *fhir.Code                                    `json:"type"`
+		Use               *fhir.Code                                    `json:"use"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	odp.Binding = raw.Binding
+	odp.Documentation = raw.Documentation
+	odp.Extension = raw.Extension
+	odp.ID = raw.ID
+	odp.Max = raw.Max
+	odp.Min = raw.Min
+	odp.ModifierExtension = raw.ModifierExtension
+	odp.Name = raw.Name
+	odp.ReferencedFrom = raw.ReferencedFrom
+	odp.SearchType = raw.SearchType
+	odp.TargetProfile = raw.TargetProfile
+	odp.Type = raw.Type
+	odp.Use = raw.Use
+	return nil
+}
+
+var _ json.Marshaler = (*OperationDefinitionParameter)(nil)
+var _ json.Unmarshaler = (*OperationDefinitionParameter)(nil)
+
+func (odpb *OperationDefinitionParameterBinding) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (odpb *OperationDefinitionParameterBinding) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Strength          *fhir.Code        `json:"strength"`
+		ValueSet          *fhir.Canonical   `json:"valueSet"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	odpb.Extension = raw.Extension
+	odpb.ID = raw.ID
+	odpb.ModifierExtension = raw.ModifierExtension
+	odpb.Strength = raw.Strength
+	odpb.ValueSet = raw.ValueSet
+	return nil
+}
+
+var _ json.Marshaler = (*OperationDefinitionParameterBinding)(nil)
+var _ json.Unmarshaler = (*OperationDefinitionParameterBinding)(nil)
+
+func (odprf *OperationDefinitionParameterReferencedFrom) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (odprf *OperationDefinitionParameterReferencedFrom) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Source            *fhir.String      `json:"source"`
+		SourceID          *fhir.String      `json:"sourceId"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	odprf.Extension = raw.Extension
+	odprf.ID = raw.ID
+	odprf.ModifierExtension = raw.ModifierExtension
+	odprf.Source = raw.Source
+	odprf.SourceID = raw.SourceID
+	return nil
+}
+
+var _ json.Marshaler = (*OperationDefinitionParameterReferencedFrom)(nil)
+var _ json.Unmarshaler = (*OperationDefinitionParameterReferencedFrom)(nil)

@@ -6,8 +6,11 @@
 package explanationofbenefit
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // This resource provides: the claim details; adjudication details from the
@@ -4381,3 +4384,999 @@ func (eobt *ExplanationOfBenefitTotal) GetModifierExtension() []*fhir.Extension 
 	}
 	return eobt.ModifierExtension
 }
+
+func (eob *ExplanationOfBenefit) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eob *ExplanationOfBenefit) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Accident              *ExplanationOfBenefitAccident         `json:"accident"`
+		AddItem               []*ExplanationOfBenefitAddItem        `json:"addItem"`
+		BenefitBalance        []*ExplanationOfBenefitBenefitBalance `json:"benefitBalance"`
+		BenefitPeriod         *fhir.Period                          `json:"benefitPeriod"`
+		BillablePeriod        *fhir.Period                          `json:"billablePeriod"`
+		CareTeam              []*ExplanationOfBenefitCareTeam       `json:"careTeam"`
+		Claim                 *fhir.Reference                       `json:"claim"`
+		ClaimResponse         *fhir.Reference                       `json:"claimResponse"`
+		Contained             []fhir.Resource                       `json:"contained"`
+		Created               *fhir.DateTime                        `json:"created"`
+		Diagnosis             []*ExplanationOfBenefitDiagnosis      `json:"diagnosis"`
+		Disposition           *fhir.String                          `json:"disposition"`
+		Enterer               *fhir.Reference                       `json:"enterer"`
+		Extension             []*fhir.Extension                     `json:"extension"`
+		Facility              *fhir.Reference                       `json:"facility"`
+		Form                  *fhir.Attachment                      `json:"form"`
+		FormCode              *fhir.CodeableConcept                 `json:"formCode"`
+		FundsReserve          *fhir.CodeableConcept                 `json:"fundsReserve"`
+		FundsReserveRequested *fhir.CodeableConcept                 `json:"fundsReserveRequested"`
+
+		ID                   string                                `json:"id"`
+		Identifier           []*fhir.Identifier                    `json:"identifier"`
+		ImplicitRules        *fhir.URI                             `json:"implicitRules"`
+		Insurance            []*ExplanationOfBenefitInsurance      `json:"insurance"`
+		Insurer              *fhir.Reference                       `json:"insurer"`
+		Item                 []*ExplanationOfBenefitItem           `json:"item"`
+		Language             *fhir.Code                            `json:"language"`
+		Meta                 *fhir.Meta                            `json:"meta"`
+		ModifierExtension    []*fhir.Extension                     `json:"modifierExtension"`
+		OriginalPrescription *fhir.Reference                       `json:"originalPrescription"`
+		Outcome              *fhir.Code                            `json:"outcome"`
+		Patient              *fhir.Reference                       `json:"patient"`
+		Payee                *ExplanationOfBenefitPayee            `json:"payee"`
+		Payment              *ExplanationOfBenefitPayment          `json:"payment"`
+		PreAuthRef           []*fhir.String                        `json:"preAuthRef"`
+		PreAuthRefPeriod     []*fhir.Period                        `json:"preAuthRefPeriod"`
+		Precedence           *fhir.PositiveInt                     `json:"precedence"`
+		Prescription         *fhir.Reference                       `json:"prescription"`
+		Priority             *fhir.CodeableConcept                 `json:"priority"`
+		Procedure            []*ExplanationOfBenefitProcedure      `json:"procedure"`
+		ProcessNote          []*ExplanationOfBenefitProcessNote    `json:"processNote"`
+		Provider             *fhir.Reference                       `json:"provider"`
+		Referral             *fhir.Reference                       `json:"referral"`
+		Related              []*ExplanationOfBenefitRelated        `json:"related"`
+		Status               *fhir.Code                            `json:"status"`
+		SubType              *fhir.CodeableConcept                 `json:"subType"`
+		SupportingInfo       []*ExplanationOfBenefitSupportingInfo `json:"supportingInfo"`
+		Text                 *fhir.Narrative                       `json:"text"`
+		Total                []*ExplanationOfBenefitTotal          `json:"total"`
+		Type                 *fhir.CodeableConcept                 `json:"type"`
+		Use                  *fhir.Code                            `json:"use"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eob.Accident = raw.Accident
+	eob.AddItem = raw.AddItem
+	eob.BenefitBalance = raw.BenefitBalance
+	eob.BenefitPeriod = raw.BenefitPeriod
+	eob.BillablePeriod = raw.BillablePeriod
+	eob.CareTeam = raw.CareTeam
+	eob.Claim = raw.Claim
+	eob.ClaimResponse = raw.ClaimResponse
+	eob.Contained = raw.Contained
+	eob.Created = raw.Created
+	eob.Diagnosis = raw.Diagnosis
+	eob.Disposition = raw.Disposition
+	eob.Enterer = raw.Enterer
+	eob.Extension = raw.Extension
+	eob.Facility = raw.Facility
+	eob.Form = raw.Form
+	eob.FormCode = raw.FormCode
+	eob.FundsReserve = raw.FundsReserve
+	eob.FundsReserveRequested = raw.FundsReserveRequested
+	eob.ID = raw.ID
+	eob.Identifier = raw.Identifier
+	eob.ImplicitRules = raw.ImplicitRules
+	eob.Insurance = raw.Insurance
+	eob.Insurer = raw.Insurer
+	eob.Item = raw.Item
+	eob.Language = raw.Language
+	eob.Meta = raw.Meta
+	eob.ModifierExtension = raw.ModifierExtension
+	eob.OriginalPrescription = raw.OriginalPrescription
+	eob.Outcome = raw.Outcome
+	eob.Patient = raw.Patient
+	eob.Payee = raw.Payee
+	eob.Payment = raw.Payment
+	eob.PreAuthRef = raw.PreAuthRef
+	eob.PreAuthRefPeriod = raw.PreAuthRefPeriod
+	eob.Precedence = raw.Precedence
+	eob.Prescription = raw.Prescription
+	eob.Priority = raw.Priority
+	eob.Procedure = raw.Procedure
+	eob.ProcessNote = raw.ProcessNote
+	eob.Provider = raw.Provider
+	eob.Referral = raw.Referral
+	eob.Related = raw.Related
+	eob.Status = raw.Status
+	eob.SubType = raw.SubType
+	eob.SupportingInfo = raw.SupportingInfo
+	eob.Text = raw.Text
+	eob.Total = raw.Total
+	eob.Type = raw.Type
+	eob.Use = raw.Use
+	return nil
+}
+
+var _ json.Marshaler = (*ExplanationOfBenefit)(nil)
+var _ json.Unmarshaler = (*ExplanationOfBenefit)(nil)
+
+func (eoba *ExplanationOfBenefitAccident) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eoba *ExplanationOfBenefitAccident) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Date      *fhir.Date        `json:"date"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		LocationAddress   *fhir.Address         `json:"locationAddress"`
+		LocationReference *fhir.Reference       `json:"locationReference"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eoba.Date = raw.Date
+	eoba.Extension = raw.Extension
+	eoba.ID = raw.ID
+	eoba.Location, err = validate.SelectOneOf[fhir.Element]("ExplanationOfBenefit.accident.location",
+		raw.LocationAddress,
+		raw.LocationReference)
+	if err != nil {
+		return err
+	}
+	eoba.ModifierExtension = raw.ModifierExtension
+	eoba.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ExplanationOfBenefitAccident)(nil)
+var _ json.Unmarshaler = (*ExplanationOfBenefitAccident)(nil)
+
+func (eobai *ExplanationOfBenefitAddItem) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eobai *ExplanationOfBenefitAddItem) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		BodySite       *fhir.CodeableConcept                `json:"bodySite"`
+		Detail         []*ExplanationOfBenefitAddItemDetail `json:"detail"`
+		DetailSequence []*fhir.PositiveInt                  `json:"detailSequence"`
+		Extension      []*fhir.Extension                    `json:"extension"`
+		Factor         *fhir.Decimal                        `json:"factor"`
+
+		ID                      string                  `json:"id"`
+		ItemSequence            []*fhir.PositiveInt     `json:"itemSequence"`
+		LocationCodeableConcept *fhir.CodeableConcept   `json:"locationCodeableConcept"`
+		LocationAddress         *fhir.Address           `json:"locationAddress"`
+		LocationReference       *fhir.Reference         `json:"locationReference"`
+		Modifier                []*fhir.CodeableConcept `json:"modifier"`
+		ModifierExtension       []*fhir.Extension       `json:"modifierExtension"`
+		Net                     *fhir.Money             `json:"net"`
+		NoteNumber              []*fhir.PositiveInt     `json:"noteNumber"`
+		ProductOrService        *fhir.CodeableConcept   `json:"productOrService"`
+		ProgramCode             []*fhir.CodeableConcept `json:"programCode"`
+		Provider                []*fhir.Reference       `json:"provider"`
+		Quantity                *fhir.Quantity          `json:"quantity"`
+		ServicedDate            *fhir.Date              `json:"servicedDate"`
+		ServicedPeriod          *fhir.Period            `json:"servicedPeriod"`
+		SubDetailSequence       []*fhir.PositiveInt     `json:"subDetailSequence"`
+		SubSite                 []*fhir.CodeableConcept `json:"subSite"`
+		UnitPrice               *fhir.Money             `json:"unitPrice"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eobai.BodySite = raw.BodySite
+	eobai.Detail = raw.Detail
+	eobai.DetailSequence = raw.DetailSequence
+	eobai.Extension = raw.Extension
+	eobai.Factor = raw.Factor
+	eobai.ID = raw.ID
+	eobai.ItemSequence = raw.ItemSequence
+	eobai.Location, err = validate.SelectOneOf[fhir.Element]("ExplanationOfBenefit.addItem.location",
+		raw.LocationCodeableConcept,
+		raw.LocationAddress,
+		raw.LocationReference)
+	if err != nil {
+		return err
+	}
+	eobai.Modifier = raw.Modifier
+	eobai.ModifierExtension = raw.ModifierExtension
+	eobai.Net = raw.Net
+	eobai.NoteNumber = raw.NoteNumber
+	eobai.ProductOrService = raw.ProductOrService
+	eobai.ProgramCode = raw.ProgramCode
+	eobai.Provider = raw.Provider
+	eobai.Quantity = raw.Quantity
+	eobai.Serviced, err = validate.SelectOneOf[fhir.Element]("ExplanationOfBenefit.addItem.serviced",
+		raw.ServicedDate,
+		raw.ServicedPeriod)
+	if err != nil {
+		return err
+	}
+	eobai.SubDetailSequence = raw.SubDetailSequence
+	eobai.SubSite = raw.SubSite
+	eobai.UnitPrice = raw.UnitPrice
+	return nil
+}
+
+var _ json.Marshaler = (*ExplanationOfBenefitAddItem)(nil)
+var _ json.Unmarshaler = (*ExplanationOfBenefitAddItem)(nil)
+
+func (eobaid *ExplanationOfBenefitAddItemDetail) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eobaid *ExplanationOfBenefitAddItemDetail) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+		Factor    *fhir.Decimal     `json:"factor"`
+
+		ID                string                                        `json:"id"`
+		Modifier          []*fhir.CodeableConcept                       `json:"modifier"`
+		ModifierExtension []*fhir.Extension                             `json:"modifierExtension"`
+		Net               *fhir.Money                                   `json:"net"`
+		NoteNumber        []*fhir.PositiveInt                           `json:"noteNumber"`
+		ProductOrService  *fhir.CodeableConcept                         `json:"productOrService"`
+		Quantity          *fhir.Quantity                                `json:"quantity"`
+		SubDetail         []*ExplanationOfBenefitAddItemDetailSubDetail `json:"subDetail"`
+		UnitPrice         *fhir.Money                                   `json:"unitPrice"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eobaid.Extension = raw.Extension
+	eobaid.Factor = raw.Factor
+	eobaid.ID = raw.ID
+	eobaid.Modifier = raw.Modifier
+	eobaid.ModifierExtension = raw.ModifierExtension
+	eobaid.Net = raw.Net
+	eobaid.NoteNumber = raw.NoteNumber
+	eobaid.ProductOrService = raw.ProductOrService
+	eobaid.Quantity = raw.Quantity
+	eobaid.SubDetail = raw.SubDetail
+	eobaid.UnitPrice = raw.UnitPrice
+	return nil
+}
+
+var _ json.Marshaler = (*ExplanationOfBenefitAddItemDetail)(nil)
+var _ json.Unmarshaler = (*ExplanationOfBenefitAddItemDetail)(nil)
+
+func (eobaidsd *ExplanationOfBenefitAddItemDetailSubDetail) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eobaidsd *ExplanationOfBenefitAddItemDetailSubDetail) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+		Factor    *fhir.Decimal     `json:"factor"`
+
+		ID                string                  `json:"id"`
+		Modifier          []*fhir.CodeableConcept `json:"modifier"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Net               *fhir.Money             `json:"net"`
+		NoteNumber        []*fhir.PositiveInt     `json:"noteNumber"`
+		ProductOrService  *fhir.CodeableConcept   `json:"productOrService"`
+		Quantity          *fhir.Quantity          `json:"quantity"`
+		UnitPrice         *fhir.Money             `json:"unitPrice"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eobaidsd.Extension = raw.Extension
+	eobaidsd.Factor = raw.Factor
+	eobaidsd.ID = raw.ID
+	eobaidsd.Modifier = raw.Modifier
+	eobaidsd.ModifierExtension = raw.ModifierExtension
+	eobaidsd.Net = raw.Net
+	eobaidsd.NoteNumber = raw.NoteNumber
+	eobaidsd.ProductOrService = raw.ProductOrService
+	eobaidsd.Quantity = raw.Quantity
+	eobaidsd.UnitPrice = raw.UnitPrice
+	return nil
+}
+
+var _ json.Marshaler = (*ExplanationOfBenefitAddItemDetailSubDetail)(nil)
+var _ json.Unmarshaler = (*ExplanationOfBenefitAddItemDetailSubDetail)(nil)
+
+func (eobbb *ExplanationOfBenefitBenefitBalance) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eobbb *ExplanationOfBenefitBenefitBalance) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Category    *fhir.CodeableConcept                          `json:"category"`
+		Description *fhir.String                                   `json:"description"`
+		Excluded    *fhir.Boolean                                  `json:"excluded"`
+		Extension   []*fhir.Extension                              `json:"extension"`
+		Financial   []*ExplanationOfBenefitBenefitBalanceFinancial `json:"financial"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Name              *fhir.String          `json:"name"`
+		Network           *fhir.CodeableConcept `json:"network"`
+		Term              *fhir.CodeableConcept `json:"term"`
+		Unit              *fhir.CodeableConcept `json:"unit"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eobbb.Category = raw.Category
+	eobbb.Description = raw.Description
+	eobbb.Excluded = raw.Excluded
+	eobbb.Extension = raw.Extension
+	eobbb.Financial = raw.Financial
+	eobbb.ID = raw.ID
+	eobbb.ModifierExtension = raw.ModifierExtension
+	eobbb.Name = raw.Name
+	eobbb.Network = raw.Network
+	eobbb.Term = raw.Term
+	eobbb.Unit = raw.Unit
+	return nil
+}
+
+var _ json.Marshaler = (*ExplanationOfBenefitBenefitBalance)(nil)
+var _ json.Unmarshaler = (*ExplanationOfBenefitBenefitBalance)(nil)
+
+func (eobbbf *ExplanationOfBenefitBenefitBalanceFinancial) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eobbbf *ExplanationOfBenefitBenefitBalanceFinancial) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AllowedUnsignedInt *fhir.UnsignedInt `json:"allowedUnsignedInt"`
+		AllowedString      *fhir.String      `json:"allowedString"`
+		AllowedMoney       *fhir.Money       `json:"allowedMoney"`
+		Extension          []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Type              *fhir.CodeableConcept `json:"type"`
+		UsedUnsignedInt   *fhir.UnsignedInt     `json:"usedUnsignedInt"`
+		UsedMoney         *fhir.Money           `json:"usedMoney"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eobbbf.Allowed, err = validate.SelectOneOf[fhir.Element]("ExplanationOfBenefit.benefitBalance.financial.allowed",
+		raw.AllowedUnsignedInt,
+		raw.AllowedString,
+		raw.AllowedMoney)
+	if err != nil {
+		return err
+	}
+	eobbbf.Extension = raw.Extension
+	eobbbf.ID = raw.ID
+	eobbbf.ModifierExtension = raw.ModifierExtension
+	eobbbf.Type = raw.Type
+	eobbbf.Used, err = validate.SelectOneOf[fhir.Element]("ExplanationOfBenefit.benefitBalance.financial.used",
+		raw.UsedUnsignedInt,
+		raw.UsedMoney)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*ExplanationOfBenefitBenefitBalanceFinancial)(nil)
+var _ json.Unmarshaler = (*ExplanationOfBenefitBenefitBalanceFinancial)(nil)
+
+func (eobct *ExplanationOfBenefitCareTeam) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eobct *ExplanationOfBenefitCareTeam) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Provider          *fhir.Reference       `json:"provider"`
+		Qualification     *fhir.CodeableConcept `json:"qualification"`
+		Responsible       *fhir.Boolean         `json:"responsible"`
+		Role              *fhir.CodeableConcept `json:"role"`
+		Sequence          *fhir.PositiveInt     `json:"sequence"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eobct.Extension = raw.Extension
+	eobct.ID = raw.ID
+	eobct.ModifierExtension = raw.ModifierExtension
+	eobct.Provider = raw.Provider
+	eobct.Qualification = raw.Qualification
+	eobct.Responsible = raw.Responsible
+	eobct.Role = raw.Role
+	eobct.Sequence = raw.Sequence
+	return nil
+}
+
+var _ json.Marshaler = (*ExplanationOfBenefitCareTeam)(nil)
+var _ json.Unmarshaler = (*ExplanationOfBenefitCareTeam)(nil)
+
+func (eobd *ExplanationOfBenefitDiagnosis) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eobd *ExplanationOfBenefitDiagnosis) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		DiagnosisCodeableConcept *fhir.CodeableConcept `json:"diagnosisCodeableConcept"`
+		DiagnosisReference       *fhir.Reference       `json:"diagnosisReference"`
+		Extension                []*fhir.Extension     `json:"extension"`
+
+		ID                string                  `json:"id"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		OnAdmission       *fhir.CodeableConcept   `json:"onAdmission"`
+		PackageCode       *fhir.CodeableConcept   `json:"packageCode"`
+		Sequence          *fhir.PositiveInt       `json:"sequence"`
+		Type              []*fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eobd.Diagnosis, err = validate.SelectOneOf[fhir.Element]("ExplanationOfBenefit.diagnosis.diagnosis",
+		raw.DiagnosisCodeableConcept,
+		raw.DiagnosisReference)
+	if err != nil {
+		return err
+	}
+	eobd.Extension = raw.Extension
+	eobd.ID = raw.ID
+	eobd.ModifierExtension = raw.ModifierExtension
+	eobd.OnAdmission = raw.OnAdmission
+	eobd.PackageCode = raw.PackageCode
+	eobd.Sequence = raw.Sequence
+	eobd.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ExplanationOfBenefitDiagnosis)(nil)
+var _ json.Unmarshaler = (*ExplanationOfBenefitDiagnosis)(nil)
+
+func (eobi *ExplanationOfBenefitInsurance) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eobi *ExplanationOfBenefitInsurance) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Coverage  *fhir.Reference   `json:"coverage"`
+		Extension []*fhir.Extension `json:"extension"`
+		Focal     *fhir.Boolean     `json:"focal"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		PreAuthRef        []*fhir.String    `json:"preAuthRef"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eobi.Coverage = raw.Coverage
+	eobi.Extension = raw.Extension
+	eobi.Focal = raw.Focal
+	eobi.ID = raw.ID
+	eobi.ModifierExtension = raw.ModifierExtension
+	eobi.PreAuthRef = raw.PreAuthRef
+	return nil
+}
+
+var _ json.Marshaler = (*ExplanationOfBenefitInsurance)(nil)
+var _ json.Unmarshaler = (*ExplanationOfBenefitInsurance)(nil)
+
+func (eobi *ExplanationOfBenefitItem) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eobi *ExplanationOfBenefitItem) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Adjudication      []*ExplanationOfBenefitItemAdjudication `json:"adjudication"`
+		BodySite          *fhir.CodeableConcept                   `json:"bodySite"`
+		CareTeamSequence  []*fhir.PositiveInt                     `json:"careTeamSequence"`
+		Category          *fhir.CodeableConcept                   `json:"category"`
+		Detail            []*ExplanationOfBenefitItemDetail       `json:"detail"`
+		DiagnosisSequence []*fhir.PositiveInt                     `json:"diagnosisSequence"`
+		Encounter         []*fhir.Reference                       `json:"encounter"`
+		Extension         []*fhir.Extension                       `json:"extension"`
+		Factor            *fhir.Decimal                           `json:"factor"`
+
+		ID                      string                  `json:"id"`
+		InformationSequence     []*fhir.PositiveInt     `json:"informationSequence"`
+		LocationCodeableConcept *fhir.CodeableConcept   `json:"locationCodeableConcept"`
+		LocationAddress         *fhir.Address           `json:"locationAddress"`
+		LocationReference       *fhir.Reference         `json:"locationReference"`
+		Modifier                []*fhir.CodeableConcept `json:"modifier"`
+		ModifierExtension       []*fhir.Extension       `json:"modifierExtension"`
+		Net                     *fhir.Money             `json:"net"`
+		NoteNumber              []*fhir.PositiveInt     `json:"noteNumber"`
+		ProcedureSequence       []*fhir.PositiveInt     `json:"procedureSequence"`
+		ProductOrService        *fhir.CodeableConcept   `json:"productOrService"`
+		ProgramCode             []*fhir.CodeableConcept `json:"programCode"`
+		Quantity                *fhir.Quantity          `json:"quantity"`
+		Revenue                 *fhir.CodeableConcept   `json:"revenue"`
+		Sequence                *fhir.PositiveInt       `json:"sequence"`
+		ServicedDate            *fhir.Date              `json:"servicedDate"`
+		ServicedPeriod          *fhir.Period            `json:"servicedPeriod"`
+		SubSite                 []*fhir.CodeableConcept `json:"subSite"`
+		Udi                     []*fhir.Reference       `json:"udi"`
+		UnitPrice               *fhir.Money             `json:"unitPrice"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eobi.Adjudication = raw.Adjudication
+	eobi.BodySite = raw.BodySite
+	eobi.CareTeamSequence = raw.CareTeamSequence
+	eobi.Category = raw.Category
+	eobi.Detail = raw.Detail
+	eobi.DiagnosisSequence = raw.DiagnosisSequence
+	eobi.Encounter = raw.Encounter
+	eobi.Extension = raw.Extension
+	eobi.Factor = raw.Factor
+	eobi.ID = raw.ID
+	eobi.InformationSequence = raw.InformationSequence
+	eobi.Location, err = validate.SelectOneOf[fhir.Element]("ExplanationOfBenefit.item.location",
+		raw.LocationCodeableConcept,
+		raw.LocationAddress,
+		raw.LocationReference)
+	if err != nil {
+		return err
+	}
+	eobi.Modifier = raw.Modifier
+	eobi.ModifierExtension = raw.ModifierExtension
+	eobi.Net = raw.Net
+	eobi.NoteNumber = raw.NoteNumber
+	eobi.ProcedureSequence = raw.ProcedureSequence
+	eobi.ProductOrService = raw.ProductOrService
+	eobi.ProgramCode = raw.ProgramCode
+	eobi.Quantity = raw.Quantity
+	eobi.Revenue = raw.Revenue
+	eobi.Sequence = raw.Sequence
+	eobi.Serviced, err = validate.SelectOneOf[fhir.Element]("ExplanationOfBenefit.item.serviced",
+		raw.ServicedDate,
+		raw.ServicedPeriod)
+	if err != nil {
+		return err
+	}
+	eobi.SubSite = raw.SubSite
+	eobi.Udi = raw.Udi
+	eobi.UnitPrice = raw.UnitPrice
+	return nil
+}
+
+var _ json.Marshaler = (*ExplanationOfBenefitItem)(nil)
+var _ json.Unmarshaler = (*ExplanationOfBenefitItem)(nil)
+
+func (eobia *ExplanationOfBenefitItemAdjudication) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eobia *ExplanationOfBenefitItemAdjudication) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Amount    *fhir.Money           `json:"amount"`
+		Category  *fhir.CodeableConcept `json:"category"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Reason            *fhir.CodeableConcept `json:"reason"`
+		Value             *fhir.Decimal         `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eobia.Amount = raw.Amount
+	eobia.Category = raw.Category
+	eobia.Extension = raw.Extension
+	eobia.ID = raw.ID
+	eobia.ModifierExtension = raw.ModifierExtension
+	eobia.Reason = raw.Reason
+	eobia.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*ExplanationOfBenefitItemAdjudication)(nil)
+var _ json.Unmarshaler = (*ExplanationOfBenefitItemAdjudication)(nil)
+
+func (eobid *ExplanationOfBenefitItemDetail) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eobid *ExplanationOfBenefitItemDetail) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Category  *fhir.CodeableConcept `json:"category"`
+		Extension []*fhir.Extension     `json:"extension"`
+		Factor    *fhir.Decimal         `json:"factor"`
+
+		ID                string                                     `json:"id"`
+		Modifier          []*fhir.CodeableConcept                    `json:"modifier"`
+		ModifierExtension []*fhir.Extension                          `json:"modifierExtension"`
+		Net               *fhir.Money                                `json:"net"`
+		NoteNumber        []*fhir.PositiveInt                        `json:"noteNumber"`
+		ProductOrService  *fhir.CodeableConcept                      `json:"productOrService"`
+		ProgramCode       []*fhir.CodeableConcept                    `json:"programCode"`
+		Quantity          *fhir.Quantity                             `json:"quantity"`
+		Revenue           *fhir.CodeableConcept                      `json:"revenue"`
+		Sequence          *fhir.PositiveInt                          `json:"sequence"`
+		SubDetail         []*ExplanationOfBenefitItemDetailSubDetail `json:"subDetail"`
+		Udi               []*fhir.Reference                          `json:"udi"`
+		UnitPrice         *fhir.Money                                `json:"unitPrice"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eobid.Category = raw.Category
+	eobid.Extension = raw.Extension
+	eobid.Factor = raw.Factor
+	eobid.ID = raw.ID
+	eobid.Modifier = raw.Modifier
+	eobid.ModifierExtension = raw.ModifierExtension
+	eobid.Net = raw.Net
+	eobid.NoteNumber = raw.NoteNumber
+	eobid.ProductOrService = raw.ProductOrService
+	eobid.ProgramCode = raw.ProgramCode
+	eobid.Quantity = raw.Quantity
+	eobid.Revenue = raw.Revenue
+	eobid.Sequence = raw.Sequence
+	eobid.SubDetail = raw.SubDetail
+	eobid.Udi = raw.Udi
+	eobid.UnitPrice = raw.UnitPrice
+	return nil
+}
+
+var _ json.Marshaler = (*ExplanationOfBenefitItemDetail)(nil)
+var _ json.Unmarshaler = (*ExplanationOfBenefitItemDetail)(nil)
+
+func (eobidsd *ExplanationOfBenefitItemDetailSubDetail) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eobidsd *ExplanationOfBenefitItemDetailSubDetail) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Category  *fhir.CodeableConcept `json:"category"`
+		Extension []*fhir.Extension     `json:"extension"`
+		Factor    *fhir.Decimal         `json:"factor"`
+
+		ID                string                  `json:"id"`
+		Modifier          []*fhir.CodeableConcept `json:"modifier"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Net               *fhir.Money             `json:"net"`
+		NoteNumber        []*fhir.PositiveInt     `json:"noteNumber"`
+		ProductOrService  *fhir.CodeableConcept   `json:"productOrService"`
+		ProgramCode       []*fhir.CodeableConcept `json:"programCode"`
+		Quantity          *fhir.Quantity          `json:"quantity"`
+		Revenue           *fhir.CodeableConcept   `json:"revenue"`
+		Sequence          *fhir.PositiveInt       `json:"sequence"`
+		Udi               []*fhir.Reference       `json:"udi"`
+		UnitPrice         *fhir.Money             `json:"unitPrice"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eobidsd.Category = raw.Category
+	eobidsd.Extension = raw.Extension
+	eobidsd.Factor = raw.Factor
+	eobidsd.ID = raw.ID
+	eobidsd.Modifier = raw.Modifier
+	eobidsd.ModifierExtension = raw.ModifierExtension
+	eobidsd.Net = raw.Net
+	eobidsd.NoteNumber = raw.NoteNumber
+	eobidsd.ProductOrService = raw.ProductOrService
+	eobidsd.ProgramCode = raw.ProgramCode
+	eobidsd.Quantity = raw.Quantity
+	eobidsd.Revenue = raw.Revenue
+	eobidsd.Sequence = raw.Sequence
+	eobidsd.Udi = raw.Udi
+	eobidsd.UnitPrice = raw.UnitPrice
+	return nil
+}
+
+var _ json.Marshaler = (*ExplanationOfBenefitItemDetailSubDetail)(nil)
+var _ json.Unmarshaler = (*ExplanationOfBenefitItemDetailSubDetail)(nil)
+
+func (eobp *ExplanationOfBenefitPayee) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eobp *ExplanationOfBenefitPayee) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Party             *fhir.Reference       `json:"party"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eobp.Extension = raw.Extension
+	eobp.ID = raw.ID
+	eobp.ModifierExtension = raw.ModifierExtension
+	eobp.Party = raw.Party
+	eobp.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ExplanationOfBenefitPayee)(nil)
+var _ json.Unmarshaler = (*ExplanationOfBenefitPayee)(nil)
+
+func (eobp *ExplanationOfBenefitPayment) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eobp *ExplanationOfBenefitPayment) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Adjustment       *fhir.Money           `json:"adjustment"`
+		AdjustmentReason *fhir.CodeableConcept `json:"adjustmentReason"`
+		Amount           *fhir.Money           `json:"amount"`
+		Date             *fhir.Date            `json:"date"`
+		Extension        []*fhir.Extension     `json:"extension"`
+
+		ID                string                `json:"id"`
+		Identifier        *fhir.Identifier      `json:"identifier"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eobp.Adjustment = raw.Adjustment
+	eobp.AdjustmentReason = raw.AdjustmentReason
+	eobp.Amount = raw.Amount
+	eobp.Date = raw.Date
+	eobp.Extension = raw.Extension
+	eobp.ID = raw.ID
+	eobp.Identifier = raw.Identifier
+	eobp.ModifierExtension = raw.ModifierExtension
+	eobp.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ExplanationOfBenefitPayment)(nil)
+var _ json.Unmarshaler = (*ExplanationOfBenefitPayment)(nil)
+
+func (eobp *ExplanationOfBenefitProcedure) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eobp *ExplanationOfBenefitProcedure) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Date      *fhir.DateTime    `json:"date"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                       string                  `json:"id"`
+		ModifierExtension        []*fhir.Extension       `json:"modifierExtension"`
+		ProcedureCodeableConcept *fhir.CodeableConcept   `json:"procedureCodeableConcept"`
+		ProcedureReference       *fhir.Reference         `json:"procedureReference"`
+		Sequence                 *fhir.PositiveInt       `json:"sequence"`
+		Type                     []*fhir.CodeableConcept `json:"type"`
+		Udi                      []*fhir.Reference       `json:"udi"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eobp.Date = raw.Date
+	eobp.Extension = raw.Extension
+	eobp.ID = raw.ID
+	eobp.ModifierExtension = raw.ModifierExtension
+	eobp.Procedure, err = validate.SelectOneOf[fhir.Element]("ExplanationOfBenefit.procedure.procedure",
+		raw.ProcedureCodeableConcept,
+		raw.ProcedureReference)
+	if err != nil {
+		return err
+	}
+	eobp.Sequence = raw.Sequence
+	eobp.Type = raw.Type
+	eobp.Udi = raw.Udi
+	return nil
+}
+
+var _ json.Marshaler = (*ExplanationOfBenefitProcedure)(nil)
+var _ json.Unmarshaler = (*ExplanationOfBenefitProcedure)(nil)
+
+func (eobpn *ExplanationOfBenefitProcessNote) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eobpn *ExplanationOfBenefitProcessNote) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		Language          *fhir.CodeableConcept `json:"language"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Number            *fhir.PositiveInt     `json:"number"`
+		Text              *fhir.String          `json:"text"`
+		Type              *fhir.Code            `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eobpn.Extension = raw.Extension
+	eobpn.ID = raw.ID
+	eobpn.Language = raw.Language
+	eobpn.ModifierExtension = raw.ModifierExtension
+	eobpn.Number = raw.Number
+	eobpn.Text = raw.Text
+	eobpn.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ExplanationOfBenefitProcessNote)(nil)
+var _ json.Unmarshaler = (*ExplanationOfBenefitProcessNote)(nil)
+
+func (eobr *ExplanationOfBenefitRelated) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eobr *ExplanationOfBenefitRelated) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Claim     *fhir.Reference   `json:"claim"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Reference         *fhir.Identifier      `json:"reference"`
+		Relationship      *fhir.CodeableConcept `json:"relationship"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eobr.Claim = raw.Claim
+	eobr.Extension = raw.Extension
+	eobr.ID = raw.ID
+	eobr.ModifierExtension = raw.ModifierExtension
+	eobr.Reference = raw.Reference
+	eobr.Relationship = raw.Relationship
+	return nil
+}
+
+var _ json.Marshaler = (*ExplanationOfBenefitRelated)(nil)
+var _ json.Unmarshaler = (*ExplanationOfBenefitRelated)(nil)
+
+func (eobsi *ExplanationOfBenefitSupportingInfo) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eobsi *ExplanationOfBenefitSupportingInfo) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Category  *fhir.CodeableConcept `json:"category"`
+		Code      *fhir.CodeableConcept `json:"code"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Reason            *fhir.Coding      `json:"reason"`
+		Sequence          *fhir.PositiveInt `json:"sequence"`
+		TimingDate        *fhir.Date        `json:"timingDate"`
+		TimingPeriod      *fhir.Period      `json:"timingPeriod"`
+		ValueBoolean      *fhir.Boolean     `json:"valueBoolean"`
+		ValueString       *fhir.String      `json:"valueString"`
+		ValueQuantity     *fhir.Quantity    `json:"valueQuantity"`
+		ValueAttachment   *fhir.Attachment  `json:"valueAttachment"`
+		ValueReference    *fhir.Reference   `json:"valueReference"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eobsi.Category = raw.Category
+	eobsi.Code = raw.Code
+	eobsi.Extension = raw.Extension
+	eobsi.ID = raw.ID
+	eobsi.ModifierExtension = raw.ModifierExtension
+	eobsi.Reason = raw.Reason
+	eobsi.Sequence = raw.Sequence
+	eobsi.Timing, err = validate.SelectOneOf[fhir.Element]("ExplanationOfBenefit.supportingInfo.timing",
+		raw.TimingDate,
+		raw.TimingPeriod)
+	if err != nil {
+		return err
+	}
+	eobsi.Value, err = validate.SelectOneOf[fhir.Element]("ExplanationOfBenefit.supportingInfo.value",
+		raw.ValueBoolean,
+		raw.ValueString,
+		raw.ValueQuantity,
+		raw.ValueAttachment,
+		raw.ValueReference)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*ExplanationOfBenefitSupportingInfo)(nil)
+var _ json.Unmarshaler = (*ExplanationOfBenefitSupportingInfo)(nil)
+
+func (eobt *ExplanationOfBenefitTotal) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (eobt *ExplanationOfBenefitTotal) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Amount    *fhir.Money           `json:"amount"`
+		Category  *fhir.CodeableConcept `json:"category"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	eobt.Amount = raw.Amount
+	eobt.Category = raw.Category
+	eobt.Extension = raw.Extension
+	eobt.ID = raw.ID
+	eobt.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*ExplanationOfBenefitTotal)(nil)
+var _ json.Unmarshaler = (*ExplanationOfBenefitTotal)(nil)

@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for MarketingStatus Type: The marketing status
@@ -161,3 +163,39 @@ func (ms *MarketingStatus) GetStatus() *CodeableConcept {
 	}
 	return ms.Status
 }
+
+func (ms *MarketingStatus) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ms *MarketingStatus) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Country   *CodeableConcept `json:"country"`
+		DateRange *Period          `json:"dateRange"`
+		Extension []*Extension     `json:"extension"`
+
+		ID                string           `json:"id"`
+		Jurisdiction      *CodeableConcept `json:"jurisdiction"`
+		ModifierExtension []*Extension     `json:"modifierExtension"`
+		RestoreDate       *DateTime        `json:"restoreDate"`
+		Status            *CodeableConcept `json:"status"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ms.Country = raw.Country
+	ms.DateRange = raw.DateRange
+	ms.Extension = raw.Extension
+	ms.ID = raw.ID
+	ms.Jurisdiction = raw.Jurisdiction
+	ms.ModifierExtension = raw.ModifierExtension
+	ms.RestoreDate = raw.RestoreDate
+	ms.Status = raw.Status
+	return nil
+}
+
+var _ json.Marshaler = (*MarketingStatus)(nil)
+var _ json.Unmarshaler = (*MarketingStatus)(nil)

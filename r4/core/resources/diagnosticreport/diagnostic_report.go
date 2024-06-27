@@ -6,8 +6,11 @@
 package diagnosticreport
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The findings and interpretation of diagnostic tests performed on patients,
@@ -536,3 +539,111 @@ func (drm *DiagnosticReportMedia) GetModifierExtension() []*fhir.Extension {
 	}
 	return drm.ModifierExtension
 }
+
+func (dr *DiagnosticReport) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (dr *DiagnosticReport) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		BasedOn           []*fhir.Reference       `json:"basedOn"`
+		Category          []*fhir.CodeableConcept `json:"category"`
+		Code              *fhir.CodeableConcept   `json:"code"`
+		Conclusion        *fhir.String            `json:"conclusion"`
+		ConclusionCode    []*fhir.CodeableConcept `json:"conclusionCode"`
+		Contained         []fhir.Resource         `json:"contained"`
+		EffectiveDateTime *fhir.DateTime          `json:"effectiveDateTime"`
+		EffectivePeriod   *fhir.Period            `json:"effectivePeriod"`
+		Encounter         *fhir.Reference         `json:"encounter"`
+		Extension         []*fhir.Extension       `json:"extension"`
+
+		ID                 string                   `json:"id"`
+		Identifier         []*fhir.Identifier       `json:"identifier"`
+		ImagingStudy       []*fhir.Reference        `json:"imagingStudy"`
+		ImplicitRules      *fhir.URI                `json:"implicitRules"`
+		Issued             *fhir.Instant            `json:"issued"`
+		Language           *fhir.Code               `json:"language"`
+		Media              []*DiagnosticReportMedia `json:"media"`
+		Meta               *fhir.Meta               `json:"meta"`
+		ModifierExtension  []*fhir.Extension        `json:"modifierExtension"`
+		Performer          []*fhir.Reference        `json:"performer"`
+		PresentedForm      []*fhir.Attachment       `json:"presentedForm"`
+		Result             []*fhir.Reference        `json:"result"`
+		ResultsInterpreter []*fhir.Reference        `json:"resultsInterpreter"`
+		Specimen           []*fhir.Reference        `json:"specimen"`
+		Status             *fhir.Code               `json:"status"`
+		Subject            *fhir.Reference          `json:"subject"`
+		Text               *fhir.Narrative          `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	dr.BasedOn = raw.BasedOn
+	dr.Category = raw.Category
+	dr.Code = raw.Code
+	dr.Conclusion = raw.Conclusion
+	dr.ConclusionCode = raw.ConclusionCode
+	dr.Contained = raw.Contained
+	dr.Effective, err = validate.SelectOneOf[fhir.Element]("DiagnosticReport.effective",
+		raw.EffectiveDateTime,
+		raw.EffectivePeriod)
+	if err != nil {
+		return err
+	}
+	dr.Encounter = raw.Encounter
+	dr.Extension = raw.Extension
+	dr.ID = raw.ID
+	dr.Identifier = raw.Identifier
+	dr.ImagingStudy = raw.ImagingStudy
+	dr.ImplicitRules = raw.ImplicitRules
+	dr.Issued = raw.Issued
+	dr.Language = raw.Language
+	dr.Media = raw.Media
+	dr.Meta = raw.Meta
+	dr.ModifierExtension = raw.ModifierExtension
+	dr.Performer = raw.Performer
+	dr.PresentedForm = raw.PresentedForm
+	dr.Result = raw.Result
+	dr.ResultsInterpreter = raw.ResultsInterpreter
+	dr.Specimen = raw.Specimen
+	dr.Status = raw.Status
+	dr.Subject = raw.Subject
+	dr.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*DiagnosticReport)(nil)
+var _ json.Unmarshaler = (*DiagnosticReport)(nil)
+
+func (drm *DiagnosticReportMedia) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (drm *DiagnosticReportMedia) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Comment   *fhir.String      `json:"comment"`
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		Link              *fhir.Reference   `json:"link"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	drm.Comment = raw.Comment
+	drm.Extension = raw.Extension
+	drm.ID = raw.ID
+	drm.Link = raw.Link
+	drm.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*DiagnosticReportMedia)(nil)
+var _ json.Unmarshaler = (*DiagnosticReportMedia)(nil)

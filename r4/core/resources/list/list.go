@@ -8,6 +8,8 @@ package list
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A list is a curated collection of resources.
@@ -455,3 +457,99 @@ func (le *ListEntry) GetModifierExtension() []*fhir.Extension {
 	}
 	return le.ModifierExtension
 }
+
+func (l *List) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (l *List) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code        *fhir.CodeableConcept `json:"code"`
+		Contained   []fhir.Resource       `json:"contained"`
+		Date        *fhir.DateTime        `json:"date"`
+		EmptyReason *fhir.CodeableConcept `json:"emptyReason"`
+		Encounter   *fhir.Reference       `json:"encounter"`
+		Entry       []*ListEntry          `json:"entry"`
+		Extension   []*fhir.Extension     `json:"extension"`
+
+		ID                string                `json:"id"`
+		Identifier        []*fhir.Identifier    `json:"identifier"`
+		ImplicitRules     *fhir.URI             `json:"implicitRules"`
+		Language          *fhir.Code            `json:"language"`
+		Meta              *fhir.Meta            `json:"meta"`
+		Mode              *fhir.Code            `json:"mode"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Note              []*fhir.Annotation    `json:"note"`
+		OrderedBy         *fhir.CodeableConcept `json:"orderedBy"`
+		Source            *fhir.Reference       `json:"source"`
+		Status            *fhir.Code            `json:"status"`
+		Subject           *fhir.Reference       `json:"subject"`
+		Text              *fhir.Narrative       `json:"text"`
+		Title             *fhir.String          `json:"title"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	l.Code = raw.Code
+	l.Contained = raw.Contained
+	l.Date = raw.Date
+	l.EmptyReason = raw.EmptyReason
+	l.Encounter = raw.Encounter
+	l.Entry = raw.Entry
+	l.Extension = raw.Extension
+	l.ID = raw.ID
+	l.Identifier = raw.Identifier
+	l.ImplicitRules = raw.ImplicitRules
+	l.Language = raw.Language
+	l.Meta = raw.Meta
+	l.Mode = raw.Mode
+	l.ModifierExtension = raw.ModifierExtension
+	l.Note = raw.Note
+	l.OrderedBy = raw.OrderedBy
+	l.Source = raw.Source
+	l.Status = raw.Status
+	l.Subject = raw.Subject
+	l.Text = raw.Text
+	l.Title = raw.Title
+	return nil
+}
+
+var _ json.Marshaler = (*List)(nil)
+var _ json.Unmarshaler = (*List)(nil)
+
+func (le *ListEntry) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (le *ListEntry) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Date      *fhir.DateTime        `json:"date"`
+		Deleted   *fhir.Boolean         `json:"deleted"`
+		Extension []*fhir.Extension     `json:"extension"`
+		Flag      *fhir.CodeableConcept `json:"flag"`
+
+		ID                string            `json:"id"`
+		Item              *fhir.Reference   `json:"item"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	le.Date = raw.Date
+	le.Deleted = raw.Deleted
+	le.Extension = raw.Extension
+	le.Flag = raw.Flag
+	le.ID = raw.ID
+	le.Item = raw.Item
+	le.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*ListEntry)(nil)
+var _ json.Unmarshaler = (*ListEntry)(nil)

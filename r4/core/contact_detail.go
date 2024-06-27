@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for ContactDetail Type: Specifies contact
@@ -80,3 +82,31 @@ func (cd *ContactDetail) GetTelecom() []*ContactPoint {
 	}
 	return cd.Telecom
 }
+
+func (cd *ContactDetail) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (cd *ContactDetail) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*Extension `json:"extension"`
+
+		ID      string          `json:"id"`
+		Name    *String         `json:"name"`
+		Telecom []*ContactPoint `json:"telecom"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	cd.Extension = raw.Extension
+	cd.ID = raw.ID
+	cd.Name = raw.Name
+	cd.Telecom = raw.Telecom
+	return nil
+}
+
+var _ json.Marshaler = (*ContactDetail)(nil)
+var _ json.Unmarshaler = (*ContactDetail)(nil)

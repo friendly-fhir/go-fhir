@@ -6,8 +6,11 @@
 package supplyrequest
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A record of a request for a medication, substance or device used in the
@@ -560,3 +563,123 @@ func (srp *SupplyRequestParameter) GetValueBoolean() *fhir.Boolean {
 	}
 	return val
 }
+
+func (sr *SupplyRequest) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (sr *SupplyRequest) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AuthoredOn  *fhir.DateTime        `json:"authoredOn"`
+		Category    *fhir.CodeableConcept `json:"category"`
+		Contained   []fhir.Resource       `json:"contained"`
+		DeliverFrom *fhir.Reference       `json:"deliverFrom"`
+		DeliverTo   *fhir.Reference       `json:"deliverTo"`
+		Extension   []*fhir.Extension     `json:"extension"`
+
+		ID                  string                    `json:"id"`
+		Identifier          []*fhir.Identifier        `json:"identifier"`
+		ImplicitRules       *fhir.URI                 `json:"implicitRules"`
+		ItemCodeableConcept *fhir.CodeableConcept     `json:"itemCodeableConcept"`
+		ItemReference       *fhir.Reference           `json:"itemReference"`
+		Language            *fhir.Code                `json:"language"`
+		Meta                *fhir.Meta                `json:"meta"`
+		ModifierExtension   []*fhir.Extension         `json:"modifierExtension"`
+		OccurrenceDateTime  *fhir.DateTime            `json:"occurrenceDateTime"`
+		OccurrencePeriod    *fhir.Period              `json:"occurrencePeriod"`
+		OccurrenceTiming    *fhir.Timing              `json:"occurrenceTiming"`
+		Parameter           []*SupplyRequestParameter `json:"parameter"`
+		Priority            *fhir.Code                `json:"priority"`
+		Quantity            *fhir.Quantity            `json:"quantity"`
+		ReasonCode          []*fhir.CodeableConcept   `json:"reasonCode"`
+		ReasonReference     []*fhir.Reference         `json:"reasonReference"`
+		Requester           *fhir.Reference           `json:"requester"`
+		Status              *fhir.Code                `json:"status"`
+		Supplier            []*fhir.Reference         `json:"supplier"`
+		Text                *fhir.Narrative           `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	sr.AuthoredOn = raw.AuthoredOn
+	sr.Category = raw.Category
+	sr.Contained = raw.Contained
+	sr.DeliverFrom = raw.DeliverFrom
+	sr.DeliverTo = raw.DeliverTo
+	sr.Extension = raw.Extension
+	sr.ID = raw.ID
+	sr.Identifier = raw.Identifier
+	sr.ImplicitRules = raw.ImplicitRules
+	sr.Item, err = validate.SelectOneOf[fhir.Element]("SupplyRequest.item",
+		raw.ItemCodeableConcept,
+		raw.ItemReference)
+	if err != nil {
+		return err
+	}
+	sr.Language = raw.Language
+	sr.Meta = raw.Meta
+	sr.ModifierExtension = raw.ModifierExtension
+	sr.Occurrence, err = validate.SelectOneOf[fhir.Element]("SupplyRequest.occurrence",
+		raw.OccurrenceDateTime,
+		raw.OccurrencePeriod,
+		raw.OccurrenceTiming)
+	if err != nil {
+		return err
+	}
+	sr.Parameter = raw.Parameter
+	sr.Priority = raw.Priority
+	sr.Quantity = raw.Quantity
+	sr.ReasonCode = raw.ReasonCode
+	sr.ReasonReference = raw.ReasonReference
+	sr.Requester = raw.Requester
+	sr.Status = raw.Status
+	sr.Supplier = raw.Supplier
+	sr.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*SupplyRequest)(nil)
+var _ json.Unmarshaler = (*SupplyRequest)(nil)
+
+func (srp *SupplyRequestParameter) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (srp *SupplyRequestParameter) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      *fhir.CodeableConcept `json:"code"`
+		Extension []*fhir.Extension     `json:"extension"`
+
+		ID                   string                `json:"id"`
+		ModifierExtension    []*fhir.Extension     `json:"modifierExtension"`
+		ValueCodeableConcept *fhir.CodeableConcept `json:"valueCodeableConcept"`
+		ValueQuantity        *fhir.Quantity        `json:"valueQuantity"`
+		ValueRange           *fhir.Range           `json:"valueRange"`
+		ValueBoolean         *fhir.Boolean         `json:"valueBoolean"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	srp.Code = raw.Code
+	srp.Extension = raw.Extension
+	srp.ID = raw.ID
+	srp.ModifierExtension = raw.ModifierExtension
+	srp.Value, err = validate.SelectOneOf[fhir.Element]("SupplyRequest.parameter.value",
+		raw.ValueCodeableConcept,
+		raw.ValueQuantity,
+		raw.ValueRange,
+		raw.ValueBoolean)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*SupplyRequestParameter)(nil)
+var _ json.Unmarshaler = (*SupplyRequestParameter)(nil)

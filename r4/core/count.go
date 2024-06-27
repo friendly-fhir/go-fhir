@@ -7,6 +7,8 @@ package fhir
 
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Count Type: A measured amount (or an amount
@@ -124,3 +126,37 @@ func (c *Count) GetValue() *Decimal {
 	}
 	return c.Value
 }
+
+func (c *Count) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (c *Count) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code       *Code        `json:"code"`
+		Comparator *Code        `json:"comparator"`
+		Extension  []*Extension `json:"extension"`
+
+		ID     string   `json:"id"`
+		System *URI     `json:"system"`
+		Unit   *String  `json:"unit"`
+		Value  *Decimal `json:"value"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	c.Code = raw.Code
+	c.Comparator = raw.Comparator
+	c.Extension = raw.Extension
+	c.ID = raw.ID
+	c.System = raw.System
+	c.Unit = raw.Unit
+	c.Value = raw.Value
+	return nil
+}
+
+var _ json.Marshaler = (*Count)(nil)
+var _ json.Unmarshaler = (*Count)(nil)

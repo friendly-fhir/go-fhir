@@ -8,6 +8,8 @@ package evidence
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // The Evidence resource describes the conditional state (population and any
@@ -567,3 +569,95 @@ func (e *Evidence) GetVersion() *fhir.String {
 	}
 	return e.Version
 }
+
+func (e *Evidence) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (e *Evidence) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		ApprovalDate       *fhir.Date            `json:"approvalDate"`
+		Author             []*fhir.ContactDetail `json:"author"`
+		Contact            []*fhir.ContactDetail `json:"contact"`
+		Contained          []fhir.Resource       `json:"contained"`
+		Copyright          *fhir.Markdown        `json:"copyright"`
+		Date               *fhir.DateTime        `json:"date"`
+		Description        *fhir.Markdown        `json:"description"`
+		Editor             []*fhir.ContactDetail `json:"editor"`
+		EffectivePeriod    *fhir.Period          `json:"effectivePeriod"`
+		Endorser           []*fhir.ContactDetail `json:"endorser"`
+		ExposureBackground *fhir.Reference       `json:"exposureBackground"`
+		ExposureVariant    []*fhir.Reference     `json:"exposureVariant"`
+		Extension          []*fhir.Extension     `json:"extension"`
+
+		ID                string                  `json:"id"`
+		Identifier        []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules     *fhir.URI               `json:"implicitRules"`
+		Jurisdiction      []*fhir.CodeableConcept `json:"jurisdiction"`
+		Language          *fhir.Code              `json:"language"`
+		LastReviewDate    *fhir.Date              `json:"lastReviewDate"`
+		Meta              *fhir.Meta              `json:"meta"`
+		ModifierExtension []*fhir.Extension       `json:"modifierExtension"`
+		Name              *fhir.String            `json:"name"`
+		Note              []*fhir.Annotation      `json:"note"`
+		Outcome           []*fhir.Reference       `json:"outcome"`
+		Publisher         *fhir.String            `json:"publisher"`
+		RelatedArtifact   []*fhir.RelatedArtifact `json:"relatedArtifact"`
+		Reviewer          []*fhir.ContactDetail   `json:"reviewer"`
+		ShortTitle        *fhir.String            `json:"shortTitle"`
+		Status            *fhir.Code              `json:"status"`
+		Subtitle          *fhir.String            `json:"subtitle"`
+		Text              *fhir.Narrative         `json:"text"`
+		Title             *fhir.String            `json:"title"`
+		Topic             []*fhir.CodeableConcept `json:"topic"`
+		URL               *fhir.URI               `json:"url"`
+		UseContext        []*fhir.UsageContext    `json:"useContext"`
+		Version           *fhir.String            `json:"version"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	e.ApprovalDate = raw.ApprovalDate
+	e.Author = raw.Author
+	e.Contact = raw.Contact
+	e.Contained = raw.Contained
+	e.Copyright = raw.Copyright
+	e.Date = raw.Date
+	e.Description = raw.Description
+	e.Editor = raw.Editor
+	e.EffectivePeriod = raw.EffectivePeriod
+	e.Endorser = raw.Endorser
+	e.ExposureBackground = raw.ExposureBackground
+	e.ExposureVariant = raw.ExposureVariant
+	e.Extension = raw.Extension
+	e.ID = raw.ID
+	e.Identifier = raw.Identifier
+	e.ImplicitRules = raw.ImplicitRules
+	e.Jurisdiction = raw.Jurisdiction
+	e.Language = raw.Language
+	e.LastReviewDate = raw.LastReviewDate
+	e.Meta = raw.Meta
+	e.ModifierExtension = raw.ModifierExtension
+	e.Name = raw.Name
+	e.Note = raw.Note
+	e.Outcome = raw.Outcome
+	e.Publisher = raw.Publisher
+	e.RelatedArtifact = raw.RelatedArtifact
+	e.Reviewer = raw.Reviewer
+	e.ShortTitle = raw.ShortTitle
+	e.Status = raw.Status
+	e.Subtitle = raw.Subtitle
+	e.Text = raw.Text
+	e.Title = raw.Title
+	e.Topic = raw.Topic
+	e.URL = raw.URL
+	e.UseContext = raw.UseContext
+	e.Version = raw.Version
+	return nil
+}
+
+var _ json.Marshaler = (*Evidence)(nil)
+var _ json.Unmarshaler = (*Evidence)(nil)

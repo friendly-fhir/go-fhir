@@ -8,6 +8,8 @@ package imagingstudy
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Representation of the content produced in a DICOM imaging study. A study
@@ -901,3 +903,193 @@ func (issp *ImagingStudySeriesPerformer) GetModifierExtension() []*fhir.Extensio
 	}
 	return issp.ModifierExtension
 }
+
+func (is *ImagingStudy) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (is *ImagingStudy) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		BasedOn     []*fhir.Reference `json:"basedOn"`
+		Contained   []fhir.Resource   `json:"contained"`
+		Description *fhir.String      `json:"description"`
+		Encounter   *fhir.Reference   `json:"encounter"`
+		Endpoint    []*fhir.Reference `json:"endpoint"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                 string                  `json:"id"`
+		Identifier         []*fhir.Identifier      `json:"identifier"`
+		ImplicitRules      *fhir.URI               `json:"implicitRules"`
+		Interpreter        []*fhir.Reference       `json:"interpreter"`
+		Language           *fhir.Code              `json:"language"`
+		Location           *fhir.Reference         `json:"location"`
+		Meta               *fhir.Meta              `json:"meta"`
+		Modality           []*fhir.Coding          `json:"modality"`
+		ModifierExtension  []*fhir.Extension       `json:"modifierExtension"`
+		Note               []*fhir.Annotation      `json:"note"`
+		NumberOfInstances  *fhir.UnsignedInt       `json:"numberOfInstances"`
+		NumberOfSeries     *fhir.UnsignedInt       `json:"numberOfSeries"`
+		ProcedureCode      []*fhir.CodeableConcept `json:"procedureCode"`
+		ProcedureReference *fhir.Reference         `json:"procedureReference"`
+		ReasonCode         []*fhir.CodeableConcept `json:"reasonCode"`
+		ReasonReference    []*fhir.Reference       `json:"reasonReference"`
+		Referrer           *fhir.Reference         `json:"referrer"`
+		Series             []*ImagingStudySeries   `json:"series"`
+		Started            *fhir.DateTime          `json:"started"`
+		Status             *fhir.Code              `json:"status"`
+		Subject            *fhir.Reference         `json:"subject"`
+		Text               *fhir.Narrative         `json:"text"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	is.BasedOn = raw.BasedOn
+	is.Contained = raw.Contained
+	is.Description = raw.Description
+	is.Encounter = raw.Encounter
+	is.Endpoint = raw.Endpoint
+	is.Extension = raw.Extension
+	is.ID = raw.ID
+	is.Identifier = raw.Identifier
+	is.ImplicitRules = raw.ImplicitRules
+	is.Interpreter = raw.Interpreter
+	is.Language = raw.Language
+	is.Location = raw.Location
+	is.Meta = raw.Meta
+	is.Modality = raw.Modality
+	is.ModifierExtension = raw.ModifierExtension
+	is.Note = raw.Note
+	is.NumberOfInstances = raw.NumberOfInstances
+	is.NumberOfSeries = raw.NumberOfSeries
+	is.ProcedureCode = raw.ProcedureCode
+	is.ProcedureReference = raw.ProcedureReference
+	is.ReasonCode = raw.ReasonCode
+	is.ReasonReference = raw.ReasonReference
+	is.Referrer = raw.Referrer
+	is.Series = raw.Series
+	is.Started = raw.Started
+	is.Status = raw.Status
+	is.Subject = raw.Subject
+	is.Text = raw.Text
+	return nil
+}
+
+var _ json.Marshaler = (*ImagingStudy)(nil)
+var _ json.Unmarshaler = (*ImagingStudy)(nil)
+
+func (iss *ImagingStudySeries) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (iss *ImagingStudySeries) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		BodySite    *fhir.Coding      `json:"bodySite"`
+		Description *fhir.String      `json:"description"`
+		Endpoint    []*fhir.Reference `json:"endpoint"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string                         `json:"id"`
+		Instance          []*ImagingStudySeriesInstance  `json:"instance"`
+		Laterality        *fhir.Coding                   `json:"laterality"`
+		Modality          *fhir.Coding                   `json:"modality"`
+		ModifierExtension []*fhir.Extension              `json:"modifierExtension"`
+		Number            *fhir.UnsignedInt              `json:"number"`
+		NumberOfInstances *fhir.UnsignedInt              `json:"numberOfInstances"`
+		Performer         []*ImagingStudySeriesPerformer `json:"performer"`
+		Specimen          []*fhir.Reference              `json:"specimen"`
+		Started           *fhir.DateTime                 `json:"started"`
+		Uid               *fhir.ID                       `json:"uid"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	iss.BodySite = raw.BodySite
+	iss.Description = raw.Description
+	iss.Endpoint = raw.Endpoint
+	iss.Extension = raw.Extension
+	iss.ID = raw.ID
+	iss.Instance = raw.Instance
+	iss.Laterality = raw.Laterality
+	iss.Modality = raw.Modality
+	iss.ModifierExtension = raw.ModifierExtension
+	iss.Number = raw.Number
+	iss.NumberOfInstances = raw.NumberOfInstances
+	iss.Performer = raw.Performer
+	iss.Specimen = raw.Specimen
+	iss.Started = raw.Started
+	iss.Uid = raw.Uid
+	return nil
+}
+
+var _ json.Marshaler = (*ImagingStudySeries)(nil)
+var _ json.Unmarshaler = (*ImagingStudySeries)(nil)
+
+func (issi *ImagingStudySeriesInstance) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (issi *ImagingStudySeriesInstance) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+		Number            *fhir.UnsignedInt `json:"number"`
+		SopClass          *fhir.Coding      `json:"sopClass"`
+		Title             *fhir.String      `json:"title"`
+		Uid               *fhir.ID          `json:"uid"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	issi.Extension = raw.Extension
+	issi.ID = raw.ID
+	issi.ModifierExtension = raw.ModifierExtension
+	issi.Number = raw.Number
+	issi.SopClass = raw.SopClass
+	issi.Title = raw.Title
+	issi.Uid = raw.Uid
+	return nil
+}
+
+var _ json.Marshaler = (*ImagingStudySeriesInstance)(nil)
+var _ json.Unmarshaler = (*ImagingStudySeriesInstance)(nil)
+
+func (issp *ImagingStudySeriesPerformer) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (issp *ImagingStudySeriesPerformer) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Actor     *fhir.Reference       `json:"actor"`
+		Extension []*fhir.Extension     `json:"extension"`
+		Function  *fhir.CodeableConcept `json:"function"`
+
+		ID                string            `json:"id"`
+		ModifierExtension []*fhir.Extension `json:"modifierExtension"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	issp.Actor = raw.Actor
+	issp.Extension = raw.Extension
+	issp.Function = raw.Function
+	issp.ID = raw.ID
+	issp.ModifierExtension = raw.ModifierExtension
+	return nil
+}
+
+var _ json.Marshaler = (*ImagingStudySeriesPerformer)(nil)
+var _ json.Unmarshaler = (*ImagingStudySeriesPerformer)(nil)

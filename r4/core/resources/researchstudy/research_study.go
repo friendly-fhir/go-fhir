@@ -8,6 +8,8 @@ package researchstudy
 import (
 	"github.com/friendly-fhir/go-fhir/r4/core"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // A process where a researcher or organization plans and then executes a
@@ -705,3 +707,149 @@ func (rso *ResearchStudyObjective) GetType() *fhir.CodeableConcept {
 	}
 	return rso.Type
 }
+
+func (rs *ResearchStudy) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (rs *ResearchStudy) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Arm         []*ResearchStudyArm     `json:"arm"`
+		Category    []*fhir.CodeableConcept `json:"category"`
+		Condition   []*fhir.CodeableConcept `json:"condition"`
+		Contact     []*fhir.ContactDetail   `json:"contact"`
+		Contained   []fhir.Resource         `json:"contained"`
+		Description *fhir.Markdown          `json:"description"`
+		Enrollment  []*fhir.Reference       `json:"enrollment"`
+		Extension   []*fhir.Extension       `json:"extension"`
+		Focus       []*fhir.CodeableConcept `json:"focus"`
+
+		ID                    string                    `json:"id"`
+		Identifier            []*fhir.Identifier        `json:"identifier"`
+		ImplicitRules         *fhir.URI                 `json:"implicitRules"`
+		Keyword               []*fhir.CodeableConcept   `json:"keyword"`
+		Language              *fhir.Code                `json:"language"`
+		Location              []*fhir.CodeableConcept   `json:"location"`
+		Meta                  *fhir.Meta                `json:"meta"`
+		ModifierExtension     []*fhir.Extension         `json:"modifierExtension"`
+		Note                  []*fhir.Annotation        `json:"note"`
+		Objective             []*ResearchStudyObjective `json:"objective"`
+		PartOf                []*fhir.Reference         `json:"partOf"`
+		Period                *fhir.Period              `json:"period"`
+		Phase                 *fhir.CodeableConcept     `json:"phase"`
+		PrimaryPurposeType    *fhir.CodeableConcept     `json:"primaryPurposeType"`
+		PrincipalInvestigator *fhir.Reference           `json:"principalInvestigator"`
+		Protocol              []*fhir.Reference         `json:"protocol"`
+		ReasonStopped         *fhir.CodeableConcept     `json:"reasonStopped"`
+		RelatedArtifact       []*fhir.RelatedArtifact   `json:"relatedArtifact"`
+		Site                  []*fhir.Reference         `json:"site"`
+		Sponsor               *fhir.Reference           `json:"sponsor"`
+		Status                *fhir.Code                `json:"status"`
+		Text                  *fhir.Narrative           `json:"text"`
+		Title                 *fhir.String              `json:"title"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	rs.Arm = raw.Arm
+	rs.Category = raw.Category
+	rs.Condition = raw.Condition
+	rs.Contact = raw.Contact
+	rs.Contained = raw.Contained
+	rs.Description = raw.Description
+	rs.Enrollment = raw.Enrollment
+	rs.Extension = raw.Extension
+	rs.Focus = raw.Focus
+	rs.ID = raw.ID
+	rs.Identifier = raw.Identifier
+	rs.ImplicitRules = raw.ImplicitRules
+	rs.Keyword = raw.Keyword
+	rs.Language = raw.Language
+	rs.Location = raw.Location
+	rs.Meta = raw.Meta
+	rs.ModifierExtension = raw.ModifierExtension
+	rs.Note = raw.Note
+	rs.Objective = raw.Objective
+	rs.PartOf = raw.PartOf
+	rs.Period = raw.Period
+	rs.Phase = raw.Phase
+	rs.PrimaryPurposeType = raw.PrimaryPurposeType
+	rs.PrincipalInvestigator = raw.PrincipalInvestigator
+	rs.Protocol = raw.Protocol
+	rs.ReasonStopped = raw.ReasonStopped
+	rs.RelatedArtifact = raw.RelatedArtifact
+	rs.Site = raw.Site
+	rs.Sponsor = raw.Sponsor
+	rs.Status = raw.Status
+	rs.Text = raw.Text
+	rs.Title = raw.Title
+	return nil
+}
+
+var _ json.Marshaler = (*ResearchStudy)(nil)
+var _ json.Unmarshaler = (*ResearchStudy)(nil)
+
+func (rsa *ResearchStudyArm) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (rsa *ResearchStudyArm) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Description *fhir.String      `json:"description"`
+		Extension   []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Name              *fhir.String          `json:"name"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	rsa.Description = raw.Description
+	rsa.Extension = raw.Extension
+	rsa.ID = raw.ID
+	rsa.ModifierExtension = raw.ModifierExtension
+	rsa.Name = raw.Name
+	rsa.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ResearchStudyArm)(nil)
+var _ json.Unmarshaler = (*ResearchStudyArm)(nil)
+
+func (rso *ResearchStudyObjective) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (rso *ResearchStudyObjective) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*fhir.Extension `json:"extension"`
+
+		ID                string                `json:"id"`
+		ModifierExtension []*fhir.Extension     `json:"modifierExtension"`
+		Name              *fhir.String          `json:"name"`
+		Type              *fhir.CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	rso.Extension = raw.Extension
+	rso.ID = raw.ID
+	rso.ModifierExtension = raw.ModifierExtension
+	rso.Name = raw.Name
+	rso.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*ResearchStudyObjective)(nil)
+var _ json.Unmarshaler = (*ResearchStudyObjective)(nil)

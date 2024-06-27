@@ -6,7 +6,10 @@
 package fhir
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for Dosage Type: Indicates how the medication
@@ -421,3 +424,105 @@ func (ddar *DosageDoseAndRate) GetType() *CodeableConcept {
 	}
 	return ddar.Type
 }
+
+func (d *Dosage) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (d *Dosage) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		AdditionalInstruction   []*CodeableConcept   `json:"additionalInstruction"`
+		AsNeededBoolean         *Boolean             `json:"asNeededBoolean"`
+		AsNeededCodeableConcept *CodeableConcept     `json:"asNeededCodeableConcept"`
+		DoseAndRate             []*DosageDoseAndRate `json:"doseAndRate"`
+		Extension               []*Extension         `json:"extension"`
+
+		ID                       string           `json:"id"`
+		MaxDosePerAdministration *Quantity        `json:"maxDosePerAdministration"`
+		MaxDosePerLifetime       *Quantity        `json:"maxDosePerLifetime"`
+		MaxDosePerPeriod         *Ratio           `json:"maxDosePerPeriod"`
+		Method                   *CodeableConcept `json:"method"`
+		ModifierExtension        []*Extension     `json:"modifierExtension"`
+		PatientInstruction       *String          `json:"patientInstruction"`
+		Route                    *CodeableConcept `json:"route"`
+		Sequence                 *Integer         `json:"sequence"`
+		Site                     *CodeableConcept `json:"site"`
+		Text                     *String          `json:"text"`
+		Timing                   *Timing          `json:"timing"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	d.AdditionalInstruction = raw.AdditionalInstruction
+	d.AsNeeded, err = validate.SelectOneOf[Element]("Dosage.asNeeded",
+		raw.AsNeededBoolean,
+		raw.AsNeededCodeableConcept)
+	if err != nil {
+		return err
+	}
+	d.DoseAndRate = raw.DoseAndRate
+	d.Extension = raw.Extension
+	d.ID = raw.ID
+	d.MaxDosePerAdministration = raw.MaxDosePerAdministration
+	d.MaxDosePerLifetime = raw.MaxDosePerLifetime
+	d.MaxDosePerPeriod = raw.MaxDosePerPeriod
+	d.Method = raw.Method
+	d.ModifierExtension = raw.ModifierExtension
+	d.PatientInstruction = raw.PatientInstruction
+	d.Route = raw.Route
+	d.Sequence = raw.Sequence
+	d.Site = raw.Site
+	d.Text = raw.Text
+	d.Timing = raw.Timing
+	return nil
+}
+
+var _ json.Marshaler = (*Dosage)(nil)
+var _ json.Unmarshaler = (*Dosage)(nil)
+
+func (ddar *DosageDoseAndRate) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (ddar *DosageDoseAndRate) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		DoseRange    *Range       `json:"doseRange"`
+		DoseQuantity *Quantity    `json:"doseQuantity"`
+		Extension    []*Extension `json:"extension"`
+
+		ID           string           `json:"id"`
+		RateRatio    *Ratio           `json:"rateRatio"`
+		RateRange    *Range           `json:"rateRange"`
+		RateQuantity *Quantity        `json:"rateQuantity"`
+		Type         *CodeableConcept `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	ddar.Dose, err = validate.SelectOneOf[Element]("Dosage.doseAndRate.dose",
+		raw.DoseRange,
+		raw.DoseQuantity)
+	if err != nil {
+		return err
+	}
+	ddar.Extension = raw.Extension
+	ddar.ID = raw.ID
+	ddar.Rate, err = validate.SelectOneOf[Element]("Dosage.doseAndRate.rate",
+		raw.RateRatio,
+		raw.RateRange,
+		raw.RateQuantity)
+	if err != nil {
+		return err
+	}
+	ddar.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*DosageDoseAndRate)(nil)
+var _ json.Unmarshaler = (*DosageDoseAndRate)(nil)

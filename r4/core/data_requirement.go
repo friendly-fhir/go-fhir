@@ -6,7 +6,10 @@
 package fhir
 
 import (
+	"github.com/friendly-fhir/go-fhir/internal/validate"
 	"github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
+
+	"encoding/json"
 )
 
 // Base StructureDefinition for DataRequirement Type: Describes a required data
@@ -526,3 +529,147 @@ func (drs *DataRequirementSort) GetPath() *String {
 	}
 	return drs.Path
 }
+
+func (dr *DataRequirement) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (dr *DataRequirement) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		CodeFilter []*DataRequirementCodeFilter `json:"codeFilter"`
+		DateFilter []*DataRequirementDateFilter `json:"dateFilter"`
+		Extension  []*Extension                 `json:"extension"`
+
+		ID                     string                 `json:"id"`
+		Limit                  *PositiveInt           `json:"limit"`
+		MustSupport            []*String              `json:"mustSupport"`
+		Profile                []*Canonical           `json:"profile"`
+		Sort                   []*DataRequirementSort `json:"sort"`
+		SubjectCodeableConcept *CodeableConcept       `json:"subjectCodeableConcept"`
+		SubjectReference       *Reference             `json:"subjectReference"`
+		Type                   *Code                  `json:"type"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	dr.CodeFilter = raw.CodeFilter
+	dr.DateFilter = raw.DateFilter
+	dr.Extension = raw.Extension
+	dr.ID = raw.ID
+	dr.Limit = raw.Limit
+	dr.MustSupport = raw.MustSupport
+	dr.Profile = raw.Profile
+	dr.Sort = raw.Sort
+	dr.Subject, err = validate.SelectOneOf[Element]("DataRequirement.subject",
+		raw.SubjectCodeableConcept,
+		raw.SubjectReference)
+	if err != nil {
+		return err
+	}
+	dr.Type = raw.Type
+	return nil
+}
+
+var _ json.Marshaler = (*DataRequirement)(nil)
+var _ json.Unmarshaler = (*DataRequirement)(nil)
+
+func (drcf *DataRequirementCodeFilter) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (drcf *DataRequirementCodeFilter) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Code      []*Coding    `json:"code"`
+		Extension []*Extension `json:"extension"`
+
+		ID          string     `json:"id"`
+		Path        *String    `json:"path"`
+		SearchParam *String    `json:"searchParam"`
+		ValueSet    *Canonical `json:"valueSet"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	drcf.Code = raw.Code
+	drcf.Extension = raw.Extension
+	drcf.ID = raw.ID
+	drcf.Path = raw.Path
+	drcf.SearchParam = raw.SearchParam
+	drcf.ValueSet = raw.ValueSet
+	return nil
+}
+
+var _ json.Marshaler = (*DataRequirementCodeFilter)(nil)
+var _ json.Unmarshaler = (*DataRequirementCodeFilter)(nil)
+
+func (drdf *DataRequirementDateFilter) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (drdf *DataRequirementDateFilter) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Extension []*Extension `json:"extension"`
+
+		ID            string    `json:"id"`
+		Path          *String   `json:"path"`
+		SearchParam   *String   `json:"searchParam"`
+		ValueDateTime *DateTime `json:"valueDateTime"`
+		ValuePeriod   *Period   `json:"valuePeriod"`
+		ValueDuration *Duration `json:"valueDuration"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	drdf.Extension = raw.Extension
+	drdf.ID = raw.ID
+	drdf.Path = raw.Path
+	drdf.SearchParam = raw.SearchParam
+	drdf.Value, err = validate.SelectOneOf[Element]("DataRequirement.dateFilter.value",
+		raw.ValueDateTime,
+		raw.ValuePeriod,
+		raw.ValueDuration)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+var _ json.Marshaler = (*DataRequirementDateFilter)(nil)
+var _ json.Unmarshaler = (*DataRequirementDateFilter)(nil)
+
+func (drs *DataRequirementSort) MarshalJSON() ([]byte, error) {
+	return nil, nil
+}
+
+func (drs *DataRequirementSort) UnmarshalJSON(data []byte) error {
+	var raw struct {
+		Direction *Code        `json:"direction"`
+		Extension []*Extension `json:"extension"`
+
+		ID   string  `json:"id"`
+		Path *String `json:"path"`
+	}
+
+	var err error
+	if err = json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	drs.Direction = raw.Direction
+	drs.Extension = raw.Extension
+	drs.ID = raw.ID
+	drs.Path = raw.Path
+	return nil
+}
+
+var _ json.Marshaler = (*DataRequirementSort)(nil)
+var _ json.Unmarshaler = (*DataRequirementSort)(nil)

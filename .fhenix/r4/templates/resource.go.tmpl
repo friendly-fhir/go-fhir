@@ -8,9 +8,106 @@ package {{ .Name | lowercase }}
 import (
   "github.com/friendly-fhir/go-fhir/r4/core/internal/profileimpl"
   "github.com/friendly-fhir/go-fhir/r4/core"
+{{- $hasAlternatives := false -}}
+{{- range .Fields -}}
+  {{- with .Alternatives -}}
+    {{- $hasAlternatives = true -}}
+  {{- end -}}
+{{- end -}}
+{{- range .SubTypes -}}
+  {{- range .Fields -}}
+    {{- with .Alternatives -}}
+      {{- $hasAlternatives = true -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if $hasAlternatives }}
+  "github.com/friendly-fhir/go-fhir/internal/validate"
+{{- end }}
+
+  "encoding/json"
 )
 
 {{ template "resource" . }}
 {{ range .SubTypes }}
 {{ template "resource" . }}
 {{ end }}
+
+{{- define "raw-type" -}}
+  {{- $type := .Name | pascalinitialcase | replace "." "" -}}
+  {{- if or (eq .Kind "primitive-type") (eq .Kind "complex-type") -}}
+    {{- $type = $type | prepend "fhir." -}}
+  {{- else if .IsAbstract -}}
+    {{- $type = $type | prepend "fhir." -}}
+  {{- end -}}
+  {{- if not (.IsAbstract) -}}
+    {{- $type = "*" | append $type -}}
+  {{- end -}}
+  {{- $type -}}
+{{- end -}}
+
+{{ template "json" .}}
+{{ range .SubTypes }}
+{{ template "json" . }}
+{{ end }}
+{{- define "raw-field-names" -}}
+  {{- range .Fields }}
+    {{- $field := . -}}
+    {{- range .Alternatives -}}
+      {{ template "field-name" $field }}{{ template "struct-name" . }} {{ template "raw-type" . }} `json:"{{ $field.Name | camelcase }}{{ template "struct-name" . }}"`
+    {{ else -}}
+      {{- with .Type -}}
+        {{- if eq .Kind "primitive-type" -}}
+        {{ template "field-name" $field }} {{ template "resource-field-type" $field }} `json:"{{ $field.Name | camelcase }}"`
+        {{ else -}}
+        {{ template "field-name" $field }} {{ template "resource-field-type" $field }} `json:"{{ $field.Name | camelcase }}"`
+        {{ end -}}
+      {{- else -}}
+        {{- with .Builtin }}
+        {{ template "field-name" $field }} {{ template "resource-field-type" $field }} `json:"{{ $field.Name | camelcase }}"`
+        {{ end }}
+      {{- end -}}
+    {{- end -}}
+  {{- end }}
+{{- end -}}
+
+{{- define "raw-alternative-list" -}}
+{{- $field := . -}}
+{{- range .Alternatives }}
+  raw.{{ template "field-name" $field }}{{ template "struct-name" . }},
+{{- end }}
+{{- end -}}
+
+{{- define "json" -}}
+func ({{ template "struct-receiver" . }} *{{ template "struct-name" . }}) MarshalJSON() ([]byte, error) {
+  return nil, nil
+}
+
+func ({{ template "struct-receiver" . }} *{{ template "struct-name" . }}) UnmarshalJSON(data []byte) error {
+  var raw struct {
+    {{ template "raw-field-names" . }}
+  }
+
+  var err error
+  if err = json.Unmarshal(data, &raw); err != nil {
+    return err
+  }
+
+{{ $type := . -}}
+{{ range .Fields }}
+{{ $field := . }}
+{{- if .Alternatives -}}
+  {{ template "struct-receiver" $type }}.{{ template "field-name" . }}, err = validate.SelectOneOf[fhir.{{ template "field-type" . }}]("{{ $type.Name }}.{{ .Name | camelcase }}", {{ template "raw-alternative-list" . }})
+  if err != nil {
+    return err
+  }
+{{- else -}}
+  {{ template "struct-receiver" $type }}.{{ template "field-name" . }} = raw.{{ template "field-name" . }}
+{{- end -}}
+{{ end }}
+  return nil
+}
+
+var _ json.Marshaler = (*{{ template "struct-name" . }})(nil)
+var _ json.Unmarshaler = (*{{ template "struct-name" . }})(nil)
+{{- end -}}
