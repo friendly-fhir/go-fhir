@@ -33,7 +33,7 @@ type PositiveInt struct {
 	ID string `fhirpath:"id"`
 
 	// Primitive value for positiveInt
-	Value string `fhirpath:"value"`
+	Value uint32 `fhirpath:"value"`
 
 	profileimpl.BaseInteger
 	profileimpl.BaseElement
@@ -62,9 +62,9 @@ func (pi *PositiveInt) GetID() string {
 // GetValue returns the value of the field Value.
 // This function is safe to call on nil pointers, and will return the zero value
 // instead.
-func (pi *PositiveInt) GetValue() string {
+func (pi *PositiveInt) GetValue() uint32 {
 	if pi == nil {
-		return ""
+		return 0
 	}
 	return pi.Value
 }

@@ -33,7 +33,7 @@ type UnsignedInt struct {
 	ID string `fhirpath:"id"`
 
 	// Primitive value for unsignedInt
-	Value string `fhirpath:"value"`
+	Value uint32 `fhirpath:"value"`
 
 	profileimpl.BaseInteger
 	profileimpl.BaseElement
@@ -62,9 +62,9 @@ func (ui *UnsignedInt) GetID() string {
 // GetValue returns the value of the field Value.
 // This function is safe to call on nil pointers, and will return the zero value
 // instead.
-func (ui *UnsignedInt) GetValue() string {
+func (ui *UnsignedInt) GetValue() uint32 {
 	if ui == nil {
-		return ""
+		return 0
 	}
 	return ui.Value
 }
