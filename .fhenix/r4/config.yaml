@@ -29,17 +29,17 @@ transformations:
   - input:
       type: StructureDefinition
       if: '{{ eq .Kind "primitive-type" }}'
-    output: '{{ .Package | replace "." "/" | cutprefix "hl7/fhir/" }}/{{ .Name | snakecase }}.go'
+    output: 'r4/core/{{ .Name | snakecase }}.go'
     template: 'templates/primitive.go.tmpl'
   - input:
       type: StructureDefinition
       if: '{{ and (eq .Kind "complex-type") .IsSpecialization }}'
-    output: '{{ .Package | replace "." "/" | cutprefix "hl7/fhir/" }}/{{ .Name | snakecase }}.go'
+    output: 'r4/core/{{ .Name | snakecase }}.go'
     template: 'templates/complex.go.tmpl'
   - input:
       type: StructureDefinition
       if: '{{ and (not .IsConstraint) (eq .Kind "resource") (not .IsAbstract) }}'
-    output: '{{ .Package | replace "." "/" | cutprefix "hl7/fhir/" }}/resources/{{ .Name | lowercase }}/{{ .Name | snakecase }}.go'
+    output: 'r4/core/resources/{{ .Name | lowercase }}/{{ .Name | snakecase }}.go'
     template:
       default: 'templates/resource.go.tmpl'
       resource-field-type: 'templates/utils/resource-field-type.go.tmpl'
@@ -53,17 +53,19 @@ transformations:
   - input:
       type: StructureDefinition
       if: '{{ .IsAbstract }}'
-    output: '{{ .Package | replace "." "/" | cutprefix "hl7/fhir/" }}/{{ .Name | snakecase }}.go'
+    output: 'r4/core/{{ .Name | snakecase }}.go'
     template: 'templates/base-profile.go.tmpl'
 
   - input:
       type: StructureDefinition
       if: '{{ or .IsAbstract .HasDerived }}'
-    output: '{{ .Package | replace "." "/" | cutprefix "hl7/fhir/" }}/internal/profileimpl/{{ .Name | snakecase }}.go'
+    output: 'r4/core/internal/profileimpl/{{ .Name | snakecase }}.go'
     template: 'templates/profileimpl.go.tmpl'
 
-  # - input:
-  #     type: StructureDefinition
-  #     if: '{{ or .IsAbstract .HasDerived }}'
-  #   output: '{{ .Package | replace "." "/" | cutprefix "hl7/fhir/" }}/profiles/{{ .Name | snakecase }}.go'
-  #   template: 'templates/profile.go.tmpl'
+  - input:
+      type: StructureDefinition
+      if: '{{ and (eq .Kind "primitive-type") .HasDerived }}'
+    output: 'r4/core/profiles/{{ .Name | snakecase }}.go'
+    template:
+      default: 'templates/profile.go.tmpl'
+      resource-field-type: 'templates/utils/resource-field-type.go.tmpl'
